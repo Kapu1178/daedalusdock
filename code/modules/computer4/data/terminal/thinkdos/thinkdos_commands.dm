@@ -130,6 +130,10 @@
 		system.print_error("<b>Error:</b> Invalid directory or path.")
 		return
 
+	if(!system.check_perms_read(new_dir))
+		system.print_error("<b>Error:</b> Access denied.")
+		return
+
 	system.change_dir(new_dir)
 	system.println("<b>Current Directory is now [system.current_directory.path_to_string()]</b>")
 
@@ -154,12 +158,17 @@
 		system.print_error("<b>Error:</b> Invalid character(s).")
 		return
 
-	var/datum/c4_file/folder/new_folder = new
+	var/datum/c4_file/folder/new_folder = system.new_file(
+		/datum/c4_file/folder,
+		system.current_user.uuid,
+		system.current_user.permission_groups?[1],
+	)
 	new_folder.set_name(folder_name)
 
-	if(!system.current_directory.try_add_file(new_folder))
+	var/ret = system.os_write_file(new_folder, system.current_directory)
+	if(ret != 0)
 		qdel(new_folder)
-		system.print_error("<b>Error:</b> Unable to create new directory.")
+		system.print_error("<b>Error:</b> [ret].")
 		return
 
 	system.println("New directory created.")
@@ -184,6 +193,10 @@
 		system.print_error("<b>Error:</b> Source file not found.")
 		return
 
+	if(!system.check_perms_read(file))
+		system.print_error("<b>Error:</b> Access denied.")
+		return
+
 	var/datum/file_path/destination_info = system.text_to_filepath(new_path)
 	var/desired_name = destination_info.file_name
 
@@ -196,6 +209,10 @@
 		system.print_error("<b>Error:</b> Invalid character in name.")
 		return
 
+	if(!system.check_perms_write(destination_folder))
+		system.print_error("<b>Error:</b> Access denied.")
+		return
+
 	var/old_name = file.name
 
 	// Preserve the existing file name if we didn't specify a new name.
@@ -203,6 +220,7 @@
 
 	if((destination_folder != file.containing_folder))
 		var/err
+		#warn todo: move file
 		if(system.move_file(file, destination_folder, &err, overwrite, new_name = desired_name))
 			system.println("Moved [old_name] to [file.path_to_string()].")
 			return
@@ -219,8 +237,9 @@
 			system.print_error("<b>Error:</b> Target in use. Use -f to overwrite.")
 			return
 
-		if(!destination_folder.try_delete_file(shares_name))
-			system.print_error("<b>Error:</b> Unable to delete target.")
+		var/ret = system.os_delete_file(shares_name)
+		if(ret != 0)
+			system.print_error("<b>Error:</b> [ret]")
 			return
 
 	file.set_name(desired_name)
@@ -250,6 +269,10 @@
 		system.print_error("<b>Error:</b> Copy operation would exceed disk storage.")
 		return
 
+	if(system.check_perms_read(to_copy))
+		system.print_error("<b>Error:</b> Access denied.")
+		return
+
 	var/datum/file_path/destination_info = system.text_to_filepath(new_path)
 	var/desired_name = destination_info.file_name
 
@@ -275,8 +298,9 @@
 			system.print_error("<b>Error:</b> Target in use. Use -f to overwrite.")
 			return
 
-		if(!destination_folder.try_delete_file(shares_name))
-			system.print_error("<b>Error:</b> Unable to delete target.")
+		var/del_out = system.os_delete_file(shares_name)
+		if(del_out != 0)
+			system.print_error("<b>Error:</b> [del_out].")
 			return
 
 	var/datum/c4_file/copy = to_copy.copy()
@@ -286,9 +310,10 @@
 		system.print_error("<b>Error:</b> Unable to copy file.")
 		return
 
-	if(!destination_folder.try_add_file(copy))
+	var/write_out = system.os_write_file(copy, destination_folder)
+	if(write_out != 0)
 		qdel(copy)
-		system.print_error("<b>Error:</b> Unable to copy file.")
+		system.print_error("<b>Error:</b> [write_out].")
 		return
 
 	system.println("Copied [to_copy.name] to [copy.path_to_string()].")
@@ -336,19 +361,20 @@
 		system.print_error("<b>Error:</b> Access denied.")
 		return
 
-	if(!file.containing_folder) // is root
+	if(!file.containing_folder) // is root of a drive
 		var/datum/c4_file/folder/root_dir = file
 		for(var/datum/c4_file/file_iter as anything in root_dir.contents)
-			root_dir.try_delete_file(file_iter)
+			system.os_delete_file(file_iter)
 
 		if(!QDELETED(system))
 			system.println("File deleted.")
 		return
 
-	if(file.containing_folder.try_delete_file(file))
+	var/del_out = system.os_delete_file(file)
+	if(del_out == 0)
 		system.println("File deleted.")
 	else
-		system.print_error("<b>Error:</b> Unable to delete file.")
+		system.print_error("<b>Error:</b> [del_out]")
 
 /datum/shell_command/thinkdos/initlogs
 	aliases = list("initlogs")
@@ -389,6 +415,10 @@
 	var/datum/c4_file/file = system.resolve_filepath(jointext(arguments, ""))
 	if(!file)
 		system.println("<b>Error</b>: No file found.")
+		return
+
+	if(!system.check_perms_read(file))
+		system.print_error("<b>Error:</b> Access denied.")
 		return
 
 	system.println(html_encode(file.to_string()))
@@ -455,6 +485,10 @@
 	var/datum/c4_file/terminal_program/program_to_run = system.resolve_filepath(file_path, system.current_directory)
 	if(!istype(program_to_run) || istype(program_to_run, /datum/c4_file/terminal_program/operating_system))
 		system.print_error("<b>Error: Cannot find executable.")
+		return
+
+	if(!system.check_perms_execute(program_to_run))
+		system.print_error("<b>Error:</b> Access denied.")
 		return
 
 	program.get_computer().execute_program(program_to_run)
@@ -547,12 +581,12 @@
 		return
 
 	var/datum/c4_file/terminal_program/to_kill = computer.processing_programs[id]
-	if(to_kill == system)
-		system.print_error("<b>Error:</b> Unable to terminate process.")
+	if(!system.check_perms_execute(to_kill))
+		system.print_error("<b>Error:</b> Access denied.")
 		return
 
 	computer.unload_program(to_kill)
-	system.println("Terminated [to_kill.name].")
+	system.println("Terminated [to_kill.name]")
 
 /datum/shell_command/thinkdos_backprog/switch_prog
 	aliases = list("switch", "s")
@@ -571,6 +605,10 @@
 	var/datum/c4_file/terminal_program/to_run = computer.processing_programs[id]
 	if(to_run == system)
 		system.print_error("<b>Error:</b> Process already focused.")
+		return
+
+	if(!system.check_perms_execute(to_run))
+		system.print_error("<b>Error:</b> Access denied.")
 		return
 
 	computer.execute_program(to_run)

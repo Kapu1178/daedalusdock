@@ -9,6 +9,7 @@
 	var/working_line = 0
 
 /datum/c4_file/terminal_program/notepad/New()
+	..()
 	if(!edit_commands)
 		edit_commands = list()
 		for(var/path as anything in subtypesof(/datum/shell_command/notepad/edit_cmd))

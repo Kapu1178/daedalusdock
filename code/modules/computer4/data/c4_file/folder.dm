@@ -48,6 +48,17 @@
 
 	adjust_size(new_file.size)
 
+	#warn idk if this is a good idea or not
+	// if(generation == 1) // Root folder
+	// 	if(isnull(new_file.metadata.owner))
+	// 		new_file.metadata.owner = metadata.owner
+
+	// 	if(isnull(new_file.metadata.group))
+	// 		new_file.metadata.group = metadata.group
+
+	// 	if(isnull(new_file.metadata.permission) || new_file.metadata.permission == ALL)
+	// 		new_file.metadata.permission = metadata.permission
+
 	if(istype(new_file, /datum/c4_file/folder))
 		var/datum/c4_file/folder/new_folder = new_file
 		new_folder.generation = generation + 1

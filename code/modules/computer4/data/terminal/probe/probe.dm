@@ -6,6 +6,7 @@
 	var/list/ping_replies = list()
 
 /datum/c4_file/terminal_program/probe/New()
+	..()
 	if(!commands)
 		commands = list()
 		for(var/path as anything in subtypesof(/datum/shell_command/probe_cmd))

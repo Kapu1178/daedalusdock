@@ -15,13 +15,25 @@
 	/// The command log.
 	var/datum/c4_file/text/command_log
 
+	/// Required access (ALL) on the ID card to log into the admin account.
+	var/list/access_for_admin = list()
+
 /datum/c4_file/terminal_program/operating_system/thinkdos/New()
+	..()
+	metadata.owner = THINKDOS_OWNER_SYSTEM
+	metadata.permission = PERM_WRITE_OWNER | PERM_READ_OWNER // Owner does not have execution perms. Owner cannot kill the operating system process. you will rm -rf and you will like it.
+	metadata.group = THINKDOS_ADMIN_GROUP
+
 	if(!commands)
 		commands = list()
 		for(var/datum/shell_command/thinkdos/command_path as anything in subtypesof(/datum/shell_command/thinkdos))
 			commands += new command_path
 
 /datum/c4_file/terminal_program/operating_system/thinkdos/execute()
+	containing_folder.metadata.owner = THINKDOS_OWNER_SYSTEM
+	containing_folder.metadata.permission = PERM_WRITE_GROUP | PERM_READ_PUBLIC | PERM_EXECUTE_GROUP
+	containing_folder.metadata.group = THINKDOS_ADMIN_GROUP
+
 	if(!initialize_logs())
 		println("<font color=red>Log system failure.</font>")
 
@@ -95,15 +107,19 @@
 	if(!initialize_accounts())
 		return FALSE
 
-	var/datum/c4_file/user/login_user = resolve_filepath("users/admin", drive.root)
+	var/list/user_access = text2access(account_access)
+	var/datum/c4_file/user/login_user = get_user_account(user_access)
+	if(isnull(login_user))
+		return FALSE
 
 	login_user.registered_name = account_name
 	login_user.assignment = account_occupation
-	login_user.access = text2access(account_access)
+	login_user.access = user_access
 	set_current_user(login_user)
 
 	write_log("<b>LOGIN</b>: [html_encode(account_name)] | [html_encode(account_occupation)]")
 	println("Welcome [html_encode(account_name)]!<br><b>Current Directory: [current_directory.path_to_string()]</b>")
+	println("You are logged in as \a [current_user.name == THINKDOS_ADMIN_ACC_NAME ? "admin" : "guest"].")
 	return TRUE
 
 /datum/c4_file/terminal_program/operating_system/thinkdos/proc/logout()
@@ -119,13 +135,82 @@
 /datum/c4_file/terminal_program/operating_system/thinkdos/get_log_folder()
 	var/datum/c4_file/folder/log_dir = parse_directory("logs", drive.root)
 	if(!log_dir)
-		log_dir = new /datum/c4_file/folder
+		log_dir = new_file(
+			/datum/c4_file/folder,
+			THINKDOS_OWNER_SYSTEM,
+			THINKDOS_ADMIN_GROUP,
+			PERM_WRITE_GROUP | PERM_READ_PUBLIC
+		)
 		log_dir.set_name("logs")
 		if(!drive.root.try_add_file(log_dir))
 			qdel(log_dir)
 			return null
 
 	return log_dir
+
+/datum/c4_file/terminal_program/operating_system/thinkdos/proc/get_user_folder()
+	RETURN_TYPE(/datum/c4_file/folder)
+
+	var/datum/c4_file/folder/account_dir = parse_directory("users")
+	if(istype(account_dir))
+		return account_dir
+
+	if(account_dir && !account_dir.containing_folder.try_delete_file(account_dir))
+		print_error("<b>Error:</b> Unable to write account folder.")
+		return FALSE
+
+	account_dir = new_file(
+		/datum/c4_file/folder,
+		THINKDOS_OWNER_SYSTEM,
+		group = THINKDOS_ADMIN_GROUP,
+		permissions = PERM_WRITE_GROUP | PERM_READ_GROUP | PERM_EXECUTE_GROUP,
+	)
+	account_dir.set_name("users")
+
+	if(!containing_folder.try_add_file(account_dir))
+		qdel(account_dir)
+		print_error("<b>Error:</b> Unable to write account folder.")
+		return FALSE
+
+	RegisterSignal(account_dir, list(COMSIG_COMPUTER4_FILE_RENAMED, COMSIG_COMPUTER4_FILE_ADDED, COMSIG_COMPUTER4_FILE_REMOVED), PROC_REF(user_folder_gone))
+	return account_dir
+
+/datum/c4_file/terminal_program/operating_system/thinkdos/proc/get_user_account(list/access)
+	if(length(access & access_for_admin) == length(access_for_admin))
+		return assert_user_account(THINKDOS_ADMIN_ACC_NAME)
+	else
+		return assert_user_account(THINKDOS_GUEST_ACC_NAME)
+
+/datum/c4_file/terminal_program/operating_system/thinkdos/proc/assert_user_account(file_name)
+	RETURN_TYPE(/datum/c4_file/user)
+
+	var/datum/c4_file/folder/users_dir = get_user_folder()
+	if(!users_dir)
+		return null
+
+	var/datum/c4_file/user/user_data = users_dir.get_file(file_name, FALSE)
+	if(istype(user_data))
+		return user_data
+
+	if(!isnull(user_data) && !user_data.containing_folder.try_delete_file(user_data))
+		print_error("<b>Error:</b> Unable to write account folder.")
+		return null
+
+	user_data = new_file(
+		/datum/c4_file/user,
+		THINKDOS_OWNER_SYSTEM,
+		THINKDOS_ADMIN_GROUP,
+		PERM_READ_GROUP | PERM_WRITE_GROUP | PERM_EXECUTE_GROUP,
+	)
+
+	if(file_name == THINKDOS_ADMIN_ACC_NAME)
+		user_data.permission_groups = list(THINKDOS_ADMIN_GROUP)
+
+	if(users_dir.try_add_file(user_data))
+		return user_data
+
+	qdel(user_data)
+	print_error("<b>Error:</b> Unable to write account file.")
 
 /// Create the log file, or append a startup log.
 /datum/c4_file/terminal_program/operating_system/thinkdos/proc/initialize_logs()
@@ -135,7 +220,12 @@
 	var/datum/c4_file/folder/log_dir = get_log_folder()
 	var/datum/c4_file/text/log_file = log_dir.get_file("syslog")
 	if(!log_file)
-		log_file = new /datum/c4_file/text()
+		log_file = new_file(
+			/datum/c4_file/text,
+			THINKDOS_OWNER_SYSTEM,
+			THINKDOS_ADMIN_GROUP,
+			PERM_WRITE_GROUP | PERM_READ_PUBLIC,
+		)
 		log_file.set_name("syslog")
 		if(!log_dir.try_add_file(log_file))
 			qdel(log_file)
@@ -148,37 +238,9 @@
 	return TRUE
 
 /datum/c4_file/terminal_program/operating_system/thinkdos/proc/initialize_accounts()
-	var/datum/c4_file/folder/account_dir = parse_directory("users")
-	if(!istype(account_dir))
-		if(account_dir && !account_dir.containing_folder.try_delete_file(account_dir))
-			print_error("<b>Error:</b> Unable to write account folder.")
-			return FALSE
-
-		account_dir = new
-		account_dir.set_name("users")
-
-		if(!containing_folder.try_add_file(account_dir))
-			qdel(account_dir)
-			print_error("<b>Error:</b> Unable to write account folder.")
-			return FALSE
-
-		RegisterSignal(account_dir, list(COMSIG_COMPUTER4_FILE_RENAMED, COMSIG_COMPUTER4_FILE_ADDED, COMSIG_COMPUTER4_FILE_REMOVED), PROC_REF(user_folder_gone))
-
-	var/datum/c4_file/user/user_data = account_dir.get_file("admin", FALSE)
-	if(!istype(user_data))
-		if(user_data && !user_data.containing_folder.try_delete_file(user_data))
-			print_error("<b>Error:</b> Unable to write account folder.")
-			return FALSE
-
-		user_data = new
-		user_data.set_name("admin")
-
-		if(!account_dir.try_add_file(user_data))
-			qdel(user_data)
-			print_error("<b>Error:</b> Unable to write account file.")
-			return FALSE
-
-		//set_current_user(user_data)
+	var/datum/c4_file/user/user_data = get_user_account(access_for_admin)
+	if(!user_data)
+		return FALSE
 	return TRUE
 
 /datum/c4_file/terminal_program/operating_system/thinkdos/proc/set_current_user(datum/c4_file/user/new_user)

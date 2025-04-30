@@ -128,6 +128,10 @@
 		system.println("Error: File not found.")
 		return
 
+	if(!system.check_perms_read(found_file))
+		system.println("<b>Error:</b> Access denied.")
+		return
+
 	notepad.working_line = 0
 	system.println("Loaded note from [found_file.path_to_string()].")
 
@@ -150,7 +154,11 @@
 
 	if(existing_file)
 		if(existing_file.drive.read_only)
-			system.println("<b>Error</b>: Cannot open file for write.")
+			system.println("<b>Error:</b> Cannot open file for write.")
+			return
+
+		if(!system.check_perms_write(existing_file))
+			system.println("<b>Error:</b> Access denied.")
 			return
 
 		existing_file.stored_record.fields = notepad.note_list.Copy()
@@ -160,6 +168,10 @@
 	var/datum/c4_file/folder/dest_folder = system.parse_directory(path_info.directory, system.current_directory)
 	if(!dest_folder || dest_folder.drive.read_only)
 		system.println("<b>Error</b>: Cannot open directory for write.")
+		return
+
+	if(!system.check_perms_write(dest_folder))
+		system.println("<b>Error:</b> Access denied.")
 		return
 
 	existing_file = new

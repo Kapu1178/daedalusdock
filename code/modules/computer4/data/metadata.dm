@@ -3,3 +3,4 @@
 	var/date
 	var/owner
 	var/group
+	var/permission = ALL
