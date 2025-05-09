@@ -2,7 +2,7 @@
 #define WELDER_FUEL_BURN_INTERVAL 9
 /obj/item/weldingtool
 	name = "welding tool"
-	desc = "A standard edition welder provided by Nanotrasen."
+	desc = "A common welding tool manufactured by Daedalus Industries."
 	icon = 'icons/obj/tools.dmi'
 	icon_state = "welder"
 	inhand_icon_state = "welder"

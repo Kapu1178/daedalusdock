@@ -356,7 +356,7 @@ GLOBAL_LIST_EMPTY(fax_machines)
 			playsound(src, 'sound/machines/terminal_error.ogg', 50)
 			return FALSE
 
-	to_chat(user, span_notice("Fax sent. Dispensing paper for personal record keeping. Thank you for using the Nanotrasen Approved Faxing Device!"))
+	to_chat(user, span_notice("Fax sent. Dispensing paper for personal record keeping."))
 	eject_stored_paper()
 	playsound(src, 'sound/machines/terminal_processing.ogg', 35)
 	COOLDOWN_START(src, fax_cooldown, FAX_COOLDOWN_TIME)

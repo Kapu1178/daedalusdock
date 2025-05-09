@@ -129,7 +129,7 @@
 	data["channelAuthor"] = current_channel?.author
 
 	if(!current_channel)
-		data["channelAuthor"] = "Nanotrasen Inc"
+		data["channelAuthor"] = "The Federation"
 		data["channelDesc"] = "Welcome to Newscaster Net. Interface & News networks Operational."
 		data["channelLocked"] = TRUE
 	else

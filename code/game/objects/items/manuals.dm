@@ -278,7 +278,7 @@
 /obj/item/book/manual/wiki/chemistry
 	name = "Chemistry Textbook"
 	icon_state ="chemistrybook"
-	starting_author = "Nanotrasen"
+	starting_author = "The Aether Association"
 	starting_title = "Chemistry Textbook"
 	page_link = "Guide_to_chemistry"
 
@@ -298,9 +298,9 @@
 
 /obj/item/book/manual/wiki/security_space_law
 	name = "Space Law"
-	desc = "A set of Nanotrasen guidelines for keeping law and order on their space stations."
+	desc = "A set of Federation guidelines for keeping law and order on their space stations."
 	icon_state = "bookSpaceLaw"
-	starting_author = "Nanotrasen"
+	starting_author = "The Federation"
 	starting_title = "Space Law"
 	page_link = "Sector_Regulations"
 
@@ -332,7 +332,7 @@
 /obj/item/book/manual/wiki/detective
 	name = "The Film Noir: Proper Procedures for Investigations"
 	icon_state ="bookDetective"
-	starting_author = "Nanotrasen"
+	starting_author = "Dick Mullen"
 	starting_title = "The Film Noir: Proper Procedures for Investigations"
 	page_link = "Detective"
 

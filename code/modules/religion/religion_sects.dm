@@ -120,9 +120,9 @@
 /**** Nanotrasen Approved God ****/
 
 /datum/religion_sect/puritanism
-	name = "Nanotrasen Approved God"
+	name = "God Approved God"
 	desc = "Your run-of-the-mill sect, there are no benefits or boons associated."
-	quote = "Nanotrasen Recommends!"
+	quote = "God Recommends!"
 	tgui_icon = "bible"
 
 /**** Mechanical God ****/

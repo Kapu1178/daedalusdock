@@ -11,7 +11,7 @@
 
 /obj/machinery/dterm
 	name = "DataStation 3000"
-	desc = "A cheap clone of the classic ThinkDos 100, by Nanotrasen."
+	desc = "A cheap clone of the classic ThinkDos 100, by ThinkTronic."
 
 	net_class = NETCLASS_DATE_TERMINAL
 	network_flags = NETWORK_FLAGS_STANDARD_CONNECTION

@@ -371,7 +371,7 @@
 /datum/map_template/shuttle/emergency/goon
 	suffix = "goon"
 	name = "NES Port"
-	description = "The Nanotrasen Emergency Shuttle Port(NES Port for short) is a shuttle used at other less known Daedalus facilities and has a more open inside for larger crowds, but fewer onboard shuttle facilities."
+	description = "The Federation Emergency Shuttle Port(FES Port for short) is a shuttle used at other less known Daedalus facilities and has a more open inside for larger crowds, but fewer onboard shuttle facilities."
 	credit_cost = CARGO_CRATE_VALUE
 
 /datum/map_template/shuttle/emergency/rollerdome
