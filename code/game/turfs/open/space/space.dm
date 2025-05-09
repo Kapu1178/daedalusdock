@@ -4,7 +4,7 @@ GLOBAL_REAL_VAR(space_appearances) = make_space_appearances()
 /turf/open/space
 	icon = 'icons/turf/space.dmi'
 	icon_state = "0"
-	name = "\proper the Great Pool"
+	name = "\proper The Great Pool"
 	overfloor_placed = FALSE
 	underfloor_accessibility = UNDERFLOOR_INTERACTABLE
 	z_flags = Z_ATMOS_IN_DOWN|Z_ATMOS_IN_UP|Z_ATMOS_OUT_DOWN|Z_ATMOS_OUT_UP
