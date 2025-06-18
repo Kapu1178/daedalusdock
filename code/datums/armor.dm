@@ -11,7 +11,7 @@
 	if(istype(armor, /datum/armor))
 		return armor
 
-	if(islist(armor) || isnull(armor))
+	if(islist(armor))
 		stack_trace("Legacy armor definition: [type]")
 		armor = getArmor(arglist(armor))
 		return armor
