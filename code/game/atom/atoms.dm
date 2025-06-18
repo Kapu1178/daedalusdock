@@ -6,6 +6,7 @@
  */
 TYPEINFO_DEF(/atom)
 	var/list/default_materials
+	var/list/default_armor
 
 /atom
 	layer = TURF_LAYER

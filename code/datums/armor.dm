@@ -12,10 +12,20 @@
 		return armor
 
 	if(islist(armor) || isnull(armor))
+		stack_trace("Legacy armor definition: [type]")
 		armor = getArmor(arglist(armor))
 		return armor
 
-	CRASH("Armor is not a datum or a list, what the fuck?")
+	var/datum/typeinfo/atom/typeinfo = typeinfo(type)
+	if(isnull(typeinfo.default_armor))
+		armor = getArmor()
+		return armor
+
+	if(!islist(typeinfo.default_armor))
+		CRASH("Typeinfo Armor is not a list, what the fuck?")
+
+	armor = getArmor(arglist(typeinfo.default_armor))
+	return armor
 
 ///Setter for armor
 /atom/proc/setArmor(datum/new_armor)
