@@ -235,3 +235,7 @@
 
 /area/shuttle/caravan/freighter3
 	name = "Tiny Freighter"
+
+/area/shuttle/trader
+	name = "Tradeship"
+	area_lighting = AREA_LIGHTING_STATIC

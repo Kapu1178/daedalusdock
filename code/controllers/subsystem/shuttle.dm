@@ -771,9 +771,6 @@ SUBSYSTEM_DEF(shuttle)
 	for(var/obj/machinery/computer/camera_advanced/shuttle_docker/C as anything in INSTANCES_OF(/obj/machinery/computer/camera_advanced/shuttle_docker))
 		C.update_hidden_docking_ports(remove_images, add_images)
 
-	QDEL_LIST(remove_images)
-
-
 /datum/controller/subsystem/shuttle/proc/action_load(datum/map_template/shuttle/loading_template, obj/docking_port/stationary/destination_port, replace = FALSE)
 	// Check for an existing preview
 	if(preview_shuttle && (loading_template != preview_template))

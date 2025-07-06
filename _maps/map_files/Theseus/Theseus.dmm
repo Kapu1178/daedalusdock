@@ -14798,6 +14798,10 @@
 	},
 /turf/open/floor/plating,
 /area/station/security/checkpoint/engineering)
+"fvw" = (
+/obj/machinery/light/small/directional/north,
+/turf/open/floor/plating,
+/area/station/hallway/secondary/entry)
 "fvJ" = (
 /obj/effect/turf_decal/trimline/brown/filled/corner{
 	dir = 4
@@ -18759,17 +18763,6 @@
 /obj/structure/extinguisher_cabinet/directional/east,
 /turf/open/floor/iron,
 /area/station/hallway/primary/central/aft)
-"gVc" = (
-/obj/docking_port/stationary{
-	name = "SS13: Auxiliary Dock, Station-Port";
-	dir = 2;
-	width = 35;
-	height = 22;
-	id = "whiteship_home";
-	dwidth = 11
-	},
-/turf/open/space/basic,
-/area/space)
 "gVu" = (
 /obj/machinery/light/directional/north,
 /obj/effect/turf_decal/stripes/line{
@@ -28665,6 +28658,16 @@
 	},
 /turf/open/floor/iron,
 /area/station/medical/surgery/prep)
+"kLD" = (
+/obj/docking_port/stationary{
+	name = "SS13: Auxiliary Dock, Station-Port";
+	width = 11;
+	height = 15;
+	id = "tradeship_home";
+	dwidth = 6
+	},
+/turf/open/space/basic,
+/area/space)
 "kLK" = (
 /obj/machinery/atmospherics/pipe/smart/simple/orange/visible{
 	dir = 5
@@ -34934,11 +34937,6 @@
 /obj/effect/turf_decal/tile/bar/opposingcorners,
 /turf/open/floor/iron/white,
 /area/station/service/kitchen)
-"mXr" = (
-/obj/machinery/light/small/directional/west,
-/obj/effect/turf_decal/stripes/line,
-/turf/open/floor/plating,
-/area/station/hallway/secondary/entry)
 "mXL" = (
 /obj/docking_port/stationary{
 	dir = 4;
@@ -37409,6 +37407,9 @@
 	},
 /turf/open/floor/iron/dark,
 /area/station/security/brig/upper)
+"nUq" = (
+/turf/open/floor/plating,
+/area/station/hallway/secondary/entry)
 "nUG" = (
 /obj/effect/landmark/event_spawn,
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
@@ -71327,7 +71328,7 @@ aaa
 aaa
 aaa
 aaa
-aac
+aav
 aaa
 aaa
 aaa
@@ -71335,7 +71336,7 @@ aaa
 aaa
 aaa
 aaa
-aaa
+kLD
 aaa
 aaa
 aaa
@@ -71834,13 +71835,13 @@ aaa
 aaa
 aaa
 aaa
+kLD
 aaa
 aaa
 aaa
-quc
 aaa
 aaa
-quc
+aaa
 aaa
 aaa
 aaa
@@ -72094,10 +72095,10 @@ aaa
 aaa
 aaa
 aaa
-lMJ
-aaa
-aaa
-lMJ
+lAu
+lAu
+lAu
+lAu
 aaa
 aaa
 aaa
@@ -72340,6 +72341,7 @@ aaa
 aaa
 aaa
 aaa
+lKu
 aaa
 aaa
 aaa
@@ -72349,13 +72351,12 @@ aaa
 aaa
 aaa
 aaa
-aaa
-aaa
-lMJ
-aaa
-aaa
-lMJ
-aaa
+lAu
+oWO
+wRY
+wRY
+oWO
+lAu
 aaa
 aaa
 aaa
@@ -72607,12 +72608,12 @@ aaa
 aaa
 aaa
 aaa
-aaa
-lMJ
-aaa
-aaa
-lMJ
-aaa
+lAu
+oWO
+nUq
+nUq
+oWO
+lAu
 aaa
 aaa
 aaa
@@ -72864,12 +72865,12 @@ aaa
 aaa
 aaa
 aaa
-aaa
-lMJ
 lAu
+oWO
+fvw
+nUq
+oWO
 lAu
-lMJ
-aaa
 aaa
 aaa
 aaa
@@ -73123,11 +73124,11 @@ aaa
 aaa
 lAu
 oWO
-oWO
-oWO
+wRY
+wRY
 oWO
 lAu
-lAu
+aaa
 aaa
 aaa
 aaa
@@ -73383,9 +73384,9 @@ oWO
 lDz
 aWT
 oWO
-oWO
-oWO
 lAu
+aaa
+aaa
 aaa
 aaa
 aaa
@@ -73639,12 +73640,12 @@ aaa
 gbI
 btS
 jSF
-wRY
-mXr
-wRY
-aaa
-aaa
-aaa
+gbI
+lMJ
+lMJ
+lMJ
+lMJ
+quc
 aaa
 aaa
 aaa
@@ -73896,10 +73897,10 @@ lAu
 oWO
 aVw
 aWU
-wRY
-aZZ
-wRY
-gVc
+oWO
+lAu
+lMJ
+aaa
 aaa
 aaa
 aaa
@@ -74154,9 +74155,9 @@ uwS
 aVw
 aWU
 oWO
-oWO
-oWO
 lAu
+lMJ
+aaa
 aaa
 aaa
 aaa

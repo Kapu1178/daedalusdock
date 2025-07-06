@@ -1,0 +1,256 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"a" = (
+/turf/template_noop,
+/area/template_noop)
+"e" = (
+/obj/effect/flock_fluff/shuttle_wing/right{
+	pixel_x = -32;
+	pixel_y = -96
+	},
+/turf/closed/wall/flock,
+/area/shuttle/trader)
+"f" = (
+/turf/closed/wall/flock,
+/area/shuttle/trader)
+"j" = (
+/obj/machinery/door/flock,
+/turf/open/floor/flock,
+/area/shuttle/trader)
+"q" = (
+/obj/effect/flock_fluff/shuttle_wing/right{
+	dir = 4;
+	pixel_x = 32;
+	pixel_y = -32
+	},
+/turf/closed/wall/flock,
+/area/shuttle/trader)
+"v" = (
+/obj/structure/lattice/flock,
+/obj/docking_port/mobile/trader,
+/turf/open/space/basic,
+/area/shuttle/trader)
+"z" = (
+/obj/effect/flock_fluff/shuttle_wing/left{
+	dir = 1;
+	pixel_x = -32;
+	pixel_y = 32
+	},
+/turf/closed/wall/flock,
+/area/shuttle/trader)
+"F" = (
+/obj/effect/flock_fluff/shuttle_wing/left{
+	dir = 4;
+	pixel_x = 32;
+	pixel_y = -32
+	},
+/turf/closed/wall/flock,
+/area/shuttle/trader)
+"J" = (
+/turf/open/floor/flock,
+/area/shuttle/trader)
+"N" = (
+/obj/effect/flock_fluff/cockpit{
+	pixel_x = -128
+	},
+/turf/closed/wall/flock,
+/area/shuttle/trader)
+"O" = (
+/obj/structure/lattice/flock,
+/turf/open/space/basic,
+/area/shuttle/trader)
+
+(1,1,1) = {"
+a
+a
+a
+f
+f
+N
+f
+f
+a
+a
+a
+"}
+(2,1,1) = {"
+a
+a
+z
+f
+J
+J
+J
+f
+e
+a
+a
+"}
+(3,1,1) = {"
+a
+a
+f
+J
+J
+J
+J
+J
+f
+a
+a
+"}
+(4,1,1) = {"
+a
+a
+j
+J
+J
+J
+J
+J
+f
+a
+a
+"}
+(5,1,1) = {"
+a
+a
+j
+J
+J
+J
+J
+J
+f
+a
+a
+"}
+(6,1,1) = {"
+a
+a
+f
+J
+J
+J
+J
+J
+f
+a
+a
+"}
+(7,1,1) = {"
+a
+a
+f
+J
+J
+J
+J
+J
+f
+a
+a
+"}
+(8,1,1) = {"
+a
+a
+f
+J
+J
+J
+J
+J
+f
+a
+a
+"}
+(9,1,1) = {"
+a
+f
+f
+J
+J
+J
+J
+J
+f
+f
+a
+"}
+(10,1,1) = {"
+a
+f
+J
+J
+J
+J
+J
+J
+J
+f
+a
+"}
+(11,1,1) = {"
+a
+f
+J
+J
+J
+J
+J
+J
+J
+f
+a
+"}
+(12,1,1) = {"
+f
+f
+J
+J
+J
+J
+J
+J
+J
+f
+f
+"}
+(13,1,1) = {"
+F
+f
+f
+f
+f
+j
+f
+f
+f
+f
+q
+"}
+(14,1,1) = {"
+a
+a
+f
+f
+O
+O
+O
+f
+f
+a
+a
+"}
+(15,1,1) = {"
+a
+a
+a
+a
+O
+v
+O
+a
+a
+a
+a
+"}

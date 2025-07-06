@@ -1,4 +1,6 @@
 /obj/machinery/light/floor/has_bulb/flock
+	icon_state = "flock_floor"
+
 	light_color = "#72bfac"
 	use_power = NO_POWER_USE
 
@@ -14,6 +16,7 @@
 
 /obj/machinery/light/flock
 	icon = 'goon/icons/obj/lighting.dmi'
+	icon_state = "flock"
 
 	light_color = "#72bfac"
 	use_power = NO_POWER_USE
