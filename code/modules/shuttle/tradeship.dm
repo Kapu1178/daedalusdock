@@ -6,6 +6,6 @@
 	dir = WEST
 	port_direction = SOUTH
 
-	dwidth = 6
+	dwidth = 5
 	width = 11
 	height = 15

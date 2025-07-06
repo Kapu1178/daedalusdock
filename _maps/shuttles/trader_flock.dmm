@@ -2,6 +2,12 @@
 "a" = (
 /turf/template_noop,
 /area/template_noop)
+"d" = (
+/obj/effect/flock_fluff/shuttle_wing/broken/left{
+	dir = 1
+	},
+/turf/closed/wall/flock,
+/area/shuttle/trader)
 "e" = (
 /obj/effect/flock_fluff/shuttle_wing/right{
 	pixel_x = -32;
@@ -26,8 +32,10 @@
 /area/shuttle/trader)
 "v" = (
 /obj/structure/lattice/flock,
-/obj/docking_port/mobile/trader,
-/turf/open/space/basic,
+/obj/docking_port/mobile/trader{
+	dwidth = 5
+	},
+/turf/open/floor/flock,
 /area/shuttle/trader)
 "z" = (
 /obj/effect/flock_fluff/shuttle_wing/left{
@@ -52,11 +60,16 @@
 /obj/effect/flock_fluff/cockpit{
 	pixel_x = -128
 	},
-/turf/closed/wall/flock,
+/obj/machinery/door/flock,
+/turf/open/floor/flock,
 /area/shuttle/trader)
 "O" = (
 /obj/structure/lattice/flock,
-/turf/open/space/basic,
+/turf/open/floor/flock,
+/area/shuttle/trader)
+"R" = (
+/obj/effect/flock_fluff/shuttle_wing/destroyed/right,
+/turf/closed/wall/flock,
 /area/shuttle/trader)
 
 (1,1,1) = {"
@@ -75,7 +88,7 @@ a
 (2,1,1) = {"
 a
 a
-z
+d
 f
 J
 J
@@ -140,13 +153,13 @@ a
 (7,1,1) = {"
 a
 a
-f
+z
 J
 J
 J
 J
 J
-f
+R
 a
 a
 "}

@@ -70,33 +70,72 @@
 		place.baseturfs = baseturfs_string_list(sanity, place)
 
 		for(var/obj/docking_port/mobile/port in place)
+			port.calculate_docking_port_information(src)
 			if(register)
 				port.register()
 
-			if(isnull(port_x_offset))
-				continue
+#define WORLDMAXX_CUTOFF (world.maxx + 1)
+#define WORLDMAXY_CUTOFF (world.maxx + 1)
+/**
+ * Calculated and populates the information used for docking and some internal vars.
+ * This can also be used to calculate from shuttle_areas so that you can expand/shrink shuttles!
+ *
+ * Arguments:
+ * * loading_from - The template that the shuttle was loaded from, if not given we iterate shuttle_areas to calculate information instead
+ */
+/obj/docking_port/mobile/proc/calculate_docking_port_information(datum/map_template/shuttle/loading_from)
+	var/port_x_offset = loading_from?.port_x_offset
+	var/port_y_offset = loading_from?.port_y_offset
+	var/width = loading_from?.width
+	var/height = loading_from?.height
+	if(!loading_from)
+		if(!length(shuttle_areas))
+			CRASH("Attempted to calculate a docking port's information without a template before it was assigned any areas!")
+		// no template given, use shuttle_areas to calculate width and height
+		var/min_x = WORLDMAXX_CUTOFF
+		var/min_y = WORLDMAXY_CUTOFF
+		var/max_x = -1
+		var/max_y = -1
+		for(var/area/shuttle_area as anything in shuttle_areas)
+			for (var/turf/turf as anything in shuttle_area.get_contained_turfs())
+				min_x = min(turf.x, min_x)
+				max_x = max(turf.x, max_x)
+				min_y = min(turf.y, min_y)
+				max_y = max(turf.y, max_y)
+				CHECK_TICK
 
-			switch(port.dir) // Yeah this looks a little ugly but mappers had to do this in their head before
-				if(NORTH)
-					port.width = width
-					port.height = height
-					port.dwidth = port_x_offset - 1
-					port.dheight = port_y_offset - 1
-				if(EAST)
-					port.width = height
-					port.height = width
-					port.dwidth = height - port_y_offset
-					port.dheight = port_x_offset - 1
-				if(SOUTH)
-					port.width = width
-					port.height = height
-					port.dwidth = width - port_x_offset
-					port.dheight = height - port_y_offset
-				if(WEST)
-					port.width = height
-					port.height = width
-					port.dwidth = port_y_offset - 1
-					port.dheight = width - port_x_offset
+		if(min_x == WORLDMAXX_CUTOFF || max_x == -1)
+			CRASH("Failed to locate shuttle boundaries when iterating through shuttle areas, somehow.")
+		if(min_y ==  WORLDMAXY_CUTOFF || max_y == -1)
+			CRASH("Failed to locate shuttle boundaries when iterating through shuttle areas, somehow.")
+
+		width = (max_x - min_x) + 1
+		height = (max_y - min_y) + 1
+		port_x_offset = x - min_x + 1
+		port_y_offset = y - min_y + 1
+
+	if(dir in list(EAST, WEST))
+		src.width = height
+		src.height = width
+	else
+		src.width = width
+		src.height = height
+
+	switch(dir)
+		if(NORTH)
+			dwidth = port_x_offset - 1
+			dheight = port_y_offset - 1
+		if(EAST)
+			dwidth = height - port_y_offset
+			dheight = port_x_offset - 1
+		if(SOUTH)
+			dwidth = width - port_x_offset
+			dheight = height - port_y_offset
+		if(WEST)
+			dwidth = port_y_offset - 1
+			dheight = width - port_x_offset
+#undef WORLDMAXX_CUTOFF
+#undef WORLDMAXY_CUTOFF
 
 //Whatever special stuff you want
 /datum/map_template/shuttle/post_load(obj/docking_port/mobile/M)

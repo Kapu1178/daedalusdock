@@ -134,6 +134,9 @@
 
 	. = list()
 
+	var/list/x_values = list()
+	var/list/y_values = list()
+
 	for(var/dx in 0 to width-1)
 		var/compX = dx-dwidth
 		for(var/dy in 0 to height-1)
@@ -142,6 +145,8 @@
 			// realY = _y + compY*cos - compX*sin
 			// locate(realX, realY, _z)
 			var/turf/T = locate(_x + compX*cos - compY*sin, _y + compY*cos + compX*sin, _z)
+			x_values |= T.x
+			y_values |= T.y
 			.[T] = NONE
 
 #ifdef DOCKING_PORT_HIGHLIGHT

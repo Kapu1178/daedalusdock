@@ -28664,7 +28664,7 @@
 	width = 11;
 	height = 15;
 	id = "tradeship_home";
-	dwidth = 6
+	dwidth = 5
 	},
 /turf/open/space/basic,
 /area/space)
@@ -71835,7 +71835,7 @@ aaa
 aaa
 aaa
 aaa
-kLD
+aaa
 aaa
 aaa
 aaa
