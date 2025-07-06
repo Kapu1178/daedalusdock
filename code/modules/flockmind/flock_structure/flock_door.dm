@@ -27,3 +27,9 @@
 
 /obj/machinery/door/flock/try_flock_convert(datum/flock/flock, force)
 	return
+
+// Subtype for the flock trader, allows humans to pass.
+/obj/machinery/door/flock/open
+
+/obj/machinery/door/flock/open/allowed(mob/M)
+	return TRUE
