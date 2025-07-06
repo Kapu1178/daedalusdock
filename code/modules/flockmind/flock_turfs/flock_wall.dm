@@ -76,3 +76,35 @@
 
 	if(!isflockturf(get_step(bird, direction)))
 		bird.stop_flockphase()
+
+// Subtypes
+/turf/closed/wall/flock/shuttle
+	icon = 'goon/icons/mob/featherzone.dmi'
+	icon_state = "shuttle-wall"
+
+	canSmoothWith = null
+	smoothing_flags = NONE
+	smoothing_groups = null
+
+	use_material_appearance = FALSE
+
+	var/mutable_appearance/diagonal_underlay
+
+/turf/closed/wall/flock/shuttle/Initialize(mapload)
+	. = ..()
+	update_appearance(UPDATE_OVERLAYS)
+
+/turf/closed/wall/flock/shuttle/setDir(newdir)
+	. = ..()
+	if(ISDIAGONALDIR(dir))
+		underlays += get_baseturf_underlay()
+
+	update_appearance(UPDATE_OVERLAYS)
+
+/turf/closed/wall/flock/shuttle/update_overlays()
+	. = ..()
+	underlays -= diagonal_underlay
+
+	if(ISDIAGONALDIR(dir))
+		diagonal_underlay ||= get_baseturf_underlay()
+		underlays += diagonal_underlay

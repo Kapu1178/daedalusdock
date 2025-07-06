@@ -2,21 +2,26 @@
 "a" = (
 /turf/template_noop,
 /area/template_noop)
+"c" = (
+/turf/closed/wall/flock/shuttle,
+/area/shuttle/trader)
 "d" = (
 /obj/effect/flock_fluff/shuttle_wing/broken/left{
 	dir = 1
 	},
-/turf/closed/wall/flock,
+/turf/closed/wall/flock/shuttle,
 /area/shuttle/trader)
 "e" = (
 /obj/effect/flock_fluff/shuttle_wing/right{
 	pixel_x = -32;
 	pixel_y = -96
 	},
-/turf/closed/wall/flock,
+/turf/closed/wall/flock/shuttle,
 /area/shuttle/trader)
 "f" = (
-/turf/closed/wall/flock,
+/turf/closed/wall/flock/shuttle{
+	dir = 10
+	},
 /area/shuttle/trader)
 "j" = (
 /obj/machinery/door/flock,
@@ -28,7 +33,12 @@
 	pixel_x = 32;
 	pixel_y = -32
 	},
-/turf/closed/wall/flock,
+/turf/closed/wall/flock/shuttle,
+/area/shuttle/trader)
+"u" = (
+/turf/closed/wall/flock/shuttle{
+	dir = 9
+	},
 /area/shuttle/trader)
 "v" = (
 /obj/structure/lattice/flock,
@@ -43,7 +53,7 @@
 	pixel_x = -32;
 	pixel_y = 32
 	},
-/turf/closed/wall/flock,
+/turf/closed/wall/flock/shuttle,
 /area/shuttle/trader)
 "F" = (
 /obj/effect/flock_fluff/shuttle_wing/left{
@@ -51,16 +61,26 @@
 	pixel_x = 32;
 	pixel_y = -32
 	},
-/turf/closed/wall/flock,
+/turf/closed/wall/flock/shuttle,
+/area/shuttle/trader)
+"I" = (
+/turf/closed/wall/flock/shuttle{
+	dir = 6
+	},
 /area/shuttle/trader)
 "J" = (
-/turf/open/floor/flock,
+/turf/open/floor/flock/shuttle,
+/area/shuttle/trader)
+"L" = (
+/turf/closed/wall/flock/shuttle{
+	dir = 5
+	},
 /area/shuttle/trader)
 "N" = (
+/obj/machinery/door/flock,
 /obj/effect/flock_fluff/cockpit{
 	pixel_x = -128
 	},
-/obj/machinery/door/flock,
 /turf/open/floor/flock,
 /area/shuttle/trader)
 "O" = (
@@ -69,19 +89,19 @@
 /area/shuttle/trader)
 "R" = (
 /obj/effect/flock_fluff/shuttle_wing/destroyed/right,
-/turf/closed/wall/flock,
+/turf/closed/wall/flock/shuttle,
 /area/shuttle/trader)
 
 (1,1,1) = {"
 a
 a
-a
-f
-f
+u
+c
+c
 N
+c
+c
 f
-f
-a
 a
 a
 "}
@@ -89,11 +109,11 @@ a
 a
 a
 d
-f
+c
 J
 J
 J
-f
+c
 e
 a
 a
@@ -101,13 +121,13 @@ a
 (3,1,1) = {"
 a
 a
-f
+c
 J
 J
 J
 J
 J
-f
+c
 a
 a
 "}
@@ -120,7 +140,7 @@ J
 J
 J
 J
-f
+c
 a
 a
 "}
@@ -133,20 +153,20 @@ J
 J
 J
 J
-f
+c
 a
 a
 "}
 (6,1,1) = {"
 a
 a
-f
+c
 J
 J
 J
 J
 J
-f
+c
 a
 a
 "}
@@ -166,32 +186,32 @@ a
 (8,1,1) = {"
 a
 a
-f
+c
 J
 J
 J
 J
 J
-f
+c
 a
 a
 "}
 (9,1,1) = {"
 a
-f
-f
+u
+c
 J
 J
 J
 J
 J
-f
+c
 f
 a
 "}
 (10,1,1) = {"
 a
-f
+c
 J
 J
 J
@@ -199,12 +219,12 @@ J
 J
 J
 J
-f
+c
 a
 "}
 (11,1,1) = {"
 a
-f
+c
 J
 J
 J
@@ -212,12 +232,12 @@ J
 J
 J
 J
-f
+c
 a
 "}
 (12,1,1) = {"
-f
-f
+u
+c
 J
 J
 J
@@ -225,32 +245,32 @@ J
 J
 J
 J
-f
+c
 f
 "}
 (13,1,1) = {"
 F
-f
-f
-f
-f
+c
+c
+c
+c
 j
-f
-f
-f
-f
+c
+c
+c
+c
 q
 "}
 (14,1,1) = {"
 a
 a
-f
-f
+L
+c
 O
 O
 O
-f
-f
+c
+I
 a
 a
 "}

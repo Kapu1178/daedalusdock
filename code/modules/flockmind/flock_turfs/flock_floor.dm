@@ -95,3 +95,8 @@
 	is_on = FALSE
 	set_light_on(TRUE)
 	update_appearance(UPDATE_ICON_STATE)
+
+// Subtypes
+/turf/open/floor/flock/shuttle
+	icon_state = "shuttle-floor"
+	base_icon_state = "shuttle-floor"

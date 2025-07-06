@@ -66,6 +66,8 @@ GLOBAL_REAL_VAR(wall_overlays_cache) = list()
 	var/matset_name
 	/// Should the material name be used?
 	var/use_matset_name = TRUE
+	/// Should the wall use materials for it's appearance?
+	var/use_material_appearance = TRUE
 
 	var/list/dent_decals
 
@@ -87,13 +89,11 @@ GLOBAL_REAL_VAR(wall_overlays_cache) = list()
 	return FALSE
 
 /turf/closed/wall/update_name()
-	if(!use_matset_name)
-		return
-
-	if(rusted)
-		name = "rusted "+ matset_name
-	else
-		name = matset_name
+	if(use_matset_name)
+		if(rusted)
+			name = "rusted "+ matset_name
+		else
+			name = matset_name
 
 	return ..()
 
@@ -111,59 +111,60 @@ GLOBAL_REAL_VAR(wall_overlays_cache) = list()
 
 /// Most of this code is pasted within /obj/structure/falsewall. Be mindful of this
 /turf/closed/wall/update_overlays()
-	var/plating_color = wall_paint || material_color
-	var/stripe_color = stripe_paint || wall_paint || material_color
+	if(use_material_appearance)
+		var/plating_color = wall_paint || material_color
+		var/stripe_color = stripe_paint || wall_paint || material_color
 
-	var/neighbor_stripe = NONE
-	for (var/cardinal = NORTH; cardinal <= WEST; cardinal *= 2) //No list copy please good sir
-		var/turf/step_turf = get_step(src, cardinal)
-		var/can_area_smooth
-		CAN_AREAS_SMOOTH(src, step_turf, can_area_smooth)
-		if(isnull(can_area_smooth))
-			continue
-		for(var/atom/movable/movable_thing as anything in step_turf)
-			if(global.neighbor_typecache[movable_thing.type])
-				neighbor_stripe ^= cardinal
-				break
+		var/neighbor_stripe = NONE
+		for (var/cardinal = NORTH; cardinal <= WEST; cardinal *= 2) //No list copy please good sir
+			var/turf/step_turf = get_step(src, cardinal)
+			var/can_area_smooth
+			CAN_AREAS_SMOOTH(src, step_turf, can_area_smooth)
+			if(isnull(can_area_smooth))
+				continue
+			for(var/atom/movable/movable_thing as anything in step_turf)
+				if(global.neighbor_typecache[movable_thing.type])
+					neighbor_stripe ^= cardinal
+					break
 
-	var/old_cache_key = cache_key
-	cache_key = "[icon]:[smoothing_junction]:[plating_color]:[stripe_icon]:[stripe_color]:[neighbor_stripe]:[rusted]:[hard_decon && d_state]"
-	if(!(old_cache_key == cache_key))
+		var/old_cache_key = cache_key
+		cache_key = "[icon]:[smoothing_junction]:[plating_color]:[stripe_icon]:[stripe_color]:[neighbor_stripe]:[rusted]:[hard_decon && d_state]"
+		if(!(old_cache_key == cache_key))
 
-		var/potential_overlays = global.wall_overlays_cache[cache_key]
-		if(potential_overlays)
-			overlays = potential_overlays
-			color = plating_color
-		else
-			color = plating_color
-			//Updating the unmanaged wall overlays (unmanaged for optimisations)
-			overlays.len = 0
-			var/list/new_overlays = list()
+			var/potential_overlays = global.wall_overlays_cache[cache_key]
+			if(potential_overlays)
+				overlays = potential_overlays
+				color = plating_color
+			else
+				color = plating_color
+				//Updating the unmanaged wall overlays (unmanaged for optimisations)
+				overlays.len = 0
+				var/list/new_overlays = list()
 
-			if(stripe_icon)
-				var/image/smoothed_stripe = image(stripe_icon, icon_state)
-				smoothed_stripe.appearance_flags = RESET_COLOR
-				smoothed_stripe.color = stripe_color
-				new_overlays += smoothed_stripe
+				if(stripe_icon)
+					var/image/smoothed_stripe = image(stripe_icon, icon_state)
+					smoothed_stripe.appearance_flags = RESET_COLOR
+					smoothed_stripe.color = stripe_color
+					new_overlays += smoothed_stripe
 
-			if(neighbor_stripe)
-				var/image/neighb_stripe_overlay = image('icons/turf/walls/neighbor_stripe.dmi', "stripe-[neighbor_stripe]")
-				neighb_stripe_overlay.appearance_flags = RESET_COLOR
-				neighb_stripe_overlay.color = stripe_color
-				new_overlays += neighb_stripe_overlay
+				if(neighbor_stripe)
+					var/image/neighb_stripe_overlay = image('icons/turf/walls/neighbor_stripe.dmi', "stripe-[neighbor_stripe]")
+					neighb_stripe_overlay.appearance_flags = RESET_COLOR
+					neighb_stripe_overlay.color = stripe_color
+					new_overlays += neighb_stripe_overlay
 
-			if(rusted)
-				var/image/rust_overlay = image('icons/turf/rust_overlay.dmi', "blobby_rust")
-				rust_overlay.appearance_flags = RESET_COLOR
-				new_overlays += rust_overlay
+				if(rusted)
+					var/image/rust_overlay = image('icons/turf/rust_overlay.dmi', "blobby_rust")
+					rust_overlay.appearance_flags = RESET_COLOR
+					new_overlays += rust_overlay
 
-			if(hard_decon && d_state)
-				var/image/decon_overlay = image('icons/turf/walls/decon_states.dmi', "[d_state]")
-				decon_overlay.appearance_flags = RESET_COLOR
-				new_overlays += decon_overlay
+				if(hard_decon && d_state)
+					var/image/decon_overlay = image('icons/turf/walls/decon_states.dmi', "[d_state]")
+					decon_overlay.appearance_flags = RESET_COLOR
+					new_overlays += decon_overlay
 
-			overlays = new_overlays
-			global.wall_overlays_cache[cache_key] = new_overlays
+				overlays = new_overlays
+				global.wall_overlays_cache[cache_key] = new_overlays
 
 
 	if(dent_decals)
@@ -235,12 +236,14 @@ GLOBAL_REAL_VAR(wall_overlays_cache) = list()
 		hard_decon = null
 
 	if(reinf_mat_ref)
-		icon = plating_mat_ref.reinforced_wall_icon
-		material_color = plating_mat_ref.wall_color
+		if(use_material_appearance)
+			icon = plating_mat_ref.reinforced_wall_icon
+			material_color = plating_mat_ref.wall_color
 		explosion_block = initial(explosion_block) + 2
 	else
-		icon = plating_mat_ref.wall_icon
-		material_color = plating_mat_ref.wall_color
+		if(use_material_appearance)
+			icon = plating_mat_ref.wall_icon
+			material_color = plating_mat_ref.wall_color
 		explosion_block = initial(explosion_block)
 
 	if(reinf_mat_ref)
@@ -251,14 +254,13 @@ GLOBAL_REAL_VAR(wall_overlays_cache) = list()
 	plating_material = plating_mat
 	reinf_material = reinf_mat
 
-	if(reinf_material)
-		name = "reinforced [plating_mat_ref.name] [plating_mat_ref.wall_name]"
-		desc = "It seems to be a section of hull reinforced with [reinf_mat_ref.name] and plated with [plating_mat_ref.name]."
-	else
-		name = "[plating_mat_ref.name] [plating_mat_ref.wall_name]"
-		desc = "It seems to be a section of hull plated with [plating_mat_ref.name]."
-
-	matset_name = name
+	if(use_matset_name)
+		if(reinf_material)
+			matset_name = "reinforced [plating_mat_ref.name] [plating_mat_ref.wall_name]"
+			desc = "It seems to be a section of hull reinforced with [reinf_mat_ref.name] and plated with [plating_mat_ref.name]."
+		else
+			matset_name = "[plating_mat_ref.name] [plating_mat_ref.wall_name]"
+			desc = "It seems to be a section of hull plated with [plating_mat_ref.name]."
 
 	if(update_appearance)
 		update_appearance()

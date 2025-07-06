@@ -479,6 +479,18 @@ GLOBAL_LIST_EMPTY(station_turfs)
 	created_baseturf_lists[new_baseturfs[new_baseturfs.len]] = new_baseturfs.Copy()
 	return new_baseturfs
 
+/turf/proc/get_baseturf_underlay()
+	var/turf/path = SSmapping.level_trait(z, ZTRAIT_BASETURF) || /turf/open/space
+	if(!ispath(path))
+		path = text2path(path)
+		if(!ispath(path))
+			warning("Z-level [z] has invalid baseturf '[SSmapping.level_trait(z, ZTRAIT_BASETURF)]'")
+			path = /turf/open/space
+
+	var/mutable_appearance/underlay_appearance = mutable_appearance(initial(path.icon), initial(path.icon_state), layer = SPACE_LAYER + 0.1, plane = PLANE_SPACE)
+	underlay_appearance.appearance_flags = RESET_ALPHA | RESET_COLOR
+	return underlay_appearance
+
 /turf/proc/levelupdate()
 	for(var/obj/O in src)
 		if(O.initialized)

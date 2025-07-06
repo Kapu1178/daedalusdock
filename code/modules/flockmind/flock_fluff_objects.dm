@@ -10,6 +10,8 @@
 /obj/effect/flock_fluff/cockpit
 	icon = 'goon/icons/mob/featherzone-160x160.dmi'
 	icon_state = "shuttle-nose"
+
+	layer = HIGH_OBJ_LAYER
 	pixel_x = -64
 	pixel_y = -64
 
@@ -21,7 +23,7 @@
 	switch(dir)
 		if(NORTH)
 			pixel_x = -64
-			pixel_y = -32
+			pixel_y = 0
 		if(SOUTH)
 			pixel_x = -64
 			pixel_y = -96
