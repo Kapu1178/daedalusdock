@@ -47,7 +47,7 @@
 	owner.playsound_local(get_turf(owner), pick(akira_sounds), 20, TRUE)
 
 	var/message = pick(strings("flock.json", "the_signal"))
-	var/flock_text = "<i>... [gradient_text(message, "#3cb5a3", "#124e43")] ...</i>"
+	var/flock_text = "<i>... [FLOCKTEXT(message)] ...</i>"
 	to_chat(owner, flock_text)
 
 	addtimer(CALLBACK(src, PROC_REF(end_flash)), 15 SECONDS)

@@ -13,6 +13,9 @@
 /// Simply removes the < and > characters, and limits the length of the message.
 #define STRIP_HTML_SIMPLE(text, limit) (GLOB.angular_brackets.Replace(copytext(text, 1, limit), ""))
 
+/// Helper for making flock gradient text.
+#define FLOCKTEXT(text) gradient_text(text, "#3cb5a3", "#124e43")
+
 ///Index access defines for paper/var/add_info_style
 #define ADD_INFO_COLOR 1
 #define ADD_INFO_FONT 2

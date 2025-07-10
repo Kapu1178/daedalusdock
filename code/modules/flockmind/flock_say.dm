@@ -84,7 +84,7 @@
 		var/say_verb = pick("sings", "clicks", "whistles", "intones", "transmits", "submits", "uploads")
 		message = "[say_verb], \"[message]\""
 	else
-		message = "alerts, [gradient_text(message, "#3cb5a3", "#124e43")]"
+		message = "alerts, [FLOCKTEXT(message)]"
 
 	var/flock_message = "<span class='game say [jointext(spans, " ")]'><span class='bold'>\[[flock ? flock.name : "--.--"]\]</span> [span_name("[used_name]")] <span class='message'>[message]</span></span>"
 	var/silicon_message = "<span class='game say [jointext(spans, " ")]'><span class='bold'>\[?????\]</span> [span_name("[used_name]")] <span class='message'>[stars(message, 50)]</span></span>"
