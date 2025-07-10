@@ -44,3 +44,12 @@
 			continue
 
 		depth_first_search(child_node, visited_nodes, ++id_number)
+
+/// Jump to the given node ID.
+/datum/dialogue_holder/proc/jump_to_node(node_id)
+	var/datum/dialogue_node/node = nodes_by_id[node_id]
+	if(!node)
+		CRASH("Tried to jump to a non-existant node.")
+
+	current_node = node
+	return node
