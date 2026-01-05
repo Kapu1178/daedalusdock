@@ -17,8 +17,8 @@
 	author = _author
 	content = _content
 
-/datum/book_info/proc/set_title(_title, trusted = FALSE)  //Trusted should only be used for books read from the db, or in cases that we can be sure the info has already been sanitized
-	if(trusted)
+/datum/book_info/proc/set_title(_title, skip_sanitize = FALSE)  //skip_sanitize should only be used for books read from the db, or in cases that we can be sure the info has already been sanitized
+	if(skip_sanitize)
 		title = _title
 		return
 	title = reject_bad_text(trim(html_encode(_title), 30))
@@ -26,8 +26,8 @@
 /datum/book_info/proc/get_title(default="N/A") //Loads in an html decoded version of the title. Only use this for tgui menus, absolutely nothing else.
 	return html_decode(title) || "N/A"
 
-/datum/book_info/proc/set_author(_author, trusted = FALSE)
-	if(trusted)
+/datum/book_info/proc/set_author(_author, skip_sanitize = FALSE)
+	if(skip_sanitize)
 		author = _author
 		return
 	author = trim(html_encode(_author), MAX_NAME_LEN)
@@ -35,14 +35,14 @@
 /datum/book_info/proc/get_author(default="N/A")
 	return html_decode(author) || "N/A"
 
-/datum/book_info/proc/set_content(_content, trusted = FALSE)
-	if(trusted)
+/datum/book_info/proc/set_content(_content, skip_sanitize = FALSE)
+	if(skip_sanitize)
 		content = _content
 		return
 	content = trim(html_encode(_content), MAX_PAPER_LENGTH)
 
 /datum/book_info/proc/get_content(default="N/A")
-	return html_decode(content) || "N/A"
+	return html_decode(content) || default
 
 ///Returns a copy of the book_info datum
 /datum/book_info/proc/return_copy()
@@ -51,9 +51,9 @@
 
 ///Modify an existing book_info datum to match your data
 /datum/book_info/proc/copy_into(datum/book_info/copycat)
-	copycat.set_title(title, trusted = TRUE)
-	copycat.set_author(author, trusted = TRUE)
-	copycat.set_content(content, trusted = TRUE)
+	copycat.set_title(title, skip_sanitize = TRUE)
+	copycat.set_author(author, skip_sanitize = TRUE)
+	copycat.set_content(content, skip_sanitize = TRUE)
 	return copycat
 
 /datum/book_info/proc/compare(datum/book_info/cmp_with)
@@ -101,10 +101,11 @@
 
 /obj/item/book/proc/on_read(mob/user)
 	if(book_data?.content)
-		user << browse("<!DOCTYPE html><meta charset=UTF-8><TT><I>Penned by [book_data.author].</I></TT> <BR>" + "[book_data.content]", "window=book[window_size != null ? ";size=[window_size]" : ""]")
+		var/author_str = book_data.author && "<TT><I>Penned by [book_data.author].</I></TT><BR>"
+		user << browse("<!DOCTYPE html><meta charset=UTF-8>[author_str]" + "[book_data.content]", "window=book[window_size != null ? ";size=[window_size]" : ""]")
 		onclose(user, "book")
 	else
-		to_chat(user, span_notice("This book is completely blank!"))
+		to_chat(user, span_notice("This book is completely blank."))
 
 /// Generates a random icon state for the book
 /obj/item/book/proc/gen_random_icon_state()

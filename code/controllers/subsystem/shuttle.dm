@@ -86,8 +86,14 @@ SUBSYSTEM_DEF(shuttle)
 	/// Is the cargo shuttle currently blocked from leaving?
 	var/supply_blocked = FALSE
 
-	/// All of the possible supply packs that can be purchased by cargo.
+	/// k:v list of id -> /datum/supply_pack. Contains all of the possible supply packs that can be purchased by cargo.
 	var/list/supply_packs = list()
+
+	/// k:v list of serial_number -> /datum/supply_pack. Contains all of the possible supply packs that can be purchased by cargo.
+	var/list/supply_packs_by_serial = list()
+
+	/// k:v list of group -> /datum/supply_pack. Does not contain ungrouped packs.
+	var/list/supply_packs_by_group = list()
 
 	/// Queued supplies to be purchased for the chef.
 	var/list/chef_groceries = list()
@@ -159,7 +165,24 @@ SUBSYSTEM_DEF(shuttle)
 
 		supply_packs[pack.id] = pack
 
+		if(pack.group)
+			if(!supply_packs_by_group[pack.group])
+				supply_packs_by_group[pack.group] = list()
+			supply_packs_by_group[pack.group] += pack
+
 	sortTim(supply_packs, GLOBAL_PROC_REF(cmp_name_asc), associative = TRUE)
+	CHECK_TICK
+
+	// Generate serial numbers for each pack.
+	var/list/counters = list()
+
+	for(var/id, _pack in supply_packs)
+		var/datum/supply_pack/pack = _pack
+		counters[pack.serial_prefix] += rand(1, 36)
+
+		pack.serial_number = uppertext("[pack.serial_prefix][num2text(counters[pack.serial_prefix], 4, 36)]")
+		supply_packs_by_serial[pack.serial_number] = pack
+		CHECK_TICK
 
 	setup_shuttles(stationary_docking_ports)
 	has_purchase_shuttle_access = init_has_purchase_shuttle_access()

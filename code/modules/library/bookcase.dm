@@ -27,6 +27,7 @@ TYPEINFO_DEF(/obj/structure/bookcase)
 	. = ..()
 	if(!mapload || QDELETED(src))
 		return
+
 	set_anchored(TRUE)
 	state = BOOKCASE_FINISHED
 	for(var/obj/item/I in loc)
@@ -197,6 +198,60 @@ TYPEINFO_DEF(/obj/structure/bookcase)
 	. = ..()
 	new /obj/item/book/manual/wiki/research_and_development(src)
 	update_appearance()
+
+/obj/structure/bookcase/manuals/cargo_catalog
+	name = "Hermes Galactic Freight catalog bookcase"
+
+/obj/structure/bookcase/manuals/cargo_catalog/Initialize(mapload)
+	. = ..()
+	if(SSshuttle.initialized)
+		create_catalogs()
+	else
+		RegisterSignal(SSshuttle, COMSIG_SUBSYSTEM_POST_INITIALIZE, PROC_REF(create_catalogs))
+
+/obj/structure/bookcase/manuals/cargo_catalog/proc/create_catalogs()
+	SIGNAL_HANDLER
+
+	UnregisterSignal(SSshuttle, COMSIG_SUBSYSTEM_POST_INITIALIZE)
+	for(var/group, packs in SSshuttle.supply_packs_by_group)
+		var/volume = 1
+		var/list/book_entries = list()
+		for(var/datum/supply_pack/pack as anything in packs)
+			if(length(book_entries) > 20)
+				#warn temp titles
+				create_book("[group] vol. [convert_integer_to_words(volume)]", jointext(book_entries, ""))
+				book_entries = list()
+				volume++
+
+			var/pack_desc = pack.desc && "<div style='font-size: 1.2rem;'>[pack.desc]</div>"
+			book_entries += {"
+				<tr style='border-bottom: 2px solid black'>
+					<td style='width: 75%'>
+						<div style='font-size: 1.2rem;'>[pack.name]</div>
+						[pack_desc]
+					</td>
+					<td style='width: 25%;text-align: right;border-left: 2px solid black;font-size: 1.2rem'>
+						[pack.serial_number]
+					</td>
+				</tr>
+			"}
+
+		create_book("[group] vol. [convert_integer_to_words(volume)]", jointext(book_entries, ""))
+
+	update_appearance()
+
+/obj/structure/bookcase/manuals/cargo_catalog/proc/create_book(book_title, book_content)
+	var/obj/item/book/manual/cargo_catalog/book = new(src)
+	book.name = book_title
+	book.book_data.set_title(book_title, TRUE)
+	book.book_data.set_content(
+		{"
+			<table style='width: 100%'>
+			[book_content]
+			</table>
+		"},
+		TRUE
+	)
 
 #undef BOOKCASE_UNANCHORED
 #undef BOOKCASE_ANCHORED

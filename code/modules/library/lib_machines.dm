@@ -674,9 +674,9 @@
 			printed_book.name = "Book: [title]"
 			printed_book.book_data = new()
 			var/datum/book_info/fill = printed_book.book_data
-			fill.set_title(title, trusted = TRUE)
-			fill.set_author(author, trusted = TRUE)
-			fill.set_content(content, trusted = TRUE)
+			fill.set_title(title, skip_sanitize = TRUE)
+			fill.set_author(author, skip_sanitize = TRUE)
+			fill.set_content(content, skip_sanitize = TRUE)
 			printed_book.gen_random_icon_state()
 			visible_message(span_notice("[src]'s printer hums as it produces a completely bound book. How did it do that?"))
 		break

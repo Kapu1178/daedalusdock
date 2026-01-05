@@ -273,7 +273,7 @@
 			</html>
 
 			"}
-		book_data.set_content(wikiinfo, trusted = TRUE)
+		book_data.set_content(wikiinfo, skip_sanitize = TRUE)
 
 /obj/item/book/manual/wiki/chemistry
 	name = "Chemistry Textbook"
@@ -478,3 +478,9 @@
 	desc = "An entry of the Daedalus Service Practices, This one concerns the operation of supermatter engines."
 	icon_state = "bookdsp"
 	target_entry = "Guide to The Supermatter"
+
+/obj/item/book/manual/cargo_catalog
+	name = "you shouldn't see this!"
+	desc = "TODO"
+
+	window_size = "400x500"

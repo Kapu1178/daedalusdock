@@ -1,6 +1,12 @@
 /datum/supply_pack
 	var/name = "Crate"
 	var/group = ""
+	// UUID
+	var/id
+	/// Compile-defined prefix for the serial number generator. Used as a flavor tool to group alike packs.
+	var/serial_prefix = "TEMP"
+	/// Player-facing serial number for ordering purposes. Generated in SSshuttle init.
+	var/serial_number
 
 	// See cargo.dm
 	var/supply_flags = NONE
@@ -13,7 +19,6 @@
 
 	var/list/contains = null
 	var/crate_name = "crate"
-	var/id
 	var/desc = ""//no desc by default
 	var/crate_type = /obj/structure/closet/crate
 

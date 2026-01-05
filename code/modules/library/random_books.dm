@@ -60,9 +60,9 @@
 
 			to_randomize.book_data = new()
 			var/datum/book_info/data = to_randomize.book_data
-			data.set_title(book_deets[1], trusted = TRUE)
-			data.set_author(book_deets[2], trusted = TRUE)
-			data.set_content(book_deets[3], trusted = TRUE)
+			data.set_title(book_deets[1], skip_sanitize = TRUE)
+			data.set_author(book_deets[2], skip_sanitize = TRUE)
+			data.set_content(book_deets[3], skip_sanitize = TRUE)
 			to_randomize.name = "Book: [to_randomize.book_data.title]"
 			if(!existing_book)
 				to_randomize.gen_random_icon_state()
