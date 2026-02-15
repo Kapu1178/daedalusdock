@@ -7,7 +7,8 @@
 	"run_mapping_tests": true,
 	"traits": [
 		{
-			"Gravity": 1
+			"Gravity": 1,
+			"Linkage": "Cross"
 		}
 	],
 	"shuttles": {
