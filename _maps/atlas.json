@@ -11,7 +11,8 @@
 		}
 	],
 	"shuttles": {
-		"emergency": "emergency_goon"
+		"emergency": "emergency_goon",
+		"cargo": "cargo_atlas"
 	},
 	"disable_headset_common": true
 }

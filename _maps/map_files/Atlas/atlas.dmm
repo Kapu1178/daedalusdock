@@ -2356,7 +2356,6 @@
 /obj/structure/cable/yellow{
 	icon_state = "12"
 	},
-/obj/machinery/light/small/maintenance/directional/south,
 /obj/structure/cable/yellow{
 	icon_state = "10"
 	},
@@ -5096,7 +5095,7 @@
 "fqF" = (
 /obj/effect/turf_decal/bot,
 /obj/structure/reagent_dispensers/fueltank,
-/turf/open/floor/iron/white/white_large,
+/turf/open/floor/plating,
 /area/station/maintenance/starboard/greater)
 "fqW" = (
 /obj/effect/turf_decal/tile/neutral{
@@ -7826,10 +7825,6 @@
 	},
 /turf/open/floor/iron/ported/techfloor,
 /area/station/service/hydroponics)
-"hVY" = (
-/obj/effect/mapping_helpers/burnt_floor,
-/turf/open/floor/iron/white,
-/area/station/maintenance/starboard/greater)
 "hWJ" = (
 /obj/structure/table/wood/fancy,
 /obj/item/flashlight/lamp/green{
@@ -17481,7 +17476,7 @@
 "rxO" = (
 /obj/structure/closet/l3closet/virology,
 /obj/effect/turf_decal/bot,
-/turf/open/floor/iron/white/white_large,
+/turf/open/floor/plating,
 /area/station/maintenance/starboard/greater)
 "ryP" = (
 /obj/structure/cable/yellow{
@@ -19656,6 +19651,16 @@
 	},
 /turf/open/floor/plating,
 /area/station/maintenance/port/aft)
+"tOk" = (
+/obj/docking_port/stationary{
+	name = "Cargo Bay";
+	width = 12;
+	height = 7;
+	id = "supply_home";
+	dwidth = 6
+	},
+/turf/open/space/basic,
+/area/space/nearstation)
 "tOv" = (
 /obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
@@ -19723,7 +19728,7 @@
 "tQN" = (
 /obj/effect/turf_decal/bot,
 /obj/effect/spawner/random/structure/crate_loot,
-/turf/open/floor/iron/white/white_large,
+/turf/open/floor/plating,
 /area/station/maintenance/starboard/greater)
 "tRt" = (
 /obj/structure/overfloor_catwalk/iron_dark,
@@ -45376,7 +45381,7 @@ bSM
 rQm
 rQm
 dpx
-vBF
+gUm
 gUm
 sGj
 dwn
@@ -53304,7 +53309,7 @@ vOe
 vOe
 vOe
 vOe
-qkY
+tOk
 sKQ
 uEr
 uEr
@@ -57463,7 +57468,7 @@ mkE
 nxZ
 iMn
 rxO
-hVY
+oDB
 vPR
 jiE
 rmv
