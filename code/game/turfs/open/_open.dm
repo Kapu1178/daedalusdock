@@ -264,8 +264,8 @@
 
 /turf/open/indestructible/eternity
 	name = "eternity"
-	icon = 'icons/effects/alphacolors.dmi'
-	icon_state = "white"
+	icon = MAP_SWITCH('icons/effects/alphacolors.dmi', 'icons/effects/eternity.dmi')
+	icon_state = MAP_SWITCH("white", "eternity")
 
 	layer = HIGH_EFFECT_LAYER
 
@@ -287,7 +287,7 @@
 		pearlescent_overlay = image('icons/effects/eternity.dmi', icon_state = "eternity")
 		pearlescent_overlay.plane = GAME_PLANE
 		pearlescent_overlay.layer = HIGH_EFFECT_LAYER
-		pearlescent_overlay.alpha = 50
+		pearlescent_overlay.alpha = 100
 
 		add_overlays = list(whitifier_overlay, pearlescent_overlay)
 	add_overlay(add_overlays)
