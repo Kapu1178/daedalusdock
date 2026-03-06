@@ -99,10 +99,17 @@ TYPEINFO_DEF(/obj/structure/low_wall)
 		return
 	if(mover.throwing)
 		return TRUE
-	if(locate(/obj/structure/low_wall) in get_turf(mover))
+
+	var/turf/mover_turf = get_turf(mover)
+	if(locate(/obj/structure/low_wall) in mover_turf)
 		return TRUE
-	var/obj/structure/table/T = locate() in get_turf(mover)
+
+	var/obj/structure/table/T = locate() in mover_turf
 	if(T && !T.is_flipped())
+		return TRUE
+
+	var/obj/structure/stairs/stairs = locate() in mover_turf
+	if(stairs && stairs.dir == REVERSE_DIR(border_dir))
 		return TRUE
 
 /obj/structure/low_wall/IsObscured()

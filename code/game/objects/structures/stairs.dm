@@ -29,13 +29,6 @@
 /obj/structure/stairs/Initialize(mapload)
 	SET_TRACKING(__TYPE__)
 	update_surrounding()
-
-	var/static/list/loc_connections = list(
-		COMSIG_ATOM_EXIT = PROC_REF(on_exit),
-	)
-
-	AddElement(/datum/element/connect_loc, loc_connections)
-
 	return ..()
 
 /obj/structure/stairs/Destroy()
@@ -55,22 +48,36 @@
 		if(S)
 			S.update_appearance()
 
-/obj/structure/stairs/proc/on_exit(datum/source, atom/movable/leaving, direction, no_side_effects)
-	SIGNAL_HANDLER
+/obj/structure/stairs/Exit(atom/movable/leaving, direction, no_side_effects)
+	. = ..()
+	if(!.)
+		return
 
-	if(leaving == src)
-		return //Let's not block ourselves.
+	if(direction == dir && !(GetAbove(src) || check_ascent(leaving, TRUE)))
+		var/turf/dest_turf = get_step(src, direction)
+		return !!locate(/obj/structure/table, dest_turf) || !!locate(/obj/structure/stairs, dest_turf)
 
 	if(!isobserver(leaving) && isTerminator() && direction == dir)
 		if(!no_side_effects)
 			INVOKE_ASYNC(src, PROC_REF(stair_ascend), leaving)
-		leaving.Bump(src)
-		return COMPONENT_ATOM_BLOCK_EXIT
-
-/obj/structure/stairs/Cross(atom/movable/AM)
-	if(isTerminator() && (get_dir(src, AM) == dir))
+			leaving.Bump(src)
 		return FALSE
-	return ..()
+
+/obj/structure/stairs/CanAllowThrough(atom/movable/mover, border_dir)
+	. = ..()
+	// Not a terminator: allow entry
+	if(!isTerminator())
+		return
+
+	// They aren't coming from the terminator direction: allow entry.
+	if(border_dir != dir)
+		return
+
+	var/turf/moving_from = get_step(src, border_dir)
+	if(locate(/obj/structure/table, moving_from) || locate(/obj/structure/low_wall, moving_from))
+		return
+
+	return FALSE
 
 /obj/structure/stairs/update_icon_state()
 	icon_state = "stairs[isTerminator() ? "_t" : null]"
@@ -78,21 +85,8 @@
 
 /obj/structure/stairs/proc/stair_ascend(atom/movable/climber)
 	var/turf/my_turf = get_turf(src)
-	var/turf/checking = GetAbove(my_turf)
-	if(!istype(checking))
-		return
-
 	var/turf/target = get_step_multiz(my_turf, (dir|UP))
-	if(!target)
-		to_chat(climber, span_notice("There is nothing of interest in that direction."))
-		return
-
-	if(!checking.CanZPass(climber, UP, ZMOVE_STAIRS_FLAGS))
-		to_chat(climber, span_warning("Something blocks the path."))
-		return
-
-	if(!target.Enter(climber, FALSE))
-		to_chat(climber, span_warning("Something blocks the path."))
+	if(!check_ascent(climber))
 		return
 
 	climber.forceMoveWithGroup(target, z_movement = ZMOVING_VERTICAL)
@@ -104,6 +98,27 @@
 	/// Moves anything that's being dragged by src or anything buckled to it to the stairs turf.
 	for(var/mob/living/buckled as anything in climber.buckled_mobs)
 		buckled.handle_grabs_during_movement(my_turf, get_dir(my_turf, target))
+
+/obj/structure/stairs/proc/check_ascent(atom/movable/climber, silent)
+	var/turf/my_turf = get_turf(src)
+	var/turf/target = get_step_multiz(my_turf, (dir|UP))
+	if(!target)
+		if(!silent)
+			to_chat(climber, span_notice("There is nothing of interest in that direction."))
+		return
+
+	var/turf/checking = GetAbove(my_turf)
+	if(!checking?.CanZPass(climber, UP, ZMOVE_STAIRS_FLAGS))
+		if(!silent)
+			to_chat(climber, span_warning("Something blocks the path."))
+		return
+
+	if(!target.Enter(climber, FALSE))
+		if(!silent)
+			to_chat(climber, span_warning("Something blocks the path."))
+		return
+
+	return TRUE
 
 /obj/structure/stairs/intercept_zImpact(list/falling_movables, levels = 1)
 	. = ..()
