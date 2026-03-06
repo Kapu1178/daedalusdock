@@ -340,7 +340,7 @@ TYPEINFO_DEF(/obj/item/radio/headset)
 
 /obj/item/radio/headset/get_channels()
 	. = ..()
-	for(var/channel_name in keyslot?.channels)
+	for(var/channel_name in keyslot2?.channels)
 		.[channel_name] = CHANNEL_STATUS_LISTENING
 
 /obj/item/radio/headset/AltClick(mob/living/user)
