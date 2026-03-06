@@ -283,6 +283,7 @@ TYPEINFO_DEF(/obj/item/radio/headset)
 /obj/item/radio/headset/silicon/ai/Initialize(mapload)
 	keyslot2 = new /obj/item/encryptionkey/ai(src)
 	. = ..()
+	can_broadcast_on_common = TRUE
 
 /obj/item/radio/headset/screwdriver_act(mob/living/user, obj/item/tool)
 	user.set_machine(src)
