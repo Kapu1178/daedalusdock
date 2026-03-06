@@ -1,3 +1,6 @@
+TYPEINFO_DEF(/obj/item/clothing/shoes/magboots)
+	default_armor = list(BLUNT = 15, PUNCTURE = 15, SLASH = 30, LASER = 20, ENERGY = 10, BOMB = 20, BIO = 10, FIRE = 100, ACID = 50)
+
 /obj/item/clothing/shoes/magboots
 	desc = "Magnetic boots, often used during extravehicular activity to ensure the user remains safely attached to the vehicle."
 	name = "magboots"
