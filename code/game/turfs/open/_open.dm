@@ -261,3 +261,33 @@
 
 /turf/open/indestructible/necropolis/air
 	initial_gas = OPENTURF_DEFAULT_ATMOS
+
+/turf/open/indestructible/eternity
+	name = "eternity"
+	icon = 'icons/effects/alphacolors.dmi'
+	icon_state = "white"
+
+	layer = HIGH_EFFECT_LAYER
+
+/turf/open/indestructible/eternity/Initialize(mapload)
+	. = ..()
+	setDir(pick(GLOB.cardinals))
+
+	// Fog that renders over everything
+	var/static/list/add_overlays
+	if(!add_overlays)
+		var/image/whitifier_overlay
+		whitifier_overlay = image('icons/effects/alphacolors.dmi', icon_state = "white")
+		whitifier_overlay.plane = GAME_PLANE
+		whitifier_overlay.layer = HIGH_EFFECT_LAYER
+		whitifier_overlay.blend_mode = BLEND_ADD
+		whitifier_overlay.alpha = 100
+
+		var/image/pearlescent_overlay
+		pearlescent_overlay = image('icons/effects/eternity.dmi', icon_state = "eternity")
+		pearlescent_overlay.plane = GAME_PLANE
+		pearlescent_overlay.layer = HIGH_EFFECT_LAYER
+		pearlescent_overlay.alpha = 50
+
+		add_overlays = list(whitifier_overlay, pearlescent_overlay)
+	add_overlay(add_overlays)

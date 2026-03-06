@@ -1,0 +1,20 @@
+{
+	"version": 1,
+	"map_name": "Test Map",
+	"map_path": "map_files/Testmap",
+	"map_file": "testmap.dmm",
+	"webmap_id": "Testmap",
+	"run_mapping_tests": true,
+	"traits": [
+		{
+			"Gravity": 1,
+			"Baseturf": "/turf/open/misc/grass",
+			"Linkage": "UNAFFECTED"
+		}
+	],
+	"shuttles": {
+		"emergency": "emergency_goon",
+		"cargo": "cargo_atlas"
+	},
+	"disable_headset_common": true
+}

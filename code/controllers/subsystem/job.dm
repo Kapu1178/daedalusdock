@@ -783,6 +783,14 @@ SUBSYSTEM_DEF(job)
 
 /datum/controller/subsystem/job/proc/get_last_resort_spawn_points()
 	//bad mojo
+
+	// See if the map has any backup spawns.
+	var/obj/effect/landmark/start/backup/backup_spawn = get_start_landmark_for(/obj/effect/landmark/start/backup::name)
+	if(backup_spawn)
+		. = backup_spawn.get_spawn_location()
+		if(.)
+			return
+
 	var/area/shuttle/arrival/arrivals_area = GLOB.areas_by_type[/area/shuttle/arrival]
 	if(arrivals_area)
 		//first check if we can find a chair
