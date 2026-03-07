@@ -82,7 +82,7 @@
 	var/image/I = image(shadower ? 'icons/turf/uncut_shadows.dmi' : 'icons/turf/shadows.dmi', cstr)
 	I.alpha = alpha
 	I.blend_mode = BLEND_OVERLAY
-	I.appearance_flags = RESET_ALPHA | RESET_COLOR | TILE_BOUND
+	I.appearance_flags = RESET_ALPHA | RESET_COLOR | TILE_BOUND | RESET_TRANSFORM
 	I.layer = AO_LAYER
 	// If there's an offset, counteract it.
 	if (px || py || pz || pw)

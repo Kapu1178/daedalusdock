@@ -4,8 +4,8 @@
 	always_unpowered = TRUE
 
 	area_lighting = AREA_LIGHTING_STATIC
-	base_lighting_alpha = 200
-	base_lighting_color = LIGHTBULB_COLOR_WARM
+	base_lighting_alpha = 255
+	base_lighting_color = "FFFFFF"
 
 	power_light = FALSE
 	power_equip = FALSE
@@ -14,6 +14,5 @@
 	area_flags = UNIQUE_AREA | NO_ALERTS
 	outdoors = TRUE
 
-	//ambience_index = AMBIENCE_SPACE
-	// sound_environment = SOUND_AREA_SPACE
-	// ambient_buzz = null
+	ambience_index = null
+	sound_environment = SOUND_ENVIRONMENT_FOREST
