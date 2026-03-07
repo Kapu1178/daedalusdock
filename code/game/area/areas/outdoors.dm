@@ -5,7 +5,7 @@
 
 	area_lighting = AREA_LIGHTING_STATIC
 	base_lighting_alpha = 200
-	base_lighting_color = LIGHTBULB_COLOR_SLIGHTLY_WARM
+	base_lighting_color = LIGHTBULB_COLOR_WARM
 
 	power_light = FALSE
 	power_equip = FALSE
