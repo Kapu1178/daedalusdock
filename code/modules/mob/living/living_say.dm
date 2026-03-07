@@ -284,7 +284,7 @@ GLOBAL_LIST_INIT(message_modes_stat_limits, list(
 	send_speech(message, range, src, bubble_type, spans, language, message_mods)//roughly 58% of living/say()'s total cost
 
 	///Play a sound to indicate we just spoke
-	if(client && !is_visual_language)
+	if((client || HAS_TRAIT(src, TRAIT_ACTOR)) && !is_visual_language)
 		var/ending = copytext_char(message, -1)
 		var/sound/speak_sound
 		if(ending == "?")

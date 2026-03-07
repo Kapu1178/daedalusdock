@@ -123,7 +123,7 @@
 
 /// Returns TRUE if the movable can speak the language. This does not check it knows the language.
 /datum/language/proc/can_speak_language(atom/movable/speaker, silent = TRUE, ignore_mute = FALSE)
-	if(!isliving(speaker))
+	if(!isliving(speaker) || HAS_TRAIT(speaker, TRAIT_ACTOR))
 		return TRUE
 
 	var/mob/living/L = speaker

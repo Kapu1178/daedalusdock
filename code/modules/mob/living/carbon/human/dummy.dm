@@ -18,6 +18,36 @@ INITIALIZE_IMMEDIATE(/mob/living/carbon/human/dummy)
 /mob/living/carbon/human/dummy/attach_rot(mapload)
 	return
 
+/mob/living/carbon/human/dummy/needs_organ(slot)
+	return FALSE
+
+/mob/living/carbon/human/dummy/undergoing_cyanosis()
+	return FALSE
+
+/mob/living/carbon/human/dummy/undergoing_liver_failure()
+	return FALSE
+
+/mob/living/carbon/human/dummy/undergoing_pale_skin()
+	return FALSE
+
+/mob/living/carbon/human/dummy/undergoing_nervous_system_failure()
+	return FALSE
+
+/mob/living/carbon/human/dummy/undergoing_jaundice()
+	return NONE
+
+/mob/living/carbon/human/dummy/getOxyLoss()
+	return 0
+
+/mob/living/carbon/human/dummy/getFireLoss()
+	return 0
+
+/mob/living/carbon/human/dummy/getBruteLoss()
+	return 0
+
+/mob/living/carbon/human/dummy/getToxLoss()
+	return 0
+
 /mob/living/carbon/human/dummy/set_species(datum/species/mrace, icon_update = TRUE, pref_load = FALSE)
 	harvest_organs()
 	return ..()

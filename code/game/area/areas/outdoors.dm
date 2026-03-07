@@ -1,11 +1,12 @@
 /area/outdoors
 	icon_state = "space"
+
 	requires_power = TRUE
 	always_unpowered = TRUE
 
 	area_lighting = AREA_LIGHTING_STATIC
-	base_lighting_alpha = 255
-	base_lighting_color = "FFFFFF"
+	base_lighting_alpha = 240
+	base_lighting_color = LIGHTBULB_COLOR_WARM
 
 	power_light = FALSE
 	power_equip = FALSE
