@@ -29,7 +29,7 @@
 
 	seconds_spent++
 	if(seconds_spent <= 10 && (seconds_spent % 2 == 0))
-		owner.add_or_update_variable_movespeed_modifier(/datum/movespeed_modifier/eternity, slowdown = 1 + (seconds_spent / 2))
+		owner.add_or_update_variable_movespeed_modifier(/datum/movespeed_modifier/eternity, slowdown = 1 + (seconds_spent * 0.8))
 		owner.transition_filter(
 		"eternity_motion_blur", 2 SECONDS,
 			list(
