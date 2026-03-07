@@ -1,6 +1,5 @@
-author: Kapu1178
-delete-after: true
-changes:
+2026-03-07:
+  Kapu1178:
   - bugfix: Fixed AI being unable to properly use their radio like at all. (FOR REAL
       THIS TIME)
   - rscadd: Added armor ratings to magboots. (I forget whose idea this was)
