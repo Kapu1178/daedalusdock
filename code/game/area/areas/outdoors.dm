@@ -13,7 +13,7 @@
 
 	area_flags = UNIQUE_AREA | NO_ALERTS
 	outdoors = TRUE
-	ambience_index = AMBIENCE_SPACE
 
+	//ambience_index = AMBIENCE_SPACE
 	// sound_environment = SOUND_AREA_SPACE
 	// ambient_buzz = null
