@@ -126,7 +126,10 @@ GLOBAL_LIST_INIT(barefootstep, list(
 		'sound/effects/footstep/grass1.ogg',
 		'sound/effects/footstep/grass2.ogg',
 		'sound/effects/footstep/grass3.ogg',
-		'sound/effects/footstep/grass4.ogg'), 75, 0),
+		'sound/effects/footstep/grass4.ogg',
+		'sound/effects/footstep/grass5.ogg',
+		'sound/effects/footstep/grass5.ogg'), 75, 0),
+
 	FOOTSTEP_WATER = list(list(
 		'sound/effects/footstep/water1.ogg',
 		'sound/effects/footstep/water2.ogg',
