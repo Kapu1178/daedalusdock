@@ -13,3 +13,7 @@
 
 /datum/movespeed_modifier/vampire_wasting
 	slowdown = 1
+
+/datum/movespeed_modifier/eternity
+	variable = TRUE
+	slowdown = 1

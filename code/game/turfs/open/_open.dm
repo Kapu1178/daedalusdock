@@ -263,11 +263,14 @@
 	initial_gas = OPENTURF_DEFAULT_ATMOS
 
 /turf/open/indestructible/eternity
-	name = "eternity"
+	name = "\proper eternity"
 	icon = MAP_SWITCH('icons/effects/alphacolors.dmi', 'icons/effects/eternity.dmi')
 	icon_state = MAP_SWITCH("white", "eternity")
 
-	layer = HIGH_EFFECT_LAYER
+	footstep = FOOTSTEP_GRASS
+	barefootstep = FOOTSTEP_GRASS
+	clawfootstep = FOOTSTEP_GRASS
+	heavyfootstep = FOOTSTEP_GENERIC_HEAVY
 
 /turf/open/indestructible/eternity/Initialize(mapload)
 	. = ..()
@@ -291,3 +294,7 @@
 
 		add_overlays = list(whitifier_overlay, pearlescent_overlay)
 	add_overlay(add_overlays)
+
+/turf/open/indestructible/eternity/Entered(atom/movable/arrived, atom/old_loc, list/atom/old_locs)
+	. = ..()
+	astype(arrived, /mob/living)?.apply_status_effect(/datum/status_effect/eternity)

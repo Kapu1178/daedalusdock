@@ -112,6 +112,8 @@ INITIALIZE_IMMEDIATE(/obj/effect/landmark)
 	name = "BACKUP SPAWN"
 	icon_state = JOB_ASSISTANT
 
+	delete_after_roundstart = FALSE
+
 /obj/effect/landmark/start/assistant
 	name = JOB_ASSISTANT
 	icon_state = JOB_ASSISTANT //icon_state is case sensitive. why are all of these capitalized? because fuck you that's why
