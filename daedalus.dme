@@ -1329,6 +1329,7 @@
 #include "code\game\area\areas\holodeck.dm"
 #include "code\game\area\areas\mining.dm"
 #include "code\game\area\areas\misc.dm"
+#include "code\game\area\areas\outdoors.dm"
 #include "code\game\area\areas\shuttles.dm"
 #include "code\game\area\areas\station.dm"
 #include "code\game\area\areas\atlas\ai_monitored.dm"

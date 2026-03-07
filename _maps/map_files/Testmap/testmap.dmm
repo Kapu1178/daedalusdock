@@ -1,18 +1,18 @@
 //MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
 "a" = (
 /turf/open/misc/grass,
-/area/space)
+/area/outdoors)
 "d" = (
 /obj/effect/landmark/start/backup,
 /turf/open/misc/grass,
-/area/space)
+/area/outdoors)
 "B" = (
 /obj/effect/landmark/observer_start,
 /turf/open/misc/grass,
-/area/space)
+/area/outdoors)
 "L" = (
 /turf/open/indestructible/eternity,
-/area/space)
+/area/outdoors)
 
 (1,1,1) = {"
 L
