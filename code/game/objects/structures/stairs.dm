@@ -60,13 +60,14 @@
 
 	if(direction == dir && !(GetAbove(src) || check_ascent(leaving, TRUE)))
 		var/turf/dest_turf = get_step(src, direction)
-		return !!locate(/obj/structure/table, dest_turf) || !!locate(/obj/structure/stairs, dest_turf)
+		if(locate(/obj/structure/table, dest_turf) || locate(/obj/structure/stairs, dest_turf))
+			return NONE
 
 	if(!isobserver(leaving) && isTerminator() && direction == dir)
 		if(!no_side_effects)
 			INVOKE_ASYNC(src, PROC_REF(stair_ascend), leaving)
 			leaving.Bump(src)
-		return FALSE
+		return COMPONENT_ATOM_BLOCK_EXIT
 
 /obj/structure/stairs/CanAllowThrough(atom/movable/mover, border_dir)
 	. = ..()
@@ -107,7 +108,7 @@
 /obj/structure/stairs/proc/check_ascent(atom/movable/climber, silent)
 	var/turf/my_turf = get_turf(src)
 	var/turf/target = get_step_multiz(my_turf, (dir|UP))
-	if(!target)
+	if(!target || isopenspaceturf(target))
 		if(!silent)
 			to_chat(climber, span_notice("There is nothing of interest in that direction."))
 		return
