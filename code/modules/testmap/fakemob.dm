@@ -201,3 +201,26 @@
 	puppet.update_body_parts(TRUE)
 	puppet.dress_up_as_job(SSjob.GetJob(JOB_ASSISTANT), TRUE)
 	return puppet
+
+/obj/effect/fakemob/stairman
+	name = "Clybe"
+	dialogue = list(
+		"Is my tower not wonderous?",
+		"I wish I could keep going higher.",
+		"How am I to get down, whence I am so close to heaven?",
+	)
+
+/obj/effect/fakemob/roadman/create_meat_puppet()
+	var/mob/living/carbon/human/dummy/consistent/puppet = ..()
+	puppet.update_body_parts(TRUE)
+	puppet.dress_up_as_job(SSjob.GetJob(JOB_STATION_ENGINEER), TRUE)
+	return puppet
+
+/obj/effect/mapping_helpers/dead_stairman
+	name = "Dead Stairman"
+
+/obj/effect/mapping_helpers/dead_stairman/Initialize(mapload)
+	. = ..()
+	var/mob/living/carbon/human/consistent/H = new(loc)
+	H.dress_up_as_job(SSjob.GetJob(JOB_STATION_ENGINEER), TRUE)
+	H.gib(TRUE, TRUE)

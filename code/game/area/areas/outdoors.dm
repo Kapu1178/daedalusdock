@@ -17,3 +17,7 @@
 
 	ambience_index = null
 	sound_environment = SOUND_ENVIRONMENT_FOREST
+
+/area/outdoors/midnight
+	base_lighting_alpha = 80
+	base_lighting_color = COLOR_PURPLE
