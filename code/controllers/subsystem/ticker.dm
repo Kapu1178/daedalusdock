@@ -85,8 +85,6 @@ SUBSYSTEM_DEF(ticker)
 	var/emergency_reason
 
 /datum/controller/subsystem/ticker/Initialize(timeofday)
-	gametime_offset = rand(0, 23) HOURS
-
 	pick_login_music()
 	pick_credits_music()
 
@@ -115,11 +113,7 @@ SUBSYSTEM_DEF(ticker)
 		GLOB.revolution_code_phrase_regex = codeword_match
 
 	start_at = world.time + (CONFIG_GET(number/lobby_countdown) * 10)
-	if(CONFIG_GET(flag/randomize_shift_time))
-		gametime_offset = rand(0, 23) HOURS
-	else if(CONFIG_GET(flag/shift_time_realtime))
-		gametime_offset = world.timeofday
-
+	set_station_time()
 	if(GLOB.is_debug_server)
 		mode = new /datum/game_mode/extended
 
@@ -702,6 +696,15 @@ SUBSYSTEM_DEF(ticker)
 	for(var/mob/M in GLOB.player_list)
 		if(M.client.prefs?.toggles & SOUND_ENDOFROUND)
 			SEND_SOUND(M.client, end_of_round_sound_ref)
+
+/// Not set in init, as we want the time to be set exactly when the round starts.
+/datum/controller/subsystem/ticker/proc/set_station_time()
+	if(SSmapping.config.station_time)
+		gametime_offset = SSmapping.config.station_time
+	else if(CONFIG_GET(flag/randomize_shift_time))
+		gametime_offset = rand(0, 23) HOURS
+	else if(CONFIG_GET(flag/shift_time_realtime))
+		gametime_offset = world.timeofday
 
 /datum/controller/subsystem/ticker/proc/choose_round_end_song()
 	var/list/reboot_sounds = flist("[global.config.directory]/reboot_themes/")

@@ -205,7 +205,10 @@ Specifically: ZMIMIC_MAX_PLANE to (ZMIMIC_MAX_PLANE - ZMIMIC_MAX_DEPTH)
 //-------------------- HUD ---------------------
 //HUD layer defines
 #define HUD_PLANE 1000
+//-------------------- ABOVE HUD ---------------------
 #define ABOVE_HUD_PLANE 1100
+#define BLACKOUT_LAYER 10
+#define ABOVE_BLACKOUT_LAYER 11
 
 #define RADIAL_BACKGROUND_LAYER 0
 ///1000 is an unimportant number, it's just to normalize copied layers

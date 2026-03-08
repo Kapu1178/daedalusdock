@@ -46,6 +46,9 @@
 
 	var/disable_headset_common = FALSE
 
+	/// Override for station time. Null uses config values.
+	var/station_time = null
+
 /**
  * Proc that simply loads the default map config, which should always be functional.
  */
@@ -218,6 +221,9 @@
 		run_mapping_tests = json["run_mapping_tests"]
 
 	disable_headset_common = json["disable_headset_common"]
+
+	if("station_time" in json)
+		station_time = json["station_time"]
 
 	defaulted = FALSE
 	return TRUE

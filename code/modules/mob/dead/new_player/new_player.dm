@@ -260,10 +260,11 @@
 /mob/dead/new_player/proc/transfer_character()
 	new_character.PossessByPlayer(key)
 	new_character.client?.stoptitlemusic()
-	new_character.client?.show_location_blurb()
 
 	var/area/joined_area = get_area(new_character.loc)
 	if(joined_area)
+		if(joined_area.area_flags & SHOW_NAME)
+			new_character.client?.show_location_blurb()
 		joined_area.on_joining_game(new_character)
 
 	new_character = null

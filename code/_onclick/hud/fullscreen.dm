@@ -117,6 +117,10 @@
 	layer = BLIND_LAYER + 0.01
 	plane = FULLSCREEN_PLANE
 
+/atom/movable/screen/fullscreen/blind/blinder/above_hud
+	plane = ABOVE_HUD_PLANE
+	layer = BLACKOUT_LAYER
+
 /atom/movable/screen/fullscreen/curse
 	icon_state = "curse"
 	layer = CURSE_LAYER

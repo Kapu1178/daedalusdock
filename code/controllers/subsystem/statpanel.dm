@@ -32,7 +32,7 @@ SUBSYSTEM_DEF(statpanels)
 			"Time Dilation: [round(SStime_track.time_dilation_current,1)]% AVG:([round(SStime_track.time_dilation_avg_fast,1)]%, [round(SStime_track.time_dilation_avg,1)]%, [round(SStime_track.time_dilation_avg_slow,1)]%)",
 			"Server Time: [time2text(world.timeofday, "hh:mm:ss DD-MM-YYYY")]",
 			"\n",
-			"Station Time: [stationtime2text()] [stationdate2text()]",
+			"Station Time: [SSticker?.current_state >= GAME_STATE_PLAYING ? "[stationtime2text()] [stationdate2text()]" : "Not ready"]",
 			"Internal Round Timer: [SSticker.round_start_time ? time2text(world.time - SSticker.round_start_time, "hh:mm:ss", 0) : "The round hasn't started yet!"]",
 			"Actual Round Timer: [SSticker.round_start_timeofday ? time2text(REALTIMEOFDAY - SSticker.round_start_timeofday, "hh:mm:ss", 0) : "The round hasn't started yet!"]",
 			"\n",

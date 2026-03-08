@@ -17,7 +17,11 @@
 	outdoors = TRUE
 
 	ambience_index = null
-	sound_environment = SOUND_ENVIRONMENT_FOREST
+	sound_environment = SOUND_ENVIRONMENT_PLAIN
+
+/area/outdoors/on_joining_game(mob/living/boarder)
+	. = ..()
+	SSeternity.for_whom_the_bell_tolls(boarder, TRUE)
 
 /area/outdoors/midnight
 	base_lighting_alpha = 80

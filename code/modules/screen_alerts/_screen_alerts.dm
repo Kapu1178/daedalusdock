@@ -19,17 +19,15 @@
 	if(text)
 		text_box.text_to_play = text
 
+	. = text_box
 	LAZYADD(client.screen_texts, text_box)
 	text_box.owner_ref = WEAKREF(client)
-
-	if(LAZYLEN(client.screen_texts) == 1) //lets only play one at a time, for thematic effect and prevent overlap
-		text_box.play_to_client()
-		return
+	text_box.play_to_client()
 
 /atom/movable/screen/text/screen_text
 	icon = null
 	icon_state = null
-	alpha = 255
+	alpha = 0
 	plane = HUD_PLANE
 
 	maptext_height = 64
@@ -62,6 +60,9 @@
 	/// Should this automatically end?
 	var/auto_end = TRUE
 
+	/// Set when the screen text starts to fade out. Is not set if the screen text doesn't fade.
+	var/fading = FALSE
+
 /atom/movable/screen/text/screen_text/Destroy()
 	if(owner_ref)
 		remove_from_screen()
@@ -79,8 +80,16 @@
 	owner.screen += src
 
 	if(fade_in_time)
-		animate(src, alpha = 255)
+		animate(src, alpha = 255, time = fade_in_time)
+	else
+		alpha = 255
 
+	animate_text()
+
+	if(auto_end)
+		addtimer(CALLBACK(src, PROC_REF(fade_out)), fade_out_delay)
+
+/atom/movable/screen/text/screen_text/proc/animate_text()
 	var/list/lines_to_skip = list()
 	var/static/html_locate_regex = regex("<.*>")
 	var/tag_position = findtext(text_to_play, html_locate_regex)
@@ -98,26 +107,18 @@
 			tag_position = findtext(text_to_play, html_locate_regex, tag_position)
 			reading_tag = TRUE
 
-	// tag_position = findtext(text_to_play, "&nbsp;")
-	// while(tag_position)
-	// 	lines_to_skip.Add(tag_position, tag_position+1, tag_position+2, tag_position+3, tag_position+4, tag_position+5)
-	// 	tag_position = tag_position + 6
-	// 	tag_position = findtext(text_to_play, "&nbsp;", tag_position)
-
 	for(var/letter = 2 to length(text_to_play) + letters_per_update step letters_per_update)
 		if(letter in lines_to_skip)
 			continue
 
-		maptext = "[style_open][copytext_char(text_to_play, 1, letter)][style_close]"
+		animate(maptext = "[style_open][copytext_char(text_to_play, 1, letter)][style_close]", flags = ANIMATION_PARALLEL)
 		if(QDELETED(src))
 			return
 		sleep(play_delay)
 
-	if(auto_end)
-		addtimer(CALLBACK(src, PROC_REF(fade_out)), fade_out_delay)
-
 ///handles post-play effects like fade out after the fade out delay
 /atom/movable/screen/text/screen_text/proc/fade_out()
+	fading = TRUE
 	if(!fade_out_time)
 		end_play()
 		return
@@ -125,21 +126,10 @@
 	animate(src, alpha = 0, time = fade_out_time)
 	addtimer(CALLBACK(src, PROC_REF(end_play)), fade_out_time)
 
-///ends the play then deletes this screen object and plalys the next one in queue if it exists
+///ends the play then deletes this screen object.
 /atom/movable/screen/text/screen_text/proc/end_play()
-	remove_and_play_next()
-	qdel(src)
-
-/// Removes the text from the player's screen and plays the next one if present.
-/atom/movable/screen/text/screen_text/proc/remove_and_play_next()
-	var/client/owner = owner_ref.resolve()
-	if(isnull(owner))
-		return
-
 	remove_from_screen()
-	if(!LAZYLEN(owner.screen_texts))
-		return
-	owner.screen_texts[1].play_to_client()
+	qdel(src)
 
 /atom/movable/screen/text/screen_text/proc/remove_from_screen()
 	var/client/owner = owner_ref.resolve()

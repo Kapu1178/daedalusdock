@@ -5,6 +5,7 @@
 	"map_file": "testmap.dmm",
 	"webmap_id": "Testmap",
 	"run_mapping_tests": true,
+	"station_time": 648000,
 	"traits": [
 		{
 			"Gravity": 1,
