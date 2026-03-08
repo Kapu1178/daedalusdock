@@ -10,6 +10,33 @@
 			"Gravity": 1,
 			"Baseturf": "/turf/open/misc/grass",
 			"Linkage": "UNAFFECTED"
+		},
+		{
+			"Up": 1,
+			"Down": -1,
+			"Gravity": 1,
+			"Baseturf": "/turf/open/openspace",
+			"Linkage": "UNAFFECTED"
+		},
+		{
+			"Up": 1,
+			"Down": -1,
+			"Gravity": 1,
+			"Baseturf": "/turf/open/openspace",
+			"Linkage": "UNAFFECTED"
+		},
+		{
+			"Up": 1,
+			"Down": -1,
+			"Gravity": 1,
+			"Baseturf": "/turf/open/openspace",
+			"Linkage": "UNAFFECTED"
+		},
+		{
+			"Down": -1,
+			"Gravity": 1,
+			"Baseturf": "/turf/open/openspace",
+			"Linkage": "UNAFFECTED"
 		}
 	],
 	"shuttles": {

@@ -74,6 +74,7 @@
 	appearance = puppet.appearance
 	if(original_name)
 		name = original_name
+		puppet.name = original_name
 
 	real_mob = puppet
 
@@ -175,6 +176,10 @@
 		"This is my pained creation.",
 		"It's all coming to a close now."
 	)
+
+/obj/effect/fakemob/king/Initialize(mapload)
+	. = ..()
+	real_mob.name = name
 
 /obj/effect/fakemob/king/skinwalk(mob/living/puppet)
 	return
