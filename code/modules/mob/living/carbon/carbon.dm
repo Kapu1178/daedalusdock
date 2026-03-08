@@ -1323,7 +1323,7 @@
 			dislocatable_bodyparts += BP
 
 	if(length(dislocatable_bodyparts))
-		var/datum/roll_result/result = stat_roll(10, /datum/rpg_skill/electric_body)
+		var/datum/roll_result/result = stat_roll(9 + levels, /datum/rpg_skill/electric_body)
 		if(result.outcome <= FAILURE)
 			var/obj/item/bodypart/dislocated = pick(dislocatable_bodyparts)
 			dislocated.set_dislocated(TRUE)
