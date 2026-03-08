@@ -90,7 +90,7 @@
 	return TRUE
 
 /mob/living/proc/TakeFallDamage(turf/T, levels)
-	adjustBruteLoss((levels * 5) ** 1.5)
+	adjustBruteLoss((levels * 15) ** 1.5)
 	Knockdown(levels * 5 SECONDS)
 	Stun(levels * 2 SECONDS)
 	return TRUE
