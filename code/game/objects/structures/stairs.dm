@@ -29,6 +29,13 @@
 /obj/structure/stairs/Initialize(mapload)
 	SET_TRACKING(__TYPE__)
 	update_surrounding()
+
+	var/static/list/loc_connections = list(
+		COMSIG_ATOM_EXIT = PROC_REF(on_exit),
+	)
+
+	AddElement(/datum/element/connect_loc, loc_connections)
+
 	return ..()
 
 /obj/structure/stairs/Destroy()
@@ -48,10 +55,8 @@
 		if(S)
 			S.update_appearance()
 
-/obj/structure/stairs/Exit(atom/movable/leaving, direction, no_side_effects)
-	. = ..()
-	if(!.)
-		return
+/obj/structure/stairs/proc/on_exit(datum/source, atom/movable/leaving, direction, no_side_effects)
+	SIGNAL_HANDLER
 
 	if(direction == dir && !(GetAbove(src) || check_ascent(leaving, TRUE)))
 		var/turf/dest_turf = get_step(src, direction)
