@@ -19,10 +19,6 @@
 "h" = (
 /turf/closed/wall/mineral/wood/nonmetal,
 /area/outdoors)
-"i" = (
-/obj/structure/stairs/east,
-/turf/open/floor/iron/white,
-/area/outdoors)
 "j" = (
 /turf/open/floor/iron/stairs/medium,
 /area/outdoors)
@@ -32,6 +28,10 @@
 "n" = (
 /turf/cordon,
 /area/space)
+"o" = (
+/obj/structure/stairs/west,
+/turf/open/floor/iron/white,
+/area/outdoors)
 "p" = (
 /obj/machinery/door/airlock,
 /turf/open/floor/iron/white,
@@ -61,13 +61,6 @@
 /obj/effect/landmark/observer_start,
 /turf/open/misc/sandy_dirt,
 /area/outdoors)
-"C" = (
-/obj/structure/stairs/west,
-/turf/open/floor/iron/white,
-/area/space)
-"F" = (
-/turf/open/floor/iron/white,
-/area/space)
 "G" = (
 /obj/machinery/light/directional/north,
 /turf/open/floor/iron/white,
@@ -80,7 +73,7 @@
 /area/outdoors)
 "K" = (
 /turf/open/openspace,
-/area/space)
+/area/outdoors)
 "L" = (
 /turf/open/indestructible/eternity,
 /area/outdoors)
@@ -101,7 +94,7 @@
 "R" = (
 /obj/structure/stairs/west,
 /turf/open/openspace,
-/area/space)
+/area/outdoors)
 "S" = (
 /obj/structure/railing{
 	dir = 8
@@ -93803,7 +93796,7 @@ K
 K
 K
 K
-K
+o
 K
 K
 K
@@ -94060,7 +94053,7 @@ K
 K
 K
 K
-C
+o
 K
 K
 K
@@ -94317,8 +94310,8 @@ K
 K
 K
 K
-C
-i
+J
+J
 K
 K
 K
@@ -94574,8 +94567,8 @@ K
 K
 K
 K
-F
-F
+K
+K
 K
 K
 K
@@ -159082,9 +159075,9 @@ K
 K
 K
 K
-F
-F
-F
+J
+J
+J
 K
 K
 K
