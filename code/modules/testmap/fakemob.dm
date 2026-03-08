@@ -74,7 +74,7 @@
 	appearance = puppet.appearance
 	if(original_name)
 		name = original_name
-		puppet.name = original_name
+		puppet.set_real_name(original_name)
 
 	real_mob = puppet
 
@@ -210,7 +210,7 @@
 		"How am I to get down, whence I am so close to heaven?",
 	)
 
-/obj/effect/fakemob/roadman/create_meat_puppet()
+/obj/effect/fakemob/stairman/create_meat_puppet()
 	var/mob/living/carbon/human/dummy/consistent/puppet = ..()
 	puppet.update_body_parts(TRUE)
 	puppet.dress_up_as_job(SSjob.GetJob(JOB_STATION_ENGINEER), TRUE)
@@ -223,4 +223,5 @@
 	. = ..()
 	var/mob/living/carbon/human/consistent/H = new(loc)
 	H.dress_up_as_job(SSjob.GetJob(JOB_STATION_ENGINEER), TRUE)
+	H.set_real_name("Unknown")
 	H.gib(TRUE, TRUE)

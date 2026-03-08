@@ -1,4 +1,5 @@
 /area/outdoors
+	name = "Nowhere"
 	icon_state = "space"
 
 	requires_power = TRUE
