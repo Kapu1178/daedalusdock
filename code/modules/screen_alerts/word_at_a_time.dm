@@ -28,17 +28,3 @@
 		if(QDELETED(src))
 			return
 		sleep(play_delay)
-
-/atom/movable/screen/text/screen_text/one_word_a_time/bell_toll
-	plane = ABOVE_HUD_PLANE
-	layer = ABOVE_BLACKOUT_LAYER
-	maptext_height = 128
-
-	play_delay =  5.7 SECONDS
-
-	fade_in_time = 2 SECONDS
-	fade_out_time = 2 SECONDS
-	fade_out_delay = 11 SECONDS
-
-	style_open = "<span style='font-size:24px;text-align:center;vertical-align:top;-dm-text-outline: 1px black;'>"
-	style_close = "</span>"

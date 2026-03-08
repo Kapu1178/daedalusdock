@@ -4528,6 +4528,7 @@
 #include "code\modules\research\xenobiology\crossbreeding\stabilized.dm"
 #include "code\modules\screen_alerts\_screen_alerts.dm"
 #include "code\modules\screen_alerts\atom_hud_text.dm"
+#include "code\modules\screen_alerts\bell_toll.dm"
 #include "code\modules\screen_alerts\location_blurb.dm"
 #include "code\modules\screen_alerts\picture_alert.dm"
 #include "code\modules\screen_alerts\word_at_a_time.dm"

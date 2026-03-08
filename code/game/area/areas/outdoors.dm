@@ -21,8 +21,28 @@
 
 /area/outdoors/on_joining_game(mob/living/boarder)
 	. = ..()
-	SSeternity.for_whom_the_bell_tolls(boarder, TRUE)
+	spawn(-1)
+		boarder.add_filter("join_blur", 1, gauss_blur_filter(10))
+		boarder.transition_filter("join_blur", 10 SECONDS, list("size" = 0))
+
+		boarder.alpha = 0
+		animate(boarder, alpha = 255, time = 10 SECONDS, flags = ANIMATION_PARALLEL)
+
+		SSeternity.for_whom_the_bell_tolls(boarder, TRUE)
+		boarder.remove_filter("join_blur")
+
 
 /area/outdoors/midnight
 	base_lighting_alpha = 80
 	base_lighting_color = COLOR_PURPLE
+
+/mob/verb/bells()
+	var/mob/living/boarder = src
+	boarder.add_filter("join_blur", 1, gauss_blur_filter(10))
+	boarder.transition_filter("join_blur", 10 SECONDS, list("size" = 0))
+
+	boarder.alpha = 0
+	animate(boarder, alpha = 255, time = 10 SECONDS, flags = ANIMATION_PARALLEL)
+
+	SSeternity.for_whom_the_bell_tolls(boarder, TRUE)
+	boarder.remove_filter("join_blur")
