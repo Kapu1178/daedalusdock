@@ -62,6 +62,9 @@ SUBSYSTEM_DEF(ambience)
 /area/proc/play_ambience(mob/M, sound/override_sound, volume = 27)
 	var/turf/T = get_turf(M)
 	var/sound/new_sound = override_sound || pick(ambientsounds)
+	if(!new_sound)
+		return rand(min_ambience_cooldown, max_ambience_cooldown)
+
 	new_sound = sound(new_sound, channel = CHANNEL_AMBIENCE)
 	M.playsound_local(
 		T,
@@ -127,20 +130,13 @@ SUBSYSTEM_DEF(ambience)
 
 	var/sound_file = ambience_tracked_area?.ambient_buzz
 
-	if(!(client.prefs.toggles & SOUND_SHIP_AMBIENCE) || !sound_file || !can_hear())
+	if(!(client.prefs.toggles & SOUND_SHIP_AMBIENCE) || !sound_file || !can_hear() || !ambience_tracked_area.has_ambient_buzz())
 		SEND_SOUND(src, sound(null, repeat = 0, wait = 0, channel = CHANNEL_BUZZ))
 		client.playing_ambience = null
 		return
 
-	//Station ambience is dependant on a functioning and charged APC.
-	if(!is_mining_level(ambience_tracked_area.z) && ((!ambience_tracked_area.apc || !ambience_tracked_area.apc.operating || !ambience_tracked_area.apc.cell?.charge && ambience_tracked_area.requires_power)))
-		SEND_SOUND(src, sound(null, repeat = 0, wait = 0, channel = CHANNEL_BUZZ))
-		client.playing_ambience = null
+	if(client.playing_ambience == sound_file)
 		return
 
-	else
-		if(client.playing_ambience == sound_file)
-			return
-
-		client.playing_ambience = sound_file
-		SEND_SOUND(src, sound(sound_file, repeat = 1, wait = 0, volume = ambience_tracked_area.ambient_buzz_vol, channel = CHANNEL_BUZZ))
+	client.playing_ambience = sound_file
+	SEND_SOUND(src, sound(sound_file, repeat = 1, wait = 0, volume = ambience_tracked_area.ambient_buzz_vol, channel = CHANNEL_BUZZ))

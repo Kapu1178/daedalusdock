@@ -16,12 +16,26 @@
 	area_flags = UNIQUE_AREA | NO_ALERTS
 	outdoors = TRUE
 
-	ambience_index = null
+	ambientsounds = list(
+		'sound/ambience/ambiruin2.ogg',
+		'sound/ambience/ambiruin4.ogg',
+		'sound/ambience/ambiruin7.ogg',
+		'sound/ambience/ambiodd.ogg',
+		'sound/ambience/ambimystery.ogg',
+	)
+	ambient_buzz = 'sound/ambience/wind.ogg'
+	ambient_buzz_vol = 100
+	min_ambience_cooldown = 2 MINUTES
+	max_ambience_cooldown = 6 MINUTES
+
 	sound_environment = SOUND_ENVIRONMENT_PLAIN
 
 /area/outdoors/on_joining_game(mob/living/boarder)
 	. = ..()
 	SSnowhere.enter_the_crossroads(boarder)
+
+/area/outdoors/has_ambient_buzz()
+	return TRUE
 
 /area/outdoors/midnight
 	base_lighting_alpha = 80

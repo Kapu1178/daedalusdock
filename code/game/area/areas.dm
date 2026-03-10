@@ -478,6 +478,14 @@ GLOBAL_LIST_EMPTY(teleportlocs)
 	for(var/turf/open/T in get_contained_turfs())
 		areasize++
 
+/// Returns TRUE if this area should be playing an ambient buzz.
+/area/proc/has_ambient_buzz()
+	//Station ambience is dependant on a functioning and charged APC.
+	if(!is_mining_level(z) && ((!apc || !apc.operating || !apc.cell?.charge && requires_power)))
+		return FALSE
+
+	return !!ambient_buzz
+
 /**
  * Causes a runtime error
  */
