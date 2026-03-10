@@ -48,6 +48,8 @@
 
 	/// Override for station time. Null uses config values.
 	var/station_time = null
+	/// Multiplier applied to the passage of time.
+	var/station_time_multiplier = 1
 
 /**
  * Proc that simply loads the default map config, which should always be functional.
@@ -224,6 +226,9 @@
 
 	if("station_time" in json)
 		station_time = json["station_time"]
+
+	if("station_time_multiplier" in json)
+		station_time_multiplier = json["station_time_multiplier"]
 
 	defaulted = FALSE
 	return TRUE

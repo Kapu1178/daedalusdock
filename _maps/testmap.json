@@ -6,6 +6,7 @@
 	"webmap_id": "Testmap",
 	"run_mapping_tests": true,
 	"station_time": 648000,
+	"station_time_multiplier": 6,
 	"traits": [
 		{
 			"Gravity": 1,
