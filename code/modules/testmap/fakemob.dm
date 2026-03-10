@@ -183,6 +183,7 @@
 	icon = 'goon/icons/obj/kinginyellow.dmi'
 	icon_state = "kingyellow"
 
+	speech_span = SPAN_ITALICS
 	light_system = OVERLAY_LIGHT
 	light_outer_range =  1.1
 	light_color = "#FFFFFF"
@@ -208,6 +209,7 @@
 /obj/effect/fakemob/king/Initialize(mapload)
 	. = ..()
 	real_mob.name = name
+	dialogue = shuffle_inplace(dialogue)
 
 	var/image/I = image('icons/effects/light_overlays/light_96.dmi', "cone")
 	I.plane = O_LIGHTING_VISUAL_PLANE

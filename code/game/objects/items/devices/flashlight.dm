@@ -16,10 +16,12 @@ TYPEINFO_DEF(/obj/item/flashlight)
 	slot_flags = ITEM_SLOT_BELT
 	actions_types = list(/datum/action/item_action/toggle_light)
 	light_system = OVERLAY_LIGHT_DIRECTIONAL
-	light_outer_range = 4
+
+	light_outer_range = 1.5
 	light_power = 0.3
 	light_on = FALSE
 	force = 10
+
 	var/on = FALSE
 
 
