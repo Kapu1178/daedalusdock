@@ -172,7 +172,7 @@
 
 /obj/item/clothing/under/costume/scarecrow
 	name = "scarecrow clothes"
-	desc = "Perfect camouflage for hiding in botany."
+	desc = "Birds may believe at a distance."
 	icon_state = "scarecrow"
 	inhand_icon_state = "scarecrow"
 	body_parts_covered = CHEST|GROIN|ARMS|LEGS

@@ -287,7 +287,7 @@ TYPEINFO_DEF(/obj/item/storage/backpack/holding)
 
 /obj/item/storage/backpack/satchel
 	name = "satchel"
-	desc = "A trendy looking satchel."
+	desc = "A satchel, for storing objects."
 	icon_state = "satchel-norm"
 	inhand_icon_state = "satchel-norm"
 

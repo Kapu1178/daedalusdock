@@ -138,7 +138,8 @@
 /// And to log events to [log_dir]/harddels.log
 //#define REFERENCE_DOING_IT_LIVE
 
-
+// Throws warnings anywhere i touched really dangerous code.
+//#define TRACK_TESTMAP_CHANGES
 
 /////////////////////// UNIT TESTING
 
@@ -283,4 +284,10 @@
 
 #ifdef DEBUG_AI
 #warn DEBUG_AI is enabled!
+#endif
+
+#ifdef TRACK_TESTMAP_CHANGES
+#define TESTMAP_CHANGE #warn testmap change
+#else
+#define TESTMAP_CHANGE
 #endif

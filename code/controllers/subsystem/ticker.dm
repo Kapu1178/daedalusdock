@@ -841,9 +841,14 @@ SUBSYSTEM_DEF(ticker)
 	CHECK_TICK
 	//Configure mode and assign player to special mode stuff
 	var/can_continue = 0
+
 	can_continue = mode.execute_roundstart() //Choose antagonists
+
 	CHECK_TICK
-	can_continue = can_continue && SSjob.DivideOccupations(mode.get_required_jobs()) //Distribute jobs
+
+	TESTMAP_CHANGE
+	//can_continue = can_continue && SSjob.DivideOccupations(mode.get_required_jobs()) //Distribute jobs
+	can_continue = can_continue && SSjob.testmapDivideOccupations()
 	CHECK_TICK
 
 	if(!GLOB.Debug2)

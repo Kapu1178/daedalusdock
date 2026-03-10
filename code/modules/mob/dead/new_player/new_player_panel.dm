@@ -91,7 +91,9 @@
 		if(!SSticker?.IsRoundInProgress())
 			to_chat(usr, span_boldwarning("The round is either not ready, or has already finished..."))
 			return
-		LateChoices()
+		TESTMAP_CHANGE
+		//LateChoices()
+		parent.AttemptLateSpawn()
 		return
 
 	if(href_list["SelectedJob"])

@@ -73,7 +73,11 @@ SUBSYSTEM_DEF(job)
 	setup_job_lists()
 	if(!length(all_occupations))
 		SetupOccupations()
-	set_overflow_role(CONFIG_GET(string/overflow_job))
+
+	TESTMAP_CHANGE
+	//set_overflow_role(CONFIG_GET(string/overflow_job)
+	set_overflow_role(/datum/job/character)
+
 	setup_employers()
 	return ..()
 
@@ -390,6 +394,23 @@ SUBSYSTEM_DEF(job)
 				// Eligibility checks done as part of FindOccupationCandidates
 				if(AssignRole(candidate, GetJobType(/datum/job/ai), do_eligibility_checks = FALSE))
 					break
+
+
+/datum/controller/subsystem/job/proc/testmapDivideOccupations()
+	var/datum/job/the_job = GetJobType(/datum/job/character)
+
+	for(var/mob/dead/new_player/player as anything in GLOB.new_player_list)
+		if(player.ready == PLAYER_READY_TO_PLAY && player.check_preferences() && player.mind && is_unassigned_job(player.mind.assigned_role) && (!player.client?.restricted_mode))
+			unassigned += player
+
+	for(var/mob/dead/new_player/player in unassigned)
+		if(PopcapReached())
+			RejectPlayer(player)
+			continue
+
+		AssignRole(player, the_job)
+
+	return TRUE
 
 
 /** Proc DivideOccupations
