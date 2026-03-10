@@ -42,7 +42,7 @@
 	liver_traits = list(TRAIT_CULINARY_METABOLISM)
 
 	departments_list = list(
-		/datum/job_department/service,
+		/datum/job_faction/service,
 		)
 
 	family_heirlooms = list(/obj/item/reagent_containers/condiment/saltshaker, /obj/item/kitchen/rollingpin, /obj/item/clothing/head/chefhat)

@@ -29,7 +29,7 @@
 	liver_traits = list(TRAIT_MEDICAL_METABOLISM)
 
 	departments_list = list(
-		/datum/job_department/service,
+		/datum/job_faction/service,
 		)
 
 	family_heirlooms = list(/obj/item/storage/pill_bottle)

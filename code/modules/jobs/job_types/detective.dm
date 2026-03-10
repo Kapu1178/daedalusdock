@@ -27,7 +27,7 @@
 	)
 
 	departments_list = list(
-		/datum/job_department/service,
+		/datum/job_faction/service,
 	)
 
 	paycheck = PAYCHECK_ASSISTANT * 2.5 // You start barely wealthier than the riff-raff.

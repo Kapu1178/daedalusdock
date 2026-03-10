@@ -1,5 +1,5 @@
 /// Singleton representing a category of jobs forming a department.
-/datum/job_department
+/datum/job_faction
 	/// Department as displayed on different menus.
 	var/department_name = "No department assigned"
 	/// Bitflags associated to the specific department.
@@ -27,27 +27,27 @@
 	var/is_not_real_department = FALSE
 
 /// Handles adding jobs to the department and setting up the job bitflags.
-/datum/job_department/proc/add_job(datum/job/job)
+/datum/job_faction/proc/add_job(datum/job/job)
 	department_jobs += job
 	job.departments_bitflags |= department_bitflags
 
 /// Returns a nation name for this department.
-/datum/job_department/proc/generate_nation_name()
+/datum/job_faction/proc/generate_nation_name()
 	var/static/list/nation_suffixes = list("stan", "topia", "land", "nia", "ca", "tova", "dor", "ador", "tia", "sia", "ano", "tica", "tide", "cis", "marea", "co", "taoide", "slavia", "stotzka")
 	return pick(nation_prefixes) + pick(nation_suffixes)
 
-/datum/job_department/assistant/generate_nation_name()
+/datum/job_faction/assistant/generate_nation_name()
 	var/nomadic_name = pick("roving clans", "barbaric tribes", "tides", "bandit kingdom", "tribal society", "marauder clans", "horde")
 	return "The [nomadic_name] of [..()]"
 
 /// A special captain only department, for use by the preferences menu
-/datum/job_department/captain
+/datum/job_faction/captain
 	department_name = DEPARTMENT_CAPTAIN
 	department_bitflags = DEPARTMENT_BITFLAG_CAPTAIN
 	department_head = /datum/job/captain
 	is_not_real_department = TRUE
 
-/datum/job_department/command
+/datum/job_faction/command
 	department_name = DEPARTMENT_FEDERATION
 	department_bitflags = DEPARTMENT_BITFLAG_FEDERATION
 	department_head = /datum/job/captain
@@ -56,7 +56,7 @@
 	label_class = "command"
 	latejoin_color = "#ccccff"
 
-/datum/job_department/security
+/datum/job_faction/security
 	department_name = DEPARTMENT_SECURITY
 	department_bitflags = DEPARTMENT_BITFLAG_SECURITY
 	department_head = /datum/job/head_of_security
@@ -68,7 +68,7 @@
 	nation_prefixes = list("Securi", "Beepski", "Shitcuri", "Red", "Stunba", "Flashbango", "Flasha", "Stanfordi")
 	budget_id = ACCOUNT_SEC
 
-/datum/job_department/engineering
+/datum/job_faction/engineering
 	department_name = DEPARTMENT_ENGINEERING
 	department_bitflags = DEPARTMENT_BITFLAG_ENGINEERING
 	department_head = /datum/job/chief_engineer
@@ -80,7 +80,7 @@
 	manifest_key = DATACORE_RECORDS_DAEDALUS
 	budget_id = ACCOUNT_ENG
 
-/datum/job_department/medical
+/datum/job_faction/medical
 	department_name = DEPARTMENT_MEDICAL
 	department_bitflags = DEPARTMENT_BITFLAG_MEDICAL
 	department_head = /datum/job/augur
@@ -92,7 +92,7 @@
 	manifest_key = DATACORE_RECORDS_AETHER
 	budget_id = ACCOUNT_MED
 
-/datum/job_department/cargo
+/datum/job_faction/cargo
 	department_name = DEPARTMENT_CARGO
 	department_bitflags = DEPARTMENT_BITFLAG_CARGO
 	department_head = /datum/job/quartermaster
@@ -104,7 +104,7 @@
 	manifest_key = DATACORE_RECORDS_HERMES
 	budget_id = ACCOUNT_CAR
 
-/datum/job_department/silicon
+/datum/job_faction/silicon
 	department_name = DEPARTMENT_SILICON
 	department_bitflags = DEPARTMENT_BITFLAG_SILICON
 	department_head = /datum/job/ai
@@ -113,10 +113,10 @@
 	label_class = "silicon"
 	latejoin_color = "#ccffcc"
 
-/datum/job_department/silicon/generate_nation_name()
+/datum/job_faction/silicon/generate_nation_name()
 	return "United Nations" //For nations ruleset specifically, because all other sources of nation creation cannot choose silicons
 
-/datum/job_department/service
+/datum/job_faction/service
 	department_name = DEPARTMENT_SERVICE
 	department_bitflags = DEPARTMENT_BITFLAG_SERVICE
 	department_head = /datum/job/head_of_personnel
@@ -127,7 +127,7 @@
 	nation_prefixes = list("Honka", "Boozo", "Fatu", "Danka", "Mimi", "Libra", "Jani", "Religi")
 
 /// A special assistant only department, primarily for use by the preferences menu
-/datum/job_department/assistant
+/datum/job_faction/assistant
 	department_name = DEPARTMENT_ASSISTANT
 	department_bitflags = DEPARTMENT_BITFLAG_ASSISTANT
 	display_order = 9
@@ -136,11 +136,11 @@
 	is_not_real_department = TRUE
 
 /// Catch-all department for undefined jobs.
-/datum/job_department/undefined
+/datum/job_faction/undefined
 	display_order = 10
 	exclude_from_latejoin = TRUE
 
-/datum/job_department/company_leader
+/datum/job_faction/company_leader
 	department_name = DEPARTMENT_COMPANY_LEADER
 	department_bitflags = DEPARTMENT_BITFLAG_COMPANY_LEADER
 	exclude_from_latejoin = TRUE

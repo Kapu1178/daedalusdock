@@ -32,7 +32,7 @@
 	liver_traits = list(TRAIT_LAW_ENFORCEMENT_METABOLISM)
 
 	departments_list = list(
-		/datum/job_department/security,
+		/datum/job_faction/security,
 		)
 
 	family_heirlooms = list(/obj/item/book/manual/wiki/security_space_law)

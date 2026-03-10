@@ -16,9 +16,9 @@ SUBSYSTEM_DEF(job)
 	var/list/experience_jobs_map = list()
 
 	/// List of all departments.
-	var/list/datum/job_department/departments = list()
+	var/list/datum/job_faction/departments = list()
 	/// List of all departments indexed by their typepath, sorted by their own display order.
-	var/list/datum/job_department/departments_by_type = list()
+	var/list/datum/job_faction/departments_by_type = list()
 
 	var/list/unassigned = list() //Players who need jobs
 	var/initial_players_to_assign = 0 //used for checking against population caps
@@ -64,7 +64,7 @@ SUBSYSTEM_DEF(job)
 	/// Dictionary that maps job priorities to low/medium/high. Keys have to be number-strings as assoc lists cannot be indexed by integers. Set in setup_job_lists.
 	var/list/job_priorities_to_strings
 
-	var/list/department_has_atleast_one_player
+	var/list/faction_has_atleast_one_player
 
 	/// A k:v list of department_path : name, where name is the name of the player who was given head access at roundstart
 	var/list/temporary_heads_by_dep = list()
@@ -77,14 +77,14 @@ SUBSYSTEM_DEF(job)
 	setup_employers()
 	return ..()
 
-/// Returns a list of department paths that must be filled.
-/datum/controller/subsystem/job/proc/get_necessary_departments()
+/// Returns a list of faction paths that must be filled.
+/datum/controller/subsystem/job/proc/get_necessary_factions()
 	. = list(
-		/datum/job_department/command = FALSE,
-		/datum/job_department/engineering = FALSE,
-		/datum/job_department/medical = FALSE,
-		/datum/job_department/cargo = FALSE,
-		/datum/job_department/security = FALSE,
+		/datum/job_faction/command = FALSE,
+		/datum/job_faction/engineering = FALSE,
+		/datum/job_faction/medical = FALSE,
+		/datum/job_faction/cargo = FALSE,
+		/datum/job_faction/security = FALSE,
 	)
 
 /datum/controller/subsystem/job/proc/set_overflow_role(new_overflow_role)
@@ -145,16 +145,16 @@ SUBSYSTEM_DEF(job)
 			new_joinable_occupations += job
 
 		if(!LAZYLEN(job.departments_list))
-			var/datum/job_department/department = new_departments_by_type[/datum/job_department/undefined]
+			var/datum/job_faction/department = new_departments_by_type[/datum/job_faction/undefined]
 			if(!department)
-				department = new /datum/job_department/undefined()
-				new_departments_by_type[/datum/job_department/undefined] = department
+				department = new /datum/job_faction/undefined()
+				new_departments_by_type[/datum/job_faction/undefined] = department
 
 			department.add_job(job)
 			continue
 
 		for(var/department_type in job.departments_list)
-			var/datum/job_department/department = new_departments_by_type[department_type]
+			var/datum/job_faction/department = new_departments_by_type[department_type]
 			if(!department)
 				department = new department_type()
 				new_departments_by_type[department_type] = department
@@ -171,7 +171,7 @@ SUBSYSTEM_DEF(job)
 	sortTim(new_departments_by_type, GLOBAL_PROC_REF(cmp_department_display_asc), associative = TRUE)
 
 	for(var/department_type in new_departments_by_type)
-		var/datum/job_department/department = new_departments_by_type[department_type]
+		var/datum/job_faction/department = new_departments_by_type[department_type]
 		sortTim(department.department_jobs, GLOBAL_PROC_REF(cmp_job_display_asc))
 		new_departments += department
 		if(department.department_experience_type)
@@ -239,9 +239,9 @@ SUBSYSTEM_DEF(job)
 	unassigned -= player
 	job.current_positions++
 
-	for(var/datum/job_department/path as anything in job.departments_list)
-		if(department_has_atleast_one_player[path] == FALSE)
-			department_has_atleast_one_player[path] = TRUE
+	for(var/datum/job_faction/path as anything in job.departments_list)
+		if(faction_has_atleast_one_player[path] == FALSE)
+			faction_has_atleast_one_player[path] = TRUE
 
 	return TRUE
 
@@ -335,7 +335,7 @@ SUBSYSTEM_DEF(job)
  * Basically tries to ensure there is at least one head in every shift if anyone has that job preference enabled at all.
  */
 /datum/controller/subsystem/job/proc/FillHeadPosition()
-	var/datum/job_department/command_department = get_department_type(/datum/job_department/command)
+	var/datum/job_faction/command_department = get_department_type(/datum/job_faction/command)
 	if(!command_department)
 		return FALSE
 	for(var/level in level_order)
@@ -359,7 +359,7 @@ SUBSYSTEM_DEF(job)
  * * level - One of the JP_LOW, JP_MEDIUM or JP_HIGH defines. Attempts to find candidates with head jobs at this priority only.
  */
 /datum/controller/subsystem/job/proc/CheckHeadPositions(level)
-	var/datum/job_department/command_department = get_department_type(/datum/job_department/company_leader)
+	var/datum/job_faction/command_department = get_department_type(/datum/job_faction/company_leader)
 	if(!command_department)
 		return
 
@@ -402,7 +402,7 @@ SUBSYSTEM_DEF(job)
 
 	SEND_SIGNAL(src, COMSIG_OCCUPATIONS_DIVIDED)
 
-	department_has_atleast_one_player = get_necessary_departments()
+	faction_has_atleast_one_player = get_necessary_factions()
 
 	//Get the players who are ready
 	for(var/mob/dead/new_player/player as anything in GLOB.new_player_list)
@@ -539,8 +539,8 @@ SUBSYSTEM_DEF(job)
 			JobDebug("DO, ensuring that all departments have atleast one player.")
 
 			var/we_fucked = FALSE
-			for(var/path in department_has_atleast_one_player)
-				if(department_has_atleast_one_player[path] == FALSE)
+			for(var/path in faction_has_atleast_one_player)
+				if(faction_has_atleast_one_player[path] == FALSE)
 					JobDebug("DO, [path] does not have any players, aborting.")
 					we_fucked = TRUE
 
@@ -958,7 +958,7 @@ SUBSYSTEM_DEF(job)
 	if(!id_card)
 		return NONE
 
-	var/datum/job_department/department = SSjob.get_department_type(assigned_job.departments_list?[1])
+	var/datum/job_faction/department = SSjob.get_department_type(assigned_job.departments_list?[1])
 	if(!department)
 		CRASH("Somehow someone tried to get promoted to department head despite their job not having a valid department. Value: [assigned_job.departments_list?[1] || "NULL"]")
 
@@ -1012,7 +1012,7 @@ SUBSYSTEM_DEF(job)
 	JobDebug("Assign Captain: Nobody signed up for captain. Pulling from users signed up for Command.")
 
 	// Okay nobody is signed up for captain, let's try something more drastic.
-	var/datum/job_department/federation = get_department_type(/datum/job_department/command)
+	var/datum/job_faction/federation = get_department_type(/datum/job_faction/command)
 	for(var/datum/job/federation_job as anything in federation.department_jobs)
 		for(var/level in level_order)
 			var/list/candidates = FindOccupationCandidates(federation_job, level)

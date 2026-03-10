@@ -21,7 +21,7 @@
 	)
 
 	departments_list = list(
-		/datum/job_department/service,
+		/datum/job_faction/service,
 		)
 
 	family_heirlooms = list(/obj/item/reagent_containers/cup/bucket, /obj/item/toy/plush/beeplushie)

@@ -27,7 +27,7 @@
 	liver_traits = list(TRAIT_COMEDY_METABOLISM)
 
 	departments_list = list(
-		/datum/job_department/service,
+		/datum/job_faction/service,
 	)
 
 	mail_goodies = list(

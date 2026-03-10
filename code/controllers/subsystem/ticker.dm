@@ -394,7 +394,7 @@ SUBSYSTEM_DEF(ticker)
 /datum/controller/subsystem/ticker/proc/equip_characters()
 	var/mob/dead/new_player/picked_spare_id_candidate = get_captain_or_backup()
 	// This is a bitfield!!!
-	var/departments_without_heads = filter_headless_departments(SSjob.get_necessary_departments())
+	var/departments_without_heads = filter_headless_departments(SSjob.get_necessary_factions())
 
 	for(var/mob/dead/new_player/new_player_mob as anything in GLOB.new_player_list)
 		if(QDELETED(new_player_mob) || !isliving(new_player_mob.new_character))
@@ -427,7 +427,7 @@ SUBSYSTEM_DEF(ticker)
 
 /datum/controller/subsystem/ticker/proc/get_captain_or_backup()
 	var/list/spare_id_candidates = list()
-	var/datum/job_department/federation = SSjob.get_department_type(/datum/job_department/command)
+	var/datum/job_faction/federation = SSjob.get_department_type(/datum/job_faction/command)
 
 	// Find a suitable player to hold captaincy.
 	for(var/mob/dead/new_player/new_player_mob as anything in GLOB.new_player_list)
@@ -456,8 +456,8 @@ SUBSYSTEM_DEF(ticker)
 /datum/controller/subsystem/ticker/proc/filter_headless_departments(list/departments)
 	. = NONE
 
-	for(var/path in departments - /datum/job_department/command)
-		var/datum/job_department/department = SSjob.get_department_type(path)
+	for(var/path in departments - /datum/job_faction/command)
+		var/datum/job_faction/department = SSjob.get_department_type(path)
 		var/datum/job/head_role = SSjob.GetJobType(department.department_head)
 		if(head_role.current_positions == 0)
 			. |= department.department_bitflags

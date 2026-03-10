@@ -25,7 +25,7 @@
 	languages = list(/datum/language/aether)
 
 	departments_list = list(
-		/datum/job_department/medical,
+		/datum/job_faction/medical,
 		)
 
 	family_heirlooms = list(/obj/item/storage/medkit/ancient/heirloom)

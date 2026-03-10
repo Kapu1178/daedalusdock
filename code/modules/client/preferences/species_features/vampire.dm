@@ -26,12 +26,12 @@ GLOBAL_LIST_EMPTY(vampire_houses)
 		return
 
 	//find and setup the house (department) this vampire is joining
-	var/datum/job_department/vampire_house
+	var/datum/job_faction/vampire_house
 	var/datum/job/vampire_job = SSjob.GetJob(target.job)
 	if(!vampire_job) //no job or no mind LOSERS
 		return
-	var/list/valid_departments = (SSjob.departments.Copy()) - list(/datum/job_department/silicon, /datum/job_department/undefined, /datum/job_department/company_leader)
-	for(var/datum/job_department/potential_house as anything in valid_departments)
+	var/list/valid_departments = (SSjob.departments.Copy()) - list(/datum/job_faction/silicon, /datum/job_faction/undefined, /datum/job_faction/company_leader)
+	for(var/datum/job_faction/potential_house as anything in valid_departments)
 		if(vampire_job in potential_house.department_jobs)
 			vampire_house = potential_house
 			break

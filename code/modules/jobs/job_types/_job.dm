@@ -132,7 +132,7 @@ GLOBAL_LIST_INIT(job_display_order, list(
 	var/departments_bitflags = NONE
 
 	/// If specified, this department will be used for the preferences menu.
-	var/datum/job_department/department_for_prefs = null
+	var/datum/job_faction/department_for_prefs = null
 
 	/// Lazy list with the departments this job belongs to.
 	/// Required to be set for playable jobs.

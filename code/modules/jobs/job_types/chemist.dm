@@ -28,7 +28,7 @@
 	liver_traits = list(TRAIT_MEDICAL_METABOLISM)
 
 	departments_list = list(
-		/datum/job_department/medical,
+		/datum/job_faction/medical,
 	)
 
 	mail_goodies = list(

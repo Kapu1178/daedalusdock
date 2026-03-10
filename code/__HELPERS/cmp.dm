@@ -118,7 +118,7 @@ GLOBAL_VAR_INIT(cmp_field, "name")
 /proc/cmp_job_display_asc(datum/job/A, datum/job/B)
 	return GLOB.job_display_order.Find(A.type) - GLOB.job_display_order.Find(B.type)
 
-/proc/cmp_department_display_asc(datum/job_department/A, datum/job_department/B)
+/proc/cmp_department_display_asc(datum/job_faction/A, datum/job_faction/B)
 	return A.display_order - B.display_order
 
 /proc/cmp_reagents_asc(datum/reagent/a, datum/reagent/b)

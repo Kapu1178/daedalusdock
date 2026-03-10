@@ -26,8 +26,8 @@
 	)
 
 	departments_list = list(
-		/datum/job_department/security,
-		/datum/job_department/company_leader,
+		/datum/job_faction/security,
+		/datum/job_faction/company_leader,
 	)
 
 	mind_traits = list(TRAIT_DONUT_LOVER)

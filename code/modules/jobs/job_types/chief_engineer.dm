@@ -26,8 +26,8 @@
 	)
 
 	departments_list = list(
-		/datum/job_department/engineering,
-		/datum/job_department/company_leader,
+		/datum/job_faction/engineering,
+		/datum/job_faction/company_leader,
 	)
 
 	paycheck = PAYCHECK_ASSISTANT * 10

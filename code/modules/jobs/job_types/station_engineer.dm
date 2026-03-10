@@ -43,7 +43,7 @@
 	liver_traits = list(TRAIT_ENGINEER_METABOLISM)
 
 	departments_list = list(
-		/datum/job_department/engineering,
+		/datum/job_faction/engineering,
 		)
 
 	family_heirlooms = list(/obj/item/clothing/head/hardhat, /obj/item/screwdriver, /obj/item/wrench, /obj/item/weldingtool, /obj/item/crowbar, /obj/item/wirecutters)

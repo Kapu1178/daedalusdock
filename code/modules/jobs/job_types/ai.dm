@@ -21,7 +21,7 @@
 
 	allow_bureaucratic_error = FALSE
 	departments_list = list(
-		/datum/job_department/silicon,
+		/datum/job_faction/silicon,
 		)
 
 	spawn_logic = JOBSPAWN_FORCE_FIXED

@@ -30,8 +30,8 @@
 	liver_traits = list(TRAIT_ROYAL_METABOLISM)
 
 	departments_list = list(
-		/datum/job_department/command,
-		/datum/job_department/company_leader
+		/datum/job_faction/command,
+		/datum/job_faction/company_leader
 	)
 
 

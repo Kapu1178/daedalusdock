@@ -24,7 +24,7 @@
 	paycheck_department = ACCOUNT_CAR
 
 	departments_list = list(
-		/datum/job_department/cargo,
+		/datum/job_faction/cargo,
 		)
 
 	family_heirlooms = list(/obj/item/pickaxe/mini, /obj/item/shovel)

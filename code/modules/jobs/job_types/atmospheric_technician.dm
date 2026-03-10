@@ -25,7 +25,7 @@
 	liver_traits = list(TRAIT_ENGINEER_METABOLISM)
 
 	departments_list = list(
-		/datum/job_department/engineering,
+		/datum/job_faction/engineering,
 		)
 
 	employers = list(

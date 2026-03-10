@@ -123,7 +123,7 @@
 	var/list/jobs = list()
 
 	for (var/datum/job/job as anything in SSjob.joinable_occupations)
-		var/datum/job_department/department_type = job.department_for_prefs || job.departments_list?[1]
+		var/datum/job_faction/department_type = job.department_for_prefs || job.departments_list?[1]
 		if (isnull(department_type))
 			stack_trace("[job] does not have a department set, yet is a joinable occupation!")
 			continue

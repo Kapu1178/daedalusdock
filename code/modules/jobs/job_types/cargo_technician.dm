@@ -23,7 +23,7 @@
 	paycheck = PAYCHECK_ASSISTANT * 5
 	paycheck_department = ACCOUNT_CAR
 	departments_list = list(
-		/datum/job_department/cargo,
+		/datum/job_faction/cargo,
 		)
 
 	family_heirlooms = list(/obj/item/clipboard)

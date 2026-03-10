@@ -123,7 +123,7 @@ SUBSYSTEM_DEF(datacore)
 /datum/controller/subsystem/datacore/proc/get_manifest(record_type = DATACORE_RECORDS_STATION)
 	// First we build up the order in which we want the departments to appear in.
 	var/list/manifest_out = list()
-	for(var/datum/job_department/department as anything in SSjob.departments)
+	for(var/datum/job_faction/department as anything in SSjob.departments)
 		if(department.exclude_from_latejoin)
 			continue
 		manifest_out[department.department_name] = list()
@@ -151,7 +151,7 @@ SUBSYSTEM_DEF(datacore)
 			continue
 
 		for(var/department_type as anything in job.departments_list)
-			var/datum/job_department/department = departments_by_type[department_type]
+			var/datum/job_faction/department = departments_by_type[department_type]
 
 			if(!department)
 				stack_trace("get_manifest() failed to get job department for [department_type] of [job.type]")
@@ -263,7 +263,7 @@ SUBSYSTEM_DEF(datacore)
 	library[DATACORE_RECORDS_STATION].inject_record(G)
 
 	// Add to company-specific manifests
-	var/datum/job_department/department = SSjob.departments_by_type[job.departments_list?[1]]
+	var/datum/job_faction/department = SSjob.departments_by_type[job.departments_list?[1]]
 	if(department?.manifest_key)
 		library[department.manifest_key].inject_record(G.Copy())
 

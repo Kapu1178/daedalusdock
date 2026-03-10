@@ -105,7 +105,7 @@ SUBSYSTEM_DEF(economy)
 		if(medical_record.fields["status"] == "*Deceased*")
 			dead_people += medical_record.fields[DATACORE_NAME]
 
-	for(var/datum/job_department/department as anything in SSjob.departments)
+	for(var/datum/job_faction/department as anything in SSjob.departments)
 		if(!department.budget_id)
 			continue
 

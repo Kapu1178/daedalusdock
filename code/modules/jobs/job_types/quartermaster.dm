@@ -27,8 +27,8 @@
 	liver_traits = list(TRAIT_ROYAL_METABOLISM)
 
 	departments_list = list(
-		/datum/job_department/cargo,
-		/datum/job_department/company_leader,
+		/datum/job_faction/cargo,
+		/datum/job_faction/company_leader,
 	)
 
 	family_heirlooms = list(/obj/item/stamp, /obj/item/stamp/denied)

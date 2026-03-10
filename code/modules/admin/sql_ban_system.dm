@@ -287,7 +287,7 @@
 		var/break_counter = 0
 		output += "<div class='row'>"
 
-		for(var/datum/job_department/department as anything in SSjob.departments)
+		for(var/datum/job_faction/department as anything in SSjob.departments)
 			if(department.is_not_real_department)
 				continue
 

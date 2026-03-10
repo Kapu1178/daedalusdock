@@ -25,7 +25,7 @@
 // 	)
 
 // 	departments_list = list(
-// 		/datum/job_department/command,
+// 		/datum/job_faction/command,
 // 	)
 
 // 	paycheck = PAYCHECK_ASSISTANT * 10
