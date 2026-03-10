@@ -25,12 +25,12 @@ INITIALIZE_IMMEDIATE(/obj/effect/landmark)
 	return ..()
 
 /// Helper for getting start landmarks.
-/proc/get_start_landmark_for(landmark_key, exclude_used = FALSE)
+/proc/get_start_landmark_for(landmark_key, exclude_used = FALSE) as /obj/effect/landmark/start
 	// High prio landmarks completely ignore the used var for some reason.
 	if(length(GLOB.high_priority_spawns[landmark_key]))
 		return pick(GLOB.high_priority_spawns[landmark_key])
 
-	for(var/obj/effect/landmark/start/point in GLOB.start_landmarks_by_name[landmark_key])
+	for(var/obj/effect/landmark/start/point in shuffle(GLOB.start_landmarks_by_name[landmark_key]))
 		if(exclude_used && point.used)
 			continue
 
@@ -84,7 +84,7 @@ INITIALIZE_IMMEDIATE(/obj/effect/landmark)
 	return locate(/obj/structure/chair, loc) || src
 
 /// Call this to get the actual spawn location of the atom.
-/obj/effect/landmark/start/proc/get_spawn_location()
+/obj/effect/landmark/start/proc/get_spawn_location() as /atom
 	return marked_atom
 
 /obj/effect/landmark/start/proc/set_marked_atom(atom/new_atom)

@@ -123,7 +123,7 @@
 
 	else if(istype(found_file, /datum/c4_file/text))
 		var/datum/c4_file/text/text = found_file
-		notepad.note_list = splittext(text.data, "<br>")
+		notepad.note_list = splittext(text.data, "\n")
 	else
 		system.println("Error: File not found.")
 		return

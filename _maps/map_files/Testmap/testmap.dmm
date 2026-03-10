@@ -115,6 +115,11 @@
 	},
 /turf/open/openspace,
 /area/outdoors)
+"E" = (
+/obj/effect/fakemob/king,
+/obj/effect/landmark/king,
+/turf/open/misc/sandy_dirt,
+/area/outdoors)
 "F" = (
 /obj/effect/mapping_helpers/dead_stairman,
 /turf/open/misc/grass,
@@ -149,15 +154,15 @@
 	},
 /turf/open/openspace,
 /area/outdoors)
-"O" = (
-/obj/effect/fakemob/king,
-/turf/open/misc/grass,
-/area/outdoors)
 "P" = (
 /obj/structure/railing{
 	dir = 1
 	},
 /turf/open/misc/grass,
+/area/outdoors)
+"Q" = (
+/obj/effect/landmark/king,
+/turf/open/misc/sandy_dirt,
 /area/outdoors)
 "S" = (
 /obj/structure/railing{
@@ -28336,7 +28341,7 @@ a
 I
 I
 I
-O
+a
 a
 a
 a
@@ -31158,10 +31163,10 @@ I
 I
 I
 I
-I
+Q
 d
 I
-I
+E
 I
 I
 I

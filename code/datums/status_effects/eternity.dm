@@ -53,8 +53,16 @@
 		)
 	)
 	animate(memory, time = 2 SECONDS, alpha = 0, transform = owner.transform.Scale(0, 3))
+
 	sleep(2 SECONDS)
-	qdel(memory)
+
+	memory.alpha = initial(memory.alpha)
+	memory.notransform = FALSE
+	memory.transform = matrix()
+	memory.remove_filter("eternity_motion_blur")
+
+	get_start_landmark_for(/obj/effect/landmark/start/backup::name).get_spawn_location().JoinPlayerHere(memory)
+	SSnowhere.enter_the_crossroads(memory)
 
 /datum/status_effect/eternity/proc/on_owner_move()
 	SIGNAL_HANDLER
