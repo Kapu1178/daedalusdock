@@ -115,11 +115,6 @@
 	},
 /turf/open/openspace,
 /area/outdoors)
-"E" = (
-/obj/effect/fakemob/king,
-/obj/effect/landmark/king,
-/turf/open/misc/sandy_dirt,
-/area/outdoors)
 "F" = (
 /obj/effect/mapping_helpers/dead_stairman,
 /turf/open/misc/grass,
@@ -31166,7 +31161,7 @@ I
 Q
 d
 I
-E
+I
 I
 I
 I

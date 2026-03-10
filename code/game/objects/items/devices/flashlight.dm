@@ -17,7 +17,7 @@ TYPEINFO_DEF(/obj/item/flashlight)
 	actions_types = list(/datum/action/item_action/toggle_light)
 	light_system = OVERLAY_LIGHT_DIRECTIONAL
 
-	light_outer_range = 1.5
+	light_outer_range = 4
 	light_power = 0.3
 	light_on = FALSE
 	force = 10
@@ -336,12 +336,16 @@ TYPEINFO_DEF(/obj/item/flashlight/lamp)
 
 /obj/item/flashlight/lantern
 	name = "lantern"
+	desc = "An electric lantern."
+
 	icon_state = "lantern"
 	inhand_icon_state = "lantern"
 	lefthand_file = 'icons/mob/inhands/equipment/mining_lefthand.dmi'
 	righthand_file = 'icons/mob/inhands/equipment/mining_righthand.dmi'
-	desc = "A mining lantern."
+
+	light_color = "#ffff00"
 	light_outer_range = 6 // luminosity when on
+	light_power = 0.4
 	light_system = OVERLAY_LIGHT
 
 /obj/item/flashlight/lantern/heirloom_moth

@@ -52,7 +52,7 @@
 
 	if(isappearance(value))
 		var/image/actually_an_appearance = value
-		return "/appearance (<br><span class='value'>icon: [actually_an_appearance.icon]<br>state: [actually_an_appearance.icon_state]<br>plane: [actually_an_appearance.plane]<br>layer: [actually_an_appearance.layer]</span>)"
+		return "/appearance (<br><span class='value'>icon: [actually_an_appearance.icon]<br>state: [actually_an_appearance.icon_state]<br>plane: [actually_an_appearance.plane]<br>layer: [actually_an_appearance.layer]<br>color:[actually_an_appearance.color]</span>)"
 
 	if(isfilter(value))
 		var/datum/filter_value = value

@@ -18,7 +18,7 @@
 	shoes = /obj/item/clothing/shoes/actor
 
 	back = /obj/item/storage/backpack/actor
-	backpack_contents = list(/obj/item/flashlight)
+	backpack_contents = list(/obj/item/flashlight/seclite/actor)
 
 /obj/item/clothing/under/costume/actor
 	name = "ragged clothes"
@@ -44,3 +44,14 @@
 	desc = "A fraying backpack, atleast it's still in one piece."
 	icon_state = "explorerpack"
 	inhand_icon_state = "explorerpack"
+
+/obj/item/flashlight/seclite/actor
+	name = "flashlight"
+	desc = "A handheld light projector."
+
+	light_color = LIGHTBULB_COLOR_SLIGHTLY_WARM
+	light_power = 0.1
+	light_outer_range = 1.5
+
+/obj/item/flashlight/lantern/actor
+	light_outer_range = 4
