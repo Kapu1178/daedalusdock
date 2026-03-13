@@ -6,8 +6,8 @@
 	always_unpowered = TRUE
 
 	area_lighting = AREA_LIGHTING_STATIC
+	base_lighting_color = LIGHTBULB_COLOR_SLIGHTLY_WARM
 	base_lighting_alpha = 240
-	base_lighting_color = LIGHTBULB_COLOR_WARM
 
 	power_light = FALSE
 	power_equip = FALSE
@@ -32,7 +32,9 @@
 
 /area/outdoors/on_joining_game(mob/living/boarder)
 	. = ..()
-	SSnowhere.enter_the_crossroads(boarder)
+	// The retarded second arg is to account for CHECK_TICK affecting the actual spawn times by a handful of seconds, amplified by the map's timescale.
+	//(station_time() in (18 HOURS) to (18 HOURS + 5 MINUTES)) ? 18 HOURS : station_time()
+	SSnowhere.enter_the_crossroads(boarder, SSticker.round_start_time ? station_time() : 18 HOURS)
 
 /area/outdoors/has_ambient_buzz()
 	return TRUE

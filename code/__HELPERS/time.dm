@@ -118,9 +118,10 @@ GLOBAL_VAR_INIT(rollovercheck_last_timeofday, 0)
  * Converts a time expressed in deciseconds (like world.time) to the 12-hour time format.
  * the format arg is the format passed down to time2text() (e.g. "hh:mm" is hours and minutes but not seconds).
  */
-/proc/time_to_twelve_hour(time, format = "hh:mm:ss")
+/proc/time_to_twelve_hour(time, format = "hh:mm:ss", trim_leading_zero = FALSE)
 	if(time > 1 DAY)
 		time = time % (24 HOURS)
+
 	var/am_pm = "AM"
 	if(time > 12 HOURS)
 		am_pm = "PM"
@@ -128,4 +129,9 @@ GLOBAL_VAR_INIT(rollovercheck_last_timeofday, 0)
 			time -= 12 HOURS // e.g. 4:16 PM but not 00:42 PM
 	else if (time < 1 HOURS)
 		time += 12 HOURS // e.g. 12.23 AM
-	return "[time2text(time, format, 0)] [am_pm]"
+
+
+	var/should_trim_zero = trim_leading_zero && ((time >= 1 HOUR && time < 10 HOURS) || (time >= 11 HOURS && time < 20 HOURS))
+	var/raw_time2text = time2text(time, format, 0)
+
+	return "[!should_trim_zero ? raw_time2text : copytext_char(raw_time2text, 2)] [am_pm]"

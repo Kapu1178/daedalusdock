@@ -38,7 +38,7 @@
 	},
 /obj/structure/mirror/directional/west,
 /turf/open/floor/iron/white,
-/area/outdoors)
+/area/station/testmap/home/outdoor_light)
 "eC" = (
 /obj/effect/landmark/king,
 /turf/open/misc/sandy_dirt,
@@ -109,7 +109,7 @@
 /mob/living/simple_animal/pet/cat/runtime,
 /obj/structure/bed/dogbed/runtime,
 /turf/open/floor/wood,
-/area/station/testmap/home)
+/area/station/testmap/home/outdoor_light)
 "mC" = (
 /obj/structure/railing{
 	dir = 6
@@ -126,6 +126,9 @@
 /obj/structure/table/wood,
 /turf/open/floor/wood,
 /area/station/testmap/home)
+"op" = (
+/turf/open/floor/wood,
+/area/station/testmap/home/outdoor_light)
 "oV" = (
 /obj/machinery/light/small/bar/directional/east,
 /turf/open/openspace,
@@ -150,7 +153,7 @@
 	dir = 8
 	},
 /turf/open/floor/iron/white,
-/area/outdoors)
+/area/station/testmap/home/outdoor_light)
 "sc" = (
 /obj/structure/railing{
 	dir = 8
@@ -160,6 +163,9 @@
 "su" = (
 /turf/open/misc/grass,
 /area/outdoors/midnight)
+"sU" = (
+/turf/open/floor/iron/white,
+/area/station/testmap/home/outdoor_light)
 "sX" = (
 /obj/machinery/oven,
 /obj/machinery/light/small/bar/directional/east,
@@ -200,6 +206,10 @@
 /obj/structure/stairs/east,
 /turf/open/floor/iron/white,
 /area/outdoors)
+"xz" = (
+/obj/structure/table/wood,
+/turf/open/floor/wood,
+/area/station/testmap/home/outdoor_light)
 "xG" = (
 /obj/structure/railing/corner{
 	dir = 1
@@ -209,7 +219,7 @@
 "xM" = (
 /obj/structure/closet/crate/bin,
 /turf/open/floor/wood,
-/area/station/testmap/home)
+/area/station/testmap/home/outdoor_light)
 "yw" = (
 /obj/structure/railing{
 	dir = 4
@@ -220,7 +230,7 @@
 /obj/structure/table/wood,
 /obj/item/flashlight/lamp/green,
 /turf/open/floor/wood,
-/area/station/testmap/home)
+/area/station/testmap/home/outdoor_light)
 "zW" = (
 /turf/open/floor/iron/stairs{
 	dir = 4
@@ -238,7 +248,7 @@
 	dir = 1
 	},
 /turf/open/floor/iron/white,
-/area/outdoors)
+/area/station/testmap/home/outdoor_light)
 "Dc" = (
 /obj/effect/turf_decal/siding/fancy{
 	dir = 8
@@ -263,7 +273,7 @@
 "GL" = (
 /obj/machinery/computer4/debug,
 /turf/open/floor/wood,
-/area/station/testmap/home)
+/area/station/testmap/home/outdoor_light)
 "GQ" = (
 /turf/open/floor/glass,
 /area/outdoors)
@@ -294,7 +304,7 @@
 /obj/structure/table,
 /obj/machinery/light/small/bar/directional/west,
 /turf/open/floor/iron/white,
-/area/outdoors)
+/area/station/testmap/home/outdoor_light)
 "KE" = (
 /obj/structure/railing,
 /turf/open/misc/grass,
@@ -357,6 +367,10 @@
 "Tr" = (
 /turf/open/floor/iron/stairs,
 /area/station/testmap/home)
+"TT" = (
+/obj/structure/dresser,
+/turf/open/floor/wood,
+/area/station/testmap/home/outdoor_light)
 "Uj" = (
 /obj/structure/stairs/west,
 /turf/open/floor/wood,
@@ -408,7 +422,7 @@
 	dir = 4
 	},
 /turf/open/floor/wood,
-/area/station/testmap/home)
+/area/station/testmap/home/outdoor_light)
 "XQ" = (
 /obj/effect/turf_decal/siding/fancy/corner{
 	dir = 1
@@ -32906,7 +32920,7 @@ ji
 by
 by
 by
-qz
+sU
 by
 Uj
 by
@@ -33163,7 +33177,7 @@ Vi
 by
 JB
 ez
-qz
+sU
 by
 Uj
 by
@@ -33418,9 +33432,9 @@ Vi
 Vi
 Vi
 ji
-qz
-qz
-qz
+sU
+sU
+sU
 by
 Vs
 Tr
@@ -33676,7 +33690,7 @@ Vi
 Vi
 by
 rF
-qz
+sU
 Ck
 by
 by
@@ -96897,9 +96911,9 @@ Yu
 Yu
 by
 GL
-Vs
-Vs
-Vs
+op
+op
+op
 XD
 tx
 Yu
@@ -97153,10 +97167,10 @@ WX
 ix
 XQ
 by
-nO
-Vs
-Vs
-Vs
+xz
+op
+op
+op
 ze
 by
 Yu
@@ -97410,11 +97424,11 @@ bv
 GQ
 iN
 tx
-nO
-Vs
-Vs
-Vs
-Vs
+xz
+op
+op
+op
+op
 by
 by
 by
@@ -97667,11 +97681,11 @@ bv
 GQ
 iN
 tx
-Vs
-Vs
-Vs
-Vs
-Vs
+op
+op
+op
+op
+op
 Tr
 Vs
 Vs
@@ -97924,11 +97938,11 @@ IU
 Dc
 fY
 by
-Vs
-Vs
-Vs
-Vs
-Vs
+op
+op
+op
+op
+op
 by
 Vs
 by
@@ -98182,9 +98196,9 @@ QQ
 QQ
 by
 lM
-Vs
-fs
-Vs
+op
+TT
+op
 xM
 by
 WT
