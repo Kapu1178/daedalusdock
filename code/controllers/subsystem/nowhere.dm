@@ -18,7 +18,7 @@ SUBSYSTEM_DEF(nowhere)
 
 		user.overlay_fullscreen("eternity_entry", /atom/movable/screen/fullscreen/blind/blinder/above_hud)
 
-	var/station_time = station_time
+	var/station_time = time
 	var/station_time_as_text = time_to_twelve_hour(station_time, "hh:mm", TRUE)
 	var/atom/movable/screen/text/screen_text/time_text = user.play_screen_text(station_time_as_text, /atom/movable/screen/text/screen_text/bell_toll)
 

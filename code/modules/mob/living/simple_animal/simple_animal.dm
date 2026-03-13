@@ -271,38 +271,42 @@
 
 /mob/living/simple_animal/proc/handle_automated_speech(override)
 	set waitfor = FALSE
-	if(speak_chance)
-		if(prob(speak_chance) || override)
-			if(speak?.len)
-				if((emote_hear?.len) || (emote_see?.len))
-					var/length = speak.len
-					if(emote_hear?.len)
-						length += emote_hear.len
-					if(emote_see?.len)
-						length += emote_see.len
-					var/randomValue = rand(1,length)
-					if(randomValue <= speak.len)
-						say(pick(speak), forced = "poly")
-					else
-						randomValue -= speak.len
-						if(emote_see && randomValue <= emote_see.len)
-							manual_emote(pick(emote_see))
-						else
-							manual_emote(pick(emote_hear))
-				else
-					say(pick(speak), forced = "poly")
+	if(!speak_chance)
+		return
+
+	if(!(prob(speak_chance) || override))
+		return
+
+	if(speak?.len)
+		if(!((emote_hear?.len) || (emote_see?.len)))
+			say(pick(speak), forced = "automated speech")
+			return
+
+		var/length = speak.len
+
+		if(emote_hear?.len)
+			length += emote_hear.len
+		if(emote_see?.len)
+			length += emote_see.len
+
+		var/randomValue = rand(1,length)
+		if(randomValue <= speak.len)
+			say(pick(speak), forced = "automated speech")
+		else
+			randomValue -= speak.len
+			if(emote_see && randomValue <= emote_see.len)
+				manual_emote(pick(emote_see))
 			else
-				if(!(emote_hear?.len) && (emote_see?.len))
-					manual_emote(pick(emote_see))
-				if((emote_hear?.len) && !(emote_see?.len))
-					manual_emote(pick(emote_hear))
-				if((emote_hear?.len) && (emote_see?.len))
-					var/length = emote_hear.len + emote_see.len
-					var/pick = rand(1,length)
-					if(pick <= emote_see.len)
-						manual_emote(pick(emote_see))
-					else
-						manual_emote(pick(emote_hear))
+				manual_emote(pick(emote_hear))
+		return
+
+	var/length = length(emote_hear) + length(emote_see)
+	var/hear_len = length(emote_hear)
+	var/random_index = rand(1, length)
+	if(rand(1, length) <= hear_len)
+		manual_emote(emote_hear[random_index])
+	else
+		manual_emote(emote_see[random_index - hear_len])
 
 /mob/living/simple_animal/proc/environment_air_is_safe()
 	. = TRUE

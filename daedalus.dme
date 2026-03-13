@@ -4747,6 +4747,7 @@
 #include "code\modules\tables\table_frames.dm"
 #include "code\modules\tables\tables_racks.dm"
 #include "code\modules\testmap\character.dm"
+#include "code\modules\testmap\crow.dm"
 #include "code\modules\testmap\document_disk.dm"
 #include "code\modules\testmap\fakemob\_fakemob.dm"
 #include "code\modules\testmap\fakemob\fisherman.dm"
