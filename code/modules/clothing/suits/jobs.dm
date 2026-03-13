@@ -27,8 +27,8 @@
 	strip_delay = 0
 
 /obj/item/clothing/suit/apron/waders
-	name = "horticultural waders"
-	desc = "A pair of heavy duty leather waders, perfect for insulating your soft flesh from spills, soil and thorns."
+	name = "waders"
+	desc = "A pair of heavy duty leather waders."
 	icon_state = "hort_waders"
 	inhand_icon_state = "hort_waders"
 	body_parts_covered = CHEST|GROIN|LEGS

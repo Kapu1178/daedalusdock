@@ -1,5 +1,4 @@
 /turf/open/water
-	gender = PLURAL
 	desc = "Shallow water."
 	icon = 'icons/turf/floors.dmi'
 	icon_state = "riverwater_motion"
@@ -20,7 +19,6 @@
 	initial_gas = OPENTURF_DEFAULT_ATMOS
 
 /turf/open/water/beach
-	gender = PLURAL
 	desc = "You get the feeling that nobody's bothered to actually make this water functional..."
 	icon = 'icons/misc/beach.dmi'
 	icon_state = "water"
@@ -29,4 +27,11 @@
 
 //Same turf, but instead used in the Beach Biodome
 /turf/open/water/beach/biodome
+	initial_gas = OPENTURF_DEFAULT_ATMOS
+
+/turf/open/water/testmap
+	name = "stream of consciousness"
+	desc = "A shallow stream." // is this a self-own?
+	dir = NORTH // actually south
+
 	initial_gas = OPENTURF_DEFAULT_ATMOS

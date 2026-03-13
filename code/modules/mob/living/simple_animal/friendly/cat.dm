@@ -92,7 +92,7 @@
 
 //RUNTIME IS ALIVE! SQUEEEEEEEE~
 /mob/living/simple_animal/pet/cat/runtime
-	name = "Runtime"
+	name = "Athena"
 	desc = "GCAT"
 	icon_state = "cat"
 	icon_living = "cat"
@@ -111,8 +111,6 @@
 		icon_state = "original"
 		icon_living = "original"
 		icon_dead = "original_dead"
-	if(prob(33))
-		name = "Athena"
 	Read_Memory()
 	. = ..()
 

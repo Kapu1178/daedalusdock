@@ -218,8 +218,8 @@
 	name = "McGriff's bed"
 
 /obj/structure/bed/dogbed/runtime
-	desc = "A comfy-looking cat bed. You can even strap your pet in, in case the gravity turns off."
-	name = "Runtime's bed"
+	desc = "A comfy-looking cat bed."
+	name = "Athena's bed"
 	anchored = TRUE
 
 ///Used to set the owner of a dogbed, returns FALSE if called on an owned bed or an invalid one, TRUE if the possesion succeeds

@@ -3,6 +3,8 @@
 	density = TRUE
 
 	var/mob/living/real_mob
+
+	var/stare_at_mobs = TRUE
 	var/mob/living/carbon/human/stare_target
 
 	/// Things to say in sequence
@@ -45,7 +47,7 @@
 	handle_dialogue(user)
 
 /obj/effect/fakemob/process(delta_time)
-	if(!is_interesting(stare_target))
+	if(stare_target && !is_interesting(stare_target))
 		unset_stare_target()
 
 		var/nearest_mob
@@ -79,6 +81,9 @@
 	real_mob = puppet
 
 /obj/effect/fakemob/proc/set_stare_target(mob/target)
+	if(!stare_target)
+		return
+
 	if(stare_target)
 		unset_stare_target()
 
@@ -202,6 +207,8 @@
 		"Good friends are too few.",
 		"I think tackling the fourth wall so directly is kind of tasteless in the modern world.",
 		"Dreams are fine, but I need bread.",
+		"You will be the death of me.",
+		"Let me occupy your mind, as you do mine.",
 	)
 
 	var/dialogues_said = 0
