@@ -81,7 +81,7 @@
 	real_mob = puppet
 
 /obj/effect/fakemob/proc/set_stare_target(mob/target)
-	if(!stare_target)
+	if(!stare_at_mobs)
 		return
 
 	if(stare_target)
