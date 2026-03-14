@@ -47,7 +47,7 @@
 	handle_dialogue(user)
 
 /obj/effect/fakemob/process(delta_time)
-	if(stare_target && !is_interesting(stare_target))
+	if(stare_at_mobs && !is_interesting(stare_target))
 		unset_stare_target()
 
 		var/nearest_mob
