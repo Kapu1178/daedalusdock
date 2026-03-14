@@ -31,10 +31,15 @@ SUBSYSTEM_DEF(npcpool)
 
 		if(!SA.ckey && !SA.notransform)
 			if(SA.stat != DEAD)
-				SA.handle_automated_movement()
+				SA.turns_since_move++
+				if(SA.should_automated_move() && SA.handle_automated_movement())
+					SA.turns_since_move = 0
+
 			if(SA.stat != DEAD)
 				SA.handle_automated_action()
+
 			if(SA.stat != DEAD)
 				SA.handle_automated_speech()
+
 		if (MC_TICK_CHECK)
 			return

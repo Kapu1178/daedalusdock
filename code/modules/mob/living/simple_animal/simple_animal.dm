@@ -249,24 +249,40 @@
 	set waitfor = FALSE
 	return
 
+/mob/living/simple_animal/proc/should_automated_move()
+	if(stop_automated_movement || !wander)
+		return FALSE
+	if(!isturf(loc) && !allow_movement_on_non_turfs)
+		return FALSE
+	if(!(mobility_flags & MOBILITY_MOVE)) //This is so it only moves if it's not inside a closet, gentics machine, etc.
+		return FALSE
+	if(turns_since_move < turns_per_move)
+		return FALSE
+	if(stop_automated_movement_when_pulled && LAZYLEN(grabbed_by)) //Some animals don't move when pulled
+		return FALSE
+
+	return TRUE
+
 /mob/living/simple_animal/proc/handle_automated_movement()
 	set waitfor = FALSE
-	if(stop_automated_movement || !wander)
-		return
-	if(!isturf(loc) && !allow_movement_on_non_turfs)
-		return
-	if(!(mobility_flags & MOBILITY_MOVE)) //This is so it only moves if it's not inside a closet, gentics machine, etc.
+
+	var/list/possible_turfs = list()
+	for(var/direction in GLOB.cardinals)
+		var/turf/T = get_step(src, direction)
+		if(is_turf_safe(T))
+			possible_turfs += T
+
+	var/turf/target = pick_safe(possible_turfs)
+	var/movement_dir = get_dir(src, target)
+	if(target && Process_Spacemove(movement_dir))
+
+		Move(target, movement_dir)
 		return TRUE
 
-	turns_since_move++
-	if(turns_since_move < turns_per_move)
-		return TRUE
-	if(stop_automated_movement_when_pulled && LAZYLEN(grabbed_by)) //Some animals don't move when pulled
-		return TRUE
-	var/anydir = pick(GLOB.cardinals)
-	if(Process_Spacemove(anydir))
-		Move(get_step(src, anydir), anydir)
-		turns_since_move = 0
+/mob/living/simple_animal/proc/is_turf_safe(turf/T)
+	if(is_type_in_typecache(T, GLOB.dangerous_turfs))
+		return FALSE
+
 	return TRUE
 
 /mob/living/simple_animal/proc/handle_automated_speech(override)
