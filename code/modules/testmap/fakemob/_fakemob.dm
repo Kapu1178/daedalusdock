@@ -216,7 +216,7 @@
 
 /obj/effect/fakemob/king/Initialize(mapload)
 	. = ..()
-	real_mob.name = name
+	real_mob.set_real_name(name)
 	shuffle_inplace(dialogue)
 
 	var/image/I = image('icons/effects/light_overlays/light_96.dmi', "cone")
