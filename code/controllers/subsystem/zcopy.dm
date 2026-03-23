@@ -323,9 +323,14 @@ SUBSYSTEM_DEF(zcopy)
 			QDEL_NULL(below_turf.mimic_above_copy)
 
 		// Handle below atoms.
+		// Lighting
+		var/area/below_area = below_turf.loc
+		if(!below_turf.always_lit && !(below_area.area_has_base_lighting && below_area.base_lighting_alpha == 255 && below_area.base_lighting_color == "#FFFFFF")) // Below turf is not fullbright.
+			if(below_area.area_has_base_lighting)
+				T.shadower.copy_lighting(below_area.lighting_effect)
 
-		if (below_turf.lighting_object && !(below_turf.loc.luminosity || below_turf.always_lit))
-			T.shadower.copy_lighting(below_turf.lighting_object)
+			else if(below_turf.lighting_object)
+				T.shadower.copy_lighting(below_turf.lighting_object.current_underlay)
 
 		// Add everything below us to the update queue.
 		for (var/atom/movable/object as anything in below_turf)

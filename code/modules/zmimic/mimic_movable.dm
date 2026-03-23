@@ -90,9 +90,9 @@
 		myturf.shadower = null
 	return ..()
 
-/atom/movable/openspace/multiplier/proc/copy_lighting(datum/lighting_object/LO)
-	ASSERT(LO != null)
-	appearance = LO.current_underlay
+/atom/movable/openspace/multiplier/proc/copy_lighting(mutable_appearance/lighting_appearance)
+	ASSERT(lighting_appearance != null)
+	appearance = lighting_appearance
 	layer = MIMICKED_LIGHTING_LAYER
 	plane = ZMIMIC_MAX_PLANE
 	blend_mode = BLEND_MULTIPLY
@@ -118,10 +118,16 @@
 		c_list[CL_MATRIX_AG] *= SHADOWER_DARKENING_FACTOR
 		c_list[CL_MATRIX_AB] *= SHADOWER_DARKENING_FACTOR
 		color = c_list
-	else
-		// Not a color matrix, so we can just use the color var ourselves.
+
+	else if(isnull(color))
 		color = SHADOWER_DARKENING_COLOR
 		icon_state = "lighting_transparent"
+	else
+		var/list/decomposed_color = rgb2num(color)
+		decomposed_color[1] *= SHADOWER_DARKENING_FACTOR
+		decomposed_color[2] *= SHADOWER_DARKENING_FACTOR
+		decomposed_color[3] *= SHADOWER_DARKENING_FACTOR
+		color = rgb(decomposed_color[1], decomposed_color[2], decomposed_color[3], length(decomposed_color) > 3 ? decomposed_color[4] : 255)
 
 	UPDATE_OO_IF_PRESENT
 
