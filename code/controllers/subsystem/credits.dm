@@ -58,7 +58,9 @@ SUBSYSTEM_DEF(credits)
 	draft_caststring() //roundend grief not included in the credits
 	draft_producerstring() //so that we show admins who have logged out before the credits roll
 	draft_star() //done early so admins have time to edit it
-	draft_episode_names() //only selects the possibilities, doesn't pick one yet
+	TESTMAP_CHANGE
+	episode_names += new /datum/episode_name("Epilogue", "Senescence")
+	//draft_episode_names() //only selects the possibilities, doesn't pick one yet
 	draft_disclaimers()
 	drafted = TRUE
 	message_admins("SScredits has finished drafting the credits, they can now be editted.")

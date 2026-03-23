@@ -19,3 +19,18 @@
 /area/station/testmap/home/outdoor_light
 	base_lighting_color = /area/outdoors::base_lighting_color
 	base_lighting_alpha = /area/outdoors::base_lighting_alpha
+
+/area/station/testmap/tower_of_babel
+	name = "Tower of Babel"
+	sound_environment = SOUND_ENVIRONMENT_HANGAR
+
+	base_lighting_color = /area/outdoors/midnight::base_lighting_color
+	base_lighting_alpha = /area/outdoors/midnight::base_lighting_alpha
+
+/area/station/testmap/Entered(atom/movable/arrived, area/old_area)
+	. = ..()
+	astype(arrived, /mob)?.add_client_colour(/datum/client_colour/monochrome/tower_of_babel)
+
+/area/station/testmap/Exited(atom/movable/gone, direction)
+	. = ..()
+	astype(gone, /mob)?.remove_client_colour(/datum/client_colour/monochrome/tower_of_babel)

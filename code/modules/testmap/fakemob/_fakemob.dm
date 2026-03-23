@@ -209,6 +209,7 @@
 		"Dreams are fine, but I need bread.",
 		"You will be the death of me.",
 		"Let me occupy your mind, as you do mine.",
+		"How do you wake someone up from inside a dream?",
 	)
 
 	var/dialogues_said = 0
