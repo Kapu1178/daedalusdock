@@ -1,9 +1,0 @@
-author: Doctor-Derp
-delete-after: true
-changes:
-  - rscadd: Added a blindfold to Medical's ritual room.
-  - rscadd: Added ATMs to Cargo Lobby, Dormitories, and Medical Lobby.
-  - bugfix: Fixes atmospherics' oxygen tank.
-  - bugfix: Fixes the scrubbers pipe adapter connecting to the supply line in atmospherics
-      maintenance.
-  - bugfix: Fixes Security's camera console to be hooked into the proper network.
