@@ -92,6 +92,10 @@
 	},
 /turf/open/floor/wood,
 /area/outdoors)
+"je" = (
+/obj/effect/landmark/king_death,
+/turf/open/floor/iron/dark,
+/area/station/testmap/tower_of_babel)
 "ji" = (
 /obj/structure/low_wall/wood,
 /obj/structure/window/fulltile,
@@ -5381,7 +5385,7 @@ rW
 rW
 rW
 rW
-rW
+je
 rW
 rW
 rW
