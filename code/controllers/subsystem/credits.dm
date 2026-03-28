@@ -190,7 +190,10 @@ SUBSYSTEM_DEF(credits)
 /datum/controller/subsystem/credits/proc/finalize_starstring()
 	if(customized_star == "" && star == "")
 		return
-	star_string = "<h1>Starring<br>[customized_star != "" ? customized_star : (star ? star : "Nobody!")]</h1><br>%<splashbreak>" //%<splashbreak> being an arbitrary "new splash card" char we use to split this string back in the javascript
+
+	TESTMAP_CHANGE
+	star_string = "<h1>Starring<br>You</h1><br>%<splashbreak>"
+	//star_string = "<h1>Starring<br>[customized_star != "" ? customized_star : (star ? star : "Nobody!")]</h1><br>%<splashbreak>" //%<splashbreak> being an arbitrary "new splash card" char we use to split this string back in the javascript
 
 /datum/controller/subsystem/credits/proc/finalize_ssstring()
 	if(customized_ss == "" && ss == "")

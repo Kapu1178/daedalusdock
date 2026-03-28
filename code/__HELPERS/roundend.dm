@@ -216,12 +216,15 @@
 
 	popcount = gather_roundend_feedback()
 	INVOKE_ASYNC(SScredits, TYPE_PROC_REF(/datum/controller/subsystem/credits, draft)) //Must always come after popcount is set
-	for(var/client/C in GLOB.clients)
-		C.playcreditsmusic(50)
+
+	TESTMAP_CHANGE
+	// for(var/client/C in GLOB.clients)
+	// 	C.playcreditsmusic(50)
 
 	CHECK_TICK
 
-	display_report(popcount)
+	TESTMAP_CHANGE
+	//display_report(popcount)
 
 	CHECK_TICK
 
@@ -242,7 +245,6 @@
 
 	CHECK_TICK
 
-	handle_hearts()
 	set_observer_default_invisibility(0, span_warning("The round is over! You are now visible to the living."))
 
 	CHECK_TICK

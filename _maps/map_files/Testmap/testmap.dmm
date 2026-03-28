@@ -427,6 +427,7 @@
 /area/outdoors)
 "RE" = (
 /obj/effect/fakemob/king,
+/obj/effect/spotlight,
 /turf/open/floor/wood,
 /area/station/testmap/tower_of_babel)
 "Sv" = (

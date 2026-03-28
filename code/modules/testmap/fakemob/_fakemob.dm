@@ -214,17 +214,32 @@
 
 	var/dialogues_said = 0
 
+	var/is_falling = FALSE
+
 /obj/effect/fakemob/king/Initialize(mapload)
 	. = ..()
 	real_mob.set_real_name(name)
 	shuffle_inplace(dialogue)
 
-	var/image/I = image('icons/effects/light_overlays/light_96.dmi', "cone")
-	I.plane = O_LIGHTING_VISUAL_PLANE
-	I.appearance_flags = RESET_COLOR | RESET_ALPHA | RESET_TRANSFORM
-	I.pixel_x -= 32
-	I.pixel_y -= 32
-	add_overlay(I)
+/obj/effect/fakemob/king/proc/long_live_the_king()
+	set waitfor = FALSE
+
+	var/matrix/target_transform = matrix().Translate(0, -24)
+
+	animate(src, transform = target_transform, time = 0.3 SECONDS)
+
+	sleep(0.3 SECONDS)
+
+	qdel(src)
+	src = null
+
+	var/sound/screm = sound('sound/voice/iamfallingdownpleasehelpme.ogg', 0, 0, 0, 50)
+	for(var/mob/player in GLOB.player_list)
+		if(player.can_hear() && istype(get_area(player), /area/station/testmap/tower_of_babel))
+			SEND_SOUND(player, screm)
+
+	sleep(4.2 SECONDS) // The time it takes for all of the echo and reverb to end.
+	SSticker.end_round()
 
 /obj/effect/fakemob/king/skinwalk(mob/living/puppet)
 	return
@@ -237,6 +252,21 @@
 	dialogues_said++
 	if(dialogues_said == 4)
 		dialogue = list("It is time for you to leave. I cannot go with you.")
+
+
+/obj/effect/spotlight
+
+	mouse_opacity = MOUSE_OPACITY_TRANSPARENT
+	plane = O_LIGHTING_VISUAL_PLANE
+	appearance_flags = RESET_COLOR | RESET_ALPHA | RESET_TRANSFORM
+
+	pixel_x = -32
+	pixel_y = -32
+
+/obj/effect/spotlight/Initialize(mapload)
+	. = ..()
+	icon = 'icons/effects/light_overlays/light_96.dmi'
+	icon_state = "cone"
 
 /obj/effect/landmark/king
 	icon = 'goon/icons/obj/kinginyellow.dmi'

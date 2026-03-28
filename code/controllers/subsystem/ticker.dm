@@ -657,7 +657,8 @@ SUBSYSTEM_DEF(ticker)
 
 	to_chat(world, systemtext("Rebooting World in [DisplayTimeText(delay)]. [reason]"))
 
-	var/roll_credits_in = CONFIG_GET(number/eor_credits_delay) * 10
+	TESTMAP_CHANGE
+	var/roll_credits_in = 0 //CONFIG_GET(number/eor_credits_delay) * 10
 	if(roll_credits)
 		if(roll_credits_in)
 			addtimer(CALLBACK(SScredits, TYPE_PROC_REF(/datum/controller/subsystem/credits, compile_credits)), roll_credits_in)
