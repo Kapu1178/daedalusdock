@@ -1,5 +1,5 @@
 /datum/job/character
-	title = "Actor"
+	title = "Memory"
 	job_flags = JOB_NEW_PLAYER_JOINABLE | JOB_EQUIP_RANK
 
 	spawn_positions = -1

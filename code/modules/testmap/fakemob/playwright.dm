@@ -97,4 +97,4 @@
 	pixel_y = -32
 
 /obj/item/clothing/head/crown/kiy
-	desc = "Engraved on the side is one word: \"Love\""
+	desc = "Engraved on the side is one word: <i>\"Ktisis\"</i>"
