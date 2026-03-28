@@ -60,7 +60,7 @@
 	new /obj/effect/spotlight(crown_loc)
 
 	for(var/mob/living/viewer in viewers(crown_loc))
-		viewer.flash_act(visual = TRUE, type = /atom/movable/screen/fullscreen/flash/black, )
+		viewer.flash_act(visual = TRUE, type = /atom/movable/screen/fullscreen/flash/black)
 
 	sleep(1.9 SECONDS) // The time it takes for all of the echo and reverb to end.
 	SSticker.end_round()
@@ -76,12 +76,6 @@
 	dialogues_said++
 	if(dialogues_said == 4)
 		dialogue = list("It is time for you to leave. I cannot go with you.")
-
-/obj/effect/landmark/king
-	icon = 'goon/icons/obj/kinginyellow.dmi'
-	icon_state = "kingyellow"
-
-/obj/effect/landmark/king_death
 
 /obj/effect/spotlight
 

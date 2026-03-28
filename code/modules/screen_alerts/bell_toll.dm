@@ -18,3 +18,6 @@
 
 /atom/movable/screen/text/screen_text/bell_toll/countdown
 	maptext_y = parent_type::maptext_y - 32
+
+/atom/movable/screen/text/screen_text/bell_toll/subtext
+	maptext_y = parent_type::maptext_y - 64

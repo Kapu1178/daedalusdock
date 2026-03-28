@@ -1,10 +1,15 @@
 SUBSYSTEM_DEF(nowhere)
 	name = "Nowhere"
-	flags = SS_NO_INIT | SS_KEEP_TIMING
+	flags = SS_KEEP_TIMING
 	runlevels = RUNLEVEL_GAME
 	wait = 1 SECOND
 
+	var/obj/effect/landmark/testmap_teleport_marker/fog_teleport
 	var/datum/nowhere_state/current_state
+
+/datum/controller/subsystem/nowhere/Initialize(start_timeofday)
+	. = ..()
+	fog_teleport = locate(/obj/effect/landmark/testmap_teleport_marker) in GLOB.landmarks_list
 
 /datum/controller/subsystem/nowhere/fire(resumed)
 	return
@@ -18,24 +23,37 @@ SUBSYSTEM_DEF(nowhere)
 
 		user.overlay_fullscreen("eternity_entry", /atom/movable/screen/fullscreen/blind/blinder/above_hud)
 
-	var/station_time = time
-	var/station_time_as_text = time_to_twelve_hour(station_time, "hh:mm", TRUE)
-	var/atom/movable/screen/text/screen_text/time_text = user.play_screen_text(station_time_as_text, /atom/movable/screen/text/screen_text/bell_toll)
+	var/list/screen_texts = list()
+
+	var/station_time_as_text = time_to_twelve_hour(time, "hh:mm", TRUE)
+	var/hours_to_midnight = round((24 HOURS - time) / (1 HOUR), 1)
+
+	if(hours_to_midnight != 0)
+		screen_texts += user.play_screen_text(station_time_as_text, /atom/movable/screen/text/screen_text/bell_toll)
+	else
+		screen_texts += user.play_screen_text("The Dark Star rises", /atom/movable/screen/text/screen_text/bell_toll)
 
 	sleep(5.7 SECONDS)
 
-	var/hours_to_midnight = round((24 HOURS - station_time) / (1 HOUR), 1)
-	var/atom/movable/screen/text/screen_text/countdown_text = user.play_screen_text("[hours_to_midnight] Hours to Midnight", /atom/movable/screen/text/screen_text/bell_toll/countdown)
+	if(hours_to_midnight != 0)
+		screen_texts += user.play_screen_text("[hours_to_midnight] Hours to Midnight", /atom/movable/screen/text/screen_text/bell_toll/countdown)
+	else
+		screen_texts += user.play_screen_text("in Carcosa", /atom/movable/screen/text/screen_text/bell_toll/countdown)
 
-	sleep(11.5 SECONDS) // Ends two bell tolls later.
+	sleep(5.8 SECONDS)
+	if(hours_to_midnight == 0)
+		screen_texts += user.play_screen_text("OVERTHROW THE KING", /atom/movable/screen/text/screen_text/bell_toll/subtext)
+
+	sleep(5.7 SECONDS)
 
 	if(cinematic)
 		REMOVE_TRAIT(user, TRAIT_KNOCKEDOUT, "eternity_cinematic")
 		REMOVE_TRAIT(user, TRAIT_DEAF, "eternity_cinematic")
 
 		user.clear_fullscreen("eternity_entry", 3 SECONDS)
-		time_text.fade_out()
-		countdown_text.fade_out()
+
+	for(var/atom/movable/screen/text/screen_text/text as anything in screen_texts)
+		text.fade_out()
 
 	return TRUE
 
@@ -124,6 +142,10 @@ SUBSYSTEM_DEF(nowhere)
 
 /datum/nowhere_state/midnight/on_enter_state()
 	..()
+	SSnowhere.fog_teleport = locate(/obj/effect/landmark/testmap_teleport_marker/tower_of_babel) in GLOB.landmarks_list
+	for(var/mob/living/carbon/human/player in GLOB.player_list)
+		if(player.stat == DEAD)
+			continue
 
-	var/obj/effect/landmark/king_landmark = locate() in GLOB.landmarks_list
-	new /obj/effect/fakemob/king(king_landmark.loc)
+		player.forceMove(SSnowhere.fog_teleport.get_teleport_location())
+		SSnowhere.for_whom_the_bell_tolls(player, TRUE, 24 HOURS)

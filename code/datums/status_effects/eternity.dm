@@ -61,7 +61,7 @@
 	memory.transform = matrix()
 	memory.remove_filter("eternity_motion_blur")
 
-	get_start_landmark_for(/obj/effect/landmark/start/backup::name).get_spawn_location().JoinPlayerHere(memory)
+	memory.forceMove(SSnowhere.fog_teleport.get_teleport_location())
 	SSnowhere.enter_the_crossroads(memory)
 
 /datum/status_effect/eternity/proc/on_owner_move()
