@@ -7,6 +7,11 @@
 	resistance_flags = INDESTRUCTIBLE | LAVA_PROOF | FIRE_PROOF | UNACIDABLE | ACID_PROOF
 
 /obj/item/kinginyellow/attack_self(mob/living/user, modifiers)
+	TESTMAP_CHANGE
+	if(istype(SSnowhere.current_state, /datum/nowhere_state/midnight))
+		to_chat(user, span_warning("The pages are blank."))
+		return TRUE
+
 	var/datum/status_effect/grouped/king_in_yellow/curse = user.has_status_effect(/datum/status_effect/grouped/king_in_yellow)
 
 	if(!curse)

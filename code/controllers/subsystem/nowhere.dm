@@ -153,5 +153,8 @@ SUBSYSTEM_DEF(nowhere)
 		if(player.stat == DEAD)
 			continue
 
+		// If they read the stupid book.
+		player.remove_status_effect(/datum/status_effect/grouped/king_in_yellow)
+
 		player.forceMove(SSnowhere.fog_teleport.get_teleport_location())
 		SSnowhere.for_whom_the_bell_tolls(player, TRUE, 24 HOURS)
