@@ -195,7 +195,6 @@ GLOBAL_VAR_INIT(fresh_ghost_adjectives, __fresh_ghost_adjectives())
 /// Helper for setting can_reenter_corpse to FALSE
 /mob/dead/observer/proc/unset_reenter_corpse()
 	can_reenter_corpse = FALSE
-	mind = null
 
 /// Adds or removes the monochrome filter based on certain traits.
 /mob/dead/observer/proc/update_monochrome()
@@ -227,16 +226,17 @@ GLOBAL_VAR_INIT(fresh_ghost_adjectives, __fresh_ghost_adjectives())
 	update_appearance(UPDATE_NAME)
 	set_ghost_appearance(null)
 
-	if(client)
-		// tgchat displays doc strings with formatting, so we do stupid shit instead
-		var/list/text = list(
-			"<div style='text-align:center'>[span_statsgood("<span style='font-size: 300%;font-style: normal'>You were laid to rest.</span>")]</div>",
-			"<hr>",
-			span_obviousnotice("Your soul has moved on from the mortal realm, and may no longer interact with it. You may now return to the lobby, and begin anew."),
-		)
-		to_chat(src, examine_block(jointext(text, "")))
+	TESTMAP_CHANGE
+	// if(client)
+	// 	// tgchat displays doc strings with formatting, so we do stupid shit instead
+	// 	var/list/text = list(
+	// 		"<div style='text-align:center'>[span_statsgood("<span style='font-size: 300%;font-style: normal'>You were laid to rest.</span>")]</div>",
+	// 		"<hr>",
+	// 		span_obviousnotice("Your soul has moved on from the mortal realm, and may no longer interact with it. You may now return to the lobby, and begin anew."),
+	// 	)
+	// 	to_chat(src, examine_block(jointext(text, "")))
 
-		playsound_local(src, 'goon/sounds/ghostrespawn.ogg', 50, FALSE, pressure_affected = FALSE)
+	// 	playsound_local(src, 'goon/sounds/ghostrespawn.ogg', 50, FALSE, pressure_affected = FALSE)
 
 	if(priest)
 		deadchat_broadcast("'s restless spirit has been put to rest by [priest.name].", real_name, priest, message_type = DEADCHAT_ANNOUNCEMENT)

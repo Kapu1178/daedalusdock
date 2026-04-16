@@ -539,6 +539,10 @@
 /obj/effect/landmark/kiy_book,
 /turf/open/misc/grass,
 /area/outdoors)
+"Xj" = (
+/obj/effect/landmark/testmap_teleport_marker/spawnloc,
+/turf/open/misc/sandy_dirt,
+/area/outdoors)
 "Xm" = (
 /obj/structure/railing,
 /turf/open/openspace,
@@ -31537,7 +31541,7 @@ Fn
 Fn
 WC
 Fn
-Fn
+Xj
 Fn
 Fn
 Fn

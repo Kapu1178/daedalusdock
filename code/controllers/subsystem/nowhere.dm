@@ -9,7 +9,7 @@ SUBSYSTEM_DEF(nowhere)
 
 /datum/controller/subsystem/nowhere/Initialize(start_timeofday)
 	. = ..()
-	fog_teleport = locate(/obj/effect/landmark/testmap_teleport_marker) in GLOB.landmarks_list
+	fog_teleport = locate(/obj/effect/landmark/testmap_teleport_marker/spawnloc) in GLOB.landmarks_list
 
 /datum/controller/subsystem/nowhere/fire(resumed)
 	return

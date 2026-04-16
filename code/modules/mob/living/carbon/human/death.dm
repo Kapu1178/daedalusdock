@@ -68,6 +68,34 @@ GLOBAL_LIST_EMPTY(dead_players_during_shift)
 	if(!gibbed)
 		hes_dead_jim()
 
+	TESTMAP_CHANGE
+	back_to_nowhere()
+
+	spawn(world.tick_lag)
+		if(!QDELETED(src))
+			qdel(src)
+
+/mob/living/carbon/human/proc/back_to_nowhere()
+	var/mob/dead/observer/ghost = get_ghost(TRUE) || ghostize(FALSE)
+	if(ghost?.mind && ghost.client)
+		var/mob/living/carbon/human/spawning_mob = ghost.mind.assigned_role.get_spawn_mob(ghost.client, SSnowhere.fog_teleport)
+		spawning_mob.equipOutfit(/datum/outfit/memory)
+		ghost.mind.transfer_to(spawning_mob)
+		ghost.mind.set_original_character(spawning_mob)
+		spawning_mob.PossessByPlayer(ghost.key)
+		SSnowhere.enter_the_crossroads(spawning_mob)
+		qdel(ghost)
+		return
+
+	if(!key && !ghost)
+		return
+
+	var/mob/dead/new_player/backup = new()
+	backup.PossessByPlayer(key || ghost.key)
+
+	if(!QDELETED(ghost))
+		qdel(ghost)
+
 /// Gives the He's dead, Jim award to anyone in view.
 /mob/living/carbon/human/proc/hes_dead_jim()
 	if(!ckey)
