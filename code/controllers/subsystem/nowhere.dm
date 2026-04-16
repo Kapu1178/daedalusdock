@@ -4,15 +4,23 @@ SUBSYSTEM_DEF(nowhere)
 	runlevels = RUNLEVEL_GAME
 	wait = 1 SECOND
 
-	var/obj/effect/landmark/testmap_teleport_marker/fog_teleport
 	var/datum/nowhere_state/current_state
+
+	var/obj/effect/landmark/testmap_teleport_marker/fog_teleport
 
 /datum/controller/subsystem/nowhere/Initialize(start_timeofday)
 	. = ..()
 	fog_teleport = locate(/obj/effect/landmark/testmap_teleport_marker/spawnloc) in GLOB.landmarks_list
+	current_state = new /datum/nowhere_state/six
 
 /datum/controller/subsystem/nowhere/fire(resumed)
-	return
+	if(!current_state.next_state)
+		return
+
+	if(floor(station_time() / (1 HOUR)) == current_state.next_state.hour)
+		var/new_state = current_state.next_state
+		current_state = new new_state
+		current_state.on_enter_state(TRUE)
 
 /datum/controller/subsystem/nowhere/proc/for_whom_the_bell_tolls(mob/living/user, cinematic = FALSE, time = station_time())
 	user.playsound_local(get_turf(user), 'sound/effects/belltoll.ogg', 50, FALSE, pressure_affected = FALSE)
@@ -102,6 +110,8 @@ SUBSYSTEM_DEF(nowhere)
 		sleep(5 SECONDS)
 
 /datum/nowhere_state
+	var/hour
+	var/datum/nowhere_state/next_state
 	var/area_color
 	var/area_alpha
 
@@ -111,29 +121,55 @@ SUBSYSTEM_DEF(nowhere)
 		/area/station/testmap/home/outdoor_light,
 	)
 
-/datum/nowhere_state/proc/on_enter_state()
+/datum/nowhere_state/proc/on_enter_state(bing_bong)
 	SHOULD_CALL_PARENT(TRUE)
 	for(var/area_type in areas_lit)
 		var/area/outdoors/area = GLOB.areas_by_type[area_type]
 		area.set_base_lighting(area_color, area_alpha)
 
+	if(bing_bong)
+		bing_bong()
+
+/datum/nowhere_state/proc/bing_bong()
+	for(var/mob/living/carbon/human/player in GLOB.player_list)
+		if(player.stat == DEAD)
+			continue
+
+		SSnowhere.for_whom_the_bell_tolls(player, FALSE, hour HOURS)
+
+/datum/nowhere_state/six
+	next_state = /datum/nowhere_state/seven
+	hour = 18
+	area_color = /area/outdoors::base_lighting_color
+	area_alpha = /area/outdoors::base_lighting_alpha
+
 /datum/nowhere_state/seven
+	next_state = /datum/nowhere_state/eight
+	hour = 19
 	area_color = "#dfac72"
 	area_alpha = 240
 
 /datum/nowhere_state/eight
+	next_state = /datum/nowhere_state/nine
+	hour = 20
 	area_color = "#dfac72"
 	area_alpha = 200
 
 /datum/nowhere_state/nine
+	next_state = /datum/nowhere_state/ten
+	hour = 21
 	area_color = "#df9a72"
 	area_alpha = 150
 
 /datum/nowhere_state/ten
+	next_state = /datum/nowhere_state/eleven
+	hour = 22
 	area_color = "#ccecff"
 	area_alpha = 50
 
 /datum/nowhere_state/eleven
+	next_state = /datum/nowhere_state/midnight
+	hour = 23
 	area_color = "#ccecff"
 	area_alpha = 10
 
@@ -143,11 +179,11 @@ SUBSYSTEM_DEF(nowhere)
 	new /obj/item/kinginyellow(get_turf(book_spawn))
 
 /datum/nowhere_state/midnight
+	hour = 0
 	area_color = "#800080"
 	area_alpha = 50
 
-/datum/nowhere_state/midnight/on_enter_state()
-	..()
+/datum/nowhere_state/midnight/bing_bong()
 	SSnowhere.fog_teleport = locate(/obj/effect/landmark/testmap_teleport_marker/tower_of_babel) in GLOB.landmarks_list
 	for(var/mob/living/carbon/human/player in GLOB.player_list)
 		if(player.stat == DEAD)

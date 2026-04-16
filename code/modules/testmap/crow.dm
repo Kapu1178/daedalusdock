@@ -97,7 +97,7 @@
 	)
 
 	var/performed_emote
-	if(rand(1, length) <= hear_len)
+	if(random_index <= hear_len)
 		performed_emote = emote_hear[random_index]
 		if(!sound_map[performed_emote])
 			manual_emote(performed_emote)
