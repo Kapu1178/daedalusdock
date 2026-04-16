@@ -36,3 +36,7 @@
 /obj/effect/landmark/testmap_teleport_marker/spawnloc // spawn is a reserved keyword
 
 /obj/effect/landmark/testmap_teleport_marker/tower_of_babel
+
+/obj/effect/landmark/kiy_book
+	icon = /obj/item/kinginyellow::icon
+	icon_state = /obj/item/kinginyellow::icon_state

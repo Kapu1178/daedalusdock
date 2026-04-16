@@ -232,7 +232,7 @@
 	icon_state = "pill_happy"
 
 
-/obj/item/reagent_containers/pill/lsd
+/obj/item/reagent_containers/pill/lsd //this isn't even lsd.
 	name = "sunshine pill"
 	desc = "Engraved on this split-coloured pill is a half-sun, half-moon."
 	list_reagents = list(/datum/reagent/drug/mushroomhallucinogen = 15, /datum/reagent/toxin/mindbreaker = 15)

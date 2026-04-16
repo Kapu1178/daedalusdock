@@ -241,3 +241,16 @@
 	puppet.update_body_parts(TRUE)
 	puppet.dress_up_as_job(SSjob.GetJob(JOB_ACOLYTE), TRUE)
 	return puppet
+
+/obj/effect/fakemob/scarecrow
+	name = "Scarecrow"
+
+	scramble_dialogue_on_reset = TRUE
+	dialogue = list("Begone, fowl beasts!", "I'm a scarecrow!", "Why can we not be friends?")
+
+/obj/effect/fakemob/scarecrow/create_meat_puppet()
+	var/mob/living/carbon/human/dummy/consistent/puppet = ..()
+	puppet.update_body_parts(TRUE)
+	puppet.equipOutfit(/datum/outfit/memory/scarecrow)
+	return puppet
+

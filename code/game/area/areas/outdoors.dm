@@ -48,3 +48,6 @@
 
 /obj/effect/mob_container/examine(mob/user)
 	return vis_contents[1]:examine(user)
+
+/area/outdoors/carcosa
+	name = "Carcosa"

@@ -107,6 +107,7 @@ SUBSYSTEM_DEF(nowhere)
 
 	var/list/areas_lit = list(
 		/area/outdoors,
+		/area/outdoors/carcosa,
 		/area/station/testmap/home/outdoor_light,
 	)
 
@@ -135,6 +136,11 @@ SUBSYSTEM_DEF(nowhere)
 /datum/nowhere_state/eleven
 	area_color = "#ccecff"
 	area_alpha = 10
+
+/datum/nowhere_state/eleven/on_enter_state()
+	. = ..()
+	var/obj/effect/landmark/kiy_book/book_spawn = locate() in GLOB.landmarks_list
+	new /obj/item/kinginyellow(get_turf(book_spawn))
 
 /datum/nowhere_state/midnight
 	area_color = "#800080"

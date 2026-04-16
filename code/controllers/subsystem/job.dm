@@ -76,7 +76,7 @@ SUBSYSTEM_DEF(job)
 
 	TESTMAP_CHANGE
 	//set_overflow_role(CONFIG_GET(string/overflow_job)
-	set_overflow_role(/datum/job/character)
+	set_overflow_role(/datum/job/memory)
 
 	setup_employers()
 	return ..()
@@ -397,7 +397,7 @@ SUBSYSTEM_DEF(job)
 
 
 /datum/controller/subsystem/job/proc/testmapDivideOccupations()
-	var/datum/job/the_job = GetJobType(/datum/job/character)
+	var/datum/job/the_job = GetJobType(/datum/job/memory)
 
 	for(var/mob/dead/new_player/player as anything in GLOB.new_player_list)
 		if(player.ready == PLAYER_READY_TO_PLAY && player.check_preferences() && player.mind && is_unassigned_job(player.mind.assigned_role) && (!player.client?.restricted_mode))

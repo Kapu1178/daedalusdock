@@ -1,4 +1,4 @@
-/datum/job/character
+/datum/job/memory
 	title = "Memory"
 	job_flags = JOB_NEW_PLAYER_JOINABLE | JOB_EQUIP_RANK
 
@@ -7,18 +7,24 @@
 
 	outfits = list(
 		"Default" = list(
-			SPECIES_HUMAN = /datum/outfit/character,
+			SPECIES_HUMAN = /datum/outfit/memory,
 		),
 	)
 
-/datum/outfit/character
-	name = /datum/job/character::title
+/datum/outfit/memory
+	name = /datum/job/memory::title
 
 	uniform = /obj/item/clothing/under/costume/actor
 	shoes = /obj/item/clothing/shoes/actor
 
 	back = /obj/item/storage/backpack/actor
 	backpack_contents = list(/obj/item/flashlight/seclite/actor)
+
+/datum/outfit/memory/scarecrow
+	name = "Scarecrow"
+	head = /obj/item/clothing/head/scarecrow_hat
+	back = null
+	backpack_contents = null
 
 /obj/item/clothing/under/costume/actor
 	name = "ragged clothes"

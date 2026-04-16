@@ -49,3 +49,4 @@
 /area/station/testmap/tower_of_babel/Exited(atom/movable/gone, direction)
 	. = ..()
 	astype(gone, /mob)?.remove_client_colour(/datum/client_colour/monochrome/tower_of_babel)
+

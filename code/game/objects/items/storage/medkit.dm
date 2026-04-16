@@ -315,8 +315,8 @@
  */
 
 /obj/item/storage/pill_bottle
-	name = "pill bottle"
-	desc = "It's an airtight container for storing medication."
+	name = "medication vial"
+	desc = "It's a container for storing medication."
 	icon_state = "pill_canister"
 	icon = 'icons/obj/chemical.dmi'
 	inhand_icon_state = "contsolid"
