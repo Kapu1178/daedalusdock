@@ -8,7 +8,7 @@
 
 /obj/item/kinginyellow/attack_self(mob/living/user, modifiers)
 	TESTMAP_CHANGE
-	if(istype(SSnowhere.current_state, /datum/nowhere_state/midnight))
+	if(istype(SSnowhere.current_state, /datum/nowhere_phase/midnight))
 		to_chat(user, span_warning("The pages are blank."))
 		return TRUE
 

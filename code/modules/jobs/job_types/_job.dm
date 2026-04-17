@@ -611,6 +611,17 @@ GLOBAL_LIST_INIT(job_display_order, list(
 
 /// Called by SSjob when a player joins the round as this job.
 /datum/job/proc/on_join_message(client/C, job_title_pref)
+	to_chat(C, examine_block(build_greeting(C, job_title_pref)))
+
+/datum/job/proc/build_greeting(client/C, job_title_pref)
+	var/list/out = list()
+	out += greeting_header(C, job_title_pref)
+	out += jointext(greeting_desc(C, job_title_pref), "")
+	out += greeting_radio_help(C, job_title_pref)
+	list_clear_nulls(out)
+	return jointext(out, "")
+
+/datum/job/proc/greeting_header(client/C, job_title_pref)
 	var/completed_title = "<span style='color:[selection_color]'>[job_title_pref]</span>"
 	var/prefix
 	if(spawn_positions == 1)
@@ -618,16 +629,18 @@ GLOBAL_LIST_INIT(job_display_order, list(
 	else
 		prefix = (uppertext(title[1]) in GLOB.vowels_upper) ? "an" : "a"
 
-	var/job_header = "<div style='font-size: 200%;text-align: center'>You are [prefix] [completed_title]</div>"
-	var/job_info = list("<hr>[description]")
+	return "<div style='font-size: 200%;text-align: center'>You are [prefix] [completed_title]</div>"
 
+/datum/job/proc/greeting_desc(client/C, job_title_pref) as /list
+	var/list/desc = list("<hr>[description]")
 	if(supervisors)
-		job_info += "<br><br>As the <span style='color:[selection_color]'>[job_title_pref == title ? job_title_pref : "[job_title_pref] ([title])"]</span> \
+		desc += "<br><br>As the <span style='color:[selection_color]'>[job_title_pref == title ? job_title_pref : "[job_title_pref] ([title])"]</span> \
 		you answer directly to [supervisors]. Special circumstances may change this."
+	return desc
 
-	job_info += "<br><br>[radio_help_message]"
-
-	to_chat(C, examine_block("[job_header][jointext(job_info, "")]"))
+/datum/job/proc/greeting_radio_help(client/C, job_title_pref)
+	if(radio_help_message)
+		return "<br><br>[radio_help_message]"
 
 /// Called by SSjob when a player joins the round as this job.
 /datum/job/proc/on_join_popup(client/C, job_title_pref)

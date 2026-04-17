@@ -11,6 +11,8 @@
 		),
 	)
 
+	radio_help_message = null
+
 /datum/outfit/memory
 	name = /datum/job/memory::title
 

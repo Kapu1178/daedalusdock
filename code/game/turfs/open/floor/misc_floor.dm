@@ -217,6 +217,7 @@ TYPEINFO_DEF(/turf/open/floor/plastic)
 	desc = "This one takes you back."
 	icon_state = "eighties"
 	floor_tile = /obj/item/stack/tile/eighties
+	footstep = FOOTSTEP_CARPET_BAREFOOT
 
 /turf/open/floor/eighties/setup_broken_states()
 	return list("eighties_damaged")

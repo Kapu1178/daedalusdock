@@ -640,15 +640,17 @@ SUBSYSTEM_DEF(job)
 		if(related_policy)
 			to_chat(player_client, related_policy)
 
-		if(CONFIG_GET(number/minimal_access_threshold))
-			to_chat(player_client, span_notice("<B>As this station was initially staffed with a [CONFIG_GET(flag/jobs_have_minimal_access) ? "full crew, only your job's necessities" : "skeleton crew, additional access may"] have been added to your ID card.</B>"))
+		TESTMAP_CHANGE
+		//if(!CONFIG_GET(flag/jobs_have_minimal_access))
+			//to_chat(player_client, span_notice("<B>As this station was initially staffed with askeleton crew, additional access may have been added to your ID card.</B>"))
 
 	if(ishuman(equipping))
 		var/mob/living/carbon/human/wageslave = equipping
 		var/datum/bank_account/bank = SSeconomy.bank_accounts_by_id["[wageslave.account_id]"]
 
 		wageslave.mind.set_note(NOTES_BANK_ACCOUNT, list("Account ID: [wageslave.account_id]<br>Account PIN: [bank.account_pin]"))
-		to_chat(player_client, span_obviousnotice("Your bank account pin is: <b>[bank.account_pin]</b>"))
+		TESTMAP_CHANGE
+		//to_chat(player_client, span_obviousnotice("Your bank account pin is: <b>[bank.account_pin]</b>"))
 
 		setup_alt_job_items(wageslave, job, player_client) //PARIAH EDIT ADDITION
 

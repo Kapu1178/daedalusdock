@@ -95,8 +95,8 @@
 	if(!stare_target)
 		return
 
-	stare_target = null
 	UnregisterSignal(stare_target, COMSIG_MOVABLE_MOVED)
+	stare_target = null
 
 /obj/effect/fakemob/proc/is_interesting(mob/living/carbon/human/H)
 	if(QDELETED(H))
@@ -184,7 +184,7 @@
 	return puppet
 
 /obj/effect/fakemob/roadman
-	name = "Constance"
+	name = "Pathfinder"
 
 	dialogue = list(
 		"This path hasn't gone anywhere for a long time.",
@@ -245,6 +245,7 @@
 /obj/effect/fakemob/scarecrow
 	name = "Scarecrow"
 
+	stare_at_mobs = FALSE
 	scramble_dialogue_on_reset = TRUE
 	dialogue = list("Begone, fowl beasts!", "I'm a scarecrow!", "Why can we not be friends?")
 

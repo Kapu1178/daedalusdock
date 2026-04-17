@@ -4,14 +4,15 @@ SUBSYSTEM_DEF(nowhere)
 	runlevels = RUNLEVEL_GAME
 	wait = 1 SECOND
 
-	var/datum/nowhere_state/current_state
+	var/datum/nowhere_phase/current_state
 
 	var/obj/effect/landmark/testmap_teleport_marker/fog_teleport
 
 /datum/controller/subsystem/nowhere/Initialize(start_timeofday)
 	. = ..()
 	fog_teleport = locate(/obj/effect/landmark/testmap_teleport_marker/spawnloc) in GLOB.landmarks_list
-	current_state = new /datum/nowhere_state/six
+	current_state = new /datum/nowhere_phase/six
+	current_state.on_enter_state(TRUE)
 
 /datum/controller/subsystem/nowhere/fire(resumed)
 	if(!current_state.next_state)
@@ -85,7 +86,7 @@ SUBSYSTEM_DEF(nowhere)
 	qdel(container)
 
 /mob/verb/teststate()
-	var/selected_type = tgui_input_list(src, "Select state", "Nowhere State Selector", subtypesof(/datum/nowhere_state))
+	var/selected_type = tgui_input_list(src, "Select state", "Nowhere State Selector", subtypesof(/datum/nowhere_phase))
 	if(!selected_type)
 		return
 
@@ -93,7 +94,7 @@ SUBSYSTEM_DEF(nowhere)
 	SSnowhere.current_state.on_enter_state()
 
 /mob/verb/rotatestate()
-	var/list/paths = subtypesof(/datum/nowhere_state)
+	var/list/paths = subtypesof(/datum/nowhere_phase)
 	var/static/rotating = FALSE
 	if(rotating)
 		rotating = FALSE
@@ -109,9 +110,9 @@ SUBSYSTEM_DEF(nowhere)
 		SSnowhere.current_state.on_enter_state()
 		sleep(5 SECONDS)
 
-/datum/nowhere_state
+/datum/nowhere_phase
 	var/hour
-	var/datum/nowhere_state/next_state
+	var/datum/nowhere_phase/next_state
 	var/area_color
 	var/area_alpha
 
@@ -121,7 +122,7 @@ SUBSYSTEM_DEF(nowhere)
 		/area/station/testmap/home/outdoor_light,
 	)
 
-/datum/nowhere_state/proc/on_enter_state(bing_bong)
+/datum/nowhere_phase/proc/on_enter_state(bing_bong)
 	SHOULD_CALL_PARENT(TRUE)
 	for(var/area_type in areas_lit)
 		var/area/outdoors/area = GLOB.areas_by_type[area_type]
@@ -130,60 +131,62 @@ SUBSYSTEM_DEF(nowhere)
 	if(bing_bong)
 		bing_bong()
 
-/datum/nowhere_state/proc/bing_bong()
+	SEND_GLOBAL_SIGNAL(SSdcs, COMSIG_GLOB_NOWHERE_PHASE_CHANGE, src)
+
+/datum/nowhere_phase/proc/bing_bong()
 	for(var/mob/living/carbon/human/player in GLOB.player_list)
 		if(player.stat == DEAD)
 			continue
 
 		SSnowhere.for_whom_the_bell_tolls(player, FALSE, hour HOURS)
 
-/datum/nowhere_state/six
-	next_state = /datum/nowhere_state/seven
+/datum/nowhere_phase/six
+	next_state = /datum/nowhere_phase/seven
 	hour = 18
 	area_color = /area/outdoors::base_lighting_color
 	area_alpha = /area/outdoors::base_lighting_alpha
 
-/datum/nowhere_state/seven
-	next_state = /datum/nowhere_state/eight
+/datum/nowhere_phase/seven
+	next_state = /datum/nowhere_phase/eight
 	hour = 19
 	area_color = "#dfac72"
 	area_alpha = 240
 
-/datum/nowhere_state/eight
-	next_state = /datum/nowhere_state/nine
+/datum/nowhere_phase/eight
+	next_state = /datum/nowhere_phase/nine
 	hour = 20
 	area_color = "#dfac72"
 	area_alpha = 200
 
-/datum/nowhere_state/nine
-	next_state = /datum/nowhere_state/ten
+/datum/nowhere_phase/nine
+	next_state = /datum/nowhere_phase/ten
 	hour = 21
 	area_color = "#df9a72"
 	area_alpha = 150
 
-/datum/nowhere_state/ten
-	next_state = /datum/nowhere_state/eleven
+/datum/nowhere_phase/ten
+	next_state = /datum/nowhere_phase/eleven
 	hour = 22
 	area_color = "#ccecff"
 	area_alpha = 50
 
-/datum/nowhere_state/eleven
-	next_state = /datum/nowhere_state/midnight
+/datum/nowhere_phase/eleven
+	next_state = /datum/nowhere_phase/midnight
 	hour = 23
 	area_color = "#ccecff"
 	area_alpha = 10
 
-/datum/nowhere_state/eleven/on_enter_state()
+/datum/nowhere_phase/eleven/on_enter_state()
 	. = ..()
 	var/obj/effect/landmark/kiy_book/book_spawn = locate() in GLOB.landmarks_list
 	new /obj/item/kinginyellow(get_turf(book_spawn))
 
-/datum/nowhere_state/midnight
+/datum/nowhere_phase/midnight
 	hour = 0
 	area_color = "#800080"
 	area_alpha = 50
 
-/datum/nowhere_state/midnight/bing_bong()
+/datum/nowhere_phase/midnight/bing_bong()
 	SSnowhere.fog_teleport = locate(/obj/effect/landmark/testmap_teleport_marker/tower_of_babel) in GLOB.landmarks_list
 	for(var/mob/living/carbon/human/player in GLOB.player_list)
 		if(player.stat == DEAD)

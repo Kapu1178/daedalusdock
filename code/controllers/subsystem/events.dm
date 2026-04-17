@@ -2,6 +2,8 @@ SUBSYSTEM_DEF(events)
 	name = "Events"
 	init_order = INIT_ORDER_EVENTS
 	runlevels = RUNLEVEL_GAME
+	#warn disable events
+	flags = SS_NO_FIRE
 
 	var/list/control = list() //list of all datum/round_event_control. Used for selecting events based on weight and occurrences.
 	///List of all existing /datum/round_event

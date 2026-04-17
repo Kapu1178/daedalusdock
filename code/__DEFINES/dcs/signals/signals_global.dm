@@ -86,3 +86,5 @@
 #define COMSIG_GLOB_PLAYER_LOGIN "!player_login"
 ///Global signal sent when the player list shrinks. (mob/player)
 #define COMSIG_GLOB_PLAYER_LOGOUT "!player_logout"
+
+#define COMSIG_GLOB_NOWHERE_PHASE_CHANGE "!nowhere_phase_change"

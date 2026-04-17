@@ -40,8 +40,8 @@
 	return TRUE
 
 /area/outdoors/midnight
-	base_lighting_alpha = /datum/nowhere_state/midnight::area_alpha
-	base_lighting_color = /datum/nowhere_state/midnight::area_color
+	base_lighting_alpha = /datum/nowhere_phase/midnight::area_alpha
+	base_lighting_color = /datum/nowhere_phase/midnight::area_color
 
 /obj/effect/mob_container
 	name = ""
