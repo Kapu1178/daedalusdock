@@ -35,6 +35,7 @@
 	fakemob.remove_filter("join_blur")
 
 /obj/effect/landmark/time_spawner/npc/holly
+	hour = 19
 	type_to_spawn = /obj/effect/fakemob/holly
 
 /obj/effect/landmark/time_spawner/npc/roadman

@@ -12,6 +12,9 @@
 /// Jukebox music.
 #define MEDIA_TAG_JUKEBOX "JUKEBOX"
 
+#define MEDIA_TAG_JUKEBOX_TESTMAP "JUKEBOX_TESTMAP"
+#define MEDIA_TAG_EDGE "ANGSTY"
+
 /// Cassette music, anything with this tag will be able to be put into random cassettes.
 #define MEDIA_TAG_CASSETTE "CASSETTE"
 /// IS12 cassettes.

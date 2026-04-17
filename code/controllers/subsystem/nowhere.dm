@@ -27,8 +27,8 @@ SUBSYSTEM_DEF(nowhere)
 	user.playsound_local(get_turf(user), 'sound/effects/belltoll.ogg', 50, FALSE, pressure_affected = FALSE)
 
 	if(cinematic)
-		ADD_TRAIT(user, TRAIT_KNOCKEDOUT, "eternity_cinematic")
 		ADD_TRAIT(user, TRAIT_DEAF, "eternity_cinematic")
+		ADD_TRAIT(user, TRAIT_KNOCKEDOUT, "eternity_cinematic")
 
 		user.overlay_fullscreen("eternity_entry", /atom/movable/screen/fullscreen/blind/blinder/above_hud)
 
@@ -61,7 +61,7 @@ SUBSYSTEM_DEF(nowhere)
 
 		user.clear_fullscreen("eternity_entry", 3 SECONDS)
 
-	for(var/atom/movable/screen/text/screen_text/text as anything in screen_texts)
+	for(var/atom/movable/screen/text/screen_text/text in screen_texts)
 		text.fade_out()
 
 	return TRUE
@@ -131,7 +131,7 @@ SUBSYSTEM_DEF(nowhere)
 	if(bing_bong)
 		bing_bong()
 
-	SEND_GLOBAL_SIGNAL(SSdcs, COMSIG_GLOB_NOWHERE_PHASE_CHANGE, src)
+	SEND_GLOBAL_SIGNAL(COMSIG_GLOB_NOWHERE_PHASE_CHANGE, src)
 
 /datum/nowhere_phase/proc/bing_bong()
 	for(var/mob/living/carbon/human/player in GLOB.player_list)

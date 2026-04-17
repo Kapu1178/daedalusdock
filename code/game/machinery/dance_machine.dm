@@ -5,6 +5,8 @@
 	icon_state = "jukebox"
 	verb_say = "states"
 	density = TRUE
+
+	var/track_pool_tag = MEDIA_TAG_JUKEBOX
 	var/active = FALSE
 	/// A k:v list of weakref:status, either LISTENER_HEARING or LISTENER_MUTED
 	var/list/hearers = list()
@@ -29,7 +31,7 @@
 
 /obj/machinery/jukebox/Initialize(mapload)
 	. = ..()
-	songs = SSmedia.get_track_pool(MEDIA_TAG_JUKEBOX)
+	songs = SSmedia.get_track_pool(track_pool_tag)
 	if(songs.len)
 		selection = pick(songs)
 

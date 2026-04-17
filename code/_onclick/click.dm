@@ -514,10 +514,10 @@
 	face_atom: turns the mob towards what you clicked on
 */
 
-/// Simple helper to face what you clicked on, in case it should be needed in more than one place
-/mob/proc/face_atom(atom/A)
-	if( buckled || stat != CONSCIOUS || !A || !x || !y || !A.x || !A.y )
+/atom/movable/proc/face_atom(atom/A)
+	if(!A || !x || !y || !A.x || !A.y )
 		return
+
 	var/dx = A.x - x
 	var/dy = A.y - y
 	if(!dx && !dy) // Wall items are graphically shifted but on the floor
@@ -541,6 +541,13 @@
 			setDir(EAST)
 		else
 			setDir(WEST)
+
+/// Simple helper to face what you clicked on, in case it should be needed in more than one place
+/mob/face_atom(atom/A)
+	if(buckled || stat != CONSCIOUS)
+		return
+
+	return ..()
 
 //debug
 /atom/movable/screen/proc/scale_to(x1,y1)
