@@ -303,13 +303,20 @@
 		"}
 		output += "<div class='flexItem' style='margin-top: 8px'>[button_element(src, "View Station Manifests", "manifest=1")]</div>"
 	else
-		switch(parent.ready)
-			if(PLAYER_NOT_READY)
-				output += "<div>\[ [LINKIFY_READY("Ready", PLAYER_READY_TO_PLAY)] | <span class='linkOn'>Not Ready</span> | [LINKIFY_READY("Observe", PLAYER_READY_TO_OBSERVE)] \]</div>"
-			if(PLAYER_READY_TO_PLAY)
-				output += "<div>\[ <span class='linkOn'>Ready</span> | [LINKIFY_READY("Not Ready", PLAYER_NOT_READY)] | [LINKIFY_READY("Observe", PLAYER_READY_TO_OBSERVE)] \]</div>"
-			if(PLAYER_READY_TO_OBSERVE)
-				output += "<div>\[ [LINKIFY_READY("Ready", PLAYER_READY_TO_PLAY)] | [LINKIFY_READY("Not Ready", PLAYER_NOT_READY)] | <span class='linkOn'>Observe</span> \]</div>"
+		if(check_rights_for(parent.client))
+			switch(parent.ready)
+				if(PLAYER_NOT_READY)
+					output += "<div>\[ [LINKIFY_READY("Ready", PLAYER_READY_TO_PLAY)] | <span class='linkOn'>Not Ready</span> | [LINKIFY_READY("Observe", PLAYER_READY_TO_OBSERVE)] \]</div>"
+				if(PLAYER_READY_TO_PLAY)
+					output += "<div>\[ <span class='linkOn'>Ready</span> | [LINKIFY_READY("Not Ready", PLAYER_NOT_READY)] | [LINKIFY_READY("Observe", PLAYER_READY_TO_OBSERVE)] \]</div>"
+				if(PLAYER_READY_TO_OBSERVE)
+					output += "<div>\[ [LINKIFY_READY("Ready", PLAYER_READY_TO_PLAY)] | [LINKIFY_READY("Not Ready", PLAYER_NOT_READY)] | <span class='linkOn'>Observe</span> \]</div>"
+		else
+			switch(parent.ready)
+				if(PLAYER_NOT_READY)
+					output += "<div>\[ [LINKIFY_READY("Ready", PLAYER_READY_TO_PLAY)] | <span class='linkOn'>Not Ready</span> \]</div>"
+				if(PLAYER_READY_TO_PLAY)
+					output += "<div>\[ <span class='linkOn'>Ready</span> | [LINKIFY_READY("Not Ready", PLAYER_NOT_READY)] \]</div>"
 		output += "</div>"
 
 	output += "</div>"
