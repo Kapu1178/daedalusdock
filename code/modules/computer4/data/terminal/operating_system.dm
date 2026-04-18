@@ -145,6 +145,9 @@
 	get_computer()?.text_buffer = ""
 	get_computer()?.operating_system = null
 
+/// Called when the computer's inserted disk (not internal disk!) changes.
+/datum/c4_file/terminal_program/operating_system/proc/inserted_disk_changed(obj/item/disk/new_inserted_disk)
+
 /// Run a program.
 /datum/c4_file/terminal_program/operating_system/proc/execute_program(datum/c4_file/terminal_program/program, datum/parsed_cmdline/cmdline)
 	if(!program)

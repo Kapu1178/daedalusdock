@@ -132,6 +132,8 @@ TYPEINFO_DEF(/obj/machinery/computer4)
 	if(inserted_disk)
 		inserted_disk.computer = src
 
+	operating_system?.inserted_disk_changed(inserted_disk)
+
 /obj/machinery/computer4/update_overlays()
 	. = ..()
 	if(machine_stat & NOPOWER)

@@ -97,6 +97,9 @@
 	if(.)
 		handle_command_queue()
 
+/datum/c4_file/terminal_program/operating_system/thinkdos/inserted_disk_changed(obj/item/disk/new_inserted_disk)
+	if(current_directory.drive != get_computer().internal_disk)
+		change_dir(drive.root)
 
 /datum/c4_file/terminal_program/operating_system/thinkdos/proc/handle_command_queue()
 	while(LAZYLEN(queued_commands)) //hmm...

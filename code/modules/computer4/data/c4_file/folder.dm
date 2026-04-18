@@ -89,6 +89,7 @@
 
 	SEND_SIGNAL(file, COMSIG_COMPUTER4_FILE_REMOVED)
 	SEND_SIGNAL(containing_drive, COMSIG_COMPUTER4_DRIVE_FILE_REMOVED)
+	return TRUE
 
 /datum/c4_file/folder/proc/can_remove_file(datum/c4_file/file)
 	if(drive.read_only)
