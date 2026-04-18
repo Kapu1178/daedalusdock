@@ -33,6 +33,8 @@
 	animate(container, alpha = 255, time = 10 SECONDS)
 	sleep(10 SECONDS)
 	fakemob.remove_filter("join_blur")
+	fakemob.forceMove(container.loc)
+	qdel(container)
 
 /obj/effect/landmark/time_spawner/npc/holly
 	hour = 19

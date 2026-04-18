@@ -10,6 +10,31 @@
 		"Summer is coming up, and we're right on the lake, you could go swimming!",
 	)
 
+/obj/item/disk/data/floppy/document/code
+	file_name = "memory"
+	file_extension = "DM"
+	file_fields = list(
+		"/datum/outfit/memory",
+		"	name = /datum/job/memory::title",
+		"",
+		"	uniform = /obj/item/clothing/under/costume/actor",
+		"	shoes = /obj/item/clothing/shoes/actor",
+		"",
+		"	back = /obj/item/storage/backpack/actor",
+		"	backpack_contents = list(/obj/item/flashlight/seclite/actor)",
+	)
+
+/obj/item/disk/data/floppy/document/code/init_file()
+	. = ..()
+	RegisterSignal(., COMSIG_COMPUTER4_FILE_REMOVED, PROC_REF(on_memory_delete))
+
+/obj/item/disk/data/floppy/document/code/proc/on_memory_delete()
+	SIGNAL_HANDLER
+
+	SSnowhere.code_deleted = TRUE
+	SSnowhere.check_book()
+	SSnowhere.you_did_something_right()
+
 // November
 
 /obj/item/storage/box/old_invite

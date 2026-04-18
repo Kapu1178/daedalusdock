@@ -80,6 +80,7 @@
 	if(!force && !can_remove_file(file))
 		return FALSE
 
+	var/obj/item/disk/containing_drive = file.drive
 	contents -= file
 	file.containing_folder = null
 	file.drive = null
@@ -87,6 +88,7 @@
 	adjust_size(-file.size)
 
 	SEND_SIGNAL(file, COMSIG_COMPUTER4_FILE_REMOVED)
+	SEND_SIGNAL(containing_drive, COMSIG_COMPUTER4_DRIVE_FILE_REMOVED)
 
 /datum/c4_file/folder/proc/can_remove_file(datum/c4_file/file)
 	if(drive.read_only)

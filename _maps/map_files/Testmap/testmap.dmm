@@ -23,6 +23,14 @@
 /obj/effect/fakemob/fisherman,
 /turf/open/water/testmap,
 /area/outdoors)
+"cu" = (
+/obj/item/card/id/testmap,
+/turf/open/misc/grass,
+/area/outdoors)
+"cE" = (
+/obj/structure/chair/sofa/bench/left,
+/turf/open/misc/grass,
+/area/outdoors)
 "cS" = (
 /obj/structure/railing{
 	dir = 1
@@ -135,6 +143,11 @@
 /obj/structure/bed/dogbed/runtime,
 /turf/open/floor/wood,
 /area/station/testmap/home/outdoor_light)
+"mb" = (
+/obj/structure/table/wood,
+/obj/item/gun/ballistic/revolver/single_action/juno,
+/turf/open/misc/grass,
+/area/outdoors)
 "mC" = (
 /obj/structure/railing{
 	dir = 6
@@ -164,6 +177,12 @@
 /obj/machinery/light/small/bar/directional/east,
 /turf/open/openspace,
 /area/station/testmap/home)
+"pn" = (
+/obj/structure/chair/plastic{
+	dir = 8
+	},
+/turf/open/misc/grass,
+/area/outdoors)
 "qm" = (
 /obj/structure/sign/poster/random/directional/south,
 /obj/structure/sign/poster/random/directional/west,
@@ -331,7 +350,9 @@
 /turf/open/water/testmap,
 /area/outdoors)
 "Dq" = (
-/obj/structure/closet/secure_closet/freezer/fridge,
+/obj/structure/closet/secure_closet/freezer/fridge{
+	anchored = 1
+	},
 /obj/item/food/donkpocket,
 /obj/item/food/donkpocket,
 /obj/item/food/donkpocket,
@@ -346,6 +367,12 @@
 "EF" = (
 /turf/open/misc/sandy_dirt,
 /area/outdoors/carcosa)
+"EV" = (
+/obj/structure/chair/plastic{
+	dir = 4
+	},
+/turf/open/misc/grass,
+/area/outdoors)
 "Fi" = (
 /obj/structure/railing{
 	dir = 6
@@ -365,6 +392,10 @@
 /obj/item/pizzabox/infinite,
 /turf/open/floor/iron/checker,
 /area/station/testmap/home)
+"FL" = (
+/obj/structure/chair/plastic,
+/turf/open/misc/grass,
+/area/outdoors)
 "Gj" = (
 /turf/open/floor/iron/checker,
 /area/station/testmap/home)
@@ -381,6 +412,14 @@
 /obj/machinery/washing_machine,
 /turf/open/floor/iron/checker,
 /area/station/testmap/home)
+"Hk" = (
+/obj/structure/table/wood,
+/turf/open/misc/grass,
+/area/outdoors)
+"Hn" = (
+/obj/machinery/computer4/testmap,
+/turf/open/floor/wood,
+/area/station/testmap/home/outdoor_light)
 "Im" = (
 /obj/structure/stairs/west,
 /turf/open/floor/iron/white,
@@ -390,6 +429,12 @@
 /obj/structure/sign/poster/random/directional/south,
 /turf/open/floor/eighties,
 /area/station/testmap/home)
+"IN" = (
+/obj/structure/table/wood,
+/obj/structure/table/wood,
+/obj/item/ammo_box/c38,
+/turf/open/misc/grass,
+/area/outdoors)
 "IU" = (
 /obj/effect/turf_decal/siding/fancy/corner{
 	dir = 8
@@ -401,6 +446,11 @@
 	dir = 8
 	},
 /turf/open/openspace,
+/area/outdoors)
+"JA" = (
+/obj/structure/table/wood,
+/obj/item/ammo_box/c38,
+/turf/open/misc/grass,
 /area/outdoors)
 "JB" = (
 /obj/structure/table,
@@ -454,6 +504,12 @@
 /area/station/testmap/home)
 "Ot" = (
 /obj/structure/flora/tree/pine,
+/turf/open/misc/grass,
+/area/outdoors)
+"OE" = (
+/obj/structure/chair/plastic{
+	dir = 1
+	},
 /turf/open/misc/grass,
 /area/outdoors)
 "OP" = (
@@ -578,6 +634,12 @@
 /obj/structure/stairs/east,
 /turf/open/misc/grass,
 /area/outdoors)
+"Wc" = (
+/obj/effect/fakemob/mistwalker{
+	dir = 8
+	},
+/turf/open/misc/sandy_dirt,
+/area/outdoors)
 "Wl" = (
 /obj/structure/sign/poster/random/directional/east,
 /turf/open/floor/eighties,
@@ -648,6 +710,10 @@
 	dir = 1
 	},
 /turf/open/floor/wood,
+/area/outdoors)
+"Yj" = (
+/obj/structure/chair/sofa/bench/right,
+/turf/open/misc/grass,
 /area/outdoors)
 "Yu" = (
 /turf/open/floor/wood,
@@ -26461,8 +26527,8 @@ Vi
 Vi
 Vi
 Vi
-Vi
-Vi
+EV
+EV
 Vi
 Vi
 Vi
@@ -26717,10 +26783,10 @@ Vi
 Vi
 Vi
 Vi
-Vi
-Vi
-Vi
-Vi
+FL
+mb
+Hk
+OE
 Vi
 Vi
 Vi
@@ -26974,10 +27040,10 @@ Vi
 Vi
 Vi
 Vi
-Vi
-Vi
-Vi
-Vi
+FL
+JA
+IN
+OE
 Vi
 Vi
 Vi
@@ -27232,8 +27298,8 @@ Vi
 Vi
 Vi
 Vi
-Vi
-Vi
+pn
+pn
 Vi
 Vi
 Vi
@@ -31634,7 +31700,7 @@ Fn
 Fn
 Fn
 Fn
-Fn
+vy
 Fn
 Fn
 Fn
@@ -32650,7 +32716,7 @@ Vi
 Vi
 Vi
 Fn
-vy
+Fn
 Fn
 Vi
 Vi
@@ -32905,7 +32971,7 @@ Vi
 Vi
 Vi
 Vi
-Vi
+Yj
 Fn
 Fn
 Fn
@@ -33162,7 +33228,7 @@ Vi
 Vi
 Vi
 Vi
-Vi
+cE
 Fn
 Fn
 Fn
@@ -42416,7 +42482,7 @@ Vi
 Vi
 Vi
 Fn
-Fn
+Wc
 Fn
 Vi
 Vi
@@ -44985,9 +45051,9 @@ PL
 PL
 PL
 PL
-PL
-PL
-PL
+Vi
+Vi
+Vi
 PL
 PL
 PL
@@ -45242,9 +45308,9 @@ PL
 PL
 PL
 PL
-PL
-PL
-PL
+Vi
+cu
+Vi
 PL
 PL
 PL
@@ -45499,9 +45565,9 @@ PL
 PL
 PL
 PL
-PL
-PL
-PL
+Vi
+Vi
+Vi
 PL
 PL
 PL
@@ -97126,7 +97192,7 @@ Yu
 Yu
 Yu
 by
-op
+Hn
 op
 op
 op

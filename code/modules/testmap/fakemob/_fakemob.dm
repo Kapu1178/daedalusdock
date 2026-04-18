@@ -69,7 +69,8 @@
 
 /// Create the meat puppet the fakemob puppeteers.
 /obj/effect/fakemob/proc/create_meat_puppet() as /mob/living/carbon/human/dummy/consistent
-	return new /mob/living/carbon/human/dummy/consistent(src)
+	. = new /mob/living/carbon/human/dummy/consistent(src)
+	(.).setDir(dir)
 
 /obj/effect/fakemob/proc/skinwalk(mob/living/puppet)
 	var/original_name = name

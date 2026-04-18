@@ -14,11 +14,15 @@
 		"I think we should kill this guy."
 	)
 
+	var/giving_item = FALSE
+	var/given_item = FALSE
+
 /obj/effect/fakemob/taylor/create_meat_puppet()
 	var/mob/living/carbon/human/taylor = ..()
 	taylor.equipOutfit(/datum/outfit/memory/taylor)
 	return taylor
 
+/obj/effect/fakemob/taylor/
 /obj/effect/fakemob/taylor/reset_dialogue()
 	. = ..()
 	dialogue = shuffle(list(
@@ -29,7 +33,12 @@
 	))
 
 /obj/effect/fakemob/taylor/item_interaction(mob/living/user, obj/item/tool, list/modifiers)
+	if(given_item || giving_item)
+		return
+
 	if(istype(tool, /obj/item/card/id))
+		giving_item = TRUE
+		SSnowhere.you_did_something_right()
 		COOLDOWN_START(src, dialogue_cd, 10 SECONDS)
 		reset_dialogue()
 		spawn(-1)
@@ -43,21 +52,6 @@
 			sleep(2 SECONDS)
 			setDir(SOUTH)
 		return ITEM_INTERACT_SUCCESS
-
-/obj/item/disk/data/floppy/document/code
-	file_name = "memory"
-	file_extension = "DM"
-	file_fields = list(
-		"/datum/outfit/memory",
-		"	name = /datum/job/memory::title",
-		"",
-		"	uniform = /obj/item/clothing/under/costume/actor",
-		"	shoes = /obj/item/clothing/shoes/actor",
-		"",
-		"	back = /obj/item/storage/backpack/actor",
-		"	backpack_contents = list(/obj/item/flashlight/seclite/actor)",
-	)
-
 
 /datum/outfit/memory/taylor
 	head = /obj/item/clothing/head/ushanka

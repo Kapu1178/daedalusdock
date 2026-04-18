@@ -1,3 +1,4 @@
 #define COMSIG_COMPUTER4_FILE_ADDED "computer4_file_moved"
 #define COMSIG_COMPUTER4_FILE_RENAMED "computer4_file_renamed"
 #define COMSIG_COMPUTER4_FILE_REMOVED "computer4_file_del"
+#define COMSIG_COMPUTER4_DRIVE_FILE_REMOVED "computer4_drive_file_del"

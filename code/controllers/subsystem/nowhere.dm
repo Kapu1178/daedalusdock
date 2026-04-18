@@ -8,6 +8,8 @@ SUBSYSTEM_DEF(nowhere)
 
 	var/obj/effect/landmark/testmap_teleport_marker/fog_teleport
 
+	var/code_deleted = FALSE
+
 /datum/controller/subsystem/nowhere/Initialize(start_timeofday)
 	. = ..()
 	fog_teleport = locate(/obj/effect/landmark/testmap_teleport_marker/spawnloc) in GLOB.landmarks_list
@@ -84,6 +86,16 @@ SUBSYSTEM_DEF(nowhere)
 
 	memory.forceMove(get_turf(container))
 	qdel(container)
+
+/datum/controller/subsystem/nowhere/proc/you_did_something_right()
+	var/sound/sound = sound('goon/sounds/prayerchime.ogg', volume = 50)
+	for(var/mob/M in GLOB.player_list)
+		M.playsound_local(get_turf(M), null, 50, FALSE, sound_to_use = sound)
+
+/datum/controller/subsystem/nowhere/proc/check_book()
+	if(code_deleted && istype(current_state, /datum/nowhere_phase/eleven))
+		var/obj/effect/landmark/kiy_book/book_spawn = locate() in GLOB.landmarks_list
+		new /obj/item/kinginyellow(get_turf(book_spawn))
 
 /mob/verb/teststate()
 	var/selected_type = tgui_input_list(src, "Select state", "Nowhere State Selector", subtypesof(/datum/nowhere_phase))
@@ -178,8 +190,7 @@ SUBSYSTEM_DEF(nowhere)
 
 /datum/nowhere_phase/eleven/on_enter_state()
 	. = ..()
-	var/obj/effect/landmark/kiy_book/book_spawn = locate() in GLOB.landmarks_list
-	new /obj/item/kinginyellow(get_turf(book_spawn))
+	SSnowhere.check_book()
 
 /datum/nowhere_phase/midnight
 	hour = 0
