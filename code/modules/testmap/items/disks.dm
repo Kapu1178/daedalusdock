@@ -11,6 +11,7 @@
 	)
 
 /obj/item/disk/data/floppy/document/code
+	title = "ext"
 	file_name = "memory"
 	file_extension = "DM"
 	file_fields = list(
