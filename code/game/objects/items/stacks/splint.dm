@@ -13,6 +13,10 @@
 
 	splint_slowdown = 1
 
+/obj/item/stack/splint/get_mechanics_info()
+	. = ..()
+	. += "Promotes fracture healing after some time."
+
 /obj/item/stack/splint/two
 	amount = 2
 

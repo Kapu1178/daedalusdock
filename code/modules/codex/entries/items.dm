@@ -8,11 +8,6 @@
 	associated_paths = list(/obj/item/extinguisher)
 	controls_text = "Alt Click - Empty contents."
 
-/datum/codex_entry/item/stack
-	name = "Stack"
-	associated_paths = list(/obj/item/stack)
-	controls_text = "Right Click - Split stack."
-
 /datum/codex_entry/item/reagent_cart
 	name = "Reagent Cartridge"
 	associated_paths = list(/obj/item/reagent_containers/chem_cartridge)

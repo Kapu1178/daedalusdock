@@ -164,6 +164,10 @@
 	. = ..()
 	update_maptext()
 
+/obj/item/stack/get_controls_info()
+	. = ..()
+	. += "Right Click - Split stack."
+
 /// Set the maptext for the item that shows how much junk is inside the trunk.
 /obj/item/stack/proc/update_maptext()
 	if(item_flags & (IN_INVENTORY|IN_STORAGE))
