@@ -1,6 +1,6 @@
 /obj/item/stack/splint
 	name = "medical splints"
-	singular_name = "splint"
+	singular_name = "medical splint"
 	stack_name = "pair"
 	icon_state = "splint"
 	novariants = TRUE
@@ -8,6 +8,9 @@
 	full_w_class = WEIGHT_CLASS_NORMAL
 	item_flags = NOBLUDGEON
 	merge_type = /obj/item/stack/splint
+
+	dynamically_set_name = TRUE
+
 	amount = 1
 	max_amount = 2
 
@@ -77,3 +80,10 @@
 
 	return ITEM_INTERACT_SUCCESS
 
+
+/obj/item/stack/splint/makeshift
+	name = "makeshift splints"
+	singular_name = "makeshift splint"
+
+	merge_type = /obj/item/stack/splint/makeshift
+	splint_slowdown = 3
