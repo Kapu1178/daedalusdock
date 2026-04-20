@@ -1,6 +1,6 @@
 /datum/slapcraft_recipe/makeshift_splint
 	name = "Makeshift Splint"
-	examine_hint = "You could craft a makeshift splint with some rods..."
+	examine_hint = "You could craft a makeshift splint with some rods and a fixing."
 	category = SLAP_CAT_MEDICAL
 	steps = list(
 		/datum/slapcraft_step/stack/or_other/binding,

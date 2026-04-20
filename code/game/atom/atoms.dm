@@ -743,7 +743,7 @@ TYPEINFO_DEF(/atom)
 		place_linebreak = TRUE
 
 	if(isitem(src) && length(slapcraft_examine_hints_for_type(type)))
-		. += "<span class='obviousnotice'><b><a href='?src=\ref[user.client];show_slapcraft_hints=[type];'>You could craft [(length(slapcraft_examine_hints_for_type(type)) > 1) ? "several things" : "something"] with it.</a><b></span>"
+		. += "<span class='obviousnotice'>You could craft <a href='?src=\ref[user.client];show_slapcraft_hints=[type];'>[(length(slapcraft_examine_hints_for_type(type)) > 1) ? "multiple things" : "something"]</a> with [p_them(FALSE)].<b></span>"
 		place_linebreak = TRUE
 
 	if(place_linebreak)
