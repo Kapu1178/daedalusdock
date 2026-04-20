@@ -84,6 +84,7 @@
 /obj/item/stack/splint/makeshift
 	name = "makeshift splints"
 	singular_name = "makeshift splint"
+	icon_state = "splint_makeshift"
 
 	merge_type = /obj/item/stack/splint/makeshift
 	splint_slowdown = 3
