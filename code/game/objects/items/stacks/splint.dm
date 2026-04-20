@@ -41,23 +41,23 @@
 		to_chat(user, span_warning("There is already a splint there."))
 		return ITEM_INTERACT_BLOCKING
 
+	if(!do_after(user, H, 5 SECONDS, DO_PUBLIC, interaction_key = "splint", display = src))
+		return ITEM_INTERACT_BLOCKING
+
 	if(H != user)
 		user.visible_message(span_notice("[user] starts to apply [src] to [H]'s [BP.plaintext_zone]."), blind_message = span_hear("You hear something being wrapped."))
 	else
 		switch(user.get_active_hand())
 			if(BODY_ZONE_PRECISE_R_HAND)
 				if(zone == BODY_ZONE_R_ARM)
-					to_chat(user, span_warning("You cannot apply a splint to the arm you are using!"))
+					to_chat(user, span_warning("You cannot apply a splint to the arm you are using."))
 					return ITEM_INTERACT_BLOCKING
 			if(BODY_ZONE_PRECISE_L_HAND)
 				if(zone == BODY_ZONE_L_ARM)
-					to_chat(user, span_warning("You cannot apply a splint to the arm you are using!"))
+					to_chat(user, span_warning("You cannot apply a splint to the arm you are using."))
 					return ITEM_INTERACT_BLOCKING
 
 		user.visible_message(span_notice("[user] starts to apply [src] to [user.p_their()] [BP.plaintext_zone]."), blind_message = span_hear("You hear something being wrapped."))
-
-	if(!do_after(user, H, 5 SECONDS, DO_PUBLIC, interaction_key = "splint", display = src))
-		return ITEM_INTERACT_BLOCKING
 
 	var/datum/roll_result/result = user.stat_roll(7, /datum/rpg_skill/anatomy)
 	if(result.outcome <= FAILURE)
