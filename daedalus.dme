@@ -4750,6 +4750,7 @@
 #include "code\modules\testmap\computer.dm"
 #include "code\modules\testmap\crow.dm"
 #include "code\modules\testmap\document_disk.dm"
+#include "code\modules\testmap\dream.dm"
 #include "code\modules\testmap\landmarks.dm"
 #include "code\modules\testmap\testmap_jukebox.dm"
 #include "code\modules\testmap\time_spawner.dm"

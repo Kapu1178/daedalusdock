@@ -11,3 +11,4 @@
 #define DREAM_CLASS_KING_IN_YELLOW "kiy_dream"
 // Overdosing on Zedaphen
 #define DREAM_CLASS_HATMAN "hatman"
+#define DREAM_CLASS_TESTMAP "testmap_dream"
