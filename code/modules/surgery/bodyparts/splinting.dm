@@ -46,6 +46,8 @@
 /obj/item/bodypart/proc/splint_heal_effect()
 	heal_bones()
 	clear_splint_timer()
+	if(owner.stat == CONSCIOUS)
+		to_chat(owner, span_obviousnotice("The broken bone in your [plaintext_zone] has been mended."))
 
 /// Delete the splint timer
 /obj/item/bodypart/proc/clear_splint_timer()

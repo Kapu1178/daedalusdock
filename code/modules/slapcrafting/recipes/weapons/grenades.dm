@@ -1,6 +1,6 @@
 /datum/slapcraft_recipe/ied
 	name = "improvised explosive device"
-	examine_hint = "You could craft an IED, starting by filling this with fuel and adding an igniter..."
+	examine_hint = "You could craft an IED with a can of soda and an igniter."
 	category = SLAP_CAT_WEAPONS
 	steps = list(
 		/datum/slapcraft_step/reagent_container/ied_can,
@@ -19,7 +19,7 @@
 
 /datum/slapcraft_recipe/molotov
 	name = "molotov cocktail"
-	examine_hint = "With a bottle of flammable liquid and something to light, you could create a molotov..."
+	examine_hint = "You could craft a molotov cocktail with a bottle of alcohol and a cloth."
 	category = SLAP_CAT_WEAPONS
 	steps = list(
 		/datum/slapcraft_step/booze_bottle,

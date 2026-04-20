@@ -193,7 +193,8 @@ TYPEINFO_DEF(/obj/item/knife/shiv)
 			inhand_icon_state = "plastitaniumshiv"
 			set_custom_materials(list(/datum/material/glass=400, /datum/material/alloy/plastitanium=200))
 		update_appearance()
-		parts_list -= shard
+		if(parts_list)
+			parts_list -= shard
 		qdel(shard)
 	return ..()
 
