@@ -737,7 +737,8 @@ TYPEINFO_DEF(/atom)
 	var/place_linebreak = FALSE
 	var/datum/codex_entry/entry = SScodex.get_codex_entry(get_codex_value(user))
 	if(entry)
-		var/information_type = length(entry.controls_text) ? "controls" : "relevant information"
+		var/information_type = (length(entry.mechanics_text) || length(entry.lore_text) || length(entry.antag_text)) && "relevant information"
+		information_type ||= "controls"
 		. += "<span class='obviousnotice'>The codex has <b><a href='?src=\ref[SScodex];show_examined_info=\ref[src];show_to=\ref[user]'>[information_type]</a></b> available.</span>"
 		place_linebreak = TRUE
 
