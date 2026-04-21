@@ -377,7 +377,7 @@
 
 	if(damage >= (maxHealth * high_threshold))
 		if(owner.body_position == STANDING_UP)
-			to_chat(owner, span_danger("You black out!"))
+			to_chat(owner, span_danger("You black out."))
 		owner.Unconscious(5 SECOND)
 
 /obj/item/organ/brain/getToxLoss()

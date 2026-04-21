@@ -194,6 +194,9 @@
 	var/pain = getPain()
 	var/overall_pain_class = pain_class(pain)
 
+	var/previous_shock_stage = shock_stage
+	var/went_up_in_stage = FALSE
+
 	// Pain mood adjustment
 	switch(overall_pain_class)
 		if(PAIN_CLASS_AGONIZING)
@@ -237,6 +240,7 @@
 		if(shock_stage == 0)
 			throw_alert("traumatic shock", /atom/movable/screen/alert/shock)
 		shock_stage = min(shock_stage + 1, SHOCK_MAXIMUM)
+		went_up_in_stage = shock_stage > previous_shock_stage
 
 	else if(!heart_attack_gaming)
 		shock_stage = min(shock_stage, SHOCK_MAXIMUM)
@@ -259,45 +263,70 @@
 		return
 
 	var/message = ""
-	if(shock_stage == SHOCK_TIER_1)
-		message = SHOCK_STRING_MINOR
+	// Handle only-on-entering effects.
+	if(went_up_in_stage)
+		switch(shock_stage)
+			if(SHOCK_TIER_1)
+				message = SHOCK_STRING_MINOR
 
-	if((shock_stage > SHOCK_TIER_2 && prob(2)) || shock_stage == SHOCK_TIER_2)
-		if(shock_stage == SHOCK_TIER_2 && organs_by_slot[ORGAN_SLOT_EYES])
-			manual_emote("is having trouble keeping [p_their()] eyes open.")
+			if(SHOCK_TIER_2)
+				message = SHOCK_STRING_MINOR
+				if(stat == CONSCIOUS && getorganslot(ORGAN_SLOT_EYES))
+					manual_emote("is having trouble keeping [p_their()] eyes open.")
+
+			if(SHOCK_TIER_3)
+				message = SHOCK_STRING_MINOR
+
+			if(SHOCK_TIER_4)
+				message = SHOCK_STRING_MAJOR
+				if(body_position == STANDING_UP && stat == CONSCIOUS && !buckled)
+					manual_emote("stumbles over [p_them()]self.")
+
+			if(SHOCK_TIER_5)
+				if(!HAS_TRAIT(src, TRAIT_NOBREATH))
+					message = "I cannot breathe!"
+					losebreath_gasp()
+
+	// Shock 1: Only has a message.
+
+	// Shock 2: 1% chance (per second) to get 10 seconds of blur + stutter. The first time this occurs, an emote will occur.
+	// Shock 2 additionally causes a faster heartrate. See heart.dm
+	if(shock_stage >= SHOCK_TIER_2 && ((shock_stage == SHOCK_TIER_2 && went_up_in_stage) || DT_PROB(1, delta_time)))
 		blur_eyes(5)
 		set_timed_status_effect(10 SECONDS, /datum/status_effect/speech/stutter, only_if_higher = TRUE)
 
-	if(shock_stage == SHOCK_TIER_3)
-		message = SHOCK_STRING_MAJOR
+	// Shock 3: 10% chance (per second) for 5 seconds of stuttering.
+	if(shock_stage >= SHOCK_TIER_3 && ((shock_stage == SHOCK_TIER_3 && went_up_in_stage) || DT_PROB(10, delta_time)))
+		set_timed_status_effect(5 SECONDS, /datum/status_effect/speech/stutter, only_if_higher = TRUE)
 
-	else if(shock_stage >= SHOCK_TIER_3)
-		if(prob(20))
-			set_timed_status_effect(5 SECONDS, /datum/status_effect/speech/stutter, only_if_higher = TRUE)
+	// Shocks 4 only occurs whilst standing.
+	if(body_position == STANDING_UP && stat == CONSCIOUS && !buckled)
+		// Shock 4: 5% chance (per second) to stumble, 100% if just entered.
+		if(shock_stage >= SHOCK_TIER_4 && ((shock_stage == SHOCK_TIER_4 && went_up_in_stage) || DT_PROB(5, delta_time)))
+			Knockdown(2 SECONDS)
 
-	if((shock_stage > SHOCK_TIER_4 && prob(5)) || shock_stage == SHOCK_TIER_4)
-		message = SHOCK_STRING_MAJOR
-		manual_emote("stumbles over [p_them()]self.")
-		Knockdown(2 SECONDS)
+	// Shock 5: 8% chance (per second) to miss a breath.
+	// Shock 5 additionally causes a faster heartrate. See heart.dm
+	// The math on this one gets really weird really quickly. Carbons breathe every 4 life ticks (8 seconds).
+	// So every 1 missed breath has an "impact" of 8 seconds. Except not really, because in the event of a missed breath,
+	// a mob will breathe instantly the neck life tick. So losebreath is decremented every 2 seconds, not every 8 seconds.
+	if(!HAS_TRAIT(src, TRAIT_NOBREATH) && shock_stage >= SHOCK_TIER_5 && ((shock_stage == SHOCK_TIER_5 && went_up_in_stage) || DT_PROB(8, delta_time)))
+		if(losebreath < 2) // We don't want this stacking ON TOP OF the asystole death spiral.
+			losebreath++
 
-	else if((shock_stage > SHOCK_TIER_5 && prob(10)) || shock_stage == SHOCK_TIER_5)
-		message = SHOCK_STRING_MAJOR
-		manual_emote("stumbles over [p_them()]self.")
-		Knockdown(2 SECONDS)
+	// Shock 6: 1% chance (per second) to black out for 10 seconds (if conscious), 100% if just entered.
+	if(stat == CONSCIOUS && shock_stage >= SHOCK_TIER_6 && ((shock_stage == SHOCK_TIER_6 && went_up_in_stage) || DT_PROB(1, delta_time)))
+		pain_message("You black out.", shock_stage - CHEM_EFFECT_MAGNITUDE(src, CE_PAINKILLER)/3, TRUE)
+		Unconscious(10 SECONDS)
+		return // We'll be generous
 
-	if((shock_stage > SHOCK_TIER_6 && prob(2)) || shock_stage == SHOCK_TIER_6)
-		if (stat == CONSCIOUS)
-			pain_message(pick("You black out.", "I feel like I could die any moment now.", "I can't go on anymore."), shock_stage - CHEM_EFFECT_MAGNITUDE(src, CE_PAINKILLER)/3, TRUE)
-			Unconscious(10 SECONDS)
-			return // We'll be generous
-
+	// Shock 7: Permanently unconscious.
 	if(shock_stage >= SHOCK_TIER_7)
-		if(shock_stage == SHOCK_TIER_7)
-			visible_message("<b>[src]</b> falls limp!")
+		if(went_up_in_stage)
+			visible_message("<b>[src]</b> falls limp.")
 		Unconscious(20 SECONDS)
 
-	if(message && !COOLDOWN_FINISHED(src, pain_cooldowns["shock"]))
-		COOLDOWN_START(src, pain_cooldowns["shock"], 20 SECONDS)
+	if(message)
 		pain_message(message, shock_stage - CHEM_EFFECT_MAGNITUDE(src, CE_PAINKILLER)/3, TRUE)
 
 #undef SHOCK_STRING_MINOR

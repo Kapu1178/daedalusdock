@@ -93,14 +93,8 @@
 	// Recover from breath loss
 	if(losebreath >= 1)
 		losebreath--
-		if(!forced && prob(10) && COOLDOWN_FINISHED(src, mob_cooldowns["losebreath_gasp_cd"]))
-			spawn(-1)
-				if(asystole)
-					emote(/datum/emote/living/carbon/gasp_air/allow_unconscious)
-					COOLDOWN_START(src, mob_cooldowns["losebreath_gasp_cd"], 30 SECONDS)
-				else
-					emote(/datum/emote/living/carbon/gasp_air)
-					COOLDOWN_START(src, mob_cooldowns["losebreath_gasp_cd"], 15 SECONDS)
+		if(!forced && prob(10))
+			losebreath_gasp(cooldown = asystole ? 30 SECONDS : 15 SECONDS, allow_unconscious = asystole)
 
 		if(istype(loc, /obj))
 			var/obj/loc_as_obj = loc
@@ -153,6 +147,21 @@
 	if((!forced && . && COOLDOWN_FINISHED(src, mob_cooldowns["breath_sound_cd"]) && environment?.returnPressure() < SOUND_MINIMUM_PRESSURE))
 		src << breathing
 		COOLDOWN_START(src, mob_cooldowns["breath_sound_cd"], 3.5 SECONDS)
+
+/// A gasp caused by a lack of breath.
+/mob/living/carbon/proc/losebreath_gasp(cooldown = 15 SECONDS, bypass_cd = FALSE, allow_unconscious = FALSE)
+	set waitfor = FALSE // This does not actually sleep, this is a "fix" for linters thinking everything calling emote sleeps.
+
+	if(!bypass_cd && !COOLDOWN_FINISHED(src, mob_cooldowns["losebreath_gasp_cd"]))
+		return
+
+	if(allow_unconscious)
+		. = emote(/datum/emote/living/carbon/gasp_air/allow_unconscious)
+	else
+		. = emote(/datum/emote/living/carbon/gasp_air)
+
+	if(.)
+		COOLDOWN_START(src, mob_cooldowns["losebreath_gasp_cd"], cooldown)
 
 /mob/living/carbon/proc/has_smoke_protection()
 	if(HAS_TRAIT(src, TRAIT_NOBREATH))
