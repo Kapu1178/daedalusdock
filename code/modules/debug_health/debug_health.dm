@@ -61,7 +61,7 @@
 		"organ" = target.getToxLoss(),
 		"oxygen" = target.getOxyLoss(),
 		"pain" = target.getPain(),
-		"shock" = target.shock_stage,
+		"shock" = target.traumatic_shock_stage,
 		"losebreath" = target.losebreath,
 		"asystole" = BOOLEAN(target.undergoing_cardiac_arrest()),
 		"blood volume" = target.blood_volume,

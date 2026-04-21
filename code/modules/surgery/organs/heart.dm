@@ -157,9 +157,9 @@
 			. = TRUE
 
 	// Now pulse mod is impacted by shock stage and other things too
-	if(owner.shock_stage > SHOCK_TIER_2)
+	if(owner.traumatic_shock_stage > SHOCK_TIER_2)
 		pulse_mod++
-	if(owner.shock_stage > SHOCK_TIER_5)
+	if(owner.traumatic_shock_stage > SHOCK_TIER_5)
 		pulse_mod++
 
 	var/blood_oxygenation = owner.get_blood_oxygenation()
@@ -207,7 +207,7 @@
 		pulse = clamp(PULSE_NORM + pulse_mod, PULSE_SLOW, PULSE_THREADY)
 
 	// If fibrillation, then it can be PULSE_THREADY
-	var/fibrillation = blood_oxygenation <= BLOOD_CIRC_SURVIVE || (prob(30) && owner.shock_stage > SHOCK_AMT_FOR_FIBRILLATION)
+	var/fibrillation = blood_oxygenation <= BLOOD_CIRC_SURVIVE || (prob(30) && owner.traumatic_shock_stage > SHOCK_AMT_FOR_FIBRILLATION)
 
 	if(pulse && fibrillation) //I SAID MOAR OXYGEN
 		pulse = PULSE_THREADY
@@ -223,7 +223,7 @@
 		owner.med_hud_set_health()
 
 /obj/item/organ/heart/proc/handle_heartbeat()
-	var/can_hear_heart = owner.shock_stage >= SHOCK_TIER_3 || get_step(owner, 0)?.is_below_sound_pressure() || owner.has_status_effect(owner.has_status_effect(/datum/status_effect/jitter))
+	var/can_hear_heart = owner.traumatic_shock_stage >= SHOCK_TIER_3 || get_step(owner, 0)?.is_below_sound_pressure() || owner.has_status_effect(owner.has_status_effect(/datum/status_effect/jitter))
 
 	var/static/sound/slowbeat = sound('sound/health/slowbeat.ogg', repeat = TRUE)
 	var/static/sound/fastbeat = sound('sound/health/fastbeat.ogg', repeat = TRUE)

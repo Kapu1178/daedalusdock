@@ -31,7 +31,7 @@
 
 	if(!clean)
 		playsound(get_turf(limb_owner), 'sound/effects/dismember.ogg', 80, TRUE)
-		limb_owner.shock_stage += minimum_break_damage
+		limb_owner.traumatic_shock_stage += minimum_break_damage
 		if(bodypart_flags & BP_HAS_BLOOD)
 			limb_owner.bleed(rand(20, 40))
 		stump = create_stump()

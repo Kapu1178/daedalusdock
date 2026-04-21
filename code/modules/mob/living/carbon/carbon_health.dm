@@ -122,7 +122,7 @@
 	else
 		visible_message("\The [src] twitches a bit as \his heart restarts!")
 
-	shock_stage = min(shock_stage, SHOCK_AMT_FOR_FIBRILLATION - 25)
+	traumatic_shock_stage = min(traumatic_shock_stage, SHOCK_AMT_FOR_FIBRILLATION - 25)
 
 	// Clamp oxy loss to 70 for 200 health mobs. This is a 0.65 modifier for blood oxygenation.
 	if(getOxyLoss() >= maxHealth * 0.35)

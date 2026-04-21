@@ -430,7 +430,7 @@
 		who_touched_us.update_worn_gloves()
 
 /mob/living/carbon/proc/help_shake_act(mob/living/carbon/helper)
-	if(on_fire)
+	if(on_fire && helper != src)
 		var/datum/roll_result/result = helper.stat_roll(9, /datum/rpg_skill/electric_body)
 		if(result.outcome >= SUCCESS)
 			result.do_skill_sound(helper)
@@ -440,6 +440,9 @@
 			spreadFire(helper)
 
 	if(SEND_SIGNAL(src, COMSIG_CARBON_PRE_HELP_ACT, helper) & COMPONENT_BLOCK_HELP_ACT)
+		return
+
+	if(helper == src)
 		return
 
 	if(body_position == LYING_DOWN)
