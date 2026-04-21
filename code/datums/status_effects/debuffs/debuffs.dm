@@ -685,8 +685,18 @@
 	RegisterSignal(owner, COMSIG_MOVABLE_HEAR, PROC_REF(hypnotize))
 	ADD_TRAIT(owner, TRAIT_MUTE, STATUS_EFFECT_TRAIT)
 	owner.add_client_colour(/datum/client_colour/monochrome/trance)
-	owner.visible_message("[stun ? span_warning("[owner] stands still as [owner.p_their()] eyes seem to focus on a distant point.") : ""]", \
-	span_warning(pick("You feel your thoughts slow down...", "You suddenly feel extremely dizzy...", "You feel like you're in the middle of a dream...","You feel incredibly relaxed...")))
+
+	var/other_message = null
+	if(stun)
+		if(owner.body_position == STANDING_UP)
+			other_message = span_warning("[owner] stands still as [owner.p_their()] eyes seem to focus on a distant point.")
+		else
+			other_message = span_warning("[owner] lays still as [owner.p_their()] eyes seem to focus on a distant point.")
+
+	owner.visible_message(
+		other_message,
+		span_warning(pick("You feel your thoughts slow down...", "You suddenly feel extremely dizzy...", "You feel like you're in the middle of a dream...","You feel incredibly relaxed..."))
+	)
 	return TRUE
 
 /datum/status_effect/trance/on_creation(mob/living/new_owner, _duration, _stun = TRUE)
