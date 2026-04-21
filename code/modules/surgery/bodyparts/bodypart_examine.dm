@@ -221,7 +221,7 @@
 		if(owner.undergoing_jaundice())
 			to_chat(user, span_alert("The skin is yellowed."))
 
-		if(owner.shock_stage >= SHOCK_TIER_2)
+		if(owner.traumatic_shock_stage >= SHOCK_TIER_2)
 			to_chat(user, span_alert("The skin is clammy and cool to the touch."))
 
 	if(IS_ORGANIC_LIMB(src) && (bodypart_flags & BP_NECROTIC))

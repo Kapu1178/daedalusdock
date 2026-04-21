@@ -33,7 +33,7 @@
 	if(stat != DEAD && !(IS_IN_STASIS(src)))
 		handle_shock(delta_time)
 		handle_pain(delta_time)
-		if(shock_stage >= SHOCK_TIER_1)
+		if(traumatic_shock_stage >= SHOCK_TIER_1)
 			add_movespeed_modifier(/datum/movespeed_modifier/shock, TRUE)
 		else
 			remove_movespeed_modifier(/datum/movespeed_modifier/shock, TRUE)

@@ -800,7 +800,7 @@
 	if(bloodstream)
 		bloodstream.clear_reagents()
 
-	shock_stage = 0
+	traumatic_shock_stage = 0
 
 	if(mind)
 		for(var/addiction_type in subtypesof(/datum/addiction))

@@ -380,7 +380,7 @@
 	if(owner.getOxyLoss() > 50)
 		breath_info += pick("straining","labored")
 
-	if(owner.shock_stage > SHOCK_TIER_3)
+	if(owner.traumatic_shock_stage > SHOCK_TIER_3)
 		breath_info += "shallow"
 		breath_info += "rapid"
 
