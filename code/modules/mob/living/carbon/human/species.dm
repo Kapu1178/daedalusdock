@@ -1063,8 +1063,9 @@ GLOBAL_LIST_EMPTY(features_by_species)
 
 	playsound(target.loc, attacking_bodypart.unarmed_attack_sound, 25, TRUE, -1)
 
+	var/target_str = user == target ? "[user.p_them()]self" : "[target]"
 	user.visible_message(
-		span_danger("<b>[user]</b> [atk_verb]ed <b>[target]</b> in the [affecting.plaintext_zone]."),
+		span_danger("<b>[user]</b> [atk_verb]ed <b>[target_str]</b> in the [affecting.plaintext_zone]."),
 		null,
 		span_hear("You hear a scuffle."),
 		COMBAT_MESSAGE_RANGE
