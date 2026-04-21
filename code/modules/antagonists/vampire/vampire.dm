@@ -48,6 +48,14 @@
 	QDEL_LIST(state_datums)
 	return ..()
 
+/datum/antagonist/vampire/build_greeting()
+	. = ..()
+	. += "Consume blood to avoid starvation, but mind your consumption, over drinking will cause a <b>Bloodlust</b>.<br>"
+	. += "Your <b>[span_obviousnotice("Neck Bite")]</b> may be used on victims you have a <b>neck</b> grab on to siphon their lifeforce. \
+		You may only drain a fixed amount of blood per victim, the amount is not lethal to a health person. \
+		The amount of blood you may drain per victim grows over time, you may use <b>[span_obviousnotice("Blood Sense")]</b> to determine potential victims. \
+		<b>[span_obviousnotice("Glare")]</b> will enable quick incapacitations of potential victims. Beware trendy eyewear."
+
 /datum/antagonist/vampire/on_gain()
 	. = ..()
 	START_PROCESSING(SSprocessing, src)
