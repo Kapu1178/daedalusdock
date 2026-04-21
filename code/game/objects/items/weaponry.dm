@@ -298,7 +298,7 @@ TYPEINFO_DEF(/obj/item/throwing_star)
 	force = 2
 	throwforce = 10 //10 + 2 (WEIGHT_CLASS_SMALL) * 4 (EMBEDDED_IMPACT_PAIN_MULTIPLIER) = 18 damage on hit due to guaranteed embedding
 	throw_speed = 1.5
-	embedding = list("pain_mult" = 4, "embed_chance" = 100, "fall_chance" = 0)
+	embedding = list("pain_mult" = 4, "embed_chance" = 100, "fall_chance" = 0, "ignore_throwspeed_threshold" = TRUE)
 	armor_penetration = 40
 
 	w_class = WEIGHT_CLASS_SMALL
