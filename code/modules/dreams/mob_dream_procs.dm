@@ -41,6 +41,9 @@
 	var/list/dream_pool = list()
 	TESTMAP_CHANGE
 	dream_pool = GLOB.dream_controller.get_dreams(DREAM_CLASS_TESTMAP)
+	if(istype(SSnowhere.current_state, /datum/nowhere_phase/midnight))
+		dream_pool = GLOB.dream_controller.get_dreams(DREAM_CLASS_TESTMAP_MIDNIGHT)
+
 	// if(mind?.assigned_role?.title == JOB_DETECTIVE)
 	// 	dream_pool = GLOB.dream_controller.get_dreams(DREAM_CLASS_DETECTIVE).Copy()
 

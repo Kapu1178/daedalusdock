@@ -12,3 +12,4 @@
 // Overdosing on Zedaphen
 #define DREAM_CLASS_HATMAN "hatman"
 #define DREAM_CLASS_TESTMAP "testmap_dream"
+#define DREAM_CLASS_TESTMAP_MIDNIGHT "testmap_dream_midnight"

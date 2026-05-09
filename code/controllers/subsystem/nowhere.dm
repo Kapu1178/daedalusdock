@@ -29,9 +29,8 @@ SUBSYSTEM_DEF(nowhere)
 	user.playsound_local(get_turf(user), 'sound/effects/belltoll.ogg', 50, FALSE, pressure_affected = FALSE)
 
 	if(cinematic)
-		ADD_TRAIT(user, TRAIT_DEAF, "eternity_cinematic")
-		ADD_TRAIT(user, TRAIT_KNOCKEDOUT, "eternity_cinematic")
-
+		ADD_TRAIT(user, TRAIT_DEAF, "eternity_deaf")
+		user.PermaSleeping()
 		user.overlay_fullscreen("eternity_entry", /atom/movable/screen/fullscreen/blind/blinder/above_hud)
 
 	var/list/screen_texts = list()
@@ -42,14 +41,14 @@ SUBSYSTEM_DEF(nowhere)
 	if(hours_to_midnight != 0)
 		screen_texts += user.play_screen_text(station_time_as_text, /atom/movable/screen/text/screen_text/bell_toll)
 	else
-		screen_texts += user.play_screen_text("The Dark Star rises", /atom/movable/screen/text/screen_text/bell_toll)
+		screen_texts += user.play_screen_text("The dark star rises", /atom/movable/screen/text/screen_text/bell_toll)
 
 	sleep(5.7 SECONDS)
 
 	if(hours_to_midnight != 0)
 		screen_texts += user.play_screen_text("[hours_to_midnight] Hours to Midnight", /atom/movable/screen/text/screen_text/bell_toll/countdown)
 	else
-		screen_texts += user.play_screen_text("in Carcosa", /atom/movable/screen/text/screen_text/bell_toll/countdown)
+		screen_texts += user.play_screen_text("over the tower in Carcosa", /atom/movable/screen/text/screen_text/bell_toll/countdown)
 
 	sleep(5.8 SECONDS)
 	if(hours_to_midnight == 0)
@@ -58,9 +57,8 @@ SUBSYSTEM_DEF(nowhere)
 	sleep(5.7 SECONDS)
 
 	if(cinematic)
-		REMOVE_TRAIT(user, TRAIT_KNOCKEDOUT, "eternity_cinematic")
-		REMOVE_TRAIT(user, TRAIT_DEAF, "eternity_cinematic")
-
+		REMOVE_TRAIT(user, TRAIT_DEAF, "eternity_deaf")
+		user.SetSleeping(0)
 		user.clear_fullscreen("eternity_entry", 3 SECONDS)
 
 	for(var/atom/movable/screen/text/screen_text/text in screen_texts)
@@ -103,7 +101,7 @@ SUBSYSTEM_DEF(nowhere)
 		return
 
 	SSnowhere.current_state = new selected_type
-	SSnowhere.current_state.on_enter_state()
+	SSnowhere.current_state.on_enter_state(TRUE)
 
 /mob/verb/rotatestate()
 	var/list/paths = subtypesof(/datum/nowhere_phase)
