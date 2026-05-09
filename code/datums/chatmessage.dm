@@ -37,6 +37,7 @@
 	/// The visual element of the chat messsage
 	var/image/message_image
 	/// Vis contents hack to get around a byond bug with animate() and images.
+	// When using just an image, the first frame of the maptext would appear as though the animate() had concluded, then start from the beginning again.
 	var/atom/movable/message_content
 
 	/// The location in which the message is appearing
