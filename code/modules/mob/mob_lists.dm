@@ -49,7 +49,7 @@
 /mob/proc/add_to_player_list()
 	SHOULD_CALL_PARENT(TRUE)
 
-	SEND_GLOBAL_SIGNAL(SSdcs, COMSIG_GLOB_PLAYER_LOGIN, src)
+	SEND_GLOBAL_SIGNAL(COMSIG_GLOB_PLAYER_LOGIN, src)
 
 	GLOB.player_list |= src
 	if(client.holder)
@@ -70,7 +70,7 @@
 /mob/proc/remove_from_player_list()
 	SHOULD_CALL_PARENT(TRUE)
 
-	SEND_GLOBAL_SIGNAL(SSdcs, COMSIG_GLOB_PLAYER_LOGOUT, src)
+	SEND_GLOBAL_SIGNAL(COMSIG_GLOB_PLAYER_LOGOUT, src)
 
 	GLOB.player_list -= src
 	GLOB.keyloop_list -= src
