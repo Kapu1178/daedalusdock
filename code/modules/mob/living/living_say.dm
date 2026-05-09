@@ -210,7 +210,7 @@ GLOBAL_LIST_INIT(message_modes_stat_limits, list(
 		else
 			log_talk(message, LOG_SAY, forced_by = forced, custom_say_emote = message_mods[MODE_CUSTOM_SAY_EMOTE])
 
-	message = treat_message(message) // unfortunately we still need this
+	message = treat_message(message, is_visual_language = is_visual_language) // unfortunately we still need this
 
 	spans |= speech_span
 
@@ -440,7 +440,7 @@ GLOBAL_LIST_INIT(message_modes_stat_limits, list(
  * message - The message to treat.
  * correct_grammar - Whether or not to capitalize the first letter and add punctuation.
  */
-/mob/living/proc/treat_message(message, correct_grammar = TRUE)
+/mob/living/proc/treat_message(message, correct_grammar = TRUE, is_visual_language = FALSE)
 	if(HAS_TRAIT(src, TRAIT_UNINTELLIGIBLE_SPEECH))
 		message = unintelligize(message)
 
@@ -452,6 +452,9 @@ GLOBAL_LIST_INIT(message_modes_stat_limits, list(
 		var/static/regex/ends_with_punctuation = regex("\[?!-.\]")
 		if((!client || client.prefs.read_preference(/datum/preference/toggle/auto_punctuation)) && !ends_with_punctuation.Find(message, length(message)))
 			message += "."
+
+	if(!is_visual_language && copytext_char(message, -2) == "!!")
+		message = uppertext(message)
 
 	return message
 
