@@ -39,14 +39,41 @@
 	min_ambience_cooldown = 2 MINUTES
 	max_ambience_cooldown = 6 MINUTES
 
+	var/list/heard_entry_sound = list()
+
 /area/station/testmap/tower_of_babel/has_ambient_buzz()
 	return TRUE
 
 /area/station/testmap/tower_of_babel/Entered(atom/movable/arrived, area/old_area)
 	. = ..()
-	astype(arrived, /mob)?.add_client_colour(/datum/client_colour/monochrome/tower_of_babel)
+	var/mob/M = arrived
+	if(istype(M))
+		M.add_client_colour(/datum/client_colour/monochrome/tower_of_babel)
+		play_entry_sound(M)
 
 /area/station/testmap/tower_of_babel/Exited(atom/movable/gone, direction)
 	. = ..()
-	astype(gone, /mob)?.remove_client_colour(/datum/client_colour/monochrome/tower_of_babel)
+	var/mob/M = gone
+	if(istype(M))
+		M.remove_client_colour(/datum/client_colour/monochrome/tower_of_babel)
 
+
+/area/station/testmap/tower_of_babel/proc/play_entry_sound(mob/M)
+	set waitfor = FALSE
+	if(heard_entry_sound[M.ckey])
+		return
+
+	sleep(Frand(0, 4 SECONDS))
+
+	if(heard_entry_sound[M.ckey])
+		return
+
+	heard_entry_sound[M.ckey] = TRUE
+
+	var/list/sounds = list(
+		'goon/sounds/void/Void_Calls.ogg',
+		'goon/sounds/void/Void_Screaming.ogg',
+		'goon/sounds/void/Void_Wail.ogg',
+		'goon/sounds/void/Void_Hisses.ogg',
+	)
+	M.playsound_local(get_turf(M), pick(sounds), 40, FALSE, channel = CHANNEL_VOID_SOUND)

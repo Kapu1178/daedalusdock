@@ -59,7 +59,11 @@ SUBSYSTEM_DEF(credits)
 	draft_producerstring() //so that we show admins who have logged out before the credits roll
 	draft_star() //done early so admins have time to edit it
 	TESTMAP_CHANGE
-	episode_names += new /datum/episode_name("Epilogue", "Senescence")
+	if(SSnowhere.got_book_ending)
+		episode_names += new /datum/episode_name("Epilogue", "The cycle was broken.")
+	else
+		episode_names += new /datum/episode_name("The Struggle Continues", "Senescence.")
+
 	//draft_episode_names() //only selects the possibilities, doesn't pick one yet
 	draft_disclaimers()
 	drafted = TRUE

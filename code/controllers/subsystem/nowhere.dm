@@ -9,6 +9,7 @@ SUBSYSTEM_DEF(nowhere)
 	var/obj/effect/landmark/testmap_teleport_marker/fog_teleport
 
 	var/code_deleted = FALSE
+	var/got_book_ending = FALSE
 
 /datum/controller/subsystem/nowhere/Initialize(start_timeofday)
 	. = ..()

@@ -36,8 +36,20 @@
 	real_mob.set_real_name(name)
 	shuffle_inplace(dialogue)
 
-/obj/effect/fakemob/king/proc/long_live_the_king()
+/obj/effect/fakemob/king/attack_hand_secondary(mob/user, list/modifiers)
+	. = ..()
+	if(. == SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN)
+		return
+
+	long_live_the_king()
+	return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
+
+/obj/effect/fakemob/king/proc/long_live_the_king(book_ending = FALSE)
 	set waitfor = FALSE
+	if(is_falling)
+		return
+
+	is_falling = TRUE
 
 	var/matrix/target_transform = matrix().Translate(0, -24)
 
@@ -56,13 +68,33 @@
 	sleep(2.3 SECONDS) // About the time the thud starts
 
 	var/turf/crown_loc = get_turf(locate(/obj/effect/landmark/king_death) in GLOB.landmarks_list)
-	new /obj/item/clothing/head/crown/kiy(crown_loc)
-	new /obj/effect/spotlight(crown_loc)
+	if(book_ending)
+		new /obj/item/clothing/head/crown/kiy(crown_loc)
+		new /obj/effect/spotlight(crown_loc)
+		SSnowhere.got_book_ending = TRUE
+	else
+		crown_loc.ChangeTurf(/turf/open/floor/fakespace)
+		crown_loc.overlays += global.fullbright_overlay
+		crown_loc.luminosity = TRUE
+
+		var/list/nearby_turfs = RANGE_TURFS(1, crown_loc)
+		nearby_turfs -= crown_loc
+		for(var/i in 1 to 4)
+			var/turf/T = pick_n_take(nearby_turfs)
+			T.ChangeTurf(/turf/open/floor/fakespace)
+			T.overlays += global.fullbright_overlay
+			T.luminosity = TRUE
 
 	for(var/mob/living/viewer in viewers(crown_loc))
 		viewer.flash_act(visual = TRUE, type = /atom/movable/screen/fullscreen/flash/black)
 
-	sleep(1.9 SECONDS) // The time it takes for all of the echo and reverb to end.
+	//sleep(1.9 SECONDS) // The time it takes for all of the echo and reverb to end.
+	sleep(5 SECONDS)
+	var/sound/S = sound('goon/sounds/void/Void_Song.ogg', channel = CHANNEL_VOID_SOUND, volume = 50)
+	for(var/mob/living/carbon/human/H in GLOB.player_list)
+		SEND_SOUND(H, S)
+
+	sleep(1 MINUTE)
 	SSticker.end_round()
 
 /obj/effect/fakemob/king/skinwalk(mob/living/puppet)
