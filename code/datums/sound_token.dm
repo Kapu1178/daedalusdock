@@ -158,12 +158,12 @@
 	RemoveListener(source)
 
 /// Respond to any mob in the world being logged into.
-/datum/sound_token/proc/player_login(mob/player)
+/datum/sound_token/proc/player_login(datum/source, mob/player)
 	SIGNAL_HANDLER
 	AddOrUpdateListener(player)
 
 /// Respond to any cliented mob becoming uncliented
-/datum/sound_token/proc/player_logout(mob/player)
+/datum/sound_token/proc/player_logout(datum/source, mob/player)
 	SIGNAL_HANDLER
 	RemoveListener(player)
 
