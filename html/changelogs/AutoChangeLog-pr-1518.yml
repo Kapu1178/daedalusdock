@@ -1,0 +1,4 @@
+author: Floyd (Yes, _that_ Floyd)
+delete-after: true
+changes:
+  - bugfix: Sounds powered by sound-tokens start playing after logging back in.
