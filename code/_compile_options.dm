@@ -169,7 +169,7 @@
 /////////////////////// MISC PERFORMANCE
 
 //uncomment this to load centcom and runtime station and thats it.
-#define LOWMEMORYMODE
+// #define LOWMEMORYMODE
 //force a map for lowmemorymode
 // #define FORCE_MAP "runtimestation"
 
