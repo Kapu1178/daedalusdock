@@ -7,7 +7,7 @@
 	add_screen_object(/atom/movable/screen/ghost/teleport, HUDKEY_GHOST_TELEPORT, HUDGROUP_STATIC_INVENTORY)
 	add_screen_object(/atom/movable/screen/ghost/pai, HUDKEY_GHOST_PAI, HUDGROUP_STATIC_INVENTORY)
 	add_screen_object(/atom/movable/screen/ghost/minigames_menu, HUDKEY_GHOST_MINIGAMES, HUDGROUP_STATIC_INVENTORY)
-	add_screen_object(/atom/movable/screen/language_menu{screen_loc = ui_ghost_language_menu}, HUDKEY_MOB_LANGUAGE_MENU, HUDGROUP_STATIC_INVENTORY, ui_style)
+	add_screen_object(/atom/movable/screen/language_menu/ghost, HUDKEY_MOB_LANGUAGE_MENU, HUDGROUP_STATIC_INVENTORY, ui_style)
 
 /datum/hud/ghost/show_hud(version = 0, mob/viewmob)
 	// don't show this HUD if observing; show the HUD of the observee

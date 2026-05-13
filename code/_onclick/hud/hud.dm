@@ -150,6 +150,9 @@ GLOBAL_LIST_INIT(available_ui_styles, list(
 	if(ispath(new_object))
 		new_object = new new_object(null, src)
 
+	if(isnull(new_object))
+		CRASH("Bad screen object given to add_screen_object()")
+
 	if(isnull(hud_key))
 		hud_key = ref(new_object)
 
