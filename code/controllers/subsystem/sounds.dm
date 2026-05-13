@@ -59,8 +59,7 @@ SUBSYSTEM_DEF(sounds)
 		using_channels -= num2text(channel)
 		free_channel(channel)
 
-	if(D != DATUMLESS)
-		stop_tracking_datum(D)
+	stop_tracking_datum(D)
 
 /// Frees all datumless channels
 /datum/controller/subsystem/sounds/proc/free_datumless_channels()
@@ -145,7 +144,8 @@ SUBSYSTEM_DEF(sounds)
 	PRIVATE_PROC(TRUE)
 
 	using_channels_by_datum -= D
-	UnregisterSignal(D, COMSIG_PARENT_QDELETING)
+	if(D != DATUMLESS)
+		UnregisterSignal(D, COMSIG_PARENT_QDELETING)
 
 /// Handles a tracked datum being deleted, automatically freeing the channels.
 /datum/controller/subsystem/sounds/proc/tracked_datum_deleted(datum/source)
