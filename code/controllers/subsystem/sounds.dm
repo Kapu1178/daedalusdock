@@ -59,7 +59,8 @@ SUBSYSTEM_DEF(sounds)
 		using_channels -= num2text(channel)
 		free_channel(channel)
 
-	stop_tracking_datum(D)
+	if(D != DATUMLESS)
+		stop_tracking_datum(D)
 
 /// Frees all datumless channels
 /datum/controller/subsystem/sounds/proc/free_datumless_channels()
