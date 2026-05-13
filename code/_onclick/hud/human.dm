@@ -196,8 +196,9 @@
 		if(eyes?.no_glasses)
 			blocked_slots |= ITEM_SLOT_EYES
 
-	for(var/atom/movable/screen/inventory/inv in screen_objects)
-		if(inv.slot_id)
+	for(var/key, slot in screen_objects)
+		var/atom/movable/screen/inventory/inv = slot
+		if(istype(inv) && inv.slot_id)
 			inv.alpha = (blocked_slots & inv.slot_id) ? 128 : initial(inv.alpha)
 
 /datum/hud/human/hidden_inventory_update(mob/viewer)

@@ -743,14 +743,16 @@
 	if(!client || !hud_used)
 		return
 
+	if(!client || !hud_used)
+		return
+
 	var/atom/movable/screen/healthdoll/healthdoll = hud_used.screen_objects[HUDKEY_MOB_HEALTH]
 	if(!healthdoll)
 		return
 
 	var/list/new_overlays = list()
 	healthdoll.cut_overlays()
-
-	if(stat == DEAD)
+	if(stat != DEAD)
 		healthdoll.icon_state = "healthdoll_OVERLAY"
 		for(var/obj/item/bodypart/body_part as anything in bodyparts)
 			var/icon_num = 0

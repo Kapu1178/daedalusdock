@@ -681,27 +681,39 @@
 		return
 
 	var/atom/movable/screen/healths = hud_used.screen_objects[HUDKEY_MOB_HEALTH]
-	if(healths)
-		if(stat != DEAD)
-			. = 1
-			if(shown_health_amount == null)
-				shown_health_amount = health
-			if(shown_health_amount >= maxHealth)
-				healths.icon_state = "health0"
-			else if(shown_health_amount > maxHealth*0.8)
-				healths.icon_state = "health1"
-			else if(shown_health_amount > maxHealth*0.6)
-				healths.icon_state = "health2"
-			else if(shown_health_amount > maxHealth*0.4)
-				healths.icon_state = "health3"
-			else if(shown_health_amount > maxHealth*0.2)
-				healths.icon_state = "health4"
-			else if(shown_health_amount > 0)
-				healths.icon_state = "health5"
-			else
+	if(!healths)
+		return
+
+	if(stat == DEAD)
+		healths.icon_state = "health7"
+		return
+
+	if(hal_screwyhud != SCREWYHUD_NONE)
+		switch(hal_screwyhud)
+			if(SCREWYHUD_CRIT)
 				healths.icon_state = "health6"
-		else
-			healths.icon_state = "health7"
+			if(SCREWYHUD_DEAD)
+				healths.icon_state = "health7"
+			if(SCREWYHUD_HEALTHY)
+				healths.icon_state = "health0"
+		return
+
+	if(shown_health_amount == null)
+		shown_health_amount = health
+	if(shown_health_amount >= maxHealth)
+		healths.icon_state = "health0"
+	else if(shown_health_amount > maxHealth*0.8)
+		healths.icon_state = "health1"
+	else if(shown_health_amount > maxHealth*0.6)
+		healths.icon_state = "health2"
+	else if(shown_health_amount > maxHealth*0.4)
+		healths.icon_state = "health3"
+	else if(shown_health_amount > maxHealth*0.2)
+		healths.icon_state = "health4"
+	else if(shown_health_amount > 0)
+		healths.icon_state = "health5"
+	else
+		healths.icon_state = "health6"
 
 /mob/living/carbon/update_stamina_hud(shown_stamina_amount)
 	if(!client)
