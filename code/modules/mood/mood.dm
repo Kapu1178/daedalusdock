@@ -265,7 +265,7 @@
 	SIGNAL_HANDLER
 
 	var/datum/hud/hud = mob_parent.hud_used
-	mood_screen_object = hud.add_screen_object(new mood_screen_object(null, src), HUDKEY_MOB_MOOD, HUDGROUP_INFO_DISPLAY, update_screen = TRUE)
+	mood_screen_object = hud.add_screen_object(new /atom/movable/screen/mood(null, src), HUDKEY_MOB_MOOD, HUDGROUP_INFO_DISPLAY, update_screen = TRUE)
 	RegisterSignal(hud, COMSIG_PARENT_QDELETING, PROC_REF(unmodify_hud))
 	RegisterSignal(mood_screen_object, COMSIG_CLICK, PROC_REF(hud_click))
 
