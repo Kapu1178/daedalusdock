@@ -10,6 +10,9 @@
 #define PIPE_VISIBLE_LEVEL 2
 #define PIPE_HIDDEN_LEVEL 1
 
+TYPEINFO_DEF(/obj/machinery/atmospherics)
+	default_armor = list(BLUNT = 25, PUNCTURE = 10, SLASH = 0, LASER = 10, ENERGY = 100, BOMB = 0, BIO = 100, FIRE = 100, ACID = 70)
+
 /obj/machinery/atmospherics
 	anchored = TRUE
 	move_resist = INFINITY //Moving a connected machine without actually doing the normal (dis)connection things will probably cause a LOT of issues. (this imply moving machines with something that can push turfs like a megafauna)
@@ -26,9 +29,9 @@
 	///Check if the object can be unwrenched
 	var/can_unwrench = FALSE
 	///Bitflag of the initialized directions (NORTH | SOUTH | EAST | WEST)
-	var/initialize_directions = 0
+	var/initialize_directions = NONE
 	///The color of the pipe
-	var/pipe_color = COLOR_VERY_LIGHT_GRAY
+	var/pipe_color = ATMOS_COLOR_OMNI
 	///What layer the pipe is in (from 1 to 5, default 3)
 	var/piping_layer = PIPING_LAYER_DEFAULT
 	///The flags of the pipe/component (PIPING_ALL_LAYER | PIPING_ONE_PER_TURF | PIPING_DEFAULT_LAYER_ONLY | PIPING_CARDINAL_AUTONORMALIZE)
@@ -66,7 +69,7 @@
 
 /obj/machinery/atmospherics/LateInitialize()
 	. = ..()
-	update_name()
+	update_appearance(UPDATE_NAME)
 
 /obj/machinery/atmospherics/examine(mob/user)
 	. = ..()
@@ -76,15 +79,12 @@
 		if(HAS_TRAIT(L, TRAIT_VENTCRAWLER_NUDE) || HAS_TRAIT(L, TRAIT_VENTCRAWLER_ALWAYS))
 			. += span_notice("Alt-click to crawl through it.")
 
-GLOBAL_REAL_VAR(atmos_machinery_default_armor) = list(BLUNT = 25, PUNCTURE = 10, SLASH = 0, LASER = 10, ENERGY = 100, BOMB = 0, BIO = 100, FIRE = 100, ACID = 70)
 /obj/machinery/atmospherics/New(loc, process = TRUE, setdir, init_dir = ALL_CARDINALS)
 	if(!isnull(setdir))
 		setDir(setdir)
 	if(pipe_flags & PIPING_CARDINAL_AUTONORMALIZE)
 		normalize_cardinal_directions()
 	nodes = new(device_type)
-	if (!armor)
-		armor = global.atmos_machinery_default_armor
 	..()
 
 	if(process)
@@ -165,8 +165,7 @@ GLOBAL_REAL_VAR(atmos_machinery_default_armor) = list(BLUNT = 25, PUNCTURE = 10,
  * Return a list of the nodes that can connect to other machines, get called by atmos_init()
  */
 /obj/machinery/atmospherics/proc/get_node_connects()
-	var/list/node_connects = list()
-	node_connects.len = device_type
+	var/list/node_connects = new /list(device_type)
 
 	var/init_directions = get_init_directions()
 	for(var/i in 1 to device_type)
@@ -222,8 +221,8 @@ GLOBAL_REAL_VAR(atmos_machinery_default_armor) = list(BLUNT = 25, PUNCTURE = 10,
 	update_appearance()
 
 /obj/machinery/atmospherics/update_icon()
-	layer = initial(layer) + piping_layer / 1000
-	return ..()
+	. = ..()
+	update_layer()
 
 /**
  * Check if a node can actually exists by connecting to another machine
@@ -308,7 +307,7 @@ GLOBAL_REAL_VAR(atmos_machinery_default_armor) = list(BLUNT = 25, PUNCTURE = 10,
  * * obj/machinery/atmospherics/target - the machinery we want to connect to
  */
 /obj/machinery/atmospherics/proc/check_connectable_color(obj/machinery/atmospherics/target)
-	if(lowertext(target.pipe_color) == lowertext(pipe_color) || ((target.pipe_flags | pipe_flags) & PIPING_ALL_COLORS) || lowertext(target.pipe_color) == lowertext(COLOR_VERY_LIGHT_GRAY) || lowertext(pipe_color) == lowertext(COLOR_VERY_LIGHT_GRAY))
+	if(lowertext(target.pipe_color) == lowertext(pipe_color) || ((target.pipe_flags | pipe_flags) & PIPING_ALL_COLORS) || lowertext(target.pipe_color) == lowertext(ATMOS_COLOR_OMNI) || lowertext(pipe_color) == lowertext(ATMOS_COLOR_OMNI))
 		return TRUE
 	return FALSE
 
@@ -470,7 +469,7 @@ GLOBAL_REAL_VAR(atmos_machinery_default_armor) = list(BLUNT = 25, PUNCTURE = 10,
  * * piping_layer - the piping_layer the device is in, used inside PIPING_LAYER_SHIFT
  * * trinary - if TRUE we also use PIPING_FORWARD_SHIFT on layer 1 and 5 for trinary devices (filters and mixers)
  */
-/obj/machinery/atmospherics/proc/get_pipe_image(iconfile, iconstate, direction, color = COLOR_VERY_LIGHT_GRAY, piping_layer = 3, trinary = FALSE)
+/obj/machinery/atmospherics/proc/get_pipe_image(iconfile, iconstate, direction, color = ATMOS_COLOR_OMNI, piping_layer = 3, trinary = FALSE)
 	var/image/pipe_overlay = image(iconfile, iconstate, dir = direction)
 	pipe_overlay.color = color
 	PIPING_LAYER_SHIFT(pipe_overlay, piping_layer)
@@ -482,7 +481,7 @@ GLOBAL_REAL_VAR(atmos_machinery_default_armor) = list(BLUNT = 25, PUNCTURE = 10,
 	if(can_unwrench)
 		add_atom_colour(obj_color, FIXED_COLOUR_PRIORITY)
 		pipe_color = obj_color
-	update_name()
+	update_appearance(UPDATE_NAME)
 	set_piping_layer(set_layer)
 	atmos_init()
 	var/list/nodes = pipeline_expansion()
@@ -593,7 +592,7 @@ GLOBAL_REAL_VAR(atmos_machinery_default_armor) = list(BLUNT = 25, PUNCTURE = 10,
  * Update the layer in which the pipe/device is in, that way pipes have consistent layer depending on piping_layer
  */
 /obj/machinery/atmospherics/proc/update_layer()
-	layer = initial(layer) + (piping_layer - PIPING_LAYER_DEFAULT) * PIPING_LAYER_LCHANGE + (GLOB.pipe_colors_ordered[pipe_color] * 0.01)
+	return
 
 /**
  * Called by the RPD.dm pre_attack(), overriden by pipes.dm

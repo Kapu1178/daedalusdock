@@ -92,12 +92,11 @@
 			return FALSE
 
 	if(freq == FREQ_SYNDICATE)
-		if(!(syndie))
-			return FALSE//Prevents broadcast of messages over devices lacking the encryption
+		return !!syndie //Prevents broadcast of messages over devices lacking the encryption
 
 	return TRUE
 
-/obj/item/radio/intercom/Hear(message, atom/movable/speaker, message_langs, raw_message, radio_freq, list/spans, list/message_mods = list(), atom/sound_loc)
+/obj/item/radio/intercom/Hear(message, atom/movable/speaker, message_lang, raw_message, radio_freq, list/spans, list/message_mods = list(), atom/sound_loc, message_range)
 	if(message_mods[RADIO_EXTENSION] == MODE_INTERCOM)
 		return  // Avoid hearing the same thing twice
 	return ..()
@@ -134,13 +133,15 @@
 	return FALSE
 
 //Created through the autolathe or through deconstructing intercoms. Can be applied to wall to make a new intercom on it!
+TYPEINFO_DEF(/obj/item/wallframe/intercom)
+	default_materials = list(/datum/material/iron = 75, /datum/material/glass = 25)
+
 /obj/item/wallframe/intercom
 	name = "intercom frame"
 	desc = "A ready-to-go intercom. Just slap it on a wall and screw it in!"
 	icon_state = "intercom"
 	result_path = /obj/item/radio/intercom/unscrewed
 	pixel_shift = 26
-	custom_materials = list(/datum/material/iron = 75, /datum/material/glass = 25)
 
 MAPPING_DIRECTIONAL_HELPERS(/obj/item/radio/intercom, 26)
 

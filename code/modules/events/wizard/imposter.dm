@@ -15,14 +15,14 @@
 			return //Sad Trombone
 		var/mob/dead/observer/C = pick(candidates)
 
-		new /obj/effect/particle_effect/smoke(W.loc)
+		new /obj/effect/particle_effect/fluid/smoke(W.loc)
 
 		var/mob/living/carbon/human/I = new /mob/living/carbon/human(W.loc)
 		W.dna.transfer_identity(I, transfer_SE=1)
 		I.set_real_name(I.dna.real_name)
 		I.updateappearance(mutcolor_update=1)
 		I.domutcheck()
-		I.key = C.key
+		I.PossessByPlayer(C.key)
 		var/datum/antagonist/wizard/master = M.has_antag_datum(/datum/antagonist/wizard)
 		if(!master.wiz_team)
 			master.create_wiz_team()

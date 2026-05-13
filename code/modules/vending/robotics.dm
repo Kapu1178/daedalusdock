@@ -25,8 +25,8 @@
 		/obj/item/crowbar = 5
 	)
 	refill_canister = /obj/item/vending_refill/robotics
-	default_price = PAYCHECK_HARD
-	payment_department = ACCOUNT_SCI
+	default_price = PAYCHECK_ASSISTANT * 3
+	payment_department = ACCOUNT_STATION_MASTER
 
 	discount_access = ACCESS_ROBOTICS
 

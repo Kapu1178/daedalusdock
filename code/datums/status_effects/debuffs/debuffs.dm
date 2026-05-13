@@ -141,15 +141,18 @@
 	. = ..()
 	if(!.)
 		return
+
 	if(!HAS_TRAIT(owner, TRAIT_SLEEPIMMUNE))
 		ADD_TRAIT(owner, TRAIT_KNOCKEDOUT, TRAIT_STATUS_EFFECT(id))
 		tick_interval = -1
-	ADD_TRAIT(owner, TRAIT_DEAF, TRAIT_STATUS_EFFECT(id))
+
+	if(owner.mind)
+		COOLDOWN_START(owner.mind, dream_cooldown, 5 SECONDS) // You need to sleep for atleast 5 seconds to begin dreaming.
+
 	RegisterSignal(owner, SIGNAL_ADDTRAIT(TRAIT_SLEEPIMMUNE), PROC_REF(on_owner_insomniac))
 	RegisterSignal(owner, SIGNAL_REMOVETRAIT(TRAIT_SLEEPIMMUNE), PROC_REF(on_owner_sleepy))
 
 /datum/status_effect/incapacitating/sleeping/on_remove()
-	REMOVE_TRAIT(owner, TRAIT_DEAF, TRAIT_STATUS_EFFECT(id))
 	UnregisterSignal(owner, list(SIGNAL_ADDTRAIT(TRAIT_SLEEPIMMUNE), SIGNAL_REMOVETRAIT(TRAIT_SLEEPIMMUNE)))
 	if(!HAS_TRAIT(owner, TRAIT_SLEEPIMMUNE))
 		REMOVE_TRAIT(owner, TRAIT_KNOCKEDOUT, TRAIT_STATUS_EFFECT(id))
@@ -170,37 +173,34 @@
 	tick_interval = initial(tick_interval)
 
 /datum/status_effect/incapacitating/sleeping/tick()
-	if(owner.maxHealth)
-		var/health_ratio = owner.health / owner.maxHealth
-		var/healing = -0.2
+	var/healing = -0.2
+	if(isturf(owner.loc))
 		if((locate(/obj/structure/bed) in owner.loc))
 			healing -= 0.3
 		else if((locate(/obj/structure/table) in owner.loc))
 			healing -= 0.1
-		for(var/obj/item/bedsheet/bedsheet in range(owner.loc,0))
-			if(bedsheet.loc != owner.loc) //bedsheets in your backpack/neck don't give you comfort
-				continue
+
+		if((locate(/obj/structure/table) in owner.loc))
 			healing -= 0.1
-			break //Only count the first bedsheet
-		if(health_ratio > 0.8)
-			owner.adjustBruteLoss(healing)
-			owner.adjustFireLoss(healing)
-			owner.adjustToxLoss(healing * 0.5, TRUE, TRUE)
-		owner.stamina.adjust(-healing)
+
+	if(owner.getToxLoss() >= 20)
+		owner.adjustToxLoss(healing * 0.5, TRUE, TRUE)
+
+	owner.stamina.adjust(-healing)
 
 	// Drunkenness gets reduced by 0.3% per tick (6% per 2 seconds)
 	owner.set_drunk_effect(owner.get_drunk_amount() * 0.997)
 
 	if(iscarbon(owner))
 		var/mob/living/carbon/carbon_owner = owner
-		carbon_owner.handle_dreams()
+		carbon_owner.try_dream()
 
 	if(prob(2) && owner.health > owner.crit_threshold)
 		owner.emote("snore")
 
 /atom/movable/screen/alert/status_effect/asleep
 	name = "Asleep"
-	desc = "You've fallen asleep. Wait a bit and you should wake up. Unless you don't, considering how helpless you are."
+	desc = "You've fallen asleep."
 	icon_state = "asleep"
 
 //STASIS
@@ -215,7 +215,7 @@
 		var/delta = world.time - last_dead_time
 		var/new_timeofdeath = owner.timeofdeath + delta
 		owner.timeofdeath = new_timeofdeath
-		owner.tod = stationtime2text(reference_time=new_timeofdeath)
+		owner.timeofdeath_as_ingame = stationtime2text(reference_time=new_timeofdeath)
 		last_dead_time = null
 	if(owner.stat == DEAD)
 		last_dead_time = world.time
@@ -294,7 +294,7 @@
 		return
 	owner.adjustBruteLoss(0.1)
 	owner.adjustFireLoss(0.1)
-	owner.adjustToxLoss(0.2, TRUE, TRUE)
+	owner.adjustToxLoss(0.2, TRUE, TRUE, cause_of_death = "His wrath")
 
 /datum/status_effect/cultghost //is a cult ghost and can't use manifest runes
 	id = "cult_ghost"
@@ -487,14 +487,18 @@
 
 /datum/status_effect/stacking/saw_bleed
 	id = "saw_bleed"
-	tick_interval = 6
+
+	tick_interval = 0.6 SECONDS
+
+	stack_decay = 1
 	delay_before_decay = 5
 	stack_threshold = 10
 	max_stacks = 10
+
+	consumed_on_threshold = TRUE
+
 	overlay_file = 'icons/effects/bleed.dmi'
-	underlay_file = 'icons/effects/bleed.dmi'
 	overlay_state = "bleed"
-	underlay_state = "bleed"
 	var/bleed_damage = 200
 
 /datum/status_effect/stacking/saw_bleed/fadeout_effect()
@@ -507,6 +511,15 @@
 	for(var/d in GLOB.alldirs)
 		new /obj/effect/temp_visual/dir_setting/bloodsplatter(T, d)
 	playsound(T, SFX_DESECRATION, 100, TRUE, -1)
+
+/// Return FALSE if the owner is not in a valid state (self-deletes the effect), or TRUE otherwise
+/datum/status_effect/stacking/saw_bleed/can_have_status()
+	return owner.stat != DEAD
+
+/// Whether the owner can currently gain stacks or not
+/// Return FALSE if the owner is not in a valid state, or TRUE otherwise
+/datum/status_effect/stacking/saw_bleed/can_gain_stacks()
+	return owner.stat != DEAD
 
 /datum/status_effect/stacking/saw_bleed/bloodletting
 	id = "bloodletting"
@@ -537,7 +550,7 @@
 		H.remove_status_effect(/datum/status_effect/neck_slice)
 
 	if(prob(10))
-		H.emote(pick("gasp", "gag", "choke"))
+		H.emote(pick(/datum/emote/living/carbon/gasp_air, "gag", "choke"))
 
 /mob/living/proc/apply_necropolis_curse(set_curse)
 	var/datum/status_effect/necropolis_curse/C = has_status_effect(/datum/status_effect/necropolis_curse)
@@ -670,8 +683,18 @@
 	RegisterSignal(owner, COMSIG_MOVABLE_HEAR, PROC_REF(hypnotize))
 	ADD_TRAIT(owner, TRAIT_MUTE, STATUS_EFFECT_TRAIT)
 	owner.add_client_colour(/datum/client_colour/monochrome/trance)
-	owner.visible_message("[stun ? span_warning("[owner] stands still as [owner.p_their()] eyes seem to focus on a distant point.") : ""]", \
-	span_warning(pick("You feel your thoughts slow down...", "You suddenly feel extremely dizzy...", "You feel like you're in the middle of a dream...","You feel incredibly relaxed...")))
+
+	var/other_message = null
+	if(stun)
+		if(owner.body_position == STANDING_UP)
+			other_message = span_warning("[owner] stands still as [owner.p_their()] eyes seem to focus on a distant point.")
+		else
+			other_message = span_warning("[owner] lays still as [owner.p_their()] eyes seem to focus on a distant point.")
+
+	owner.visible_message(
+		other_message,
+		span_warning(pick("You feel your thoughts slow down...", "You suddenly feel extremely dizzy...", "You feel like you're in the middle of a dream...","You feel incredibly relaxed..."))
+	)
 	return TRUE
 
 /datum/status_effect/trance/on_creation(mob/living/new_owner, _duration, _stun = TRUE)
@@ -692,12 +715,17 @@
 /datum/status_effect/trance/proc/hypnotize(datum/source, list/hearing_args)
 	SIGNAL_HANDLER
 
-	if(!owner.can_hear())
+	var/datum/language/L = hearing_args[HEARING_LANGUAGE]
+	if(!L?.can_receive_language(owner, TRUE) || !owner.has_language(L))
 		return
+
 	var/mob/hearing_speaker = hearing_args[HEARING_SPEAKER]
 	if(hearing_speaker == owner)
 		return
 	var/mob/living/carbon/C = owner
+	if(!C.mind)
+		return
+
 	C.cure_trauma_type(/datum/brain_trauma/hypnosis, TRAUMA_RESILIENCE_SURGERY) //clear previous hypnosis
 	// The brain trauma itself does its own set of logging, but this is the only place the source of the hypnosis phrase can be found.
 	hearing_speaker.log_message("has hypnotised [key_name(C)] with the phrase '[hearing_args[HEARING_RAW_MESSAGE]]'", LOG_ATTACK)
@@ -1239,3 +1267,14 @@
 /datum/status_effect/discoordinated/on_remove()
 	REMOVE_TRAIT(owner, TRAIT_DISCOORDINATED_TOOL_USER, "[type]")
 	return ..()
+
+/// Applied to monkeys to make them attack slower.
+/datum/status_effect/monkey_retardation
+	id = "monkey_retardation"
+	alert_type = null
+	duration = -1
+	status_type = STATUS_EFFECT_UNIQUE
+
+/datum/status_effect/monkey_retardation/nextmove_modifier()
+	return 2
+

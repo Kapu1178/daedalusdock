@@ -13,31 +13,27 @@
 	exp_granted_type = EXP_TYPE_CREW
 
 	employers = list(
-		/datum/employer/contractor,
-		/datum/employer/ananke,
 		/datum/employer/aether
 	)
 
 	outfits = list(
 		"Default" = list(
 			SPECIES_HUMAN = /datum/outfit/job/chemist,
-			SPECIES_PLASMAMAN = /datum/outfit/job/chemist/plasmaman,
 		),
 	)
 
-	paycheck = PAYCHECK_MEDIUM
-	paycheck_department = ACCOUNT_STATION_MASTER
+	paycheck = /datum/job/acolyte::paycheck
+	paycheck_department = ACCOUNT_MED
 
 	liver_traits = list(TRAIT_MEDICAL_METABOLISM)
 
-	bounty_types = CIV_JOB_CHEM
 	departments_list = list(
 		/datum/job_department/medical,
 	)
 
 	mail_goodies = list(
-		/obj/item/reagent_containers/glass/bottle/flash_powder = 15,
-		/obj/item/reagent_containers/glass/bottle/leadacetate = 5,
+		/obj/item/reagent_containers/cup/bottle/flash_powder = 15,
+		/obj/item/reagent_containers/cup/bottle/leadacetate = 5,
 		/obj/item/paper/secretrecipe = 1
 	)
 	rpg_title = "Alchemist"
@@ -48,7 +44,7 @@
 	name = "Chemist"
 	jobtype = /datum/job/chemist
 
-	id_trim = /datum/id_trim/job/chemist
+	id_template = /datum/access_template/job/chemist
 	uniform = /obj/item/clothing/under/rank/medical/chemist
 	suit = /obj/item/clothing/suit/toggle/labcoat/chemist
 	belt = /obj/item/modular_computer/tablet/pda/chemist
@@ -57,18 +53,7 @@
 	shoes = /obj/item/clothing/shoes/sneakers/white
 	r_pocket = /obj/item/reagent_containers/syringe
 
-	backpack = /obj/item/storage/backpack/chemistry
-	satchel = /obj/item/storage/backpack/satchel/chem
-	duffelbag = /obj/item/storage/backpack/duffelbag/chemistry
+	back = /obj/item/storage/backpack/chemistry
 
 	box = /obj/item/storage/box/survival/medical
 	chameleon_extras = /obj/item/gun/syringe
-
-/datum/outfit/job/chemist/plasmaman
-	name = "Chemist (Plasmaman)"
-
-	uniform = /obj/item/clothing/under/plasmaman/chemist
-	gloves = /obj/item/clothing/gloves/color/plasmaman/white
-	head = /obj/item/clothing/head/helmet/space/plasmaman/chemist
-	mask = /obj/item/clothing/mask/breath
-	r_hand = /obj/item/tank/internals/plasmaman/belt/full

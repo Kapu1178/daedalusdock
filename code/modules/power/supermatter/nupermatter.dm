@@ -37,6 +37,8 @@ GLOBAL_DATUM(main_supermatter_engine, /obj/machinery/power/supermatter)
 	///Higher == more overall power
 	var/reaction_power_modifier = 1.1
 
+	/// Controls the turf range of radiation
+	var/radiation_range = 8
 	///Controls how much power is produced by each collector in range - this is the main parameter for tweaking SM balance, as it basically controls how the power variable relates to the rest of the game.
 	var/power_factor = 1.0
 	///Affects how fast the supermatter power decays
@@ -133,7 +135,7 @@ GLOBAL_DATUM(main_supermatter_engine, /obj/machinery/power/supermatter)
 	radio.keyslot = new radio_key
 	radio.canhear_range = -1
 	radio.set_listening(FALSE, TRUE)
-	radio.recalculateChannels()
+	radio.recalculate_channels()
 
 	AddElement(/datum/element/lateral_bound, TRUE)
 	AddComponent(/datum/component/smell, INTENSITY_SUBTLE, SCENT_FRAGRANCE, "weird", 2)
@@ -172,9 +174,32 @@ GLOBAL_DATUM(main_supermatter_engine, /obj/machinery/power/supermatter)
 	if(status >= min_status)
 		if(!current_state)
 			message_admins(message + " [ADMIN_LOOKUPFLW(src)]")
+			if(min_status == SUPERMATTER_DANGER)
+				shivers()
 		return TRUE
 	else
 		return FALSE
+
+/obj/machinery/power/supermatter/proc/shivers()
+	var/list/alerted_jobs = list(JOB_CHIEF_ENGINEER, JOB_STATION_ENGINEER)
+	for(var/mob/living/carbon/human/H in GLOB.player_list)
+		if(!H.client || (H.stat != CONSCIOUS) || !(H.mind?.assigned_role?.title in alerted_jobs))
+			continue
+
+		if(!H.stats.cooldown_finished("supermatter_fuckywucky"))
+			continue
+
+		H.stats.set_cooldown("supermatter_fuckywucky", INFINITY)
+
+		var/datum/roll_result/result = H.stat_roll(16, /datum/rpg_skill/fourteen_eyes)
+		if(result.outcome >= SUCCESS)
+			continue
+
+		result.do_skill_sound(H)
+		to_chat(
+			H,
+			result.create_tooltip("<b>Something is wrong</b>."),
+		)
 
 /obj/machinery/power/supermatter/proc/get_epr()
 	var/turf/T = get_turf(src)
@@ -532,6 +557,8 @@ GLOBAL_DATUM(main_supermatter_engine, /obj/machinery/power/supermatter)
 
 	pull_time = 150
 	explosion_power = 3
+
+	radiation_range = 4
 
 /obj/machinery/power/supermatter/shard/announce_warning() //Shards don't get announcements
 	return

@@ -1,3 +1,6 @@
+TYPEINFO_DEF(/obj/item/ammo_casing)
+	default_materials = list(/datum/material/iron = 500)
+
 /obj/item/ammo_casing
 	name = "bullet casing"
 	desc = "A bullet casing."
@@ -8,8 +11,10 @@
 	slot_flags = ITEM_SLOT_BELT
 	throwforce = 0
 	w_class = WEIGHT_CLASS_TINY
-	custom_materials = list(/datum/material/iron = 500)
 	override_notes = TRUE
+
+	/// Blanks don't actually spawn projectiles and don't deal any damage.
+	var/is_blank = FALSE
 
 	///What sound should play when this ammo is fired
 	var/fire_sound = null

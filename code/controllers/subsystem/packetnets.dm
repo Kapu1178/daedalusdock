@@ -54,13 +54,16 @@ SUBSYSTEM_DEF(packets)
 	/// @everyone broadcast key
 	var/gprs_broadcast_packet
 
+	/// A virtual radio to send radio messages without a physical radio. Yeah it's cringe, sue me.
+	var/obj/item/radio/virtual_radio
+
 /// Generates a unique (at time of read) ID for an atom, It just plays silly with the ref.
 /// Pass the target atom in as arg[1]
-/datum/controller/subsystem/packets/proc/generate_net_id(caller)
-	if(!caller)
+/datum/controller/subsystem/packets/proc/generate_net_id(invoker)
+	if(!invoker)
 		CRASH("Attempted to generate netid for null")
-	. = REF(caller)
-	. = "[copytext(.,4,(length(.)))]0"
+	. = ref(invoker)
+	. = "[fit_with_zeros(copytext(.,4,(length(.))), 8, TRUE)]"
 
 /datum/controller/subsystem/packets/PreInit(timeofday)
 	hibernate_checks = list(
@@ -84,6 +87,8 @@ SUBSYSTEM_DEF(packets)
 	framevirus_magic_packet = random_string(rand(16,32), GLOB.hex_characters)
 	gprs_broadcast_packet = random_string(rand(16,32), GLOB.hex_characters)
 	pda_exploitable_register = pick_list(PACKET_STRING_FILE, "packet_field_names")
+
+	virtual_radio = new /obj/item/radio/internal
 	. = ..()
 
 /datum/controller/subsystem/packets/Recover()
@@ -195,35 +200,6 @@ SUBSYSTEM_DEF(packets)
 
 		cost_radios = MC_AVERAGE(cost_radios, TICK_DELTA_TO_MS(cached_cost))
 		resumed = FALSE
-		// stage = SSPACKETS_TABLETS
-
-	// if(stage == SSPACKETS_TABLETS)
-	// 	timer = TICK_USAGE_REAL
-	// 	if(!resumed)
-	// 		cached_cost = 0
-	// 		last_processed_tablet_message_packets = 0
-
-	// 	var/datum/signal/subspace/messaging/tablet_msg/packet
-	// 	while(length(current_tablet_messages))
-	// 		packet = current_tablet_messages[1]
-	// 		current_tablet_messages.Cut(1,2)
-	// 		queued_tablet_messages -= packet
-
-	// 		if (!packet.logged)  // Can only go through if a message server logs it
-	// 			continue
-
-	// 		for (var/obj/item/modular_computer/comp in packet.data["targets"])
-	// 			var/obj/item/computer_hardware/hard_drive/drive = comp.all_components[MC_HDD]
-	// 			for(var/datum/computer_file/program/messenger/app in drive.stored_files)
-	// 				app.receive_message(packet)
-
-	// 		cached_cost += TICK_USAGE_REAL - timer
-	// 		last_processed_tablet_message_packets++
-	// 		if(MC_TICK_CHECK)
-	// 			return
-
-	// 	cost_tablets = MC_AVERAGE(cost_tablets, TICK_DELTA_TO_MS(cached_cost))
-	// 	resumed = FALSE
 		stage = SSPACKETS_SUBSPACE_VOCAL
 
 	if(stage == SSPACKETS_SUBSPACE_VOCAL)
@@ -270,26 +246,32 @@ SUBSYSTEM_DEF(packets)
 		start_point = get_turf(source)
 		if(!start_point)
 			return
+
 		//Spatial Grids don't like being asked for negative ranges. -1 is valid and doesn't care about range anyways.
 		if(packet.frequency == FREQ_ATMOS_CONTROL && packet.range > 0)
 			_irps_spatialgrid_atmos(packet,source,start_point) //heehoo big list.
 			return
+
 	var/datum/radio_frequency/freq = packet.frequency_datum
 	//Send the data
 	for(var/current_filter in packet.filter_list)
 		if(isnull(freq.devices[current_filter]))
 			continue //Filter lists are lazy and may not exist.
+
 		for(var/datum/weakref/device_ref as anything in freq.devices[current_filter] - packet.author)
 			var/obj/device = device_ref.resolve()
 			if(isnull(device))
 				freq.devices[current_filter] -= device_ref
 				continue
+
 			if(packet.range)
 				var/turf/end_point = get_turf(device)
 				if(!end_point)
 					continue
+
 				if(start_point.z != end_point.z || (packet.range > 0 && get_dist(start_point, end_point) > packet.range))
 					continue
+
 			device.receive_signal(packet)
 
 /// Do Spatial Grid handling for IRPS, Atmos Radio group.
@@ -364,28 +346,28 @@ SUBSYSTEM_DEF(packets)
 	switch (packet.transmission_method)
 		if (TRANSMISSION_SUBSPACE)
 			// Reaches any radios on the levels
-			var/list/all_radios_of_our_frequency = GLOB.all_radios["[frequency]"]
-			radios = all_radios_of_our_frequency.Copy()
+			var/list/radios_by_frequency_of_our_frequency = GLOB.radios_by_frequency["[frequency]"]
+			radios = radios_by_frequency_of_our_frequency.Copy()
 
 			for(var/obj/item/radio/subspace_radio in radios)
 				if(!subspace_radio.can_receive(frequency, signal_reaches_every_z_level))
 					radios -= subspace_radio
 
 			// Syndicate radios can hear all well-known radio channels
-			if (num2text(frequency) in GLOB.reverseradiochannels)
-				for(var/obj/item/radio/syndicate_radios in GLOB.all_radios["[FREQ_SYNDICATE]"])
+			if (num2text(frequency) in GLOB.radio_frequency_to_channel)
+				for(var/obj/item/radio/syndicate_radios in GLOB.radios_by_frequency["[FREQ_SYNDICATE]"])
 					if(syndicate_radios.can_receive(FREQ_SYNDICATE, RADIO_NO_Z_LEVEL_RESTRICTION))
 						radios |= syndicate_radios
 
 		if (TRANSMISSION_RADIO)
 			// Only radios not currently in subspace mode
-			for(var/obj/item/radio/non_subspace_radio in GLOB.all_radios["[frequency]"])
+			for(var/obj/item/radio/non_subspace_radio in GLOB.radios_by_frequency["[frequency]"])
 				if(!non_subspace_radio.subspace_transmission && non_subspace_radio.can_receive(frequency, signal_reaches_every_z_level))
 					radios += non_subspace_radio
 
 		if (TRANSMISSION_SUPERSPACE)
 			// Only radios which are independent
-			for(var/obj/item/radio/independent_radio in GLOB.all_radios["[frequency]"])
+			for(var/obj/item/radio/independent_radio in GLOB.radios_by_frequency["[frequency]"])
 				if(independent_radio.independent && independent_radio.can_receive(frequency, signal_reaches_every_z_level))
 					radios += independent_radio
 
@@ -405,17 +387,17 @@ SUBSYSTEM_DEF(packets)
 	var/rendered = virt.compose_message(virt, language, message, frequency, spans)
 
 	for(var/obj/item/radio/radio as anything in receive)
-		SEND_SIGNAL(radio, COMSIG_RADIO_RECEIVE, virt.source, message, frequency)
+		SEND_SIGNAL(radio, COMSIG_RADIO_RECEIVE, virt.source, message, frequency, data)
 		for(var/atom/movable/hearer as anything in receive[radio])
 			if(!hearer)
 				stack_trace("null found in the hearers list returned by the spatial grid. this is bad")
 				continue
 
-			hearer.Hear(rendered, virt, language, message, frequency, spans, message_mods, sound_loc = radio.speaker_location())
+			hearer.Hear(rendered, virt, language, message, frequency, spans, message_mods, sound_loc = radio.speaker_location(), message_range = INFINITY)
 
 	// Let the global hearers (ghosts, etc) hear this message
 	for(var/atom/movable/hearer as anything in globally_receiving)
-		hearer.Hear(rendered, virt, language, message, frequency, spans, message_mods)
+		hearer.Hear(rendered, virt, language, message, frequency, spans, message_mods, message_range = INFINITY)
 
 	// This following recording is intended for research and feedback in the use of department radio channels
 	if(length(receive))
@@ -533,3 +515,7 @@ SUBSYSTEM_DEF(packets)
 				ASSOC_UNSETEMPTY(recursive_contents, RECURSIVE_CONTENTS_RADIO_NONATMOS)
 				UNSETEMPTY(location.important_recursive_contents)
 
+/datum/controller/subsystem/packets/proc/virtual_radio_speak(speaker_name, message, list/channels = list(RADIO_CHANNEL_COMMON), list/levels = list(2))
+	virtual_radio.name = speaker_name
+	virtual_radio.broadcast_z_override = levels
+	virtual_radio.talk_into(virtual_radio, message, channels)

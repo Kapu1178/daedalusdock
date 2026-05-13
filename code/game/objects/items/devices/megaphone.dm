@@ -20,17 +20,20 @@
 
 /obj/item/megaphone/equipped(mob/M, slot)
 	. = ..()
-	if (slot == ITEM_SLOT_HANDS && !HAS_TRAIT(M, TRAIT_SIGN_LANG))
+	if (slot == ITEM_SLOT_HANDS)
 		RegisterSignal(M, COMSIG_MOB_SAY, PROC_REF(handle_speech))
 	else
 		UnregisterSignal(M, COMSIG_MOB_SAY)
 
-/obj/item/megaphone/dropped(mob/M)
+/obj/item/megaphone/unequipped(mob/M)
 	. = ..()
 	UnregisterSignal(M, COMSIG_MOB_SAY)
 
 /obj/item/megaphone/proc/handle_speech(mob/living/carbon/user, list/speech_args)
 	SIGNAL_HANDLER
+	if(istype(speech_args[SPEECH_LANGUAGE], /datum/language/visual))
+		return
+
 	if (user.get_active_held_item() == src)
 		if(spamcheck > world.time)
 			to_chat(user, span_warning("\The [src] needs to recharge!"))

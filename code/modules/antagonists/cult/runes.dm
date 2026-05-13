@@ -606,7 +606,7 @@ structure_check() searches for nearby cultist structures required for the invoca
 			to_chat(mob_to_revive.mind, "Your physical form has been taken over by another soul due to your inactivity! Ahelp if you wish to regain your form.")
 			message_admins("[key_name_admin(C)] has taken control of ([key_name_admin(mob_to_revive)]) to replace an AFK player.")
 			mob_to_revive.ghostize(0)
-			mob_to_revive.key = C.key
+			mob_to_revive.PossessByPlayer(C.key)
 		else
 			fail_invoke()
 			return
@@ -851,7 +851,7 @@ structure_check() searches for nearby cultist structures required for the invoca
 		visible_message(span_warning("A cloud of red mist forms above [src], and from within steps... a [new_human.gender == FEMALE ? "wo":""]man."))
 		to_chat(user, span_cultitalic("Your blood begins flowing into [src]. You must remain in place and conscious to maintain the forms of those summoned. This will hurt you slowly but surely..."))
 		var/obj/structure/emergency_shield/cult/weak/N = new(T)
-		new_human.key = ghost_to_spawn.key
+		new_human.PossessByPlayer(ghost_to_spawn.key)
 		new_human.mind?.add_antag_datum(/datum/antagonist/cult)
 		to_chat(new_human, span_cultitalic("<b>You are a servant of the Geometer. You have been made semi-corporeal by the cult of Nar'Sie, and you are to serve them at all costs.</b>"))
 
@@ -961,7 +961,7 @@ structure_check() searches for nearby cultist structures required for the invoca
 			continue
 		if(ishuman(M))
 			if(!IS_CULTIST(M))
-				AH.remove_hud_from(M)
+				AH.hide_from(M)
 				addtimer(CALLBACK(GLOBAL_PROC, GLOBAL_PROC_REF(hudFix), M), duration)
 			var/image/A = image('icons/mob/cult.dmi',M,"cultist", ABOVE_MOB_LAYER)
 			A.override = 1
@@ -986,37 +986,35 @@ structure_check() searches for nearby cultist structures required for the invoca
 			to_chat(M, span_cultlarge("An Apocalypse Rune was invoked in the [place.name], it is no longer available as a summoning site!"))
 			SEND_SOUND(M, 'sound/effects/pope_entry.ogg')
 	image_handler(images, duration)
+
 	if(intensity>=285) // Based on the prior formula, this means the cult makes up <15% of current players
 		var/outcome = rand(1,100)
 		switch(outcome)
-			if(1 to 10)
+			if(1 to 12)
 				var/datum/round_event_control/disease_outbreak/D = new()
 				var/datum/round_event_control/animal_infestation/vermin/M = new()
 				D.runEvent()
 				M.runEvent()
-			if(11 to 20)
+			if(13 to 25)
 				var/datum/round_event_control/radiation_storm/RS = new()
 				RS.runEvent()
-			if(21 to 30)
+			if(26 to 37)
 				var/datum/round_event_control/brand_intelligence/BI = new()
 				BI.runEvent()
-			if(31 to 40)
+			if(38 to 50)
 				var/datum/round_event_control/immovable_rod/R = new()
 				R.runEvent()
 				R.runEvent()
 				R.runEvent()
-			if(41 to 50)
+			if(51 to 62)
 				var/datum/round_event_control/meteor_wave/MW = new()
 				MW.runEvent()
-			if(51 to 70)
-				var/datum/round_event_control/spider_infestation/SI = new()
-				SI.runEvent()
-			if(71 to 80)
+			if(63 to 75)
 				var/datum/round_event_control/spacevine/SV = new()
 				var/datum/round_event_control/grey_tide/GT = new()
 				SV.runEvent()
 				GT.runEvent()
-			if(81 to 100)
+			if(75 to 100)
 				var/datum/round_event_control/portal_storm_narsie/N = new()
 				N.runEvent()
 	qdel(src)
@@ -1045,4 +1043,4 @@ structure_check() searches for nearby cultist structures required for the invoca
 	var/obj/O = target.get_item_by_slot(ITEM_SLOT_EYES)
 	if(istype(O, /obj/item/clothing/glasses/hud/security))
 		var/datum/atom_hud/AH = GLOB.huds[DATA_HUD_SECURITY_ADVANCED]
-		AH.add_hud_to(target)
+		AH.show_to(target)

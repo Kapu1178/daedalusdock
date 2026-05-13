@@ -69,8 +69,6 @@
 		if(!isabstract(path))
 			path = new path()
 			GLOB.surgeries_list += path
-			if(!length(path.allowed_tools))
-				stack_trace("Surgery type [path.type] has no allowed_items list.")
 
 	sort_list(GLOB.surgeries_list, GLOBAL_PROC_REF(cmp_typepaths_asc))
 
@@ -108,6 +106,14 @@
 	init_slapcraft_recipes()
 
 	init_blood_types()
+
+	init_language_datums()
+
+	init_employers()
+
+	init_special_attacks()
+
+	init_radio_channels()
 
 /// Inits the crafting recipe list, sorting crafting recipe requirements in the process.
 /proc/init_crafting_recipes(list/crafting_recipes)
@@ -251,3 +257,31 @@ GLOBAL_LIST_INIT(magnet_error_codes, list(
 		if(isabstract(path))
 			continue
 		GLOB.blood_datums[path] = new path()
+
+/proc/init_language_datums()
+	for(var/datum/language/language as anything in subtypesof(/datum/language))
+		if(isabstract(language) || !initial(language.key))
+			continue
+
+		var/datum/language/instance = new language
+		GLOB.all_languages += instance
+		GLOB.language_datum_instances[language] = instance
+
+		if(instance.flags & (LANGUAGE_SELECTABLE_SPEAK | LANGUAGE_SELECTABLE_UNDERSTAND))
+			GLOB.preference_language_types += language
+
+GLOBAL_LIST_EMPTY(employers_by_name)
+/proc/init_employers()
+	for(var/datum/employer/path as anything in subtypesof(/datum/employer))
+		GLOB.employers_by_name[initial(path.name)] = path
+
+GLOBAL_LIST_EMPTY(special_attacks)
+/proc/init_special_attacks()
+	for(var/datum/special_attack/path as anything in subtypesof(/datum/special_attack))
+		GLOB.special_attacks[path] = new path
+
+/proc/init_radio_channels()
+	for(var/datum/radio_channel/channel_template as anything in subtypesof(/datum/radio_channel))
+		GLOB.radio_frequency_to_channel["[channel_template.frequency]"] = channel_template.key
+		GLOB.radio_channel_to_frequency[channel_template.key] = channel_template.frequency
+		GLOB.freq2icon["[channel_template.frequency]"] = channel_template.icon

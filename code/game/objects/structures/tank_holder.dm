@@ -1,11 +1,13 @@
 ///?
+TYPEINFO_DEF(/obj/structure/tank_holder)
+	default_materials = list(/datum/material/iron = 2000)
+
 /obj/structure/tank_holder
 	name = "tank holder"
 	desc = "A metallic frame that can hold tanks and extinguishers."
 	icon = 'icons/obj/tank.dmi'
 	icon_state = "holder"
 
-	custom_materials = list(/datum/material/iron = 2000)
 
 	density = FALSE
 	anchored = FALSE
@@ -96,11 +98,11 @@
 
 	switch(severity)
 		if(EXPLODE_DEVASTATE)
-			SSexplosions.high_mov_atom += tank
+			EX_ACT(tank, EXPLODE_DEVASTATE)
 		if(EXPLODE_HEAVY)
-			SSexplosions.med_mov_atom += tank
+			EX_ACT(tank, EXPLODE_HEAVY)
 		if(EXPLODE_LIGHT)
-			SSexplosions.low_mov_atom += tank
+			EX_ACT(tank, EXPLODE_LIGHT)
 
 /// Call this after taking the tank from contents in order to update references, icon
 /// and density.

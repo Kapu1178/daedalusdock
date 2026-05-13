@@ -3,18 +3,20 @@
 #define ENGINE_WELDED 2
 #define ENGINE_WELDTIME 200
 
+TYPEINFO_DEF(/obj/structure/shuttle)
+	default_armor = list(BLUNT = 100, PUNCTURE = 40, SLASH = 100, LASER = 10, ENERGY = 0, BOMB = 0, BIO = 0, FIRE = 50, ACID = 70)
+
 /obj/structure/shuttle
 	name = "shuttle"
 	icon = 'icons/turf/shuttle.dmi'
 	resistance_flags = LAVA_PROOF | FIRE_PROOF | ACID_PROOF
 	smoothing_groups = SMOOTH_GROUP_SHUTTLE_PARTS
 	max_integrity = 500
-	armor = list(BLUNT = 100, PUNCTURE = 40, SLASH = 100, LASER = 10, ENERGY = 0, BOMB = 0, BIO = 0, FIRE = 50, ACID = 70) //default + ignores melee
 	can_atmos_pass = CANPASS_DENSITY
 
 /obj/structure/shuttle/engine
 	name = "engine"
-	desc = "A bluespace engine used to make shuttles move."
+	desc = "An engine used to make shuttles move."
 	density = TRUE
 	anchored = TRUE
 	var/engine_power = 1
@@ -39,7 +41,7 @@
 /obj/structure/shuttle/engine/wrench_act(mob/living/user, obj/item/tool)
 	. = ..()
 	default_unfasten_wrench(user, tool)
-	return TOOL_ACT_TOOLTYPE_SUCCESS
+	return ITEM_INTERACT_SUCCESS
 
 /obj/structure/shuttle/engine/welder_act(mob/living/user, obj/item/I)
 	. = ..()
@@ -122,7 +124,6 @@
 
 /obj/structure/shuttle/engine/propulsion/burst
 	name = "burst engine"
-	desc = "An engine that releases a large bluespace burst to propel it."
 
 /obj/structure/shuttle/engine/propulsion/burst/cargo
 	state = ENGINE_UNWRENCHED

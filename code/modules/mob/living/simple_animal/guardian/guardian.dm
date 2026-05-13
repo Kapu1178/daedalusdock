@@ -22,7 +22,7 @@ GLOBAL_LIST_EMPTY(parasites) //all currently existing/living guardians
 	icon_state = "magicbase"
 	icon_living = "magicbase"
 	icon_dead = "magicbase"
-	speed = 0
+	move_delay_modifier = 0
 	combat_mode = TRUE
 	stop_automated_movement = 1
 	attack_sound = SFX_PUNCH
@@ -71,19 +71,22 @@ GLOBAL_LIST_EMPTY(parasites) //all currently existing/living guardians
 	. = ..()
 
 /mob/living/simple_animal/hostile/guardian/med_hud_set_health()
-	if(summoner)
-		var/image/holder = hud_list[HEALTH_HUD]
-		holder.icon_state = "hud[RoundHealth(summoner)]"
+	if(!summoner)
+		return
+
+	set_hud_image_vars(HEALTH_HUD, "hud[RoundHealth(summoner)]")
 
 /mob/living/simple_animal/hostile/guardian/med_hud_set_status()
-	if(summoner)
-		var/image/holder = hud_list[STATUS_HUD]
-		var/icon/I = icon(icon, icon_state, dir)
-		holder.pixel_y = I.Height() - world.icon_size
-		if(summoner.stat == DEAD)
-			holder.icon_state = "huddead"
-		else
-			holder.icon_state = "hudhealthy"
+	if(!summoner)
+		return
+
+	var/new_state
+	if(summoner.stat == DEAD)
+		new_state = "huddead"
+	else
+		new_state = "hudhealthy"
+
+	set_hud_image_vars(STATUS_HUD, new_state)
 
 /mob/living/simple_animal/hostile/guardian/Destroy()
 	GLOB.parasites -= src
@@ -92,6 +95,7 @@ GLOBAL_LIST_EMPTY(parasites) //all currently existing/living guardians
 /mob/living/simple_animal/hostile/guardian/proc/updatetheme(theme) //update the guardian's theme
 	if(!theme)
 		theme = pick("magic", "tech", "carp", "miner")
+
 	switch(theme)//should make it easier to create new stand designs in the future if anyone likes that
 		if("magic")
 			name = "Guardian Spirit"
@@ -174,8 +178,7 @@ GLOBAL_LIST_EMPTY(parasites) //all currently existing/living guardians
 /mob/living/simple_animal/hostile/guardian/Life(delta_time = SSMOBS_DT, times_fired) //Dies if the summoner dies
 	. = ..()
 	update_health_hud() //we need to update all of our health displays to match our summoner and we can't practically give the summoner a hook to do it
-	med_hud_set_health()
-	med_hud_set_status()
+	update_med_hud()
 	if(!QDELETED(summoner))
 		if(summoner.stat == DEAD)
 			forceMove(summoner.loc)
@@ -238,7 +241,7 @@ GLOBAL_LIST_EMPTY(parasites) //all currently existing/living guardians
 	else
 		return ..()
 
-/mob/living/simple_animal/hostile/guardian/death()
+/mob/living/simple_animal/hostile/guardian/death(gibbed, cause_of_death = "Unknown")
 	drop_all_held_items()
 	..()
 	if(summoner)
@@ -475,7 +478,7 @@ GLOBAL_LIST_EMPTY(parasites) //all currently existing/living guardians
 	chosen_guardian.ghostize(0)
 	chosen_guardian.guardianrecolor()
 	chosen_guardian.guardianrename() //give it a new color and name, to show it's a new person
-	chosen_guardian.key = candidate.key
+	chosen_guardian.PossessByPlayer(candidate.key)
 	chosen_guardian.reset = 1
 	switch(chosen_guardian.theme)
 		if("tech")
@@ -604,7 +607,7 @@ GLOBAL_LIST_EMPTY(parasites) //all currently existing/living guardians
 	var/mob/living/simple_animal/hostile/guardian/G = new pickedtype(user, theme)
 	G.name = mob_name
 	G.summoner = user
-	G.key = candidate.key
+	G.PossessByPlayer(candidate.key)
 	G.mind.enslave_mind_to_creator(user)
 	log_game("[key_name(user)] has summoned [key_name(G)], a [guardiantype] holoparasite.")
 	switch(theme)

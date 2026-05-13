@@ -16,7 +16,9 @@
 /obj/item/storage/wallet/Initialize()
 	. = ..()
 	atom_storage.animated = FALSE
-	atom_storage.rustle_sound = FALSE
+	atom_storage.rustle_sound = null
+	atom_storage.open_sound = null
+	atom_storage.close_sound = null
 	atom_storage.max_slots = 4
 	atom_storage.max_specific_storage = WEIGHT_CLASS_TINY
 	atom_storage.max_total_storage = WEIGHT_CLASS_TINY * 4
@@ -28,6 +30,9 @@
 
 /obj/item/storage/wallet/add_context(atom/source, list/context, obj/item/held_item, mob/user)
 	. = ..()
+	if(equipped_to != user)
+		return NONE
+
 	context[SCREENTIP_CONTEXT_RMB] = is_open ? "Close" : "Open"
 	context[SCREENTIP_CONTEXT_ALT_LMB] = is_open ? "Close" : "Open"
 	return CONTEXTUAL_SCREENTIP_SET
@@ -73,7 +78,7 @@
 
 /obj/item/storage/wallet/AltClick(mob/user)
 	. = ..()
-	if(!.)
+	if(.)
 		return
 
 	if(is_open)
@@ -121,9 +126,11 @@
 
 	is_open = TRUE
 	update_appearance()
+
 	if(ishuman(loc))
 		var/mob/living/carbon/human/H = loc
 		H.sec_hud_set_ID()
+		H.update_appearance(UPDATE_NAME)
 
 /obj/item/storage/wallet/proc/close()
 	if(!is_open)
@@ -136,9 +143,11 @@
 	is_open = FALSE
 	atom_storage.close_all()
 	update_appearance()
+
 	if(ishuman(loc))
 		var/mob/living/carbon/human/H = loc
 		H.sec_hud_set_ID()
+		H.update_appearance(UPDATE_NAME)
 
 /obj/item/storage/wallet/proc/get_cached_flat_icon()
 	if(!cached_flat_icon)
@@ -192,6 +201,7 @@
 		var/mob/living/carbon/human/wearing_human = loc
 		if(wearing_human.wear_id == src)
 			wearing_human.sec_hud_set_ID()
+			wearing_human.update_appearance(UPDATE_NAME)
 
 	update_appearance()
 	update_slot_icon()
@@ -204,7 +214,7 @@
 	icon_state = "wallet"
 
 /obj/item/storage/wallet/random/PopulateContents()
-	SSeconomy.spawn_cash_for_amount(rand(5, 30), src)
+	SSeconomy.spawn_ones_for_amount(rand(5, 30), src)
 	new /obj/effect/spawner/random/entertainment/wallet_storage(src)
 
 /obj/item/storage/wallet/open

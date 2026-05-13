@@ -9,11 +9,12 @@
 
 $bg-map: colors.$bg-map !default;
 $fg-map: colors.$fg-map !default;
-$ring-color: #6a96c9 !default;
+$ring-color: colors.$primary !default;
 $knob-color: #333333 !default;
 $popup-background-color: #000000 !default;
 $popup-text-color: #ffffff !default;
 
+$pi: 3.1416;
 $inner-padding: 0.1em;
 
 .Knob {
@@ -42,9 +43,11 @@ $inner-padding: 0.1em;
   right: $inner-padding;
   margin: 0.3em;
   background-color: $knob-color;
-  background-image: linear-gradient(to bottom,
+  background-image: linear-gradient(
+    to bottom,
     rgba(255, 255, 255, 0.15) 0%,
-    rgba(255, 255, 255, 0) 100%);
+    rgba(255, 255, 255, 0) 100%
+  );
   border-radius: 50%;
   box-shadow: 0 0.05em 0.5em 0 rgba(0, 0, 0, 0.5);
 }
@@ -81,14 +84,13 @@ $inner-padding: 0.1em;
 
 .Knob__ring {
   position: absolute;
+  overflow: visible;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
   padding: $inner-padding;
 }
-
-$pi: 3.1416;
 
 .Knob__ringTrackPivot {
   transform: rotateZ(135deg);

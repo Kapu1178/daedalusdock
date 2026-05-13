@@ -60,7 +60,7 @@
 #define CHEMICAL_QUANTISATION_LEVEL 0.0001
 ///The smallest amount of volume allowed - prevents tiny numbers
 #define CHEMICAL_VOLUME_MINIMUM 0.001
-///Round to this, to prevent extreme decimal magic and to keep reagent volumes in line with perceived values.
+//Sanity check limit to clamp chems to sane amounts and prevent rounding errors during transfer.
 #define CHEMICAL_VOLUME_ROUNDING 0.01
 ///Default pH for reagents datum
 #define CHEMICAL_NORMAL_PH 7.000
@@ -103,6 +103,17 @@
 #define NO_OVERHEAT 99999
 ////Used to force an equlibrium to end a reaction in reaction_step() (i.e. in a reaction_step() proc return END_REACTION to end it)
 #define END_REACTION "end_reaction"
+
+//flags used by holder.dm to locate an reagent
+///Direct type
+#define REAGENT_STRICT_TYPE 1
+///Parent type but not sub types for e.g. if param is obj/item it will look for obj/item/stack but not obj/item/stack/sheet
+#define REAGENT_PARENT_TYPE 2
+///same as istype() check
+#define REAGENT_SUB_TYPE 3
+
+/// Helper for converting realtime seconds into reagent cycles.
+#define SECONDS_TO_REAGENT_CYCLES(seconds) round(seconds / (/datum/controller/subsystem/mobs::wait / 10))
 
 ///Minimum requirement for addiction buzz to be met. Addiction code only checks this once every two seconds, so this should generally be low
 #define MIN_ADDICTION_REAGENT_AMOUNT 1

@@ -30,7 +30,6 @@
 		/obj/item/organ/heart/gland/chem = 5,
 		/obj/item/organ/heart/gland/mindshock = 5,
 		/obj/item/organ/heart/gland/transform = 5,
-		/obj/item/organ/heart/gland/spiderman = 5,
 		/obj/item/organ/heart/gland/slime = 4,
 		/obj/item/organ/heart/gland/trauma = 4,
 		/obj/item/organ/heart/gland/electric = 3,
@@ -58,7 +57,6 @@
 		/obj/item/organ/tongue/zombie,
 		/obj/item/organ/appendix,
 		/obj/item/organ/liver/fly,
-		/obj/item/organ/lungs/plasmaman,
 		/obj/item/organ/tail/cat,
 		/obj/item/organ/tail/lizard,
 	)

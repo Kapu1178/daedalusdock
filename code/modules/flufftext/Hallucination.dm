@@ -30,6 +30,12 @@ GLOBAL_LIST_INIT(hallucination_list, list(
 	if(!hallucination)
 		return
 
+	if(hallucination >= 60)
+		apply_status_effect(/datum/status_effect/skill_mod/hallucinating)
+	else
+		remove_status_effect(/datum/status_effect/skill_mod/hallucinating)
+
+
 	hallucination = max(hallucination - (0.5 * delta_time), 0)
 	if(world.time < next_hallucination)
 		return
@@ -233,14 +239,12 @@ GLOBAL_LIST_INIT(hallucination_list, list(
 
 /datum/hallucination/fake_flood/Destroy()
 	STOP_PROCESSING(SSobj, src)
-	qdel(flood_turfs)
 	flood_turfs = list()
 	if(target.client)
 		target.client.images.Remove(flood_images)
-	qdel(flood_images)
-	flood_images = list()
-	qdel(flood_image_holders)
-	flood_image_holders = list()
+	flood_images = null
+	flood_turfs = null
+	QDEL_LIST(flood_image_holders)
 	return ..()
 
 /obj/effect/hallucination/simple/xeno
@@ -857,15 +861,18 @@ GLOBAL_LIST_INIT(hallucination_list, list(
 	var/spans = list(person.speech_span)
 	var/chosen = !specific_message ? capitalize(pick(is_radio ? speak_messages : radio_messages)) : specific_message
 	chosen = replacetext(chosen, "%TARGETNAME%", target_name)
-	var/message = target.compose_message(person, understood_language, chosen, is_radio ? "[FREQ_COMMON]" : null, spans, face_name = TRUE)
+
+	var/translated_chosen = understood_language.speech_understood(chosen)
+	var/message = target.compose_message(person, understood_language, translated_chosen, is_radio ? "[FREQ_COMMON]" : null, spans, face_name = TRUE)
 	feedback_details += "Type: [is_radio ? "Radio" : "Talk"], Source: [person.real_name], Message: [message]"
 
 	// Display message
 	if (!is_radio && !target.client?.prefs.read_preference(/datum/preference/toggle/enable_runechat))
 		var/image/speech_overlay = image('icons/mob/talk.dmi', person, "default0", layer = ABOVE_MOB_LAYER)
 		INVOKE_ASYNC(GLOBAL_PROC, GLOBAL_PROC_REF(flick_overlay), speech_overlay, list(target.client), 30)
+
 	if (target.client?.prefs.read_preference(/datum/preference/toggle/enable_runechat))
-		target.create_chat_message(person, understood_language, chosen, spans)
+		target.create_chat_message(person, understood_language, translated_chosen, spans)
 	to_chat(target, message)
 	qdel(src)
 
@@ -1611,7 +1618,7 @@ GLOBAL_LIST_INIT(hallucination_list, list(
 
 /datum/hallucination/husks/Destroy()
 	target?.client?.images -= halbody
-	QDEL_NULL(halbody)
+	halbody = null
 	return ..()
 
 //hallucination projectile code in code/modules/projectiles/projectile/special.dm

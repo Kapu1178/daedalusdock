@@ -85,34 +85,35 @@
 		. += span_notice("The status display reads: Heating reagents at <b>[heater_coefficient*1000]%</b> speed.")
 
 
-/obj/machinery/chem_heater/attackby(obj/item/I, mob/user, params)
+/obj/machinery/chem_heater/item_interaction(mob/living/user, obj/item/tool, list/modifiers)
+	var/obj/item/I = tool // Yes i am supremely lazy
+
 	if(default_deconstruction_screwdriver(user, "mixer0b", "mixer0b", I))
-		return
+		return ITEM_INTERACT_SUCCESS
 
 	if(default_deconstruction_crowbar(I))
-		return
+		return ITEM_INTERACT_SUCCESS
 
-	if(istype(I, /obj/item/reagent_containers) && !(I.item_flags & ABSTRACT) && I.is_open_container())
-		. = TRUE //no afterattack
-		var/obj/item/reagent_containers/B = I
+	if(istype(tool, /obj/item/reagent_containers) && !(tool.item_flags & ABSTRACT) && I.is_open_container())
+		var/obj/item/reagent_containers/B = tool
 		if(!user.transferItemToLoc(B, src))
-			return
+			return ITEM_INTERACT_BLOCKING
+
 		replace_beaker(user, B)
 		to_chat(user, span_notice("You add [B] to [src]."))
 		ui_interact(user)
 		update_appearance()
-		return
+		return ITEM_INTERACT_SUCCESS
 
 	if(beaker)
 		if(istype(I, /obj/item/reagent_containers/dropper))
-			var/obj/item/reagent_containers/dropper/D = I
-			D.afterattack(beaker, user, 1)
-			return
+			var/obj/item/reagent_containers/dropper/D = tool
+			return D.interact_with_atom(beaker, user)
+
 		if(istype(I, /obj/item/reagent_containers/syringe))
-			var/obj/item/reagent_containers/syringe/S = I
-			S.afterattack(beaker, user, 1)
+			var/obj/item/reagent_containers/syringe/S = tool
+			S.interact_with_atom(beaker, user)
 			return
-	return ..()
 
 /obj/machinery/chem_heater/on_deconstruction()
 	replace_beaker()
@@ -166,7 +167,7 @@
 	data["isBeakerLoaded"] = beaker ? 1 : 0
 
 	data["currentTemp"] = beaker ? beaker.reagents.chem_temp : null
-	data["beakerCurrentVolume"] = beaker ? round(beaker.reagents.total_volume, 0.01) : null
+	data["beakerCurrentVolume"] = beaker ? round(beaker.reagents.total_volume, CHEMICAL_VOLUME_ROUNDING) : null
 	data["beakerMaxVolume"] = beaker ? beaker.volume : null
 	var/upgrade_level = heater_coefficient*10
 	data["upgradeLevel"] = upgrade_level
@@ -175,7 +176,7 @@
 	for(var/r in beaker?.reagents.reagent_list)
 		var/datum/reagent/reagent = r
 		beaker_contents.len++
-		beaker_contents[length(beaker_contents)] = list("name" = reagent.name, "volume" = round(reagent.volume, 0.01))
+		beaker_contents[length(beaker_contents)] = list("name" = reagent.name, "volume" = round(reagent.volume, CHEMICAL_VOLUME_ROUNDING))
 	data["beakerContents"] = beaker_contents
 
 	var/list/active_reactions = list()

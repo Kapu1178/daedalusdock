@@ -250,7 +250,7 @@
 
 /obj/structure/inflatable/door/proc/Open()
 	isSwitchingStates = 1
-	flick("door_opening",src)
+	z_flick("door_opening",src)
 	addtimer(CALLBACK(src, PROC_REF(FinishOpen)), 1 SECONDS, TIMER_STOPPABLE)
 
 /obj/structure/inflatable/door/proc/FinishOpen()
@@ -269,7 +269,7 @@
 				return
 
 	isSwitchingStates = 1
-	flick("door_closing",src)
+	z_flick("door_closing",src)
 	addtimer(CALLBACK(src, PROC_REF(FinishClose)), 1 SECONDS, TIMER_STOPPABLE)
 
 /obj/structure/inflatable/door/proc/FinishClose()
@@ -372,7 +372,7 @@
 	RegisterSignal(user, COMSIG_PARENT_QDELETING, PROC_REF(remove_vis))
 
 /obj/structure/inflatable/shelter/proc/remove_vis(mob/user, force)
-	vis_contents.Remove(user)
+	remove_viscontents(user)
 
 /obj/structure/inflatable/shelter/container_resist_act(mob/living/user)
 	if (user.loc != src)
@@ -397,9 +397,9 @@
 
 /obj/structure/inflatable/shelter/update_overlays()
 	. = ..()
-	vis_contents.Cut()
+	cut_viscontents()
 	for(var/mob/living/L in contents)
-		vis_contents.Add(L)
+		add_viscontents(L)
 	if(length(contents))
 		. += mutable_appearance(icon, "shelter_top", ABOVE_MOB_LAYER)
 

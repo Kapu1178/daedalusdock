@@ -31,7 +31,7 @@
 	tablet.robot = robit
 	robit.interfaceButton = tablet
 	if(robit.modularInterface)
-		tablet.vis_contents += robit.modularInterface
+		using.add_viscontents(robit.modularInterface)
 
 	//Alerts
 	add_screen_object(/atom/movable/screen/robot/alerts, HUDKEY_SILICON_ALERTS, HUDGROUP_STATIC_INVENTORY)

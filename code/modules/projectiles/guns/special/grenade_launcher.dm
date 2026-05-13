@@ -1,3 +1,6 @@
+TYPEINFO_DEF(/obj/item/gun/grenadelauncher)
+	default_materials = list(/datum/material/iron=2000)
+
 /obj/item/gun/grenadelauncher
 	name = "grenade launcher"
 	desc = "A terrible, terrible thing. It's really awful!"
@@ -9,7 +12,6 @@
 	force = 5
 	var/list/grenades = new/list()
 	var/max_grenades = 3
-	custom_materials = list(/datum/material/iron=2000)
 
 /obj/item/gun/grenadelauncher/examine(mob/user)
 	. = ..()
@@ -29,7 +31,10 @@
 		else
 			to_chat(usr, span_warning("The grenade launcher cannot hold more grenades!"))
 
-/obj/item/gun/grenadelauncher/can_fire()
+/obj/item/gun/grenadelauncher/can_fire(check_lockout = FALSE)
+	. = ..()
+	if(!.)
+		return
 	return grenades.len
 
 /obj/item/gun/grenadelauncher/do_fire_gun(atom/target, mob/living/user, message = TRUE, params = null, zone_override = "", bonus_spread = 0)

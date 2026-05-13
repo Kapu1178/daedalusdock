@@ -1,3 +1,6 @@
+TYPEINFO_DEF(/obj/structure/blob/shield)
+	default_armor = list(BLUNT = 0, PUNCTURE = 0, SLASH = 0, LASER = 0, ENERGY = 0, BOMB = 0, BIO = 0, FIRE = 90, ACID = 90)
+
 /obj/structure/blob/shield
 	name = "strong blob"
 	icon = 'icons/mob/blob.dmi'
@@ -10,7 +13,6 @@
 	explosion_block = 3
 	point_return = BLOB_REFUND_STRONG_COST
 	atmosblock = TRUE
-	armor = list(BLUNT = 0, PUNCTURE = 0, SLASH = 0, LASER = 0, ENERGY = 0, BOMB = 0, BIO = 0, FIRE = 90, ACID = 90)
 
 /obj/structure/blob/shield/scannerreport()
 	if(atmosblock)
@@ -28,7 +30,7 @@
 	. = ..()
 	desc = (atom_integrity < (max_integrity * 0.5)) ? "[damaged_desc]" : initial(desc)
 
-/obj/structure/blob/shield/take_damage(damage_amount, damage_type, damage_flag, sound_effect, attack_dir)
+/obj/structure/blob/shield/take_damage(damage_amount, damage_type, damage_flag, sound_effect, attack_dir, armor_penetration = 0, allow_break = TRUE)
 	. = ..()
 	if(. && atom_integrity > 0)
 		atmosblock = atom_integrity < (max_integrity * 0.5)

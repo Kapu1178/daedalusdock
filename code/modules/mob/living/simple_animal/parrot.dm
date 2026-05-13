@@ -111,12 +111,7 @@
 /mob/living/simple_animal/parrot/Initialize(mapload)
 	. = ..()
 	if(!ears)
-		var/headset = pick(/obj/item/radio/headset/headset_sec, \
-						/obj/item/radio/headset/headset_eng, \
-						/obj/item/radio/headset/headset_med, \
-						/obj/item/radio/headset/headset_sci, \
-						/obj/item/radio/headset/headset_cargo)
-		ears = new headset(src)
+		ears = new /obj/item/radio/headset/headset_eng(src)
 
 	parrot_sleep_dur = parrot_sleep_max //In case someone decides to change the max without changing the duration var
 
@@ -143,7 +138,7 @@
 		else
 			. += pick("This parrot is no more.","This is a late parrot.","This is an ex-parrot.")
 
-/mob/living/simple_animal/parrot/death(gibbed)
+/mob/living/simple_animal/parrot/death(gibbed, cause_of_death = "Unknown")
 	if(held_item)
 		held_item.forceMove(drop_location())
 		held_item = null
@@ -164,7 +159,7 @@
 	. += "Held Item: [held_item]"
 	. += "Combat mode: [combat_mode ? "On" : "Off"]"
 
-/mob/living/simple_animal/parrot/Hear(message, atom/movable/speaker, message_langs, raw_message, radio_freq, list/spans, list/message_mods = list(), atom/sound_loc)
+/mob/living/simple_animal/parrot/Hear(message, atom/movable/speaker, message_langs, raw_message, radio_freq, list/spans, list/message_mods = list(), atom/sound_loc, message_range)
 	. = ..()
 	if(speaker != src && prob(50)) //Dont imitate ourselves
 		if(!radio_freq || prob(10))
@@ -187,7 +182,7 @@
 		if(ears)
 			ears.talk_into(src, message, message_mods[RADIO_EXTENSION], spans, language, message_mods)
 		return ITALICS | REDUCE_RANGE
-	else if(message_mods[RADIO_EXTENSION] in GLOB.radiochannels)
+	else if(message_mods[RADIO_EXTENSION] in GLOB.radio_channel_to_frequency)
 		if(ears)
 			ears.talk_into(src, message, message_mods[RADIO_EXTENSION], spans, language, message_mods)
 			return ITALICS | REDUCE_RANGE
@@ -244,8 +239,8 @@ GLOBAL_LIST_INIT(strippable_parrot_items, create_strippable_list(list(
 		switch (channel)
 			if (RADIO_CHANNEL_ENGINEERING)
 				channel_to_add = RADIO_TOKEN_ENGINEERING
-			if (RADIO_CHANNEL_COMMAND)
-				channel_to_add = RADIO_TOKEN_COMMAND
+			if (RADIO_CHANNEL_FEDERATION)
+				channel_to_add = RADIO_TOKEN_FEDERATION
 			if (RADIO_CHANNEL_SECURITY)
 				channel_to_add = RADIO_TOKEN_SECURITY
 			if (RADIO_CHANNEL_SCIENCE)
@@ -315,9 +310,6 @@ GLOBAL_LIST_INIT(strippable_parrot_items, create_strippable_list(list(
 /mob/living/simple_animal/parrot/attack_paw(mob/living/carbon/human/user, list/modifiers)
 	return attack_hand(modifiers)
 
-/mob/living/simple_animal/parrot/attack_alien(mob/living/carbon/alien/user, list/modifiers)
-	return attack_hand(user, modifiers)
-
 //Simple animals
 /mob/living/simple_animal/parrot/attack_animal(mob/living/simple_animal/user, list/modifiers)
 	. = ..() //goodbye immortal parrots
@@ -328,7 +320,7 @@ GLOBAL_LIST_INIT(strippable_parrot_items, create_strippable_list(list(
 	if(parrot_state == PARROT_PERCH)
 		parrot_sleep_dur = parrot_sleep_max //Reset it's sleep timer if it was perched
 
-	if(user.melee_damage_upper > 0 && !stat)
+	if(. > 0 && stat == CONSCIOUS)
 		parrot_interest = user
 		parrot_state = PARROT_SWOOP | PARROT_ATTACK //Attack other animals regardless
 		icon_state = icon_living
@@ -657,7 +649,7 @@ GLOBAL_LIST_INIT(strippable_parrot_items, create_strippable_list(list(
 					item = I
 					break
 		if(item)
-			if(!length(get_path_to(src, item))) // WHY DO WE DISREGARD THE PATH AHHHHHH
+			if(!length(jps_path_to(src, item))) // WHY DO WE DISREGARD THE PATH AHHHHHH
 				item = null
 				continue
 			return item
@@ -928,7 +920,7 @@ GLOBAL_LIST_INIT(strippable_parrot_items, create_strippable_list(list(
 		memory_saved = TRUE
 	..()
 
-/mob/living/simple_animal/parrot/poly/death(gibbed)
+/mob/living/simple_animal/parrot/poly/death(gibbed, cause_of_death = "Unknown")
 	if(!memory_saved)
 		Write_Memory(TRUE)
 	if(rounds_survived == longest_survival || rounds_survived == longest_deathstreak || prob(0.666))
@@ -936,7 +928,7 @@ GLOBAL_LIST_INIT(strippable_parrot_items, create_strippable_list(list(
 		if(mind)
 			mind.transfer_to(G)
 		else
-			G.key = key
+			G.PossessByPlayer(key)
 	..(gibbed)
 
 /mob/living/simple_animal/parrot/poly/proc/Read_Memory()
@@ -1015,9 +1007,9 @@ GLOBAL_LIST_INIT(strippable_parrot_items, create_strippable_list(list(
 /mob/living/simple_animal/parrot/poly/ghost/proc/Possess(mob/living/carbon/human/H)
 	if(!ishuman(H))
 		return
-	var/datum/disease/parrot_possession/P = new
+	var/datum/pathogen/parrot_possession/P = new
 	P.parrot = src
 	forceMove(H)
-	H.ForceContractDisease(P, FALSE)
+	H.try_contract_pathogen(P, FALSE)
 	parrot_interest = null
 	H.visible_message(span_danger("[src] dive bombs into [H]'s chest and vanishes!"), span_userdanger("[src] dive bombs into your chest, vanishing! This can't be good!"))

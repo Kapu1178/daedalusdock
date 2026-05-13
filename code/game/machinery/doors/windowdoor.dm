@@ -1,3 +1,6 @@
+TYPEINFO_DEF(/obj/machinery/door/window)
+	default_armor = list(BLUNT = 20, PUNCTURE = 50, SLASH = 90, LASER = 50, ENERGY = 50, BOMB = 10, BIO = 100, FIRE = 70, ACID = 100)
+
 /obj/machinery/door/window
 	name = "interior door"
 	desc = "A strong door."
@@ -9,7 +12,6 @@
 	var/base_state = "left"
 	max_integrity = 150 //If you change this, consider changing ../door/window/brigdoor/ max_integrity at the bottom of this .dm file
 	integrity_failure = 0
-	armor = list(BLUNT = 20, PUNCTURE = 50, SLASH = 90, LASER = 50, ENERGY = 50, BOMB = 10, BIO = 100, FIRE = 70, ACID = 100)
 	visible = FALSE
 	flags_1 = ON_BORDER_1
 	opacity = FALSE
@@ -170,8 +172,8 @@
 		return ZONE_BLOCKED
 
 //used in the AStar algorithm to determinate if the turf the door is on is passable
-/obj/machinery/door/window/CanAStarPass(list/access, to_dir, atom/movable/caller, no_id = FALSE)
-	return !density || (dir != to_dir) || (check_access_list(access) && hasPower() && !no_id)
+/obj/machinery/door/window/CanAStarPass(to_dir, datum/can_pass_info/pass_info, leaving)
+	return !density || (dir != to_dir) || (check_access_list(pass_info.access) && hasPower() && !pass_info.no_id)
 
 /obj/machinery/door/window/proc/on_exit(datum/source, atom/movable/leaving, direction)
 	SIGNAL_HANDLER
@@ -204,6 +206,7 @@
 	icon_state ="[base_state]open"
 	sleep(10)
 	set_density(FALSE)
+	update_appearance(UPDATE_ICON_STATE)
 	update_freelook_sight()
 
 	if(operating == 1) //emag again
@@ -225,6 +228,7 @@
 	icon_state = base_state
 
 	set_density(TRUE)
+	update_appearance(UPDATE_ICON_STATE)
 	update_freelook_sight()
 	sleep(10)
 
@@ -263,7 +267,7 @@
 /obj/machinery/door/window/fire_act(exposed_temperature, exposed_volume, turf/adjacent)
 	take_damage(round(exposed_temperature / 200), BURN, 0, 0)
 
-/obj/structure/window/take_damage(damage_amount, damage_type = BRUTE, damage_flag = 0, sound_effect = 1)
+/obj/structure/window/take_damage(damage_amount, damage_type = BRUTE, damage_flag = 0, sound_effect = 1, armor_penetration = 0, allow_break = TRUE)
 	var/initial_damage_percentage = get_integrity_percentage()
 	. = ..()
 	if(.) //received damage
@@ -284,7 +288,7 @@
 	if(!operating && density && !(obj_flags & EMAGGED))
 		obj_flags |= EMAGGED
 		operating = TRUE
-		flick("[base_state]spark", src)
+		z_flick("[base_state]spark", src)
 		playsound(src, SFX_SPARKS, 75, TRUE, SHORT_RANGE_SOUND_EXTRARANGE)
 		sleep(6)
 		operating = FALSE
@@ -378,12 +382,11 @@
 /obj/machinery/door/window/do_animate(animation)
 	switch(animation)
 		if("opening")
-			flick("[base_state]opening", src)
+			z_flick("[base_state]opening", src)
 		if("closing")
-			flick("[base_state]closing", src)
+			z_flick("[base_state]closing", src)
 		if("deny")
-			flick("[base_state]deny", src)
-
+			z_flick("[base_state]deny", src)
 
 /obj/machinery/door/window/rcd_vals(mob/user, obj/item/construction/rcd/the_rcd)
 	switch(the_rcd.mode)
@@ -412,11 +415,11 @@
 /obj/machinery/door/window/brigdoor/security/cell
 	name = "cell door"
 	desc = "For keeping in criminal scum."
-	req_access = list(ACCESS_BRIG)
+	req_access = list(ACCESS_SECURITY)
 
 /obj/machinery/door/window/brigdoor/security/holding
 	name = "holding cell door"
-	req_one_access = list(ACCESS_BRIG_ENTRANCE) //lawyer also gets brig_entrance
+	req_one_access = list(ACCESS_SECURITY)
 
 MAPPING_DIRECTIONAL_HELPERS(/obj/machinery/door/window/left, 0)
 MAPPING_DIRECTIONAL_HELPERS(/obj/machinery/door/window/right, 0)

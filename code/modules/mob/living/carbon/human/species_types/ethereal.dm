@@ -4,10 +4,11 @@
 	meat = /obj/item/food/meat/slab/human/mutant/ethereal
 	exotic_blood = /datum/reagent/consumable/liquidelectricity //Liquid Electricity. fuck you think of something better gamer
 
+	name_generator_type = /datum/name_generator/ethereal
+
 	siemens_coeff = 0.5 //They thrive on energy
 	brutemod = 1.25 //They're weak to punches
 
-	payday_modifier = 0.75
 	job_outfit_type = SPECIES_HUMAN
 
 	species_traits = list(DYNCOLORS, AGENDER, NO_UNDERWEAR, HAIR, FACEHAIR, HAIRCOLOR, FACEHAIRCOLOR) // i mean i guess they have blood so they can have wounds too
@@ -102,16 +103,6 @@
 	QDEL_NULL(ethereal_light)
 	return ..()
 
-
-/datum/species/ethereal/random_name(gender,unique,lastname)
-	if(unique)
-		return random_unique_ethereal_name()
-
-	var/randname = ethereal_name()
-
-	return randname
-
-
 /datum/species/ethereal/spec_updatehealth(mob/living/carbon/human/H)
 	. = ..()
 	if(!ethereal_light)
@@ -194,18 +185,6 @@
 		'sound/voice/ethereal/ethereal_scream_3.ogg',
 	)
 
-/datum/species/ethereal/get_species_description()
-	return "Coming from the planet of Sprout, the theocratic ethereals are \
-		separated socially by caste, and espouse a dogma of aiding the weak and \
-		downtrodden."
-
-/datum/species/ethereal/get_species_lore()
-	return list(
-		"Ethereals are a species native to the planet Sprout. \
-		When they were originally discovered, they were at a medieval level of technological progression, \
-		but due to their natural acclimation with electricity, they felt easy among the large Daedalus installations.",
-	)
-
 /datum/species/ethereal/create_pref_unique_perks()
 	var/list/to_add = list()
 
@@ -228,12 +207,6 @@
 			SPECIES_PERK_NAME = "Crystal Core",
 			SPECIES_PERK_DESC = "The Ethereal's heart will encase them in crystal should they die, returning them to life after a time - \
 				at the cost of a permanent brain trauma.",
-		),
-		list(
-			SPECIES_PERK_TYPE = SPECIES_NEUTRAL_PERK,
-			SPECIES_PERK_ICON = "fist-raised",
-			SPECIES_PERK_NAME = "Elemental Attacker",
-			SPECIES_PERK_DESC = "Ethereals deal burn damage with their punches instead of brute.",
 		),
 		list(
 			SPECIES_PERK_TYPE = SPECIES_NEGATIVE_PERK,

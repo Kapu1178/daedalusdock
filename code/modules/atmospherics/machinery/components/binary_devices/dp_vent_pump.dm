@@ -65,6 +65,7 @@
 	cut_overlays()
 	if(showpipe)
 		var/image/cap = get_pipe_image(icon, "dpvent_cap", dir, pipe_color, piping_layer = piping_layer)
+		cap.appearance_flags |= RESET_COLOR|KEEP_APART
 		add_overlay(cap)
 
 	if(!on || !is_operational)
@@ -166,7 +167,7 @@
 
 	var/area/vent_area = get_area(src)
 	if(!GLOB.air_vent_names[id_tag])
-		update_name()
+		update_appearance(UPDATE_NAME)
 		GLOB.air_vent_names[id_tag] = name
 
 	vent_area.air_vent_info[id_tag] = signal.data

@@ -179,16 +179,17 @@
 
 /obj/item/bodypart/head/apply_bone_break(mob/living/carbon/C)
 	. = ..()
-	//add_bodypart_trait(TRAIT_BLURRY_VISION)
-	C.apply_status_effect(/datum/status_effect/concussion)
+	C.apply_status_effect(/datum/status_effect/grouped/concussion, BROKEN_SKULL_EFFECT)
 
 /obj/item/bodypart/head/apply_bone_heal(mob/living/carbon/C)
 	. = ..()
-	//remove_bodypart_trait(TRAIT_BLURRY_VISION)
-	C.remove_status_effect(/datum/status_effect/concussion)
+	C.remove_status_effect(/datum/status_effect/grouped/concussion, BROKEN_SKULL_EFFECT)
 
 /obj/item/bodypart/head/update_limb(dropping_limb, is_creating)
 	. = ..()
+
+	if(!owner)
+		return
 
 	real_name = owner.real_name
 	if(HAS_TRAIT(owner, TRAIT_HUSK))
@@ -307,6 +308,12 @@
 	return gradient_overlay
 
 /obj/item/bodypart/head/talk_into(mob/holder, message, channel, spans, datum/language/language, list/message_mods)
+	if(isnull(language))
+		language = holder?.get_selected_language()
+
+	if(istype(language, /datum/language/visual))
+		return
+
 	var/mob/headholder = holder
 	if(istype(headholder))
 		headholder.log_talk(message, LOG_SAY, tag = "beheaded talk")

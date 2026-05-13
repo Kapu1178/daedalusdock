@@ -50,7 +50,7 @@
 	var/list/mob/dead/observer/candidates = poll_candidates_for_mob("Do you want to play as [owner.real_name]'s imaginary friend?", ROLE_PAI, null, 7.5 SECONDS, friend, POLL_IGNORE_IMAGINARYFRIEND)
 	if(LAZYLEN(candidates))
 		var/mob/dead/observer/C = pick(candidates)
-		friend.key = C.key
+		friend.PossessByPlayer(C.ckey)
 		friend_initialized = TRUE
 	else
 		qdel(src)
@@ -108,8 +108,8 @@
 	hide.Grant(src)
 
 /mob/camera/imaginary_friend/proc/setup_friend()
-	var/gender = pick(MALE, FEMALE)
-	set_real_name(random_unique_name(gender))
+	var/datum/name_generator/human/name_gen = new
+	set_real_name(name_gen.Generate())
 	human_image = get_flat_human_icon(null, pick(SSjob.joinable_occupations))
 
 /**
@@ -192,7 +192,7 @@
 
 	friend_talk(message)
 
-/mob/camera/imaginary_friend/Hear(message, atom/movable/speaker, datum/language/message_language, raw_message, radio_freq, list/spans, list/message_mods = list(), atom/sound_loc)
+/mob/camera/imaginary_friend/Hear(message, atom/movable/speaker, datum/language/message_language, raw_message, radio_freq, list/spans, list/message_mods = list(), atom/sound_loc, message_range)
 	if (client?.prefs.read_preference(/datum/preference/toggle/enable_runechat) && (client.prefs.read_preference(/datum/preference/toggle/enable_runechat_non_mobs) || ismob(speaker)))
 		create_chat_message(speaker, message_language, raw_message, spans, sound_loc = sound_loc)
 	to_chat(src, compose_message(speaker, message_language, raw_message, radio_freq, spans, message_mods))

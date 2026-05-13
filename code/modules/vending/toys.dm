@@ -25,8 +25,8 @@
 		/obj/item/dualsaber/toy = 5
 	)
 	refill_canister = /obj/item/vending_refill/donksoft
-	default_price = PAYCHECK_ASSISTANT
-	extra_price = PAYCHECK_HARD
+	default_price = PAYCHECK_ASSISTANT * 2
+	extra_price = PAYCHECK_ASSISTANT * 5
 	payment_department = ACCOUNT_STATION_MASTER
 
 /obj/item/vending_refill/donksoft

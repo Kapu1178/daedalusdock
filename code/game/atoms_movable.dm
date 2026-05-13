@@ -5,6 +5,8 @@
 
 	/// The last direction we moved in.
 	var/tmp/last_move = null
+	var/tmp/list/active_movement
+
 	///Are we moving with inertia? Mostly used as an optimization
 	var/tmp/inertia_moving = FALSE
 	///The last time we pushed off something
@@ -80,6 +82,9 @@
 	var/verb_sing = "sings"
 	var/verb_yell = "yells"
 	var/speech_span
+
+	/// The list of factions this atom belongs to
+	var/list/faction
 
 	///Delay in deciseconds between inertia based movement
 	var/inertia_move_delay = 5
@@ -213,7 +218,7 @@
 
 	vis_locs = null //clears this atom out of all viscontents
 	if(length(vis_contents))
-		vis_contents.Cut()
+		cut_viscontents()
 
 /atom/movable/proc/update_emissive_block()
 	if(!blocks_emissive)
@@ -310,6 +315,8 @@
 	if(QDELING(src))
 		CRASH("Illegal abstract_move() on [type]!")
 
+	RESOLVE_ACTIVE_MOVEMENT
+
 	var/atom/old_loc = loc
 	var/direction = get_dir(old_loc, new_loc)
 	loc = new_loc
@@ -324,6 +331,9 @@
 
 	if(!newloc || newloc == loc)
 		return
+
+	// A mid-movement... movement... occured, resolve that first.
+	RESOLVE_ACTIVE_MOVEMENT
 
 	if(!direction)
 		direction = get_dir(src, newloc)
@@ -369,6 +379,7 @@
 	var/area/oldarea = get_area(oldloc)
 	var/area/newarea = get_area(newloc)
 
+	SET_ACTIVE_MOVEMENT(oldloc, direction, FALSE, old_locs)
 	loc = newloc
 
 	. = TRUE
@@ -386,20 +397,15 @@
 			entered_loc.Entered(src, oldloc, old_locs)
 	else
 		newloc.Entered(src, oldloc, old_locs)
+
 	if(oldarea != newarea)
 		newarea.Entered(src, oldarea)
 
-	if(loc != newloc) // Something moved us out of where we just moved to, Abort!!!
-		return
-
-	Moved(oldloc, direction, FALSE, old_locs)
+	RESOLVE_ACTIVE_MOVEMENT
 
 ////////////////////////////////////////
 
 /atom/movable/Move(atom/newloc, direct, glide_size_override = 0, z_movement_flags)
-	if(QDELING(src))
-		CRASH("Illegal Move()! on [type]")
-
 	if(!loc || !newloc)
 		return FALSE
 
@@ -670,7 +676,7 @@
 ///allows this movable to hear and adds itself to the important_recursive_contents list of itself and every movable loc its in
 /atom/movable/proc/become_hearing_sensitive(trait_source = TRAIT_GENERIC)
 	ADD_TRAIT(src, TRAIT_HEARING_SENSITIVE, trait_source)
-	if(!HAS_TRAIT(src, TRAIT_HEARING_SENSITIVE))
+	if(HAS_TRAIT_NOT_FROM(src, TRAIT_HEARING_SENSITIVE, trait_source))
 		return
 
 	for(var/atom/movable/location as anything in get_nested_locs(src) + src)
@@ -686,7 +692,7 @@
 ///allows this movable to hear and adds itself to the important_recursive_contents list of itself and every movable loc its in
 /atom/movable/proc/become_radio_sensitive(trait_source = TRAIT_GENERIC)
 	ADD_TRAIT(src, TRAIT_HEARING_SENSITIVE, trait_source)
-	if(!HAS_TRAIT(src, TRAIT_HEARING_SENSITIVE))
+	if(HAS_TRAIT_NOT_FROM(src, TRAIT_HEARING_SENSITIVE, trait_source))
 		return
 
 	for(var/atom/movable/location as anything in get_nested_locs(src) + src)
@@ -819,9 +825,12 @@
 
 /atom/movable/proc/doMove(atom/destination)
 	. = FALSE
+	RESOLVE_ACTIVE_MOVEMENT
+
 	var/atom/oldloc = loc
 	var/is_multi_tile = bound_width > world.icon_size || bound_height > world.icon_size
 
+	SET_ACTIVE_MOVEMENT(oldloc, NONE, TRUE, null)
 	if(destination)
 		var/same_loc = oldloc == destination
 		var/area/old_area = get_area(oldloc)
@@ -879,7 +888,7 @@
 			if(old_area)
 				old_area.Exited(src, NONE)
 
-	Moved(oldloc, NONE, TRUE)
+	RESOLVE_ACTIVE_MOVEMENT
 
 /**
  * Called when a movable changes z-levels.
@@ -1042,12 +1051,14 @@
 		dist_y = olddist_x
 		dx = dy
 		dy = olddx
+
 	thrown_thing.dist_x = dist_x
 	thrown_thing.dist_y = dist_y
 	thrown_thing.dx = dx
 	thrown_thing.dy = dy
 	thrown_thing.diagonal_error = dist_x/2 - dist_y
 	thrown_thing.start_time = world.time
+	thrown_thing.origin_turf = get_turf(src)
 
 	if(LAZYLEN(grabbed_by))
 		free_from_all_grabs()
@@ -1130,7 +1141,7 @@
 	return
 
 
-/atom/movable/proc/do_attack_animation(atom/attacked_atom, visual_effect_icon, obj/item/used_item, no_effect, fov_effect = TRUE)
+/atom/movable/proc/do_attack_animation(atom/attacked_atom, visual_effect_icon, obj/item/used_item, no_effect, fov_effect = TRUE, do_hurt = TRUE)
 	if(!no_effect && (visual_effect_icon || used_item))
 		do_item_attack_animation(attacked_atom, visual_effect_icon, used_item)
 
@@ -1161,10 +1172,12 @@
 
 	var/matrix/initial_transform = matrix(transform)
 	var/matrix/rotated_transform = transform.Turn(15 * turn_dir)
-	animate(src, pixel_x = pixel_x + pixel_x_diff, pixel_y = pixel_y + pixel_y_diff, transform=rotated_transform, time = 1, easing=BACK_EASING|EASE_IN, flags = ANIMATION_PARALLEL)
-	animate(pixel_x = pixel_x - pixel_x_diff, pixel_y = pixel_y - pixel_y_diff, transform=initial_transform, time = 2, easing=SINE_EASING, flags = ANIMATION_PARALLEL)
+	for(var/atom/movable/AM as anything in get_associated_mimics() + src)
+		animate(AM, pixel_x = pixel_x + pixel_x_diff, pixel_y = pixel_y + pixel_y_diff, transform=rotated_transform, time = 1, easing=BACK_EASING|EASE_IN, flags = ANIMATION_PARALLEL)
+		animate(pixel_x = pixel_x - pixel_x_diff, pixel_y = pixel_y - pixel_y_diff, transform=initial_transform, time = 2, easing=SINE_EASING, flags = ANIMATION_PARALLEL)
 
-	attacked_atom.do_hurt_animation()
+	if(do_hurt)
+		attacked_atom.do_hurt_animation()
 
 /// Plays an animation for getting hit.
 /atom/proc/do_hurt_animation()
@@ -1181,69 +1194,55 @@
 */
 
 /// Gets or creates the relevant language holder. For mindless atoms, gets the local one. For atom with mind, gets the mind one.
-/atom/movable/proc/get_language_holder(get_minds = TRUE)
+/atom/movable/proc/get_language_holder(get_minds = TRUE) as /datum/language_holder
+	RETURN_TYPE(/datum/language_holder)
 	if(!language_holder)
 		language_holder = new initial_language_holder(src)
 	return language_holder
 
 /// Grants the supplied language and sets omnitongue true.
 /atom/movable/proc/grant_language(language, understood = TRUE, spoken = TRUE, source = LANGUAGE_ATOM)
-	var/datum/language_holder/language_holder = get_language_holder()
-	return language_holder.grant_language(language, understood, spoken, source)
+	return get_language_holder().grant_language(language, understood, spoken, source)
 
 /// Grants every language.
 /atom/movable/proc/grant_all_languages(understood = TRUE, spoken = TRUE, grant_omnitongue = TRUE, source = LANGUAGE_MIND)
-	var/datum/language_holder/language_holder = get_language_holder()
-	return language_holder.grant_all_languages(understood, spoken, grant_omnitongue, source)
+	return get_language_holder().grant_all_languages(understood, spoken, grant_omnitongue, source)
 
 /// Removes a single language.
 /atom/movable/proc/remove_language(language, understood = TRUE, spoken = TRUE, source = LANGUAGE_ALL)
-	var/datum/language_holder/language_holder = get_language_holder()
-	return language_holder.remove_language(language, understood, spoken, source)
+	return get_language_holder().remove_language(language, understood, spoken, source)
 
 /// Removes every language and sets omnitongue false.
 /atom/movable/proc/remove_all_languages(source = LANGUAGE_ALL, remove_omnitongue = FALSE)
-	var/datum/language_holder/language_holder = get_language_holder()
-	return language_holder.remove_all_languages(source, remove_omnitongue)
+	return get_language_holder().remove_all_languages(source, remove_omnitongue)
 
 /// Adds a language to the blocked language list. Use this over remove_language in cases where you will give languages back later.
 /atom/movable/proc/add_blocked_language(language, source = LANGUAGE_ATOM)
-	var/datum/language_holder/language_holder = get_language_holder()
-	return language_holder.add_blocked_language(language, source)
+	return get_language_holder().add_blocked_language(language, source)
 
 /// Removes a language from the blocked language list.
 /atom/movable/proc/remove_blocked_language(language, source = LANGUAGE_ATOM)
-	var/datum/language_holder/language_holder = get_language_holder()
-	return language_holder.remove_blocked_language(language, source)
+	return get_language_holder().remove_blocked_language(language, source)
 
 /// Checks if atom has the language. If spoken is true, only checks if atom can speak the language.
 /atom/movable/proc/has_language(language, spoken = FALSE)
-	var/datum/language_holder/language_holder = get_language_holder()
-	return language_holder.has_language(language, spoken)
+	return get_language_holder().has_language(language, spoken)
 
 /// Checks if atom can speak the language.
 /atom/movable/proc/can_speak_language(language)
-	var/datum/language_holder/language_holder = get_language_holder()
-	return language_holder.can_speak_language(language)
-
-/// Returns the result of tongue specific limitations on spoken languages.
-/atom/movable/proc/could_speak_language(language)
-	return TRUE
+	return get_language_holder().can_speak_language(language)
 
 /// Returns selected language, if it can be spoken, or finds, sets and returns a new selected language if possible.
 /atom/movable/proc/get_selected_language()
-	var/datum/language_holder/language_holder = get_language_holder()
-	return language_holder.get_selected_language()
+	return get_language_holder().get_selected_language()
 
 /// Gets a random understood language, useful for hallucinations and such.
 /atom/movable/proc/get_random_understood_language()
-	var/datum/language_holder/language_holder = get_language_holder()
-	return language_holder.get_random_understood_language()
+	return get_language_holder().get_random_understood_language()
 
 /// Gets a random spoken language, useful for forced speech and such.
 /atom/movable/proc/get_random_spoken_language()
-	var/datum/language_holder/language_holder = get_language_holder()
-	return language_holder.get_random_spoken_language()
+	return get_language_holder().get_random_spoken_language()
 
 /// Copies all languages into the supplied atom/language holder. Source should be overridden when you
 /// do not want the language overwritten by later atom updates or want to avoid blocked languages.
@@ -1251,14 +1250,13 @@
 	if(isatom(from_holder))
 		var/atom/movable/thing = from_holder
 		from_holder = thing.get_language_holder()
-	var/datum/language_holder/language_holder = get_language_holder()
-	return language_holder.copy_languages(from_holder, source_override)
+
+	return get_language_holder().copy_languages(from_holder, source_override)
 
 /// Empties out the atom specific languages and updates them according to the current atoms language holder.
 /// As a side effect, it also creates missing language holders in the process.
 /atom/movable/proc/update_atom_languages()
-	var/datum/language_holder/language_holder = get_language_holder()
-	return language_holder.update_atom_languages(src)
+	return get_language_holder().update_atom_languages(src)
 
 /* End language procs */
 
@@ -1349,3 +1347,37 @@
 	REMOVE_TRAIT(src, TRAIT_PASSMOB, source)
 	if(!HAS_TRAIT(src, TRAIT_PASSMOB))
 		pass_flags &= ~PASSMOB
+
+/atom/movable/proc/become_fluorescent()
+	ADD_TRAIT(src, TRAIT_MOVABLE_FLUORESCENT, TRAIT_GENERIC)
+	invisibility = INVISIBILITY_MAXIMUM
+	alpha = 0
+
+/atom/movable/proc/lose_fluorescence()
+	REMOVE_TRAIT(src, TRAIT_MOVABLE_FLUORESCENT, TRAIT_GENERIC)
+	animate(src, alpha = initial(alpha), time = 1 SECOND)
+	invisibility = initial(invisibility)
+
+/atom/movable/proc/uv_illuminate(source, animate_time = 1 SECOND, new_alpha = 255)
+	SHOULD_CALL_PARENT(TRUE)
+
+	if(!HAS_TRAIT(src, TRAIT_MOVABLE_FLUORESCENT))
+		return
+
+	SEND_SIGNAL(src, COMSIG_MOVABLE_UV_EXPOSE, source, animate_time, new_alpha)
+
+	ADD_TRAIT(src, TRAIT_MOVABLE_FLUORESCENCE_REVEALED, source)
+	return TRUE
+
+/atom/movable/proc/uv_hide(source, animate_time = 0)
+	SHOULD_CALL_PARENT(TRUE)
+
+	if(!HAS_TRAIT(src, TRAIT_MOVABLE_FLUORESCENT))
+		return
+
+	SEND_SIGNAL(src, COMSIG_MOVABLE_UV_HIDE, source, animate_time)
+
+	REMOVE_TRAIT(src, TRAIT_MOVABLE_FLUORESCENCE_REVEALED, source)
+
+	if(!HAS_TRAIT(src, TRAIT_MOVABLE_FLUORESCENCE_REVEALED))
+		return TRUE

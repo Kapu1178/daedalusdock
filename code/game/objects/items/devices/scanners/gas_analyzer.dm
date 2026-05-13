@@ -1,7 +1,10 @@
+TYPEINFO_DEF(/obj/item/analyzer)
+	default_materials = list(/datum/material/iron=30, /datum/material/glass=20)
+
 /obj/item/analyzer
 	desc = "A hand-held environmental scanner which reports current gas levels."
 	name = "gas analyzer"
-	custom_price = PAYCHECK_ASSISTANT * 0.9
+	custom_price = PAYCHECK_ASSISTANT * 1.3
 	icon = 'icons/obj/device.dmi'
 	icon_state = "analyzer"
 	inhand_icon_state = "analyzer"
@@ -16,7 +19,6 @@
 	throw_range = 7
 
 	tool_behaviour = TOOL_ANALYZER
-	custom_materials = list(/datum/material/iron=30, /datum/material/glass=20)
 	grind_results = list(/datum/reagent/mercury = 5, /datum/reagent/iron = 5, /datum/reagent/silicon = 5)
 	var/cooldown = FALSE
 	var/cooldown_time = 250

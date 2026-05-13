@@ -536,7 +536,7 @@
 /turf/open/floor/iron,
 /area/ruin/space/derelict/bridge/access)
 "dq" = (
-/obj/item/reagent_containers/food/drinks/bottle/beer,
+/obj/item/reagent_containers/cup/glass/bottle/beer,
 /obj/structure/cable/smart_cable/color/yellow,
 /turf/open/floor/iron,
 /area/ruin/space/derelict/bridge/access)
@@ -658,7 +658,7 @@
 /turf/open/floor/plating/airless,
 /area/ruin/space/derelict/singularity_engine)
 "dZ" = (
-/obj/item/reagent_containers/food/drinks/bottle/beer,
+/obj/item/reagent_containers/cup/glass/bottle/beer,
 /turf/open/floor/iron,
 /area/ruin/space/derelict/bridge)
 "ea" = (
@@ -817,7 +817,7 @@
 /area/ruin/space/derelict/bridge)
 "eU" = (
 /obj/structure/table,
-/obj/item/reagent_containers/food/drinks/bottle/beer,
+/obj/item/reagent_containers/cup/glass/bottle/beer,
 /obj/structure/window/reinforced{
 	dir = 4
 	},
@@ -940,10 +940,6 @@
 	},
 /turf/open/floor/plating/airless,
 /area/ruin/space/derelict/singularity_engine)
-"fw" = (
-/obj/effect/mob_spawn/ghost_role/drone/derelict,
-/turf/open/floor/iron/airless,
-/area/ruin/space/derelict/bridge/access)
 "fx" = (
 /turf/open/floor/iron/airless,
 /area/ruin/space/derelict/bridge/access)
@@ -1433,10 +1429,6 @@
 /obj/item/storage/box/lights/mixed,
 /turf/open/floor/plating/airless,
 /area/ruin/space/derelict/singularity_engine)
-"in" = (
-/obj/effect/mob_spawn/ghost_role/drone/derelict,
-/turf/open/floor/plating/airless,
-/area/ruin/space/derelict/singularity_engine)
 "ip" = (
 /obj/item/stack/cable_coil/cut,
 /obj/effect/mapping_helpers/broken_floor,
@@ -1481,7 +1473,7 @@
 	dir = 8
 	},
 /obj/structure/window/reinforced,
-/obj/item/reagent_containers/glass/beaker,
+/obj/item/reagent_containers/cup/beaker,
 /turf/open/floor/iron/white/airless,
 /area/ruin/space/derelict/medical)
 "iC" = (
@@ -1619,7 +1611,7 @@
 /turf/open/floor/iron/white/airless,
 /area/ruin/space/derelict/medical)
 "jk" = (
-/obj/item/reagent_containers/glass/beaker,
+/obj/item/reagent_containers/cup/beaker,
 /obj/effect/mapping_helpers/broken_floor,
 /turf/open/floor/iron/airless,
 /area/ruin/space/derelict/medical)
@@ -1999,7 +1991,7 @@
 /area/ruin/space/derelict/hallway/primary)
 "lq" = (
 /obj/structure/table,
-/obj/item/reagent_containers/glass/beaker{
+/obj/item/reagent_containers/cup/beaker{
 	list_reagents = list(/datum/reagent/toxin/acid = 50)
 	},
 /obj/item/paper/crumpled/bloody/ruins/thederelict/unfinished,
@@ -2516,7 +2508,6 @@
 	dir = 1
 	},
 /obj/structure/cable/smart_cable/color/yellow,
-/obj/effect/mob_spawn/ghost_role/drone/derelict,
 /turf/open/floor/iron/airless,
 /area/ruin/space/derelict/se_solar)
 "nV" = (
@@ -2836,7 +2827,6 @@
 /obj/structure/closet/wardrobe/orange,
 /obj/effect/spawner/random/maintenance/two,
 /obj/item/shovel/spade,
-/obj/item/cultivator,
 /turf/open/floor/iron/airless,
 /area/ruin/space/derelict/hallway/primary/port)
 "zN" = (
@@ -7552,7 +7542,7 @@ ez
 ez
 ez
 dW
-in
+dW
 dr
 iP
 ay
@@ -9458,7 +9448,7 @@ aa
 aa
 GI
 cs
-fw
+fx
 fx
 fx
 fR

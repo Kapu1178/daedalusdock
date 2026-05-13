@@ -3,10 +3,10 @@
 /datum/bank_account
 	///Name listed on the account, reflected on the ID card.
 	var/account_holder = "Rusty Venture"
-	///How many credits are currently held in the bank account.
+	///How many marks are currently held in the bank account.
 	var/account_balance = 0
 	///If there are things effecting how much income a player will get, it's reflected here 1 is standard for humans.
-	var/payday_modifier
+	var/payday_modifier = 1
 	///The job datum of the account owner.
 	var/datum/job/account_job
 	///List of the physical ID card objects that are associated with this bank_account
@@ -25,10 +25,9 @@
 	///Is there a CRAB 17 on the station draining funds? Prevents manual fund transfer. pink levels are rising
 	var/being_dumped = FALSE
 
-/datum/bank_account/New(newname, job, modifier = 1, player_account = TRUE)
+/datum/bank_account/New(newname, job, player_account = TRUE)
 	account_holder = newname
 	account_job = job
-	payday_modifier = modifier
 	add_to_accounts = player_account
 	setup_unique_account_id()
 
@@ -104,37 +103,36 @@
 	return FALSE
 
 /**
- * Performs a transfer of credits to the bank_account datum from another bank account.
- * *datum/bank_account/from: The bank account that is sending the credits to this bank_account datum.
- * *amount: the quantity of credits that are being moved between bank_account datums.
+ * Performs a transfer of marks to the bank_account datum from another bank account.
+ * *datum/bank_account/from: The bank account that is sending the marks to this bank_account datum.
+ * *amount: the quantity of marks that are being moved between bank_account datums.
  */
 /datum/bank_account/proc/transfer_money(datum/bank_account/from, amount)
 	if(from.has_money(amount))
 		adjust_money(amount)
 		SSblackbox.record_feedback("amount", "credits_transferred", amount)
-		log_econ("[amount] credits were transferred from [from.account_holder]'s account to [src.account_holder]")
+		log_econ("[amount] marks were transferred from [from.account_holder]'s account to [src.account_holder]")
 		from.adjust_money(-amount)
 		return TRUE
 	return FALSE
 
 /**
  * This proc handles passive income gain for players, using their job's paycheck value.
- * Funds are taken from the station master account to hand out to players. This can result in payment brown-outs if the station is poor.
+ * Funds are taken from the given bank account unless null. This can result in payment brown-outs if the company is poor.
  */
-/datum/bank_account/proc/payday(amt_of_paychecks = 1, free = FALSE)
+/datum/bank_account/proc/payday(amt_of_paychecks = 1, datum/bank_account/drain_from = null)
 	if(!account_job)
 		return
 
 	var/money_to_transfer = round(account_job.paycheck * payday_modifier * amt_of_paychecks)
 
-	if(free)
+	if(isnull(drain_from))
 		adjust_money(money_to_transfer)
 		SSblackbox.record_feedback("amount", "free_income", money_to_transfer)
-		log_econ("[money_to_transfer] credits were given to [src.account_holder]'s account from income.")
 		return TRUE
 	else
-		var/datum/bank_account/D = SSeconomy.station_master
-		if(D && transfer_money(D, money_to_transfer))
+		if(transfer_money(drain_from, money_to_transfer))
+			log_econ("[money_to_transfer] marks were given to [src.account_holder]'s account from [drain_from.account_holder].")
 			return TRUE
 	return FALSE
 

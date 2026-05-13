@@ -13,7 +13,7 @@
 /datum/gun_bolt/no_bolt/unload(mob/user)
 	. = TRUE // No matter what happens we're cancelling the call
 	if(!parent.wielded && !user.get_empty_held_index())
-		to_chat(user, span_warning("You need a free hand to do that!"))
+		to_chat(user, span_warning("You need a free hand to do that."))
 		return
 
 	parent.chambered = null
@@ -28,8 +28,8 @@
 			SSblackbox.record_feedback("tally", "station_mess_created", 1, CB.name)
 
 	if (num_unloaded)
-		to_chat(user, span_notice("You unload [num_unloaded] [parent.cartridge_wording]\s from [src]."))
+		to_chat(user, span_notice("You unload [num_unloaded] [parent.cartridge_wording]\s from [parent]."))
 		playsound(parent, parent.eject_sound, parent.eject_sound_volume, parent.eject_sound_vary)
 		parent.update_appearance()
 	else
-		to_chat(user, span_warning("[parent] is empty!"))
+		to_chat(user, span_warning("[parent] is empty."))

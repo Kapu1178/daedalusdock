@@ -14,7 +14,7 @@
 	health = 25
 	maxHealth = 25
 
-	maints_access_required = list(ACCESS_ROBOTICS, ACCESS_CONSTRUCTION)
+	maints_access_required = list(ACCESS_ROBOTICS, ACCESS_ENGINEERING)
 	radio_key = /obj/item/encryptionkey/headset_eng
 	radio_channel = RADIO_CHANNEL_ENGINEERING
 	bot_type = FIRE_BOT
@@ -42,8 +42,8 @@
 	update_appearance(UPDATE_ICON)
 
 	// Doing this hurts my soul, but simplebot access reworks are for another day.
-	var/datum/id_trim/job/engi_trim = SSid_access.trim_singletons_by_path[/datum/id_trim/job/station_engineer]
-	access_card.add_access(engi_trim.access + engi_trim.wildcard_access)
+	var/datum/access_template/job/engi_trim = SSid_access.template_singletons_by_path[/datum/access_template/job/station_engineer]
+	access_card.add_access(engi_trim.access)
 	prev_access = access_card.access.Copy()
 
 	create_extinguisher()
@@ -69,7 +69,7 @@
 	if(!can_unarmed_attack())
 		return
 	if(internal_ext)
-		internal_ext.afterattack(A, src)
+		internal_ext.ranged_interact_with_atom(A, src)
 	else
 		return ..()
 
@@ -77,7 +77,7 @@
 	if(!(bot_mode_flags & BOT_MODE_ON))
 		return
 	if(internal_ext)
-		internal_ext.afterattack(A, src)
+		internal_ext.ranged_interact_with_atom(A, src)
 	else
 		return ..()
 
@@ -99,7 +99,7 @@
 /mob/living/simple_animal/bot/firebot/proc/soft_reset()
 	path = list()
 	target_fire = null
-	mode = BOT_IDLE
+	set_mode(BOT_IDLE)
 	last_found = world.time
 	update_appearance()
 
@@ -168,7 +168,7 @@
 	if(IsStun() || IsParalyzed())
 		old_target_fire = target_fire
 		target_fire = null
-		mode = BOT_IDLE
+		set_mode(BOT_IDLE)
 		return
 
 	if(prob(1) && target_fire == null)
@@ -211,7 +211,7 @@
 				playsound(src, 'sound/voice/firebot/extinguishing.ogg', 50, FALSE)
 			speech_cooldown = world.time
 
-			flick("firebot1_use", src)
+			z_flick("firebot1_use", src)
 			spray_water(target_fire, src)
 
 		soft_reset()
@@ -219,7 +219,7 @@
 	// Target ran away
 	else if(target_fire && path.len && (get_dist(target_fire,path[path.len]) > 2))
 		path = list()
-		mode = BOT_IDLE
+		set_mode(BOT_IDLE)
 		last_found = world.time
 
 	else if(target_fire && stationary_mode)
@@ -227,9 +227,9 @@
 		return
 
 	if(target_fire && (get_dist(src, target_fire) > 2))
-
-		path = get_path_to(src, target_fire, max_distance=30, mintargetdist=1, access = access_card?.GetAccess())
-		mode = BOT_MOVING
+		set_mode(BOT_PATHING)
+		path = jps_path_to(src, target_fire, max_steps=30, mintargetdist=1, access = access_card?.GetAccess())
+		set_mode(BOT_MOVING)
 		if(!path.len)
 			soft_reset()
 
@@ -267,15 +267,16 @@
 /mob/living/simple_animal/bot/firebot/atmos_expose(datum/gas_mixture/air, exposed_temperature)
 	if(exposed_temperature > T0C + 200 || exposed_temperature < BODYTEMP_COLD_DAMAGE_LIMIT)
 		if(COOLDOWN_FINISHED(src, foam_cooldown))
-			new /obj/effect/particle_effect/foam/firefighting(loc)
+			new /obj/effect/particle_effect/fluid/foam/firefighting(loc)
 			COOLDOWN_START(src, foam_cooldown, FOAM_INTERVAL)
 
 /mob/living/simple_animal/bot/firebot/proc/spray_water(atom/target, mob/user)
 	if(stationary_mode)
-		flick("firebots_use", user)
+		z_flick("firebots_use", user)
 	else
-		flick("firebot1_use", user)
-	internal_ext.afterattack(target, user, null)
+		z_flick("firebot1_use", user)
+
+	internal_ext.ranged_interact_with_atom(target, user)
 
 /mob/living/simple_animal/bot/firebot/update_icon_state()
 	. = ..()

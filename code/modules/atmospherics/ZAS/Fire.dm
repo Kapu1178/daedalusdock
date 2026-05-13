@@ -11,10 +11,10 @@ If it gains pressure too slowly, it may leak or just rupture instead of explodin
 /turf
 	var/obj/effect/hotspot/active_hotspot = null
 
-/turf/proc/hotspot_expose(exposed_temperature, exposed_volume, soh = 0)
+/turf/proc/hotspot_expose(exposed_temperature, exposed_volume)
 	return
 
-/turf/open/hotspot_expose(exposed_temperature, exposed_volume, soh)
+/turf/open/hotspot_expose(exposed_temperature, exposed_volume)
 	if(!simulated)
 		return 0
 	if(fire_protection > world.time-300)
@@ -55,6 +55,9 @@ If it gains pressure too slowly, it may leak or just rupture instead of explodin
 	if(create_own_fuel)
 		if(!fuel)
 			fuel = new /obj/effect/decal/cleanable/oil(src)
+			if(QDELETED(fuel))
+				qdel(active_hotspot)
+				return
 			fuel.reagents.add_reagent(/datum/reagent/fuel/oil, create_own_fuel)
 		else
 			fuel.reagents.add_reagent(/datum/reagent/fuel/oil, create_own_fuel)
@@ -79,7 +82,7 @@ If it gains pressure too slowly, it may leak or just rupture instead of explodin
 	var/firelevel = 1 //Calculated by gas_mixture.calculate_firelevel()
 	var/temperature = 0
 
-/obj/effect/hotspot/Initialize(fl)
+/obj/effect/hotspot/Initialize(mapload, fl)
 	. = ..()
 	var/turf/open/T = loc
 	if(!isopenturf(T))
@@ -246,7 +249,7 @@ If it gains pressure too slowly, it may leak or just rupture instead of explodin
 			total_oxidizers += gas[g]
 
 	total_fuel = gas_fuel + liquid_fuel_amt
-	if(total_fuel <= 0.005)
+	if(total_fuel <= FIRE_MINIMUM_FUEL_MOL_TO_EXIST)
 		return 0
 
 	//*** Determine how fast the fire burns
@@ -304,13 +307,13 @@ If it gains pressure too slowly, it may leak or just rupture instead of explodin
 
 		var/fuel_to_remove = GASFUEL_AMOUNT_TO_LIQUID(used_liquid_fuel) //convert back to liquid volume units
 
-		liquid_fuel.reagents.remove_any(fuel_to_remove)
+		liquid_fuel.reagents.remove_all(fuel_to_remove)
 		if(liquid_fuel.reagents.total_volume <= 0.1) //Precision loss kinda fucks with us here so
 			qdel(liquid_fuel)
 
 	//calculate the energy produced by the reaction and then set the new temperature of the mix
 	temperature = (starting_energy + zas_settings.fire_fuel_energy_release * (used_gas_fuel + used_liquid_fuel)) / getHeatCapacity()
-	AIR_UPDATE_VALUES(src)
+	garbageCollect()
 
 	#ifdef FIREDBG
 	to_chat(world, "used_gas_fuel = [used_gas_fuel]; used_liquid_fuel = [used_liquid_fuel]; total = [used_fuel]")

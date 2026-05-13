@@ -1,9 +1,13 @@
 /obj/item/stack/sticky_tape
-	name = "duct tape"
-	singular_name = "duct tape"
+	name = "roll of duct tape"
+	singular_name = "piece"
+	stack_name = "roll"
+	multiple_gender = NEUTER
+
 	desc = "Used for sticking to things for sticking said things to people."
 	icon = 'icons/obj/tapes.dmi'
 	icon_state = "tape"
+
 	var/prefix = "sticky"
 	w_class = WEIGHT_CLASS_TINY
 	full_w_class = WEIGHT_CLASS_TINY
@@ -12,7 +16,6 @@
 	max_amount = 5
 	resistance_flags = FLAMMABLE
 	grind_results = list(/datum/reagent/cellulose = 5)
-	splint_slowdown = 4
 	merge_type = /obj/item/stack/sticky_tape
 	usesound = 'sound/items/duct_tape_rip.ogg'
 	var/list/conferred_embed = EMBED_HARMLESS
@@ -45,34 +48,41 @@
 		return NONE
 	return CONTEXTUAL_SCREENTIP_SET
 
-/obj/item/stack/sticky_tape/attack(mob/living/carbon/victim, mob/living/user)
-	if((!istype(victim)))
-		return
+/obj/item/stack/sticky_tape/proc/interact_with_human(mob/living/carbon/victim, mob/living/user, list/modifiers)
 	if(is_zero_amount(delete_if_zero = TRUE))
-		return
+		return NONE
+
 	if((HAS_TRAIT(user, TRAIT_CLUMSY) && prob(25)))
 		to_chat(user, "<span class='warning'>Uh... where did the tape edge go?!</span>")
 		var/obj/item/restraints/handcuffs/tape/handcuffed = new(user)
 		handcuffed.apply_cuffs(user,user)
-		return
+		return ITEM_INTERACT_SUCCESS
+
 	if(user.zone_selected == BODY_ZONE_PRECISE_MOUTH)
 		if(victim.wear_mask)
 			to_chat(user, span_notice("[victim] is already wearing somthing on their face."))
-			return
-		MuzzleAttack(victim, user)
-	else if (!victim.handcuffed)
-		if(victim.canBeHandcuffed())
-			CuffAttack(victim, user)
-			return
+			return ITEM_INTERACT_BLOCKING
 
-/obj/item/stack/sticky_tape/afterattack(obj/item/target, mob/living/user, proximity)
-	if(!proximity)
+		MuzzleAttack(victim, user)
+
+	else if (!victim.handcuffed && victim.canBeHandcuffed())
+		CuffAttack(victim, user)
+
+	return ITEM_INTERACT_SUCCESS
+
+/obj/item/stack/sticky_tape/interact_with_atom(atom/interacting_with, mob/living/user, list/modifiers)
+	if(ishuman(interacting_with))
+		return interact_with_human(interacting_with, user, modifiers)
+
+	if(!isitem(interacting_with))
 		return
-	if(!istype(target))
-		return
+
+	var/obj/item/target = interacting_with
+
 	if(target.embedding && target.embedding == conferred_embed)
 		to_chat(user, span_warning("[target] is already coated in [src]!"))
-		return
+		return ITEM_INTERACT_BLOCKING
+
 	user.visible_message(span_notice("[user] begins wrapping [target] with [src]."), span_notice("You begin wrapping [target] with [src]."))
 	playsound(user, usesound, 50, TRUE)
 	if(do_after(user, target, 3 SECONDS, DO_PUBLIC, display = src))
@@ -82,11 +92,11 @@
 			to_chat(user, span_notice("You turn [target] into [O] with [src]."))
 			QDEL_NULL(target)
 			user.put_in_hands(O)
-			return
+			return ITEM_INTERACT_SUCCESS
 
 		if(target.embedding && target.embedding == conferred_embed)
 			to_chat(user, span_warning("[target] is already coated in [src]!"))
-			return
+			return ITEM_INTERACT_BLOCKING
 
 		target.embedding = conferred_embed
 		target.updateEmbedding()
@@ -96,6 +106,9 @@
 		if(istype(target, /obj/item/grenade))
 			var/obj/item/grenade/sticky_bomb = target
 			sticky_bomb.sticky = TRUE
+		return ITEM_INTERACT_SUCCESS
+
+	return ITEM_INTERACT_BLOCKING
 
 /obj/item/stack/sticky_tape/proc/MuzzleAttack(mob/living/carbon/victim, mob/living/user)
 	playsound(loc, usesound, 30, TRUE, -2)
@@ -135,7 +148,6 @@
 	icon_state = "tape_y"
 	prefix = "super sticky"
 	conferred_embed = EMBED_HARMLESS_SUPERIOR
-	splint_slowdown = 6
 	merge_type = /obj/item/stack/sticky_tape/super
 	tape_gag = /obj/item/clothing/mask/muzzle/tape/super
 
@@ -166,7 +178,6 @@
 	icon_state = "tape_w"
 	prefix = "surgical"
 	conferred_embed = list("embed_chance" = 30, "pain_mult" = 0, "jostle_pain_mult" = 0, "ignore_throwspeed_threshold" = TRUE)
-	splint_slowdown = 3
-	custom_price = PAYCHECK_MEDIUM
+	custom_price = PAYCHECK_ASSISTANT * 0.4
 	merge_type = /obj/item/stack/sticky_tape/surgical
 	tape_gag = /obj/item/clothing/mask/muzzle/tape/surgical

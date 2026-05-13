@@ -89,7 +89,7 @@
 		RegisterSignal(shooter, COMSIG_MOB_LOGOUT, PROC_REF(autofire_off))
 		UnregisterSignal(shooter, COMSIG_MOB_LOGIN)
 
-	RegisterSignal(parent, list(COMSIG_PARENT_QDELETING, COMSIG_ITEM_DROPPED), PROC_REF(autofire_off))
+	RegisterSignal(parent, list(COMSIG_PARENT_QDELETING, COMSIG_ITEM_UNEQUIPPED), PROC_REF(autofire_off))
 	parent.RegisterSignal(src, COMSIG_AUTOFIRE_ONMOUSEDOWN, TYPE_PROC_REF(/obj/item/gun, autofire_bypass_check))
 	parent.RegisterSignal(parent, COMSIG_AUTOFIRE_SHOT, TYPE_PROC_REF(/obj/item/gun, do_autofire))
 
@@ -113,7 +113,7 @@
 		RegisterSignal(shooter, COMSIG_MOB_LOGIN, PROC_REF(on_client_login))
 		UnregisterSignal(shooter, COMSIG_MOB_LOGOUT)
 
-	UnregisterSignal(parent, list(COMSIG_PARENT_QDELETING, COMSIG_ITEM_DROPPED))
+	UnregisterSignal(parent, list(COMSIG_PARENT_QDELETING, COMSIG_ITEM_UNEQUIPPED))
 	shooter = null
 	parent.UnregisterSignal(parent, COMSIG_AUTOFIRE_SHOT)
 	parent.UnregisterSignal(src, COMSIG_AUTOFIRE_ONMOUSEDOWN)
@@ -299,10 +299,10 @@
 // Gun procs.
 
 /obj/item/gun/proc/on_autofire_start(mob/living/shooter)
-	if(fire_lockout || shooter.incapacitated() || !can_trigger_gun(shooter))
+	if(shooter.incapacitated() || !can_trigger_gun(shooter))
 		return FALSE
 
-	if(!can_fire())
+	if(!can_fire(check_lockout = TRUE))
 		shoot_with_empty_chamber(shooter)
 		return FALSE
 
@@ -317,9 +317,10 @@
 
 /obj/item/gun/proc/do_autofire(datum/source, atom/target, mob/living/shooter, params)
 	SIGNAL_HANDLER
-	if(fire_lockout || shooter.incapacitated())
+	if(shooter.incapacitated())
 		return NONE
-	if(!can_fire())
+
+	if(!can_fire(check_lockout = TRUE))
 		shoot_with_empty_chamber(shooter)
 		return NONE
 

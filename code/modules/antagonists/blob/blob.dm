@@ -8,7 +8,7 @@
 	var/datum/action/innate/blobpop/pop_action
 	var/starting_points_human_blob = OVERMIND_STARTING_POINTS
 
-/datum/antagonist/blob/roundend_report()
+/datum/antagonist/blob/roundend_report_article_column_body()
 	var/basic_report = ..()
 	//Display max blobpoints for blebs that lost
 	if(isovermind(owner.current)) //embarrasing if not
@@ -20,7 +20,6 @@
 
 /datum/antagonist/blob/greet()
 	. = ..()
-	owner.announce_objectives()
 	if(!isovermind(owner.current))
 		to_chat(owner.current, span_notice("Use the pop ability to place your blob core! It is recommended you do this away from anyone else, as you'll be taking on the entire crew!"))
 

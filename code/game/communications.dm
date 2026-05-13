@@ -60,69 +60,40 @@
 /* the radio controller is a confusing piece of shit and didnt work
 	so i made radios not use the radio controller.
 */
-GLOBAL_LIST_EMPTY(all_radios)
+GLOBAL_LIST_EMPTY(radios_by_frequency)
+
+/// k:v list of channel key string -> frequency NUMBER.
+GLOBAL_LIST_EMPTY(radio_channel_to_frequency)
+
+/// k:v list of frequency number AS STRING -> channel key string.
+GLOBAL_LIST_EMPTY(radio_frequency_to_channel)
+
+/// k:v list of frequency number AS STRING -> file name. See chat_icons.dm
+GLOBAL_LIST_EMPTY(freq2icon)
 
 /proc/add_radio(obj/item/radio, freq)
 	if(!freq || !radio)
 		return
-	if(!GLOB.all_radios["[freq]"])
-		GLOB.all_radios["[freq]"] = list(radio)
+
+	if(!GLOB.radios_by_frequency["[freq]"])
+		GLOB.radios_by_frequency["[freq]"] = list(radio)
 		return freq
 
-	GLOB.all_radios["[freq]"] |= radio
+	GLOB.radios_by_frequency["[freq]"][radio] = TRUE
 	return freq
 
 /proc/remove_radio(obj/item/radio, freq)
 	if(!freq || !radio)
 		return
-	if(!GLOB.all_radios["[freq]"])
+
+	if(!GLOB.radios_by_frequency["[freq]"])
 		return
 
-	GLOB.all_radios["[freq]"] -= radio
+	GLOB.radios_by_frequency["[freq]"] -= radio
 
 /proc/remove_radio_all(obj/item/radio)
-	for(var/freq in GLOB.all_radios)
-		GLOB.all_radios["[freq]"] -= radio
-
-// For information on what objects or departments use what frequencies,
-// see __DEFINES/radio.dm. Mappers may also select additional frequencies for
-// use in maps, such as in intercoms.
-
-GLOBAL_LIST_INIT(radiochannels, list(
-	RADIO_CHANNEL_COMMON = FREQ_COMMON,
-	RADIO_CHANNEL_SCIENCE = FREQ_SCIENCE,
-	RADIO_CHANNEL_COMMAND = FREQ_COMMAND,
-	RADIO_CHANNEL_MEDICAL = FREQ_MEDICAL,
-	RADIO_CHANNEL_ENGINEERING = FREQ_ENGINEERING,
-	RADIO_CHANNEL_SECURITY = FREQ_SECURITY,
-	RADIO_CHANNEL_CENTCOM = FREQ_CENTCOM,
-	RADIO_CHANNEL_SYNDICATE = FREQ_SYNDICATE,
-	RADIO_CHANNEL_SUPPLY = FREQ_SUPPLY,
-	RADIO_CHANNEL_SERVICE = FREQ_SERVICE,
-	RADIO_CHANNEL_AI_PRIVATE = FREQ_AI_PRIVATE,
-	RADIO_CHANNEL_CTF_RED = FREQ_CTF_RED,
-	RADIO_CHANNEL_CTF_BLUE = FREQ_CTF_BLUE,
-	RADIO_CHANNEL_CTF_GREEN = FREQ_CTF_GREEN,
-	RADIO_CHANNEL_CTF_YELLOW = FREQ_CTF_YELLOW
-))
-
-GLOBAL_LIST_INIT(reverseradiochannels, list(
-	"[FREQ_COMMON]" = RADIO_CHANNEL_COMMON,
-	"[FREQ_SCIENCE]" = RADIO_CHANNEL_SCIENCE,
-	"[FREQ_COMMAND]" = RADIO_CHANNEL_COMMAND,
-	"[FREQ_MEDICAL]" = RADIO_CHANNEL_MEDICAL,
-	"[FREQ_ENGINEERING]" = RADIO_CHANNEL_ENGINEERING,
-	"[FREQ_SECURITY]" = RADIO_CHANNEL_SECURITY,
-	"[FREQ_CENTCOM]" = RADIO_CHANNEL_CENTCOM,
-	"[FREQ_SYNDICATE]" = RADIO_CHANNEL_SYNDICATE,
-	"[FREQ_SUPPLY]" = RADIO_CHANNEL_SUPPLY,
-	"[FREQ_SERVICE]" = RADIO_CHANNEL_SERVICE,
-	"[FREQ_AI_PRIVATE]" = RADIO_CHANNEL_AI_PRIVATE,
-	"[FREQ_CTF_RED]" = RADIO_CHANNEL_CTF_RED,
-	"[FREQ_CTF_BLUE]" = RADIO_CHANNEL_CTF_BLUE,
-	"[FREQ_CTF_GREEN]" = RADIO_CHANNEL_CTF_GREEN,
-	"[FREQ_CTF_YELLOW]" = RADIO_CHANNEL_CTF_YELLOW
-))
+	for(var/freq in GLOB.radios_by_frequency)
+		GLOB.radios_by_frequency["[freq]"] -= radio
 
 /datum/radio_frequency
 	var/frequency
@@ -181,7 +152,8 @@ GLOBAL_LIST_INIT(reverseradiochannels, list(
 	. = TRUE
 
 /datum/signal
-	///The author/sender of this packet.
+	/// The author/sender of this packet.
+	/// This atom will be skipped during packet send.
 	var/datum/weakref/author
 	///The medium of which this packet is travelling
 	var/transmission_method
@@ -204,6 +176,9 @@ GLOBAL_LIST_INIT(reverseradiochannels, list(
 	///Anything that captures packets should either generate garbage data or discard these packets.
 	var/has_magic_data = FALSE
 
+	/// I hate doing this but STP is hard.
+	var/list/passed_bridges
+
 /datum/signal/New(author, data, transmission_method = TRANSMISSION_RADIO, logging_data = null)
 	src.author = isnull(author) ? null : WEAKREF(author)
 	if(islist(author))
@@ -212,3 +187,93 @@ GLOBAL_LIST_INIT(reverseradiochannels, list(
 	src.data = data || list()
 	src.transmission_method = transmission_method
 	src.logging_data = logging_data
+
+/// Returns a copy of this signal.
+/datum/signal/proc/Copy()
+	var/datum/signal/clone = new type(author, data.Copy(), transmission_method, logging_data)
+	clone.passed_bridges = src.passed_bridges?.Copy()
+	return clone
+
+/// Check if this signal has passed a bridge, if not, add the bridge's refid to the passed bridge list.
+/// FALSE - first pass, TRUE - second+pass, panic.
+/datum/signal/proc/check_bridge(obj/machinery/bridge)
+	var/refid = ref(bridge)
+	if(refid in passed_bridges)
+		return TRUE
+	LAZYADD(passed_bridges, refid)
+	return FALSE
+
+// YES THIS IS STUPID I KNOW.
+/// Structs to contain radio channel information. Not instanced.
+/datum/radio_channel
+	var/frequency
+	var/key
+	var/icon // optional, see chat_icons.dm
+
+/datum/radio_channel/common
+	key = RADIO_CHANNEL_COMMON
+	frequency = FREQ_COMMON
+	icon = "radio.png"
+
+/datum/radio_channel/science
+	key = RADIO_CHANNEL_SCIENCE
+	frequency = FREQ_SCIENCE
+
+/datum/radio_channel/federation
+	key = RADIO_CHANNEL_FEDERATION
+	frequency = FREQ_COMMAND
+	icon = "ntboss.png"
+
+/datum/radio_channel/medical
+	key = RADIO_CHANNEL_MEDICAL
+	frequency = FREQ_MEDICAL
+	icon = "med.png"
+
+/datum/radio_channel/engineering
+	key = RADIO_CHANNEL_ENGINEERING
+	frequency = FREQ_ENGINEERING
+	icon = "eng.png"
+
+/datum/radio_channel/security
+	key = RADIO_CHANNEL_SECURITY
+	frequency = FREQ_SECURITY
+	icon = "sec.png"
+
+/datum/radio_channel/centcom
+	key = RADIO_CHANNEL_CENTCOM
+	frequency = FREQ_CENTCOM
+
+/datum/radio_channel/syndicate
+	key = RADIO_CHANNEL_SYNDICATE
+	frequency = FREQ_SYNDICATE
+	icon = "syndieboss.png"
+
+/datum/radio_channel/supply
+	key = RADIO_CHANNEL_SUPPLY
+	frequency = FREQ_SUPPLY
+	icon = "mail.png"
+
+/datum/radio_channel/service
+	key = RADIO_CHANNEL_SERVICE
+	frequency = FREQ_SERVICE
+
+/datum/radio_channel/ai_private
+	key = RADIO_CHANNEL_AI_PRIVATE
+	frequency = FREQ_AI_PRIVATE
+	icon = "ai.png"
+
+/datum/radio_channel/ctf_red
+	key = RADIO_CHANNEL_CTF_RED
+	frequency = FREQ_CTF_RED
+
+/datum/radio_channel/ctf_blue
+	key = RADIO_CHANNEL_CTF_BLUE
+	frequency = FREQ_CTF_BLUE
+
+/datum/radio_channel/ctf_green
+	key = RADIO_CHANNEL_CTF_GREEN
+	frequency = FREQ_CTF_GREEN
+
+/datum/radio_channel/ctf_yellow
+	key = RADIO_CHANNEL_CTF_YELLOW
+	frequency = FREQ_CTF_YELLOW

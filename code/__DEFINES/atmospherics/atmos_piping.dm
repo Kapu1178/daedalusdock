@@ -34,9 +34,7 @@
 /// The maximum pressure an gas tanks release valve can be set to.
 #define TANK_MAX_RELEASE_PRESSURE (ONE_ATMOSPHERE*3)
 /// The default initial value gas tanks release valves are set to. (At least the ones containing pure plasma/oxygen.)
-#define TANK_DEFAULT_RELEASE_PRESSURE 16
-/// The default initial value gas plasmamen tanks releases valves are set to.
-#define TANK_PLASMAMAN_RELEASE_PRESSURE 4
+#define TANK_DEFAULT_RELEASE_PRESSURE (ONE_ATMOSPHERE*O2STANDARD)
 /// The internal temperature in kelvins at which a handheld gas tank begins to take damage.
 #define TANK_MELT_TEMPERATURE 1000000
 /// The internal pressure in kPa at which a handheld gas tank begins to take damage.
@@ -55,6 +53,9 @@
 /// Additional information of the tank.
 #define TANK_RESULTS_MISC 2
 
+/// Color used by omni-color pipes
+#define ATMOS_COLOR_OMNI COLOR_VERY_LIGHT_GRAY
+
 //MULTIPIPES
 //IF YOU EVER CHANGE THESE CHANGE SPRITES TO MATCH.
 //layer = initial(layer) + piping_layer / 1000 in atmospherics/update_icon() to determine order of pipe overlap
@@ -63,7 +64,7 @@
 #define PIPING_LAYER_DEFAULT 3
 #define PIPING_LAYER_P_X 5
 #define PIPING_LAYER_P_Y 5
-#define PIPING_LAYER_LCHANGE 0.05
+#define PIPING_LAYER_LCHANGE 0.005
 
 /// intended to connect with all layers, check for all instead of just one.
 #define PIPING_ALL_LAYER (1<<0)

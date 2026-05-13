@@ -6,6 +6,7 @@ GLOBAL_LIST_EMPTY(wizard_spellbook_purchases_by_key)
 	roundend_category = "wizards/witches"
 	antagpanel_category = "Wizard"
 	job_rank = ROLE_WIZARD
+	assign_job = /datum/job/space_wizard
 	antag_hud_name = "wizard"
 	hijack_speed = 0.5
 	ui_name = "AntagInfoWizard"
@@ -272,7 +273,6 @@ GLOBAL_LIST_EMPTY(wizard_spellbook_purchases_by_key)
 /datum/antagonist/wizard/apprentice/imposter/greet()
 	. = ..()
 	to_chat(owner, "<B>Trick and confuse the crew to misdirect malice from your handsome original!</B>")
-	owner.announce_objectives()
 
 /datum/antagonist/wizard/apprentice/imposter/equip_wizard()
 	var/mob/living/carbon/human/master_mob = master.current
@@ -328,7 +328,7 @@ GLOBAL_LIST_EMPTY(wizard_spellbook_purchases_by_key)
 	objectives += new_objective
 
 //Solo wizard report
-/datum/antagonist/wizard/roundend_report()
+/datum/antagonist/wizard/roundend_report_article_column_body()
 	var/list/parts = list()
 
 	parts += printplayer(owner)
@@ -344,9 +344,9 @@ GLOBAL_LIST_EMPTY(wizard_spellbook_purchases_by_key)
 		count++
 
 	if(wizardwin)
-		parts += span_greentext("The wizard was successful!")
+		parts += "<span class='good'>The wizard was successful!</span>"
 	else
-		parts += span_redtext("The wizard has failed!")
+		parts += "<span class='bad'>The wizard has failed!</span>"
 
 	var/list/purchases = list()
 	for(var/list/log as anything in GLOB.wizard_spellbook_purchases_by_key[owner.key])
@@ -364,13 +364,13 @@ GLOBAL_LIST_EMPTY(wizard_spellbook_purchases_by_key)
 	return parts.Join("<br>")
 
 //Wizard with apprentices report
-/datum/team/wizard/roundend_report()
+/datum/team/wizard/roundend_report_article_column_body()
 	var/list/parts = list()
 
-	parts += "<span class='header'>Wizards/witches of [master_wizard.owner.name] team were:</span>"
-	parts += master_wizard.roundend_report()
+	parts += "<span class='header antagonist'>Wizards/witches of [master_wizard.owner.name] team were:</span>"
+	parts += master_wizard.roundend_report_article_column_body()
 	parts += " "
-	parts += "<span class='header'>[master_wizard.owner.name] apprentices and minions were:</span>"
+	parts += "<span class='header antagonist'>[master_wizard.owner.name] apprentices and minions were:</span>"
 	parts += printplayerlist(members - master_wizard.owner)
 
 	return "<div class='panel redborder'>[parts.Join("<br>")]</div>"

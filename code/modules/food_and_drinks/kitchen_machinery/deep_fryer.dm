@@ -3,9 +3,9 @@
 #define DEEPFRYER_BURNTIME 120
 
 GLOBAL_LIST_INIT(oilfry_blacklisted_items, typecacheof(list(
-	/obj/item/reagent_containers/glass,
+	/obj/item/reagent_containers/cup,
 	/obj/item/reagent_containers/syringe,
-	/obj/item/reagent_containers/food/condiment,
+	/obj/item/reagent_containers/condiment,
 	/obj/item/storage,
 	/obj/item/delivery,
 	/obj/item/his_grace)))
@@ -63,7 +63,7 @@ GLOBAL_LIST_INIT(oilfry_blacklisted_items, typecacheof(list(
 /obj/machinery/deepfryer/wrench_act(mob/living/user, obj/item/tool)
 	. = ..()
 	default_unfasten_wrench(user, tool)
-	return TOOL_ACT_TOOLTYPE_SUCCESS
+	return ITEM_INTERACT_SUCCESS
 
 /obj/machinery/deepfryer/attackby(obj/item/weapon, mob/user, params)
 	if(istype(weapon, /obj/item/reagent_containers/pill))
@@ -160,7 +160,7 @@ GLOBAL_LIST_INIT(oilfry_blacklisted_items, typecacheof(list(
 
 	dunking_target.apply_damage(min(30 * permeability * cold_multiplier, reagents.total_volume), BURN, BODY_ZONE_HEAD)
 	if(reagents.reagent_list) //This can runtime if reagents has nothing in it.
-		reagents.remove_any((reagents.total_volume/2))
+		reagents.remove_all((reagents.total_volume/2))
 
 	dunking_target.Paralyze(60)
 	user.changeNext_move(CLICK_CD_MELEE)

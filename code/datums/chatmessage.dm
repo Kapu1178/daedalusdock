@@ -134,8 +134,8 @@
 		return
 
 	// Non mobs speakers can be small
-	if (!ismob(target))
-		extra_classes |= "small"
+	if (target.chat_class)
+		extra_classes |= target.chat_class
 
 	var/list/prefixes
 
@@ -148,11 +148,10 @@
 		LAZYADD(prefixes, "\icon[r_icon]")
 
 	// Append language icon if the language uses one
-	var/datum/language/language_instance = GLOB.language_datum_instances[language]
-	if (language_instance?.display_icon(owner))
+	if (language?.display_icon(owner))
 		var/icon/language_icon = LAZYACCESS(language_icons, language)
 		if (isnull(language_icon))
-			language_icon = icon(language_instance.icon, icon_state = language_instance.icon_state)
+			language_icon = icon(language.icon, icon_state = language.icon_state)
 			language_icon.Scale(CHAT_MESSAGE_ICON_SIZE, CHAT_MESSAGE_ICON_SIZE)
 			LAZYSET(language_icons, language, language_icon)
 		LAZYADD(prefixes, "\icon[language_icon]")
@@ -168,6 +167,9 @@
 
 
 	message_loc = isturf(target) ? target : get_atom_on_turf(target)
+	if(isnull(message_loc))
+		qdel(src)
+		return
 
 	// Build message image
 	message = new /image{
@@ -217,6 +219,7 @@
 		//if(ismob(message_loc)) // If this proc starts getting $$$, re-add this check
 		var/turf/message_turf = get_turf(message_loc)
 		var/list/turfs2check = block(locate(max(message_turf.x-4, 1), message_turf.y, message_turf.z), locate(min(message_turf.x+4, world.maxx), message_turf.y, message_turf.z)) - message_turf
+
 		for(var/turf/T as anything in turfs2check)
 			var/mob/living/L = locate() in T
 			if(!isnull(L))
@@ -293,8 +296,7 @@
 	if(runechat_flags & EMOTE_MESSAGE)
 		new /datum/chatmessage(raw_message, sound_loc || speaker, src, message_language, list("emote", "italics"))
 	else
-		new /datum/chatmessage(lang_treat(speaker, message_language, raw_message, spans, null, TRUE), sound_loc || speaker, src, message_language, spans)
-
+		new /datum/chatmessage(raw_message, sound_loc || speaker, src, message_language, spans)
 
 // Tweak these defines to change the available color ranges
 #define CM_COLOR_SAT_MIN 0.6

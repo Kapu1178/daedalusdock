@@ -9,20 +9,19 @@
 		"**/.yarn": true,
 		"**/.pnp.*": true
 	},
+	"prettier.prettierPath": "./tgui/.yarn/sdks/prettier/index.cjs",
 	"editor.codeActionsOnSave": {
 		"source.fixAll.eslint": "explicit"
 	},
 	"files.eol": "\n",
 	"files.insertFinalNewline": true,
-	"gitlens.advanced.blame.customArguments": ["-w"],
+	"gitlens.advanced.blame.customArguments": [
+		"-w"
+	],
 	"tgstationTestExplorer.project.resultsType": "json",
-	"[javascript]": {
-		"editor.rulers": [80]
-	},
-	"[typescript]": {
-		"editor.rulers": [80]
-	},
-	"[scss]": {
-		"editor.rulers": [80]
+	"[javascript][typescript][typescriptreact][javascriptreact][html][scss][css][json][jsonc][markdown][yaml]": {
+		"editor.rulers": [80],
+		"editor.defaultFormatter": "esbenp.prettier-vscode",
+		"editor.formatOnSave": true
 	}
 }

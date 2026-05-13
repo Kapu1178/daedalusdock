@@ -2,6 +2,7 @@
 	plane = FLOOR_PLANE
 	initial_gas = OPENTURF_DEFAULT_ATMOS
 	z_flags = Z_ATMOS_IN_UP|Z_ATMOS_OUT_UP
+
 	///negative for faster, positive for slower
 	var/slowdown = 0
 	var/footstep = null
@@ -168,6 +169,7 @@
 		slipper.Knockdown(knockdown_amount)
 		slipper.Paralyze(paralyze_amount)
 		slipper.release_all_grabs()
+		slipper.client?.give_award(/datum/award/achievement/slip, slipper)
 
 	if(buckled_obj)
 		buckled_obj.unbuckle_mob(slipper)

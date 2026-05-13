@@ -1,9 +1,11 @@
+TYPEINFO_DEF(/obj/vehicle/sealed/car/clowncar)
+	default_armor = list(BLUNT = 70, PUNCTURE = 40, SLASH = 0, LASER = 40, ENERGY = 0, BOMB = 30, BIO = 0, FIRE = 80, ACID = 80)
+
 /obj/vehicle/sealed/car/clowncar
 	name = "clown car"
 	desc = "How someone could even fit in there is byond me."
 	icon_state = "clowncar"
 	max_integrity = 150
-	armor = list(BLUNT = 70, PUNCTURE = 40, SLASH = 0, LASER = 40, ENERGY = 0, BOMB = 30, BIO = 0, FIRE = 80, ACID = 80)
 	enter_delay = 20
 	max_occupants = 50
 	movedelay = 0.6
@@ -73,18 +75,18 @@
 	. = ..()
 	UnregisterSignal(M, COMSIG_MOB_CLICKON)
 
-/obj/vehicle/sealed/car/clowncar/take_damage(damage_amount, damage_type = BRUTE, damage_flag = 0, sound_effect = 1, attack_dir)
+/obj/vehicle/sealed/car/clowncar/take_damage(damage_amount, damage_type = BRUTE, damage_flag = 0, sound_effect = 1, attack_dir, armor_penetration = 0, allow_break = TRUE)
 	. = ..()
 	if(prob(33))
 		visible_message(span_danger("[src] spews out a ton of space lube!"))
-		new /obj/effect/particle_effect/foam(loc) //YEET
+		new /obj/effect/particle_effect/fluid/foam(loc) //YEET
 
 /obj/vehicle/sealed/car/clowncar/attacked_by(obj/item/I, mob/living/user)
 	. = ..()
 	if(!istype(I, /obj/item/food/grown/banana))
 		return
 	var/obj/item/food/grown/banana/banana = I
-	atom_integrity += min(banana.seed.potency, max_integrity-atom_integrity)
+	atom_integrity += min(banana.cached_potency, max_integrity-atom_integrity)
 	to_chat(user, span_danger("You use the [banana] to repair the [src]!"))
 	qdel(banana)
 
@@ -149,8 +151,8 @@
 			var/datum/reagents/randomchems = new/datum/reagents(300)
 			randomchems.my_atom = src
 			randomchems.add_reagent(get_random_reagent_id(), 100)
-			var/datum/effect_system/foam_spread/foam = new
-			foam.set_up(200, loc, randomchems)
+			var/datum/effect_system/fluid_spread/foam/foam = new
+			foam.set_up(200, location = loc, carry = randomchems)
 			foam.start()
 		if(3)
 			visible_message(span_danger("[user] presses one of the colorful buttons on [src], and the clown car turns on its singularity disguise system."))
@@ -162,8 +164,8 @@
 			var/datum/reagents/funnychems = new/datum/reagents(300)
 			funnychems.my_atom = src
 			funnychems.add_reagent(/datum/reagent/consumable/superlaughter, 50)
-			var/datum/effect_system/smoke_spread/chem/smoke = new()
-			smoke.set_up(funnychems, 4)
+			var/datum/effect_system/fluid_spread/smoke/chem/smoke = new()
+			smoke.set_up(4, location = src, carry = funnychems)
 			smoke.attach(src)
 			smoke.start()
 		if(5)

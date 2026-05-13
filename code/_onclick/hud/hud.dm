@@ -63,6 +63,11 @@ GLOBAL_LIST_INIT(available_ui_styles, list(
 	var/datum/action_group/listed/listed_actions
 	var/list/floating_actions
 
+	var/atom/movable/screen/holomap/holomap_container
+	var/atom/movable/screen/vis_holder/vis_holder
+	// subtypes can override this to force a specific UI style
+	var/ui_style
+
 /datum/hud/New(mob/owner)
 	mymob = owner
 	mymob.hud_used = src
@@ -93,6 +98,9 @@ GLOBAL_LIST_INIT(available_ui_styles, list(
 		plane_master_controllers[controller_instance.name] = controller_instance
 
 	owner.overlay_fullscreen("see_through_darkness", /atom/movable/screen/fullscreen/see_through_darkness)
+
+	holomap_container = new(null, src)
+	vis_holder = new(null, src)
 
 	RegisterSignal(mymob, COMSIG_VIEWDATA_UPDATE, PROC_REF(on_viewdata_update))
 
@@ -246,6 +254,12 @@ GLOBAL_LIST_INIT(available_ui_styles, list(
 	if(pain)
 		screenmob.client.screen += pain
 
+	if(holomap_container)
+		screenmob.client.screen += holomap_container
+
+	if(vis_holder)
+		screenmob.client.screen += vis_holder
+
 	hud_version = display_hud_version
 	update_gunpoint(screenmob)
 	persistent_inventory_update(screenmob)
@@ -365,6 +379,7 @@ GLOBAL_LIST_INIT(available_ui_styles, list(
 	if(update_hud && mymob?.hud_used == src)
 		show_hud(hud_version)
 
+/// Handles dimming inventory slots that a mob can't equip items to in their current state
 /datum/hud/proc/update_locked_slots()
 	return
 
@@ -463,7 +478,7 @@ GLOBAL_LIST_INIT(available_ui_styles, list(
 	listed_actions.check_against_view()
 	palette_actions.check_against_view()
 	for(var/atom/movable/screen/movable/action_button/floating_button as anything in floating_actions)
-		var/list/current_offsets = screen_loc_to_offset(floating_button.screen_loc)
+		var/list/current_offsets = screen_loc_to_offset(floating_button.screen_loc, our_view)
 		// We set the view arg here, so the output will be properly hemm'd in by our new view
 		floating_button.screen_loc = offset_to_screen_loc(current_offsets[1], current_offsets[2], view = our_view)
 
@@ -474,6 +489,9 @@ GLOBAL_LIST_INIT(available_ui_styles, list(
 	floating_actions = list()
 	for(var/datum/action/action as anything in mymob.actions)
 		var/atom/movable/screen/movable/action_button/button = action.viewers[src]
+		if(!action.render_button)
+			continue
+
 		if(!button)
 			action.ShowTo(mymob)
 			button = action.viewers[src]

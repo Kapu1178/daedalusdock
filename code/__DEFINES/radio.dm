@@ -2,30 +2,30 @@
 
 //say based modes like binary are in living/say.dm
 
-#define RADIO_CHANNEL_COMMON "Common"
+#define RADIO_CHANNEL_COMMON "Local"
 #define RADIO_KEY_COMMON ";"
 
-#define RADIO_CHANNEL_SECURITY "Security"
+#define RADIO_CHANNEL_SECURITY "Mars"
 #define RADIO_KEY_SECURITY "s"
 #define RADIO_TOKEN_SECURITY ":s"
 
-#define RADIO_CHANNEL_ENGINEERING "Engineering"
+#define RADIO_CHANNEL_ENGINEERING "Daedalus"
 #define RADIO_KEY_ENGINEERING "e"
 #define RADIO_TOKEN_ENGINEERING ":e"
 
-#define RADIO_CHANNEL_COMMAND "Command"
-#define RADIO_KEY_COMMAND "c"
-#define RADIO_TOKEN_COMMAND ":c"
+#define RADIO_CHANNEL_FEDERATION "Federation"
+#define RADIO_KEY_FEDERATION "c"
+#define RADIO_TOKEN_FEDERATION ":c"
 
 #define RADIO_CHANNEL_SCIENCE "Science"
 #define RADIO_KEY_SCIENCE "n"
 #define RADIO_TOKEN_SCIENCE ":n"
 
-#define RADIO_CHANNEL_MEDICAL "Medical"
+#define RADIO_CHANNEL_MEDICAL "Aether"
 #define RADIO_KEY_MEDICAL "m"
 #define RADIO_TOKEN_MEDICAL ":m"
 
-#define RADIO_CHANNEL_SUPPLY "Supply"
+#define RADIO_CHANNEL_SUPPLY "Hermes"
 #define RADIO_KEY_SUPPLY "u"
 #define RADIO_TOKEN_SUPPLY ":u"
 
@@ -51,6 +51,8 @@
 #define RADIO_CHANNEL_CTF_GREEN "Green Team"
 #define RADIO_CHANNEL_CTF_YELLOW "Yellow Team"
 
+/// Used by radios to track how they're interacting with a channel.
+#define CHANNEL_STATUS_LISTENING (1<<0)
 
 #define MIN_FREE_FREQ 1201 // -------------------------------------------------
 // Frequencies are always odd numbers and range from 1201 to 1599.
@@ -107,6 +109,7 @@
 #define RADIO_AIRLOCK "airlock"
 #define RADIO_MAGNETS "magnets"
 #define RADIO_PDAMESSAGE "pdamessage"
+#define RADIO_PAGER_MESSAGE "pager_message"
 
 #define DEFAULT_SIGNALER_CODE 30
 

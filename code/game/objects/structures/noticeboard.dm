@@ -121,7 +121,7 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/noticeboard, 32)
 /obj/structure/noticeboard/hop
 	name = "Head of Personnel's Notice Board"
 	desc = "Important notices from the Head of Personnel."
-	req_access = list(ACCESS_HOP)
+	req_access = list(ACCESS_DELEGATE)
 
 /obj/structure/noticeboard/ce
 	name = "Chief Engineer's Notice Board"
@@ -129,8 +129,8 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/noticeboard, 32)
 	req_access = list(ACCESS_CE)
 
 /obj/structure/noticeboard/hos
-	name = "Head of Security's Notice Board"
-	desc = "Important notices from the Head of Security."
+	name = "Security Marshal's Notice Board"
+	desc = "Important notices from the Security Marshal."
 	req_access = list(ACCESS_HOS)
 
 /obj/structure/noticeboard/cmo
@@ -149,8 +149,8 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/noticeboard, 32)
 	req_access = list(ACCESS_QM)
 
 /obj/structure/noticeboard/staff
-	name = "Staff Notice Board"
-	desc = "Important notices from the heads of staff."
-	req_access = list(ACCESS_HEADS)
+	name = "Federation Notice Board"
+	desc = "Important notices from Federation."
+	req_access = list(ACCESS_FEDERATION)
 
 #undef MAX_NOTICES

@@ -338,7 +338,7 @@
 /obj/machinery/photocopier/proc/do_insertion(obj/item/object, mob/user)
 	object.forceMove(src)
 	to_chat(user, span_notice("You insert [object] into [src]."))
-	flick("photocopier1", src)
+	z_flick("photocopier1", src)
 
 /**
  * Called when someone hits the "remove item" button on the copier UI.
@@ -361,7 +361,7 @@
 /obj/machinery/photocopier/wrench_act(mob/living/user, obj/item/tool)
 	. = ..()
 	default_unfasten_wrench(user, tool)
-	return TOOL_ACT_TOOLTYPE_SUCCESS
+	return ITEM_INTERACT_SUCCESS
 
 /obj/machinery/photocopier/attackby(obj/item/O, mob/user, params)
 	if(istype(O, /obj/item/paper))

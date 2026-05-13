@@ -52,7 +52,7 @@
 
 	triggermine(AM)
 
-/obj/effect/mine/take_damage(damage_amount, damage_type, damage_flag, sound_effect, attack_dir)
+/obj/effect/mine/take_damage(damage_amount, damage_type, damage_flag, sound_effect, attack_dir, armor_penetration = 0, allow_break = TRUE)
 	. = ..()
 	triggermine()
 
@@ -209,6 +209,6 @@
 	playsound(loc, 'sound/machines/chime.ogg', 30, FALSE, -3)
 	var/obj/effect/mine/new_mine = new mine_type(get_turf(src))
 	visible_message(span_danger("\The [src] releases a puff of smoke, revealing \a [new_mine]!"))
-	var/obj/effect/particle_effect/smoke/poof = new (get_turf(src))
+	var/obj/effect/particle_effect/fluid/smoke/poof = new (get_turf(src))
 	poof.lifetime = 3
 	qdel(src)

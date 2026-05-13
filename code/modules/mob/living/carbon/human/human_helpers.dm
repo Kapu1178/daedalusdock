@@ -70,7 +70,7 @@
 	var/obj/item/modular_computer/tablet/pda/pda = wear_id
 	var/obj/item/card/id/id = wear_id
 	if(istype(wallet))
-		id = wallet.front_id
+		id = wallet.GetID()
 	if(istype(id))
 		. = id.registered_name
 	else if(istype(pda))
@@ -100,11 +100,6 @@
 
 /mob/living/carbon/human/can_use_guns(obj/item/G)
 	. = ..()
-	if(G.trigger_guard == TRIGGER_GUARD_NORMAL)
-		if(check_chunky_fingers())
-			balloon_alert(src, "fingers are too big!")
-			return FALSE
-
 	if(HAS_TRAIT(src, TRAIT_NOGUNS))
 		to_chat(src, span_warning("You can't bring yourself to use a ranged weapon!"))
 		return FALSE
@@ -118,18 +113,6 @@
 	. = ..()
 	. += "[dna.species.type]"
 
-///Returns death message for mob examine text
-/mob/living/carbon/human/proc/generate_death_examine_text()
-	var/mob/dead/observer/ghost = get_ghost(TRUE, TRUE)
-	var/t_He = p_they(TRUE)
-	var/t_his = p_their()
-	var/t_is = p_are()
-	//This checks to see if the body is revivable
-	if(key || !getorgan(/obj/item/organ/brain) || ghost?.can_reenter_corpse)
-		return span_deadsay("[t_He] [t_is] limp and unresponsive; there are no signs of life...")
-	else
-		return span_deadsay("[t_He] [t_is] limp and unresponsive; there are no signs of life and [t_his] soul has departed...")
-
 ///copies over clothing preferences like underwear to another human
 /mob/living/carbon/human/proc/copy_clothing_prefs(mob/living/carbon/human/destination)
 	destination.underwear = underwear
@@ -141,7 +124,7 @@
 
 /// Fully randomizes everything according to the given flags.
 /mob/living/carbon/human/proc/randomize_human_appearance(flags = ALL)
-	var/datum/preferences/preferences = new
+	var/datum/preferences/preferences = new(new /datum/client_interface)
 
 	for (var/datum/preference/preference as anything in get_preferences_in_priority_order())
 		if(istype(preference, /datum/preference/name/real_name) && !(flags & RANDOMIZE_NAME))

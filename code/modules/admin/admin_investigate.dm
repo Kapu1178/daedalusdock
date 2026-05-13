@@ -1,8 +1,14 @@
 /atom/proc/investigate_log(message, subject)
 	if(!message || !subject)
 		return
-	var/F = file("[GLOB.log_directory]/[subject].html")
-	WRITE_FILE(F, "[time_stamp()] [REF(src)] ([x],[y],[z]) || [src] [message]<br>")
+
+	var/source = "[src]"
+
+	if(isliving(src))
+		var/mob/living/source_mob = src
+		source += " ([source_mob.ckey ? source_mob.ckey : "*no key*"])"
+
+	rustg_file_append("[time_stamp("YYYY-MM-DD hh:mm:ss")] [REF(src)] ([x],[y],[z]) || [source] [message]<br>", "[GLOB.log_directory]/[subject].html")
 
 /client/proc/investigate_show()
 	set name = "Investigate"
@@ -49,12 +55,15 @@
 
 	selected = replacetext(selected, " (empty)", "")
 
+	// Eventually kill this, It's now redundant.
 	if(selected == "notes, memos, watchlist" && check_rights(R_ADMIN))
 		browse_messages()
 		return
 
-	var/F = file("[GLOB.log_directory]/[selected].html")
-	if(!fexists(F))
+	var/filepath = "[GLOB.log_directory]/[selected].html"
+	if(!fexists(filepath))
 		to_chat(src, span_danger("No [selected] logfile was found."), confidential = TRUE)
 		return
-	src << browse(F,"window=investigate[selected];size=800x300")
+
+	var/content = "<!DOCTYPE html><html>[file2text(filepath)]</html>"
+	src << browse(content,"window=investigate[selected];size=800x300")

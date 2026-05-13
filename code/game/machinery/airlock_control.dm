@@ -24,11 +24,11 @@
 			close(TRUE)
 
 		if("unlock")
-			locked = FALSE
+			unbolt()
 			update_appearance()
 
 		if("lock")
-			locked = TRUE
+			bolt()
 			update_appearance()
 
 		if("secure_open")
@@ -43,20 +43,20 @@
 
 /obj/machinery/door/airlock/proc/secure_close()
 	set waitfor = FALSE
-	locked = FALSE
+	unbolt()
 	close(TRUE)
-	locked = TRUE
 	sleep(2)
+	bolt()
 	update_appearance()
 	send_status()
 
 /obj/machinery/door/airlock/proc/secure_open()
 	set waitfor = FALSE
-	locked = FALSE
+	unbolt()
 	update_appearance()
 	sleep(2)
 	open(TRUE)
-	locked = TRUE
+	bolt()
 	update_appearance()
 	send_status()
 
@@ -139,7 +139,7 @@
 	))
 
 	radio_connection.post_signal(signal, range = AIRLOCK_CONTROL_RANGE, filter = RADIO_AIRLOCK)
-	flick("airlock_sensor_cycle", src)
+	z_flick("airlock_sensor_cycle", src)
 
 /obj/machinery/airlock_sensor/process()
 	if(on)

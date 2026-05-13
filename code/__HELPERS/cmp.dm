@@ -16,6 +16,11 @@
 /proc/cmp_name_dsc(atom/a, atom/b)
 	return sorttext(a.name, b.name)
 
+/proc/cmp_name_or_type_asc(atom/a, atom/b)
+	var/comp_a = a.name || "[a.type]"
+	var/comp_b = b.name || "[b.type]"
+	return sorttext(comp_b, comp_a)
+
 GLOBAL_VAR_INIT(cmp_field, "name")
 /proc/cmp_records_asc(datum/data/record/a, datum/data/record/b)
 	return sorttext(b.fields[GLOB.cmp_field], a.fields[GLOB.cmp_field])
@@ -95,18 +100,12 @@ GLOBAL_VAR_INIT(cmp_field, "name")
 	else
 		return A.layer - B.layer
 
-/proc/cmp_advdisease_resistance_asc(datum/disease/advance/A, datum/disease/advance/B)
-	return A.totalResistance() - B.totalResistance()
+/proc/cmp_advdisease_resistance_asc(datum/pathogen/advance/A, datum/pathogen/advance/B)
+	return A.properties[PATHOGEN_PROP_RESISTANCE] - B.properties[PATHOGEN_PROP_RESISTANCE]
 
 /proc/cmp_quirk_asc(datum/quirk/A, datum/quirk/B)
-	var/a_sign = SIGN(initial(A.value) * -1)
-	var/b_sign = SIGN(initial(B.value) * -1)
-
-	// Neutral traits go last.
-	if(a_sign == 0)
-		a_sign = 2
-	if(b_sign == 0)
-		b_sign = 2
+	var/a_sign = SIGN(initial(A.quirk_genre) * -1)
+	var/b_sign = SIGN(initial(B.quirk_genre) * -1)
 
 	var/a_name = initial(A.name)
 	var/b_name = initial(B.name)

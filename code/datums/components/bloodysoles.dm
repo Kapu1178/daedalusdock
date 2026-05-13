@@ -30,7 +30,7 @@
 	parent_atom = parent
 
 	RegisterSignal(parent, COMSIG_ITEM_EQUIPPED, PROC_REF(on_equip))
-	RegisterSignal(parent, COMSIG_ITEM_DROPPED, PROC_REF(on_drop))
+	RegisterSignal(parent, COMSIG_ITEM_UNEQUIPPED, PROC_REF(on_drop))
 	RegisterSignal(parent, COMSIG_COMPONENT_CLEAN_ACT, PROC_REF(on_clean))
 
 /**
@@ -87,6 +87,9 @@
  * Run to equally share the blood between us and a decal
  */
 /datum/component/bloodysoles/proc/share_blood(obj/effect/decal/cleanable/pool)
+	if(HAS_TRAIT(pool, TRAIT_MOVABLE_FLUORESCENT))
+		return
+
 	// Share the blood between our boots and the blood pool
 	var/total_bloodiness = pool.bloodiness + bloody_shoes[pool.blood_color]
 
@@ -99,7 +102,17 @@
 	if(HAS_TRAIT(parent_atom, TRAIT_LIGHT_STEP)) //the character is agile enough to don't mess their clothing and hands just from one blood splatter at floor
 		return TRUE
 
-	parent_atom.add_blood_DNA(pool.return_blood_DNA())
+	if(ishuman(parent_atom))
+		var/bloody_slots = ITEM_SLOT_OCLOTHING|ITEM_SLOT_ICLOTHING|ITEM_SLOT_FEET
+		var/mob/living/carbon/human/to_bloody = parent_atom
+		if(to_bloody.body_position == LYING_DOWN)
+			bloody_slots |= ITEM_SLOT_HEAD|ITEM_SLOT_MASK|ITEM_SLOT_GLOVES
+
+		to_bloody.add_blood_DNA_to_items(pool.return_blood_DNA(), bloody_slots)
+
+	else
+		parent_atom.add_blood_DNA(pool.return_blood_DNA())
+
 	if(pool.bloodiness <= 0)
 		qdel(pool)
 
@@ -110,6 +123,8 @@
  */
 /datum/component/bloodysoles/proc/find_pool_by_blood_state(turf/turfLoc, typeFilter = null, blood_print)
 	for(var/obj/effect/decal/cleanable/blood/pool in turfLoc)
+		if(HAS_TRAIT(pool, TRAIT_MOVABLE_FLUORESCENT))
+			continue
 		if(pool.blood_color == last_blood_color && pool.blood_print == blood_print && (!typeFilter || istype(pool, typeFilter)))
 			return pool
 
@@ -221,6 +236,9 @@
 	SIGNAL_HANDLER
 
 	if(QDELETED(wielder) || is_obscured())
+		return
+
+	if(astype(pool, /obj/effect/decal/cleanable/blood)?.is_dry)
 		return
 
 	if(istype(pool, /obj/effect/decal/cleanable/blood/footprints) && pool.blood_color == last_blood_color)

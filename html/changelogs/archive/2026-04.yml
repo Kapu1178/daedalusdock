@@ -1,0 +1,10 @@
+2026-04-21:
+  Kapu1178:
+  - rscadd: Slapcraftable splints.
+  - rscadd: Slapcrafting hints are now commutative.
+2026-04-22:
+  Kapu1178:
+  - refactor: Rewrote Traumatic Shock stages.
+  - rscadd: Missed breaths is now a symptom of high Traumatic Shock.
+  - bugfix: Hypnoflash victims can be hypnotized whilst sleeping again.
+  - bugfix: You can no longer hug or kick yourself.

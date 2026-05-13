@@ -97,6 +97,9 @@
 /// log usage of tools
 /datum/config_entry/flag/log_tools
 
+/// log graffiti
+/datum/config_entry/flag/log_graffiti
+
 /// log game events
 /datum/config_entry/flag/log_game
 
@@ -296,6 +299,8 @@
 /datum/config_entry/string/discordbotcommandprefix
 	default = "?"
 
+/datum/config_entry/string/panic_bunker_discord_link
+
 /datum/config_entry/string/roundstatsurl
 
 /datum/config_entry/string/gamelogurl
@@ -401,10 +406,6 @@
 /// Flag to enable the whitelist, only allowing registered players to enter the server
 /datum/config_entry/flag/panic_bunker_discord_require
 
-/// String to show the user if they were denied access due to the WAS
-/datum/config_entry/string/panic_bunker_discord_register_message
-	default = "Sorry but this server requires players to link their Discord account before playing! Please enter the following command, including the token, into this Server's Discord Guild."
-
 /datum/config_entry/string/panic_bunker_message
 	default = "Sorry but the server is currently not accepting connections from never before seen players."
 
@@ -415,8 +416,6 @@
 	min_val = 0
 
 /datum/config_entry/flag/irc_first_connection_alert // do we notify the irc channel when somebody is connecting for the first time?
-
-/datum/config_entry/flag/check_randomizer
 
 /datum/config_entry/string/ipintel_email
 
@@ -466,6 +465,10 @@
 /datum/config_entry/number/client_warn_version
 	default = null
 	min_val = 500
+
+/datum/config_entry/number/client_warn_build
+	default = null
+	min_val = 0
 
 /datum/config_entry/string/client_warn_message
 	default = "Your version of byond may have issues or be blocked from accessing this server in the future."
@@ -583,6 +586,12 @@
 /datum/config_entry/flag/reopen_roundstart_suicide_roles_command_report
 
 /datum/config_entry/flag/auto_profile
+
+/datum/config_entry/number/drift_dump_threshold
+	default = 4 SECONDS
+
+/datum/config_entry/number/drift_profile_delay
+	default = 15 SECONDS
 
 /datum/config_entry/string/centcom_ban_db // URL for the CentCom Galactic Ban DB API
 

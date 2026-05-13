@@ -58,20 +58,19 @@
 
 #define PROCESS_AO(TARGET, AO_VAR, NEIGHBORS, ALPHA, SHADOWER) \
 	if (permit_ao && NEIGHBORS != AO_ALL_NEIGHBORS) { \
-		if (NEIGHBORS != AO_ALL_NEIGHBORS) { \
-			var/image/I = cache["ao-[NEIGHBORS]|[pixel_x]/[pixel_y]/[pixel_z]/[pixel_w]|[ALPHA]|[SHADOWER]"]; \
-			if (!I) { \
-				/* This will also add the image to the cache. */ \
-				I = make_ao_image(NEIGHBORS, TARGET.pixel_x, TARGET.pixel_y, TARGET.pixel_z, TARGET.pixel_w, ALPHA, SHADOWER) \
-			} \
-			AO_VAR = I; \
+		var/image/I = cache["ao-[NEIGHBORS]|[pixel_x]/[pixel_y]/[pixel_z]/[pixel_w]|[ALPHA]|[SHADOWER]"]; \
+		if (!I) { \
+			/* This will also add the image to the cache. */ \
+			I = make_ao_image(NEIGHBORS, TARGET.pixel_x, TARGET.pixel_y, TARGET.pixel_z, TARGET.pixel_w, ALPHA, SHADOWER); \
 		} \
-	} \
-	TARGET.add_overlay(AO_VAR, TRUE);
+		AO_VAR = I; \
+		TARGET.add_overlay(AO_VAR); \
+	}
 
 #define CUT_AO(TARGET, AO_VAR) \
 	if (AO_VAR) { \
-		TARGET.cut_overlay(AO_VAR, TRUE); \
+		TARGET.cut_overlay(AO_VAR); \
+		AO_VAR = null; \
 	}
 
 /proc/make_ao_image(corner, px = 0, py = 0, pz = 0, pw = 0, alpha, shadower)
@@ -103,7 +102,6 @@
 
 	/**
 	 * Current ambient occlusion overlays.
-	 * Tracked here so that they can be reapplied during update_overlays()
 	 */
 	var/tmp/image/ao_overlay
 
@@ -158,11 +156,6 @@
 		PROCESS_AO(shadower, ao_overlay_mimic, ao_junction_mimic, Z_AO_ALPHA, TRUE)
 	if (AO_TURF_CHECK(src) && !(z_flags & Z_MIMIC_NO_AO))
 		PROCESS_AO(src, ao_overlay, ao_junction, WALL_AO_ALPHA, FALSE)
-
-/turf/update_overlays()
-	. = ..()
-	if(permit_ao && ao_overlay)
-		. += ao_overlay
 
 /atom/movable/openspace/multiplier/update_overlays()
 	. = ..()

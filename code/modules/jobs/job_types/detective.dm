@@ -1,21 +1,20 @@
 /datum/job/detective
 	title = JOB_DETECTIVE
-	description = "Investigate crimes, gather evidence, perform interrogations, \
-		look badass, smoke cigarettes."
-	auto_deadmin_role_flags = DEADMIN_POSITION_SECURITY
-	department_head = list(JOB_HEAD_OF_SECURITY)
+	description = "Investigate crimes. Solve crimes. Cover up crimes."
 	faction = FACTION_STATION
+
+	pinpad_key = "columbo"
+
 	total_positions = 1
 	spawn_positions = 1
-	supervisors = "the head of security"
-	selection_color = "#601c1c"
+
+	supervisors = "nobody"
 	minimal_player_age = 7
 	exp_requirements = 300
 	exp_required_type = EXP_TYPE_CREW
 	exp_granted_type = EXP_TYPE_CREW
 
 	employers = list(
-		/datum/employer/contractor,
 		/datum/employer/none
 	)
 
@@ -24,24 +23,17 @@
 			SPECIES_HUMAN = /datum/outfit/job/detective,
 			SPECIES_TESHARI = /datum/outfit/job/detective,
 			SPECIES_VOX = /datum/outfit/job/detective,
-			SPECIES_PLASMAMAN = /datum/outfit/job/detective/plasmaman,
-		),
-		"Forensic Technician" = list(
-			SPECIES_HUMAN = /datum/outfit/job/detective/forensic,
-			SPECIES_TESHARI = /datum/outfit/job/detective/forensic,
-			SPECIES_PLASMAMAN = /datum/outfit/job/detective/forensic/plasmaman,
 		),
 	)
 
 	departments_list = list(
-		/datum/job_department/security,
-		)
+		/datum/job_department/service,
+	)
 
-	paycheck = PAYCHECK_MEDIUM
-	paycheck_department = ACCOUNT_STATION_MASTER
+	paycheck = PAYCHECK_ASSISTANT * 2.5 // You start barely wealthier than the riff-raff.
 
-	mind_traits = list(TRAIT_DONUT_LOVER)
 	liver_traits = list(TRAIT_LAW_ENFORCEMENT_METABOLISM)
+	mind_traits = list(TRAIT_DICK)
 
 	mail_goodies = list(
 		/obj/item/storage/fancy/cigarettes = 25,
@@ -53,27 +45,33 @@
 		/obj/item/ammo_box/c38/trac = 5,
 	)
 
-	family_heirlooms = list(/obj/item/reagent_containers/food/drinks/bottle/whiskey)
+	family_heirlooms = list(/obj/item/reagent_containers/cup/glass/bottle/whiskey)
 	rpg_title = "Thiefcatcher"
 	job_flags = JOB_ANNOUNCE_ARRIVAL | JOB_CREW_MANIFEST | JOB_EQUIP_RANK | JOB_CREW_MEMBER | JOB_NEW_PLAYER_JOINABLE | JOB_REOPEN_ON_ROUNDSTART_LOSS | JOB_ASSIGN_QUIRKS | JOB_CAN_BE_INTERN
 
 
+/datum/job/detective/after_spawn(mob/living/spawned, client/player_client)
+	. = ..()
+	spawned.apply_status_effect(/datum/status_effect/skill_mod/detective)
+
+/datum/job/detective/before_roundstart_possess(mob/living/spawning)
+	. = ..()
+	spawning.Sleeping(10 SECONDS)
+
 /datum/outfit/job/detective
-	name = "Detective"
+	name = JOB_DETECTIVE
 	jobtype = /datum/job/detective
 
-	id_trim = /datum/id_trim/job/detective
+	id_template = /datum/access_template/job/detective
 	uniform = /obj/item/clothing/under/rank/security/detective
 	suit = /obj/item/clothing/suit/det_suit
 	belt = /obj/item/modular_computer/tablet/pda/detective
-	ears = /obj/item/radio/headset/headset_sec/alt
 	gloves = /obj/item/clothing/gloves/forensic
 	head = /obj/item/clothing/head/fedora/det_hat
-	mask = /obj/item/clothing/mask/cigarette
 	neck = /obj/item/clothing/neck/tie/detective
-	shoes = /obj/item/clothing/shoes/sneakers/brown
+	shoes = /obj/item/clothing/shoes/laceup
 	l_pocket = /obj/item/toy/crayon/white
-	r_pocket = /obj/item/lighter
+	r_pocket = /obj/item/storage/fancy/cigarettes/dromedaryco
 
 	l_hand = /obj/item/storage/briefcase/crimekit
 
@@ -81,16 +79,6 @@
 		/obj/item/clothing/glasses/sunglasses,
 		/obj/item/gun/ballistic/revolver/detective,
 		)
-	implants = list(/obj/item/implant/mindshield)
-
-/datum/outfit/job/detective/plasmaman
-	name = "Detective (Plasmaman)"
-
-	uniform = /obj/item/clothing/under/plasmaman/enviroslacks
-	gloves = /obj/item/clothing/gloves/color/plasmaman/white
-	head = /obj/item/clothing/head/helmet/space/plasmaman/white
-	mask = /obj/item/clothing/mask/breath
-	r_hand = /obj/item/tank/internals/plasmaman/belt/full
 
 /datum/outfit/job/detective/post_equip(mob/living/carbon/human/H, visualsOnly = FALSE)
 	..()
@@ -109,10 +97,3 @@
 	gloves = /obj/item/clothing/gloves/color/latex
 	head = /obj/item/clothing/head/flatcap
 	shoes = /obj/item/clothing/shoes/laceup
-
-/datum/outfit/job/detective/forensic/plasmaman
-	name = "Forensic Technician (Plasmaman)"
-
-	uniform = /obj/item/clothing/under/plasmaman/enviroslacks
-	gloves = /obj/item/clothing/gloves/color/plasmaman/white
-	head = /obj/item/clothing/head/helmet/space/plasmaman/white

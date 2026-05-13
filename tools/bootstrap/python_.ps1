@@ -34,6 +34,7 @@ if ($Env:TG_BOOTSTRAP_CACHE) {
 $PythonVersion = ExtractVersion -Path "$Bootstrap/../../dependencies.sh" -Key "PYTHON_VERSION"
 $PythonDir = "$Cache/python-$PythonVersion"
 $PythonExe = "$PythonDir/python.exe"
+$PipExe = "$PythonDir/Scripts/pip.exe"
 $Log = "$Cache/last-command.log"
 
 # Download and unzip a portable version of Python
@@ -49,15 +50,20 @@ if (!(Test-Path $PythonExe -PathType Leaf)) {
 
 	[System.IO.Compression.ZipFile]::ExtractToDirectory($Archive, $PythonDir)
 
+	$PythonVersionArray = $PythonVersion.Split(".")
+	$PythonVersionString = "python$($PythonVersionArray[0])$($PythonVersionArray[1])"
+	Write-Output "Generating PATH descriptor."
+	New-Item "$Cache/$PythonVersionString._pth" | Out-Null
+	Set-Content "$Cache/$PythonVersionString._pth" "$PythonVersionString.zip`n.`n..\..\..`nimport site`n"
 	# Copy a ._pth file without "import site" commented, so pip will work
-	Copy-Item "$Bootstrap/python37._pth" $PythonDir `
+	Copy-Item "$Cache/$PythonVersionString._pth" $PythonDir `
 		-ErrorAction Stop
 
 	Remove-Item $Archive
 }
 
 # Install pip
-if (!(Test-Path "$PythonDir/Scripts/pip.exe")) {
+if (!(Test-Path $PipExe)) {
 	$host.ui.RawUI.WindowTitle = "Downloading Pip..."
 
 	Invoke-WebRequest "https://bootstrap.pypa.io/get-pip.py" `
@@ -77,7 +83,7 @@ if (!(Test-Path "$PythonDir/Scripts/pip.exe")) {
 if (!(Test-Path "$PythonDir/requirements.txt") -or ((Get-FileHash "$Tools/requirements.txt").hash -ne (Get-FileHash "$PythonDir/requirements.txt").hash)) {
 	$host.ui.RawUI.WindowTitle = "Updating dependencies..."
 
-	& $PythonExe -m pip install -U pip -r "$Tools/requirements.txt"
+	& $PipExe install -U pip -r "$Tools/requirements.txt"
 	if ($LASTEXITCODE -ne 0) {
 		exit $LASTEXITCODE
 	}

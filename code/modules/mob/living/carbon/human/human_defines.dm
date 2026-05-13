@@ -5,7 +5,20 @@
 	icon = 'icons/mob/human.dmi'
 	icon_state = "human_basic"
 	appearance_flags = KEEP_TOGETHER|TILE_BOUND|PIXEL_SCALE|LONG_GLIDE
-	hud_possible = list(HEALTH_HUD,STATUS_HUD,ID_HUD,WANTED_HUD,IMPLOYAL_HUD,IMPCHEM_HUD,IMPTRACK_HUD,ANTAG_HUD,GLAND_HUD,SENTIENT_DISEASE_HUD,FAN_HUD)
+	flags_1 = parent_type::flags_1 | PREVENT_CONTENTS_EXPLOSION_1
+
+	hud_possible = list(
+		HEALTH_HUD = 'icons/mob/huds/med_hud.dmi',
+		STATUS_HUD = 'icons/mob/huds/hud.dmi',
+		ID_HUD = 'icons/mob/huds/hud.dmi',
+		WANTED_HUD = 'icons/mob/huds/hud.dmi',
+		IMPLOYAL_HUD = 'icons/mob/huds/hud.dmi',
+		IMPCHEM_HUD = 'icons/mob/huds/hud.dmi',
+		IMPTRACK_HUD = 'icons/mob/huds/hud.dmi',
+		GLAND_HUD = 'icons/mob/huds/hud.dmi',
+		SENTIENT_PATHOGEN_HUD = 'icons/mob/huds/hud.dmi',
+	)
+
 	hud_type = /datum/hud/human
 	//pressure_resistance = 25
 	can_buckle = TRUE
@@ -34,7 +47,7 @@
 	var/eye_color_heterochromatic = FALSE
 	var/sclera_color = ""
 
-	var/skin_tone = "caucasian1" //Skin tone
+	var/skin_tone = "Fjällröker" //Skin tone
 
 	var/lip_style = null //no lipstick by default- arguably misleading, as it could be used for general makeup
 	var/lip_color = "white"
@@ -46,7 +59,6 @@
 	var/underwear_color = "#000000"
 	var/undershirt = "Nude" //Which undershirt the player wants
 	var/socks = "Nude" //Which socks the player wants
-	var/backpack = DBACKPACK //Which backpack type the player has chosen.
 	var/jumpsuit_style = PREF_SUIT //suit/skirt
 
 	//Equipment slots
@@ -88,3 +100,5 @@
 
 	///A lazylist of preference-applied appearance mods present on this human. Type:Instance
 	var/list/appearance_mods
+
+	var/list/time_of_death_stats

@@ -38,7 +38,7 @@ LINEN BINS
 		dying_key = DYE_REGISTRY_DOUBLE_BEDSHEET
 
 /obj/item/bedsheet/attack_self(mob/living/user)
-	if(!user.CanReach(src)) //No telekenetic grabbing.
+	if(!IsReachableBy(user)) //No telekenetic grabbing.
 		return
 	if(!user.dropItemToGround(src))
 		return
@@ -170,11 +170,11 @@ LINEN BINS
 	dream_messages = list("authority", "a silvery ID", "healing", "life", "surgery", "a cat", "the medical director")
 
 /obj/item/bedsheet/hos
-	name = "head of security's bedsheet"
+	name = "security marshal's bedsheet"
 	desc = "It is decorated with a shield emblem. While crime doesn't sleep, you do, but you are still THE LAW!"
 	icon_state = "sheethos"
 	inhand_icon_state = "sheethos"
-	dream_messages = list("authority", "a silvery ID", "handcuffs", "a baton", "a flashbang", "sunglasses", "the head of security")
+	dream_messages = list("authority", "a silvery ID", "handcuffs", "a baton", "a flashbang", "sunglasses", "the security marshal")
 
 /obj/item/bedsheet/hop
 	name = "head of personnel's bedsheet"
@@ -549,17 +549,17 @@ LINEN BINS
 		return FALSE
 	if(amount)
 		to_chat(user, span_warning("The [src] must be empty first!"))
-		return TOOL_ACT_TOOLTYPE_SUCCESS
+		return ITEM_INTERACT_SUCCESS
 	if(tool.use_tool(src, user, 0.5 SECONDS, volume=50))
 		to_chat(user, span_notice("You disassemble the [src]."))
 		new /obj/item/stack/rods(loc, 2)
 		qdel(src)
-		return TOOL_ACT_TOOLTYPE_SUCCESS
+		return ITEM_INTERACT_SUCCESS
 
 /obj/structure/bedsheetbin/wrench_act(mob/living/user, obj/item/tool)
 	. = ..()
 	default_unfasten_wrench(user, tool, time = 0.5 SECONDS)
-	return TOOL_ACT_TOOLTYPE_SUCCESS
+	return ITEM_INTERACT_SUCCESS
 
 /obj/structure/bedsheetbin/attackby(obj/item/I, mob/user, params)
 	if(istype(I, /obj/item/bedsheet))

@@ -539,8 +539,8 @@
 		var/prev_lockcharge = R.lockcharge
 		R.SetLockdown(TRUE)
 		R.set_anchored(TRUE)
-		var/datum/effect_system/smoke_spread/smoke = new
-		smoke.set_up(1, R.loc)
+		var/datum/effect_system/fluid_spread/smoke/smoke = new
+		smoke.set_up(1, location = R.loc)
 		smoke.start()
 		sleep(2)
 		for(var/i in 1 to 4)
@@ -550,17 +550,15 @@
 			R.SetLockdown(FALSE)
 		R.set_anchored(FALSE)
 		R.notransform = FALSE
-		R.resize = 2
 		R.hasExpanded = TRUE
-		R.update_transform()
+		R.update_transform(2)
 
 /obj/item/borg/upgrade/expand/deactivate(mob/living/silicon/robot/R, user = usr)
 	. = ..()
 	if (.)
 		if (R.hasExpanded)
 			R.hasExpanded = FALSE
-			R.resize = 0.5
-			R.update_transform()
+			R.update_transform(0.5)
 
 /obj/item/borg/upgrade/rped
 	name = "engineering cyborg RPED"

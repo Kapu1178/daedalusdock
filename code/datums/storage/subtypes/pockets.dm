@@ -2,7 +2,9 @@
 	max_slots = 2
 	max_specific_storage = WEIGHT_CLASS_SMALL
 	max_total_storage = 50
-	rustle_sound = FALSE
+	open_sound = null
+	rustle_sound = null
+	close_sound = null
 
 /datum/storage/pockets/attempt_insert(obj/item/to_insert, mob/user, override, force)
 	. = ..()
@@ -149,9 +151,9 @@
 
 /datum/storage/pockets/helmet/New()
 	. = ..()
-	set_holdable(list(/obj/item/reagent_containers/food/drinks/bottle/vodka,
-					  /obj/item/reagent_containers/food/drinks/bottle/molotov,
-					  /obj/item/reagent_containers/food/drinks/drinkingglass,
+	set_holdable(list(/obj/item/reagent_containers/cup/glass/bottle/vodka,
+					  /obj/item/reagent_containers/cup/glass/bottle/molotov,
+					  /obj/item/reagent_containers/cup/glass/drinkingglass,
 					  /obj/item/ammo_box/a762))
 
 

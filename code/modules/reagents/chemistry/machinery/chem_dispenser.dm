@@ -71,7 +71,6 @@
 			. += span_notice("It looks like you can <b>pry</b> out one of the cartridges.")
 		else
 			. += "It has space for [maximum_cartridges] cartridges."
-	. += span_notice("Use <b>RMB</b> to eject a stored beaker.")
 
 /obj/machinery/chem_dispenser/on_set_is_operational(old_value)
 	if(old_value) //Turned off
@@ -138,11 +137,11 @@
 
 	switch(severity)
 		if(EXPLODE_DEVASTATE)
-			SSexplosions.high_mov_atom += beaker
+			EX_ACT(beaker, EXPLODE_DEVASTATE)
 		if(EXPLODE_HEAVY)
-			SSexplosions.med_mov_atom += beaker
+			EX_ACT(beaker, EXPLODE_HEAVY)
 		if(EXPLODE_LIGHT)
-			SSexplosions.low_mov_atom += beaker
+			EX_ACT(beaker, EXPLODE_LIGHT)
 
 /obj/machinery/chem_dispenser/handle_atom_del(atom/A)
 	..()
@@ -171,12 +170,12 @@
 	var/beakerCurrentVolume = 0
 	if(beaker && beaker.reagents && beaker.reagents.reagent_list.len)
 		for(var/datum/reagent/R in beaker.reagents.reagent_list)
-			beakerContents.Add(list(list("name" = R.name, "volume" = round(R.volume, 0.01)))) // list in a list because Byond merges the first list...
+			beakerContents.Add(list(list("name" = R.name, "volume" = round(R.volume, CHEMICAL_VOLUME_ROUNDING)))) // list in a list because Byond merges the first list...
 			beakerCurrentVolume += R.volume
 	data["beakerContents"] = beakerContents
 
 	if (beaker)
-		data["beakerCurrentVolume"] = round(beakerCurrentVolume, 0.01)
+		data["beakerCurrentVolume"] = round(beakerCurrentVolume, CHEMICAL_VOLUME_ROUNDING)
 		data["beakerMaxVolume"] = beaker.volume
 		data["beakerTransferAmounts"] = beaker.possible_transfer_amounts
 	else
@@ -249,7 +248,7 @@
 /obj/machinery/chem_dispenser/wrench_act(mob/living/user, obj/item/tool)
 	. = ..()
 	default_unfasten_wrench(user, tool)
-	return TOOL_ACT_TOOLTYPE_SUCCESS
+	return ITEM_INTERACT_SUCCESS
 
 /obj/machinery/chem_dispenser/attackby(obj/item/I, mob/living/user, params)
 	if(default_deconstruction_screwdriver(user, icon_state, icon_state, I))

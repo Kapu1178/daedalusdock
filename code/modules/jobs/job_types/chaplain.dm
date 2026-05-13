@@ -2,36 +2,34 @@
 	title = JOB_CHAPLAIN
 	description = "Hold services and funerals, cremate people, preach your \
 		religion, protect the crew against cults."
+
 	department_head = list(JOB_HEAD_OF_PERSONNEL)
 	faction = FACTION_STATION
+
+	pinpad_key = "falseprophet"
+
 	total_positions = 1
 	spawn_positions = 1
-	supervisors = "the head of personnel"
 	exp_granted_type = EXP_TYPE_CREW
 
 	employers = list(
-		/datum/employer/contractor,
 		/datum/employer/none
 	)
 
 	outfits = list(
 		"Default" = list(
 			SPECIES_HUMAN = /datum/outfit/job/chaplain,
-			SPECIES_PLASMAMAN = /datum/outfit/job/chaplain/plasmaman,
 		),
 	)
-
-	paycheck = PAYCHECK_EASY
-	paycheck_department = ACCOUNT_STATION_MASTER
 
 	departments_list = list(
 		/datum/job_department/service,
 		)
 
-	family_heirlooms = list(/obj/item/toy/windup_toolbox, /obj/item/reagent_containers/food/drinks/bottle/holywater)
+	family_heirlooms = list(/obj/item/toy/windup_toolbox, /obj/item/reagent_containers/cup/glass/bottle/holywater)
 
 	mail_goodies = list(
-		/obj/item/reagent_containers/food/drinks/bottle/holywater = 30,
+		/obj/item/reagent_containers/cup/glass/bottle/holywater = 30,
 		/obj/item/toy/plush/awakenedplushie = 10,
 		/obj/item/grenade/chem_grenade/holy = 5,
 		/obj/item/toy/plush/narplush = 2,
@@ -121,7 +119,7 @@
 	name = "Chaplain"
 	jobtype = /datum/job/chaplain
 
-	id_trim = /datum/id_trim/job/chaplain
+	id_template = /datum/access_template/job/chaplain
 	uniform = /obj/item/clothing/under/rank/civilian/chaplain
 	backpack_contents = list(
 		/obj/item/camera/spooky = 1,
@@ -130,17 +128,6 @@
 	belt = /obj/item/modular_computer/tablet/pda/chaplain
 	ears = /obj/item/radio/headset/headset_srv
 
-	backpack = /obj/item/storage/backpack/cultpack
-	satchel = /obj/item/storage/backpack/cultpack
+	back = /obj/item/storage/backpack/cultpack
 
 	chameleon_extras = /obj/item/stamp/chap
-	skillchips = list(/obj/item/skillchip/entrails_reader)
-
-/datum/outfit/job/chaplain/plasmaman
-	name = "Chaplain (Plasmaman)"
-
-	uniform = /obj/item/clothing/under/plasmaman/chaplain
-	gloves = /obj/item/clothing/gloves/color/plasmaman/black
-	head = /obj/item/clothing/head/helmet/space/plasmaman/chaplain
-	mask = /obj/item/clothing/mask/breath
-	r_hand = /obj/item/tank/internals/plasmaman/belt/full

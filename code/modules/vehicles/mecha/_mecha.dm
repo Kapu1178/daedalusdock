@@ -17,13 +17,15 @@
  * Or are used to call action() on equipped gear
  * Cooldown for gear is on the mech because exploits
  */
+TYPEINFO_DEF(/obj/vehicle/sealed/mecha)
+	default_armor = list(BLUNT = 20, PUNCTURE = 10, SLASH = 0, LASER = 0, ENERGY = 0, BOMB = 10, BIO = 0, FIRE = 100, ACID = 100)
+
 /obj/vehicle/sealed/mecha
 	name = "mecha"
 	desc = "Exosuit"
 	icon = 'icons/mecha/mecha.dmi'
 	resistance_flags = FIRE_PROOF | ACID_PROOF
 	max_integrity = 300
-	armor = list(BLUNT = 20, PUNCTURE = 10, SLASH = 0, LASER = 0, ENERGY = 0, BOMB = 10, BIO = 0, FIRE = 100, ACID = 100)
 	force = 5
 	movedelay = 1 SECONDS
 	move_force = MOVE_FORCE_VERY_STRONG
@@ -33,7 +35,12 @@
 	light_on = FALSE
 	light_outer_range = 8
 	generic_canpass = FALSE
-	hud_possible = list(DIAG_STAT_HUD, DIAG_BATT_HUD, DIAG_MECH_HUD, DIAG_TRACK_HUD)
+	hud_possible = list(
+		DIAG_STAT_HUD = 'icons/mob/huds/hud.dmi',
+		DIAG_BATT_HUD = 'icons/mob/huds/hud.dmi',
+		DIAG_MECH_HUD = 'icons/mob/huds/hud.dmi',
+		DIAG_TRACK_HUD = 'icons/mob/huds/hud.dmi'
+	)
 	///What direction will the mech face when entered/powered on? Defaults to South.
 	var/dir_in = SOUTH
 	///How much energy the mech will consume each time it moves. This variable is a backup for when leg actuators affect the energy drain.
@@ -146,7 +153,7 @@
 	///Currently ejecting, and unable to do things
 	var/is_currently_ejecting = FALSE
 
-	var/datum/effect_system/smoke_spread/smoke_system = new
+	var/datum/effect_system/fluid_spread/smoke/smoke_system = new
 
 	////Action vars
 	///Ref to any active thrusters we might have
@@ -224,7 +231,7 @@
 	SET_TRACKING(__TYPE__)
 	prepare_huds()
 	for(var/datum/atom_hud/data/diagnostic/diag_hud in GLOB.huds)
-		diag_hud.add_to_hud(src)
+		diag_hud.add_atom_to_hud(src)
 	diag_hud_set_mechhealth()
 	diag_hud_set_mechcell()
 	diag_hud_set_mechstat()
@@ -270,7 +277,7 @@
 
 	UNSET_TRACKING(__TYPE__)
 	for(var/datum/atom_hud/data/diagnostic/diag_hud in GLOB.huds)
-		diag_hud.remove_from_hud(src) //YEET
+		diag_hud.remove_atom_from_hud(src) //YEET
 	lose_atmos_sensitivity()
 	return ..()
 
@@ -312,7 +319,7 @@
 	if(!phasing || get_charge() <= phasing_energy_drain || throwing)
 		return ..()
 	if(phase_state)
-		flick(phase_state, src)
+		z_flick(phase_state, src)
 	var/turf/destination_turf = get_step(loc, movement_dir)
 	var/area/destination_area = destination_turf.loc
 	if(destination_area.area_flags & NOTELEPORT || SSmapping.level_trait(destination_turf.z, ZTRAIT_NOPHASE))
@@ -862,7 +869,7 @@
 		return
 	//Allows the Malf to scan a mech's status and loadout, helping it to decide if it is a worthy chariot.
 	if(user.can_dominate_mechs)
-		examine(user) //Get diagnostic information!
+		user.run_examinate(src) //Get diagnostic information!
 		for(var/obj/item/mecha_parts/mecha_tracking/B in trackers)
 			to_chat(user, span_danger("Warning: Tracking Beacon detected. Enter at your own risk. Beacon Data:"))
 			to_chat(user, "[B.get_mecha_info()]")
@@ -870,7 +877,9 @@
 		//Nothing like a big, red link to make the player feel powerful!
 		to_chat(user, "<a href='?src=[REF(user)];ai_take_control=[REF(src)]'>[span_userdanger("ASSUME DIRECT CONTROL?")]</a><br>")
 		return
-	examine(user)
+
+	user.run_examinate(src)
+
 	if(length(return_drivers()) > 0)
 		to_chat(user, span_warning("This exosuit has a pilot and cannot be controlled."))
 		return
@@ -1271,7 +1280,7 @@
 			A.rounds = A.rounds - ammo_needed
 			if(A.custom_materials)
 				A.set_custom_materials(A.custom_materials, A.rounds / initial(A.rounds))
-			A.update_name()
+			A.update_appearance(UPDATE_NAME)
 			return TRUE
 
 		if(A.direct_load)
@@ -1282,7 +1291,7 @@
 		to_chat(user, span_notice("You add [A.rounds] [A.ammo_type][A.rounds > 1?"s":""] to the [gun.name]"))
 		A.rounds = 0
 		A.set_custom_materials(list(/datum/material/iron=2000))
-		A.update_name()
+		A.update_appearance(UPDATE_NAME)
 		return TRUE
 	if(!fail_chat_override)
 		if(found_gun)

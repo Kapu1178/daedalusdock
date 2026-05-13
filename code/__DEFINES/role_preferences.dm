@@ -12,11 +12,13 @@
 #define ROLE_CHANGELING "Changeling"
 #define ROLE_CULTIST "Cultist"
 #define ROLE_FAMILIES "Gangster"
+#define ROLE_FLOCK "Divine Flock"
 #define ROLE_HERETIC "Heretic"
 #define ROLE_MALF "Malf AI"
 #define ROLE_OPERATIVE "Operative"
 #define ROLE_THIEF "Thief"
 #define ROLE_TRAITOR "Traitor"
+#define ROLE_VAMPIRE "Vampire"
 #define ROLE_WIZARD "Wizard"
 
 // Midround roles
@@ -87,7 +89,6 @@
 #define ROLE_SYNDICATE_CYBERSUN "Cybersun Space Syndicate" //Ghost role syndi from Forgottenship ruin
 #define ROLE_SYNDICATE_CYBERSUN_CAPTAIN "Cybersun Space Syndicate Captain" //Forgottenship captain syndie
 #define ROLE_HEADSLUG_CHANGELING "Headslug Changeling"
-#define ROLE_SPACE_PIRATE "Space Pirate"
 #define ROLE_ANCIENT_CREW "Ancient Crew"
 #define ROLE_SPACE_DOCTOR "Space Doctor"
 #define ROLE_SPACE_BARTENDER "Space Bartender"
@@ -116,6 +117,8 @@ GLOBAL_LIST_INIT(special_roles, list(
 	ROLE_THIEF = 0,
 	ROLE_TRAITOR = 0,
 	ROLE_WIZARD = 14,
+	ROLE_VAMPIRE = 0,
+	ROLE_FLOCK = 0,
 
 	// Midround
 	ROLE_ABDUCTOR = 0,

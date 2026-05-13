@@ -1,4 +1,9 @@
 #define MAX_TRANSIT_REQUEST_RETRIES 10
+/// How many turfs to allow before we stop blocking transit requests
+#define MAX_TRANSIT_TILE_COUNT (150 ** 2)
+/// How many turfs to allow before we start freeing up existing "soft reserved" transit docks
+/// If we're under load we want to allow for cycling, but if not we want to preserve already generated docks for use
+#define SOFT_TRANSIT_RESERVATION_THRESHOLD (100 ** 2)
 
 SUBSYSTEM_DEF(shuttle)
 	name = "Shuttle"
@@ -25,7 +30,8 @@ SUBSYSTEM_DEF(shuttle)
 	var/list/transit_requesters = list()
 	/// An associative list of the mobile docking ports that have failed a transit request, with the amount of times they've actually failed that transit request, up to MAX_TRANSIT_REQUEST_RETRIES
 	var/list/transit_request_failures = list()
-
+	/// How many turfs our shuttles are currently utilizing in reservation space
+	var/transit_utilized = 0
 	/**
 	 * Emergency shuttle stuff
 	 */
@@ -153,6 +159,8 @@ SUBSYSTEM_DEF(shuttle)
 
 		supply_packs[pack.id] = pack
 
+	sortTim(supply_packs, GLOBAL_PROC_REF(cmp_name_asc), associative = TRUE)
+
 	setup_shuttles(stationary_docking_ports)
 	has_purchase_shuttle_access = init_has_purchase_shuttle_access()
 
@@ -182,6 +190,7 @@ SUBSYSTEM_DEF(shuttle)
 			continue
 		var/obj/docking_port/mobile/P = thing
 		P.check()
+
 	for(var/thing in transit_docking_ports)
 		var/obj/docking_port/stationary/transit/T = thing
 		if(!T.owner)
@@ -189,6 +198,12 @@ SUBSYSTEM_DEF(shuttle)
 		// This next one removes transit docks/zones that aren't
 		// immediately being used. This will mean that the zone creation
 		// code will be running a lot.
+
+		// If we're below the soft reservation threshold, don't clear the old space
+		// We're better off holding onto it for now
+		if(transit_utilized < SOFT_TRANSIT_RESERVATION_THRESHOLD)
+			continue
+
 		var/obj/docking_port/mobile/owner = T.owner
 		if(owner)
 			var/idle = owner.mode == SHUTTLE_IDLE
@@ -201,7 +216,11 @@ SUBSYSTEM_DEF(shuttle)
 	if(!SSmapping.clearing_reserved_turfs)
 		while(transit_requesters.len)
 			var/requester = popleft(transit_requesters)
-			var/success = generate_transit_dock(requester)
+			var/success = null
+			// Do not try and generate any transit if we're using more then our max already
+			if(transit_utilized < MAX_TRANSIT_TILE_COUNT)
+				success = generate_transit_dock(requester)
+
 			if(!success) // BACK OF THE QUEUE
 				transit_request_failures[requester]++
 				if(transit_request_failures[requester] < MAX_TRANSIT_REQUEST_RETRIES)
@@ -420,9 +439,9 @@ SUBSYSTEM_DEF(shuttle)
 			log_shuttle("There is no means of calling the emergency shuttle anymore. Shuttle automatically called.")
 			message_admins("All the communications consoles were destroyed and all AIs are inactive. Shuttle called.")
 
-/datum/controller/subsystem/shuttle/proc/registerHostileEnvironment(datum/bad)
+/datum/controller/subsystem/shuttle/proc/registerHostileEnvironment(datum/bad, announce = TRUE)
 	hostile_environments[bad] = TRUE
-	checkHostileEnvironment()
+	checkHostileEnvironment(announce)
 
 /datum/controller/subsystem/shuttle/proc/clearHostileEnvironment(datum/bad)
 	hostile_environments -= bad
@@ -452,22 +471,26 @@ SUBSYSTEM_DEF(shuttle)
 		supply.mode = SHUTTLE_DOCKED
 		//Make all cargo consoles speak up
 
-/datum/controller/subsystem/shuttle/proc/checkHostileEnvironment()
+/datum/controller/subsystem/shuttle/proc/checkHostileEnvironment(announce = TRUE)
 	for(var/datum/d in hostile_environments)
 		if(!istype(d) || QDELETED(d))
 			hostile_environments -= d
+
 	emergency_no_escape = hostile_environments.len
 
 	if(emergency_no_escape && (emergency.mode == SHUTTLE_IGNITING))
 		emergency.mode = SHUTTLE_STRANDED
 		emergency.timer = null
 		emergency.sound_played = FALSE
-		priority_announce("Hostile environment detected. \
-			Departure has been postponed indefinitely pending \
-			conflict resolution.",
-			"LRSV Icarus Announcement",
-			do_not_modify = TRUE
-		)
+
+		if(announce)
+			priority_announce("Hostile environment detected. \
+				Departure has been postponed indefinitely pending \
+				conflict resolution.",
+				"LRSV Icarus Announcement",
+				do_not_modify = TRUE
+			)
+
 	if(!emergency_no_escape && (emergency.mode == SHUTTLE_STRANDED))
 		emergency.mode = SHUTTLE_DOCKED
 		emergency.setTimer(emergency_dock_time)
@@ -491,7 +514,7 @@ SUBSYSTEM_DEF(shuttle)
 		if(shuttle_port.request(getDock(destination)))
 			return DOCKING_IMMOBILIZED
 	else
-		if(shuttle_port.initiate_docking(getDock(destination)) != DOCKING_SUCCESS)
+		if(shuttle_port.Dock(getDock(destination)) != DOCKING_SUCCESS)
 			return DOCKING_IMMOBILIZED
 	return DOCKING_SUCCESS //dock successful
 
@@ -506,7 +529,7 @@ SUBSYSTEM_DEF(shuttle)
 		if(shuttle_port.request(docking_target))
 			return DOCKING_IMMOBILIZED
 	else
-		if(shuttle_port.initiate_docking(docking_target) != DOCKING_SUCCESS)
+		if(shuttle_port.Dock(docking_target) != DOCKING_SUCCESS)
 			return DOCKING_IMMOBILIZED
 	return DOCKING_SUCCESS //dock successful
 
@@ -588,7 +611,9 @@ SUBSYSTEM_DEF(shuttle)
 
 	var/turf/midpoint = locate(transit_x, transit_y, bottomleft.z)
 	if(!midpoint)
+		qdel(proposal)
 		return FALSE
+
 	var/area/old_area = midpoint.loc
 	old_area.turfs_to_uncontain += proposal.reserved_turfs
 
@@ -606,8 +631,16 @@ SUBSYSTEM_DEF(shuttle)
 	// Add 180, because ports point inwards, rather than outwards
 	new_transit_dock.setDir(angle2dir(dock_angle))
 
+	// Proposals use 2 extra hidden tiles of space, from the cordons that surround them
+	transit_utilized += (proposal.width + 2) * (proposal.height + 2)
 	M.assigned_transit = new_transit_dock
+	RegisterSignal(proposal, COMSIG_PARENT_QDELETING, PROC_REF(transit_space_clearing))
 	return new_transit_dock
+
+/// Gotta manage our space brother
+/datum/controller/subsystem/shuttle/proc/transit_space_clearing(datum/turf_reservation/source)
+	SIGNAL_HANDLER
+	transit_utilized -= (source.width + 2) * (source.height + 2)
 
 /datum/controller/subsystem/shuttle/Recover()
 	initialized = SSshuttle.initialized
@@ -788,7 +821,7 @@ SUBSYSTEM_DEF(shuttle)
 	var/list/force_memory = preview_shuttle.movement_force
 	preview_shuttle.movement_force = list("KNOCKDOWN" = 0, "THROW" = 0)
 	preview_shuttle.mode = SHUTTLE_PREARRIVAL//No idle shuttle moving. Transit dock get removed if shuttle moves too long.
-	preview_shuttle.initiate_docking(D)
+	preview_shuttle.Dock(D)
 	preview_shuttle.movement_force = force_memory
 
 	. = preview_shuttle
@@ -811,7 +844,7 @@ SUBSYSTEM_DEF(shuttle)
 /datum/controller/subsystem/shuttle/proc/load_template(datum/map_template/shuttle/S)
 	. = FALSE
 	// Load shuttle template to a fresh block reservation.
-	preview_reservation = SSmapping.RequestBlockReservation(S.width, S.height, SSmapping.transit.z_value, /datum/turf_reservation/transit)
+	preview_reservation = SSmapping.RequestBlockReservation(S.width, S.height, type = /datum/turf_reservation/transit)
 	if(!preview_reservation)
 		CRASH("failed to reserve an area for shuttle template loading")
 	var/turf/BL = TURF_FROM_COORDS_LIST(preview_reservation.bottom_left_coords)

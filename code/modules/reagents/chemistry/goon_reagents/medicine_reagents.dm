@@ -9,10 +9,10 @@
 	C.set_drowsyness(0)
 	C.remove_status_effect(/datum/status_effect/speech/slurring/drunk)
 	C.remove_status_effect(/datum/status_effect/confusion)
-	holder.remove_all_type(/datum/reagent/consumable/ethanol, 3 * removed, FALSE, TRUE)
+	holder.remove_reagent(/datum/reagent/consumable/ethanol, 3 * removed, include_subtypes = TRUE)
 	var/obj/item/organ/stomach = C.getorganslot(ORGAN_SLOT_STOMACH)
 	if(stomach)
-		stomach.reagents.remove_all_type(/datum/reagent/consumable/ethanol, 3 * removed, FALSE, TRUE)
+		stomach.reagents.remove_reagent(/datum/reagent/consumable/ethanol, 3 * removed, include_subtypes = TRUE)
 	C.adjustToxLoss(-0.2 * removed, 0)
 	C.adjust_drunk_effect(-10 * removed)
 	. = TRUE
@@ -27,7 +27,7 @@
 	harmful = TRUE
 
 // FEED ME SEYMOUR
-/datum/reagent/medicine/strange_reagent/on_hydroponics_apply(obj/item/seeds/myseed, datum/reagents/chems, obj/machinery/hydroponics/mytray, mob/user)
+/datum/reagent/medicine/strange_reagent/on_hydroponics_apply(datum/plant_tick/plant_tick, datum/reagents/chems, volume, obj/machinery/hydroponics/mytray, mob/user)
 	. = ..()
 	if(chems.has_reagent(type, 1))
 		mytray.spawnplant()
@@ -62,3 +62,62 @@
 
 /datum/reagent/medicine/strange_reagent/affect_touch(mob/living/carbon/C, removed)
 	holder.del_reagent(type)
+
+/datum/reagent/medicine/silver_sulfadiazine
+	name = "Silver Sulfadiazine"
+	description = "This antibacterial compound is used to treat burn victims."
+	reagent_state = LIQUID
+	color = "#F0DC00"
+	touch_met = 1
+	harmful = TRUE
+	taste_description = "burn cream"
+
+	var/heal_per_unit = 1.2
+
+/datum/reagent/medicine/silver_sulfadiazine/expose_mob(mob/living/exposed_mob, reac_volume, exposed_temperature = T20C, datum/reagents/source, methods=TOUCH, show_message = TRUE, touch_protection = 0)
+	. = ..()
+
+	if(!(methods & TOUCH))
+		return
+
+	exposed_mob.heal_overall_damage(burn = heal_per_unit * reac_volume, required_status = BODYTYPE_ORGANIC)
+
+/datum/reagent/medicine/silver_sulfadiazine/affect_blood(mob/living/carbon/C, removed)
+	C.adjustToxLoss(0.5 * removed, FALSE)
+	return TRUE
+
+/datum/reagent/medicine/silver_sulfadiazine/affect_touch(mob/living/carbon/C, removed)
+	C.heal_overall_damage(burn = heal_per_unit * removed, required_status = BODYTYPE_ORGANIC)
+	return TRUE
+
+/datum/reagent/medicine/styptic_powder
+	name = "Styptic Powder"
+	description = "Styptic (aluminum sulfate) powder helps control bleeding and heal physical wounds."
+	reagent_state = LIQUID
+	color = "#FF9696"
+	touch_met = 1
+	harmful = TRUE
+	taste_description = "wound cream"
+
+	var/heal_per_unit = 1.2
+
+/datum/reagent/medicine/styptic_powder/expose_mob(mob/living/exposed_mob, reac_volume, exposed_temperature = T20C, datum/reagents/source, methods=TOUCH, show_message = TRUE, touch_protection = 0)
+	. = ..()
+
+	if(!(methods & TOUCH))
+		return
+
+	exposed_mob.heal_overall_damage(heal_per_unit * reac_volume, required_status = BODYTYPE_ORGANIC)
+
+	if(ishuman(exposed_mob))
+		var/mob/living/carbon/human/H = exposed_mob
+		H.notify_pain(1, "Your flesh burns.", TRUE)
+
+/datum/reagent/medicine/styptic_powder/affect_blood(mob/living/carbon/C, removed)
+	C.adjustToxLoss(0.5 * removed, FALSE)
+	return TRUE
+
+/datum/reagent/medicine/styptic_powder/affect_touch(mob/living/carbon/C, removed)
+	C.heal_overall_damage(heal_per_unit * removed, required_status = BODYTYPE_ORGANIC)
+	APPLY_CHEM_EFFECT(C, CE_ANTICOAGULANT, -1)
+	return TRUE

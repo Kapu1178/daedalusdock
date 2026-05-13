@@ -1,14 +1,18 @@
 // AI EYE
 //
-// An invisible (no icon) mob that the AI controls to look around the station with.
+// An invisible mob that the AI controls to look around the station with.
 // It streams chunks as it moves around, which will show it what the AI can and cannot see.
 /mob/camera/ai_eye
 	name = "Inactive AI Eye"
 
 	icon_state = "ai_camera"
 	icon = 'icons/mob/cameramob.dmi'
+	plane = ABOVE_LIGHTING_PLANE
 	invisibility = INVISIBILITY_MAXIMUM
-	hud_possible = list(ANTAG_HUD, AI_DETECT_HUD = HUD_LIST_LIST)
+	hud_possible = list(
+		AI_DETECT_HUD = HUD_LIST_LIST
+	)
+
 	var/list/visibleCameraChunks = list()
 	var/mob/living/silicon/ai/ai = null
 	var/relay_speech = FALSE
@@ -16,6 +20,7 @@
 	var/static_visibility_range = 16
 	var/ai_detector_visible = TRUE
 	var/ai_detector_color = COLOR_RED
+
 	interaction_range = null
 
 /mob/camera/ai_eye/Initialize(mapload)
@@ -35,14 +40,14 @@
 	var/datum/atom_hud/ai_detector/hud = GLOB.huds[DATA_HUD_AI_DETECT]
 	var/list/old_images = hud_list[AI_DETECT_HUD]
 	if(!ai_detector_visible)
-		hud.remove_from_hud(src)
-		QDEL_LIST(old_images)
+		hud.remove_atom_from_hud(src)
+		old_images.Cut()
 		return
 
-	if(!length(hud.hudusers))
+	if(!length(hud.hud_users))
 		return //no one is watching, do not bother updating anything
 
-	hud.remove_from_hud(src)
+	hud.remove_atom_from_hud(src)
 
 	var/static/list/vis_contents_opaque = list()
 	var/obj/effect/overlay/ai_detect_hud/hud_obj = vis_contents_opaque[ai_detector_color]
@@ -53,15 +58,18 @@
 
 	var/list/new_images = list()
 	var/list/turfs = get_visible_turfs()
+
 	for(var/T in turfs)
 		var/image/I = (old_images.len > new_images.len) ? old_images[new_images.len + 1] : image(null, T)
 		I.loc = T
 		I.vis_contents += hud_obj
 		new_images += I
+
 	for(var/i in (new_images.len + 1) to old_images.len)
 		qdel(old_images[i])
+
 	hud_list[AI_DETECT_HUD] = new_images
-	hud.add_to_hud(src)
+	hud.add_atom_to_hud(src)
 
 /mob/camera/ai_eye/proc/get_visible_turfs()
 	if(!isturf(loc))
@@ -97,7 +105,7 @@
 			var/obj/machinery/holopad/H = ai.current
 			H.move_hologram(ai, destination)
 		if(ai.camera_light_on)
-			ai.light_cameras()
+			ai.update_lit_cameras()
 		if(ai.master_multicam)
 			ai.master_multicam.refresh_view()
 
@@ -116,12 +124,14 @@
 	for(var/V in visibleCameraChunks)
 		var/datum/camerachunk/c = V
 		c.remove(src)
+
 	GLOB.aiEyes -= src
+
 	if(ai_detector_visible)
 		var/datum/atom_hud/ai_detector/hud = GLOB.huds[DATA_HUD_AI_DETECT]
-		hud.remove_from_hud(src)
+		hud.remove_atom_from_hud(src)
 		var/list/L = hud_list[AI_DETECT_HUD]
-		QDEL_LIST(L)
+		L.Cut()
 	return ..()
 
 /atom/proc/move_camera_by_click()
@@ -183,7 +193,10 @@
 	eyeobj.ai = src
 	eyeobj.setLoc(loc)
 	eyeobj.set_real_name("[name] (AI Eye)")
+	eyeobj.RegisterSignal(src, COMSIG_CLICK_SHIFT, TYPE_PROC_REF(/mob/camera/ai_eye, examinate_check))
 	set_eyeobj_visible(TRUE)
+
+	sense_of_self = image(eyeobj.icon, eyeobj, eyeobj.icon_state)
 
 /mob/living/silicon/ai/proc/set_eyeobj_visible(state = TRUE)
 	if(!eyeobj)
@@ -200,10 +213,17 @@
 	acceleration = !acceleration
 	to_chat(usr, "Camera acceleration has been toggled [acceleration ? "on" : "off"].")
 
-/mob/camera/ai_eye/Hear(message, atom/movable/speaker, datum/language/message_language, raw_message, radio_freq, list/spans, list/message_mods = list(), atom/sound_loc)
+/mob/camera/ai_eye/Hear(message, atom/movable/speaker, datum/language/message_language, raw_message, radio_freq, list/spans, list/message_mods = list(), atom/sound_loc, message_range)
 	. = ..()
 	if(relay_speech && speaker && ai && !radio_freq && speaker != ai && near_camera(speaker))
 		ai.relay_speech(message, speaker, message_language, raw_message, radio_freq, spans, message_mods)
+
+///Called when the AI shiftclicks on something to examinate it.
+/mob/camera/ai_eye/proc/examinate_check(mob/user, atom/source)
+	SIGNAL_HANDLER
+
+	if(user.client.eye == src)
+		return COMPONENT_ALLOW_EXAMINATE
 
 /obj/effect/overlay/ai_detect_hud
 	name = ""

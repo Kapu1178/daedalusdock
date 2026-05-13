@@ -15,9 +15,11 @@
   right: 0;
   color: base.$color-fg;
   background-color: base.$color-bg;
-  background-image: linear-gradient(to bottom,
+  background-image: linear-gradient(
+    to bottom,
     base.$color-bg-start 0%,
-    base.$color-bg-end 100%);
+    base.$color-bg-end 100%
+  );
 }
 
 .Window__titleBar {
@@ -42,8 +44,6 @@
 
 .Window__contentPadding {
   margin: 0.5rem;
-  // IE8: Calc not supported
-  height: 100%;
   // 0.01 is needed to make the scrollbar not appear
   // due to rem rendering inaccuracies in IE11.
   height: calc(100% - 1.01rem);
@@ -65,7 +65,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: rgba(lighten(base.$color-bg, 30%), 0.25);
+  background-color: rgba(OLD_lighten(base.$color-bg, 30%), 0.25);
   pointer-events: none;
 }
 

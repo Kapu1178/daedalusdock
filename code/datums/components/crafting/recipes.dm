@@ -120,7 +120,7 @@
 /datum/crafting_recipe/cleanbot
 	name = "Cleanbot"
 	result = /mob/living/simple_animal/bot/cleanbot
-	reqs = list(/obj/item/reagent_containers/glass/bucket = 1,
+	reqs = list(/obj/item/reagent_containers/cup/bucket = 1,
 				/obj/item/assembly/prox_sensor = 1,
 				/obj/item/bodypart/arm/right/robot = 1)
 	time = 40
@@ -371,16 +371,6 @@
 	category = CAT_WEAPONRY
 	subcategory = CAT_WEAPON
 
-/datum/crafting_recipe/radiogloves
-	name = "Radio Gloves"
-	result = /obj/item/clothing/gloves/radio
-	time = 15
-	reqs = list(/obj/item/clothing/gloves/color/black = 1,
-				/obj/item/stack/cable_coil = 2,
-				/obj/item/radio = 1)
-	tool_behaviors = list(TOOL_WIRECUTTER)
-	category = CAT_CLOTHING
-
 /datum/crafting_recipe/radiogloves/New()
 	..()
 	blacklist |= typesof(/obj/item/radio/headset)
@@ -547,18 +537,11 @@
 	result = /obj/structure/bonfire
 	category = CAT_PRIMAL
 
-/datum/crafting_recipe/rake //Category resorting incoming - but you never resorted, did you?
-	name = "Rake"
-	time = 30
-	reqs = list(/obj/item/stack/sheet/mineral/wood = 5)
-	result = /obj/item/cultivator/rake
-	category = CAT_PRIMAL
-
 /datum/crafting_recipe/woodbucket
 	name = "Wooden Bucket"
 	time = 30
 	reqs = list(/obj/item/stack/sheet/mineral/wood = 3)
-	result = /obj/item/reagent_containers/glass/bucket/wooden
+	result = /obj/item/reagent_containers/cup/bucket/wooden
 	category = CAT_PRIMAL
 */
 
@@ -883,7 +866,7 @@
 /datum/crafting_recipe/color_adapter/on_craft_completion(mob/user, atom/result)
 	var/obj/item/pipe/crafted_pipe = result
 	crafted_pipe.pipe_type = /obj/machinery/atmospherics/pipe/color_adapter
-	crafted_pipe.pipe_color = COLOR_VERY_LIGHT_GRAY
+	crafted_pipe.pipe_color = ATMOS_COLOR_OMNI
 	crafted_pipe.setDir(user.dir)
 	crafted_pipe.update()
 
@@ -904,7 +887,7 @@
 /datum/crafting_recipe/he_pipe/on_craft_completion(mob/user, atom/result)
 	var/obj/item/pipe/crafted_pipe = result
 	crafted_pipe.pipe_type = /obj/machinery/atmospherics/pipe/heat_exchanging/manifold4w
-	crafted_pipe.pipe_color = COLOR_VERY_LIGHT_GRAY
+	crafted_pipe.pipe_color = ATMOS_COLOR_OMNI
 	crafted_pipe.setDir(user.dir)
 	crafted_pipe.update()
 
@@ -925,7 +908,7 @@
 /datum/crafting_recipe/he_junction/on_craft_completion(mob/user, atom/result)
 	var/obj/item/pipe/crafted_pipe = result
 	crafted_pipe.pipe_type = /obj/machinery/atmospherics/pipe/heat_exchanging/junction
-	crafted_pipe.pipe_color = COLOR_VERY_LIGHT_GRAY
+	crafted_pipe.pipe_color = ATMOS_COLOR_OMNI
 	crafted_pipe.setDir(user.dir)
 	crafted_pipe.update()
 
@@ -947,7 +930,7 @@
 /datum/crafting_recipe/pressure_pump/on_craft_completion(mob/user, atom/result)
 	var/obj/item/pipe/crafted_pipe = result
 	crafted_pipe.pipe_type = /obj/machinery/atmospherics/components/binary/pump
-	crafted_pipe.pipe_color = COLOR_VERY_LIGHT_GRAY
+	crafted_pipe.pipe_color = ATMOS_COLOR_OMNI
 	crafted_pipe.setDir(user.dir)
 	crafted_pipe.update()
 
@@ -968,7 +951,7 @@
 /datum/crafting_recipe/manual_valve/on_craft_completion(mob/user, atom/result)
 	var/obj/item/pipe/crafted_pipe = result
 	crafted_pipe.pipe_type = /obj/machinery/atmospherics/components/binary/valve
-	crafted_pipe.pipe_color = COLOR_VERY_LIGHT_GRAY
+	crafted_pipe.pipe_color = ATMOS_COLOR_OMNI
 	crafted_pipe.setDir(user.dir)
 	crafted_pipe.update()
 
@@ -990,7 +973,7 @@
 /datum/crafting_recipe/vent/on_craft_completion(mob/user, atom/result)
 	var/obj/item/pipe/crafted_pipe = result
 	crafted_pipe.pipe_type = /obj/machinery/atmospherics/components/unary/vent_pump
-	crafted_pipe.pipe_color = COLOR_VERY_LIGHT_GRAY
+	crafted_pipe.pipe_color = ATMOS_COLOR_OMNI
 	crafted_pipe.setDir(user.dir)
 	crafted_pipe.update()
 
@@ -1012,7 +995,7 @@
 /datum/crafting_recipe/scrubber/on_craft_completion(mob/user, atom/result)
 	var/obj/item/pipe/crafted_pipe = result
 	crafted_pipe.pipe_type = /obj/machinery/atmospherics/components/unary/vent_scrubber
-	crafted_pipe.pipe_color = COLOR_VERY_LIGHT_GRAY
+	crafted_pipe.pipe_color = ATMOS_COLOR_OMNI
 	crafted_pipe.setDir(user.dir)
 	crafted_pipe.update()
 
@@ -1034,7 +1017,7 @@
 /datum/crafting_recipe/filter/on_craft_completion(mob/user, atom/result)
 	var/obj/item/pipe/crafted_pipe = result
 	crafted_pipe.pipe_type = /obj/machinery/atmospherics/components/trinary/filter
-	crafted_pipe.pipe_color = COLOR_VERY_LIGHT_GRAY
+	crafted_pipe.pipe_color = ATMOS_COLOR_OMNI
 	crafted_pipe.setDir(user.dir)
 	crafted_pipe.update()
 
@@ -1056,7 +1039,7 @@
 /datum/crafting_recipe/mixer/on_craft_completion(mob/user, atom/result)
 	var/obj/item/pipe/crafted_pipe = result
 	crafted_pipe.pipe_type = /obj/machinery/atmospherics/components/trinary/mixer
-	crafted_pipe.pipe_color = COLOR_VERY_LIGHT_GRAY
+	crafted_pipe.pipe_color = ATMOS_COLOR_OMNI
 	crafted_pipe.setDir(user.dir)
 	crafted_pipe.update()
 
@@ -1077,7 +1060,7 @@
 /datum/crafting_recipe/connector/on_craft_completion(mob/user, atom/result)
 	var/obj/item/pipe/crafted_pipe = result
 	crafted_pipe.pipe_type = /obj/machinery/atmospherics/components/unary/portables_connector
-	crafted_pipe.pipe_color = COLOR_VERY_LIGHT_GRAY
+	crafted_pipe.pipe_color = ATMOS_COLOR_OMNI
 	crafted_pipe.setDir(user.dir)
 	crafted_pipe.update()
 
@@ -1098,7 +1081,7 @@
 /datum/crafting_recipe/passive_vent/on_craft_completion(mob/user, atom/result)
 	var/obj/item/pipe/crafted_pipe = result
 	crafted_pipe.pipe_type = /obj/machinery/atmospherics/components/unary/passive_vent
-	crafted_pipe.pipe_color = COLOR_VERY_LIGHT_GRAY
+	crafted_pipe.pipe_color = ATMOS_COLOR_OMNI
 	crafted_pipe.setDir(user.dir)
 	crafted_pipe.update()
 
@@ -1120,7 +1103,7 @@
 /datum/crafting_recipe/injector/on_craft_completion(mob/user, atom/result)
 	var/obj/item/pipe/crafted_pipe = result
 	crafted_pipe.pipe_type = /obj/machinery/atmospherics/components/unary/outlet_injector
-	crafted_pipe.pipe_color = COLOR_VERY_LIGHT_GRAY
+	crafted_pipe.pipe_color = ATMOS_COLOR_OMNI
 	crafted_pipe.setDir(user.dir)
 	crafted_pipe.update()
 
@@ -1141,7 +1124,7 @@
 /datum/crafting_recipe/he_exchanger/on_craft_completion(mob/user, atom/result)
 	var/obj/item/pipe/crafted_pipe = result
 	crafted_pipe.pipe_type = /obj/machinery/atmospherics/components/unary/heat_exchanger
-	crafted_pipe.pipe_color = COLOR_VERY_LIGHT_GRAY
+	crafted_pipe.pipe_color = ATMOS_COLOR_OMNI
 	crafted_pipe.setDir(user.dir)
 	crafted_pipe.update()
 

@@ -1,6 +1,6 @@
 /datum/slapcraft_recipe/chop_log
 	name = "chop log"
-	examine_hint = "You could chop it down into planks with something sharp..."
+	examine_hint = "You could chop this into planks."
 	category = SLAP_CAT_PROCESSING
 	steps = list(
 		/datum/slapcraft_step/chop_log,

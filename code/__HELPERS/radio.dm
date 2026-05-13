@@ -1,6 +1,6 @@
 /// Ensure the frequency is within bounds of what it should be sending/receiving at
 /proc/sanitize_frequency(frequency, free = FALSE)
-	frequency = round(frequency)
+	frequency = floor(frequency)
 	if(free)
 		. = clamp(frequency, MIN_FREE_FREQ, MAX_FREE_FREQ)
 	else
@@ -28,6 +28,6 @@
 		freq_to_check = rand(start, end)
 		if(!(freq_to_check % 2)) // Ensure the last digit is an odd number
 			freq_to_check++
-	while((freq_to_check == 0) || ("[freq_to_check]" in GLOB.reverseradiochannels))
+	while((freq_to_check == 0) || ("[freq_to_check]" in GLOB.radio_frequency_to_channel))
 
 	return freq_to_check

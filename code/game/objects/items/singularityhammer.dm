@@ -1,3 +1,6 @@
+TYPEINFO_DEF(/obj/item/singularityhammer)
+	default_armor = list(BLUNT = 50, PUNCTURE = 50, SLASH = 0, LASER = 50, ENERGY = 0, BOMB = 50, BIO = 0, FIRE = 100, ACID = 100)
+
 /obj/item/singularityhammer
 	name = "singularity hammer"
 	desc = "The pinnacle of close combat technology, the hammer harnesses the power of a miniaturized singularity to deal crushing blows."
@@ -12,12 +15,11 @@
 	slot_flags = ITEM_SLOT_BACK
 
 	force = 5
-	force_wielded = type::force * 4
+	force_wielded = 20
 	throwforce = 15
 	throw_range = 1
 
 	w_class = WEIGHT_CLASS_HUGE
-	armor = list(BLUNT = 50, PUNCTURE = 50, SLASH = 0, LASER = 50, ENERGY = 0, BOMB = 50, BIO = 0, FIRE = 100, ACID = 100)
 	resistance_flags = FIRE_PROOF | ACID_PROOF
 	force_string = "LORD SINGULOTH HIMSELF"
 	///Is it able to pull shit right now?
@@ -52,20 +54,21 @@
 				step_towards(A,pull)
 				step_towards(A,pull)
 
-/obj/item/singularityhammer/afterattack(atom/A as mob|obj|turf|area, mob/living/user, proximity)
-	. = ..()
-	if(!proximity)
+/obj/item/singularityhammer/afterattack(atom/target, mob/user, list/modifiers)
+	if(!wielded || !charged)
 		return
-	if(wielded)
-		if(charged)
-			charged = FALSE
-			if(istype(A, /mob/living/))
-				var/mob/living/Z = A
-				Z.take_bodypart_damage(20,0)
-			playsound(user, 'sound/weapons/marauder.ogg', 50, TRUE)
-			var/turf/target = get_turf(A)
-			vortex(target,user)
-			addtimer(CALLBACK(src, PROC_REF(recharge)), 100)
+
+	charged = FALSE
+
+	if(istype(target, /mob/living))
+		var/mob/living/Z = target
+		Z.take_bodypart_damage(20,0)
+
+	playsound(user, 'sound/weapons/marauder.ogg', 50, TRUE)
+
+	var/turf/turf = get_turf(target)
+	vortex(turf,user)
+	addtimer(CALLBACK(src, PROC_REF(recharge)), 100)
 
 /obj/item/mjollnir
 	name = "Mjolnir"
@@ -80,7 +83,7 @@
 	slot_flags = ITEM_SLOT_BACK
 
 	force = 5
-	force_wielded = type::force * 5
+	force_wielded = 25
 	throwforce = 30
 	throw_range = 7
 
@@ -108,9 +111,13 @@
 	return
 
 /obj/item/mjollnir/attack(mob/living/M, mob/user)
-	..()
+	. = ..()
+	if(.)
+		return
+
 	if(HAS_TRAIT(user, TRAIT_PACIFISM))
 		return
+
 	if(wielded)
 		shock(M)
 

@@ -18,6 +18,9 @@ GLOBAL_VAR_INIT(glide_size_multiplier, 1.0)
 ///Similar to DELAY_TO_GLIDE_SIZE, except without the clamping, and it supports piping in an unrelated scalar
 #define MOVEMENT_ADJUSTED_GLIDE_SIZE(delay, movement_disparity) (world.icon_size / ((delay) / world.tick_lag) * movement_disparity * GLOB.glide_size_multiplier)
 
+// Multiplier for diagonal movement, either 2 (Manhattan) or sqrt(2) (Euclidean)
+#define DIAGONAL_MOVEMENT_MULTIPLIER 2
+
 //Movement loop priority. Only one loop can run at a time, this dictates that
 // Higher numbers beat lower numbers
 ///Standard, go lower then this if you want to override, higher otherwise
@@ -34,6 +37,10 @@ GLOBAL_VAR_INIT(glide_size_multiplier, 1.0)
 #define MOVEMENT_LOOP_IGNORE_PRIORITY (1<<1)
 ///Should we override the loop's glide?
 #define MOVEMENT_LOOP_IGNORE_GLIDE (1<<2)
+///Should we not update our movables dir on move?
+#define MOVEMENT_LOOP_NO_DIR_UPDATE (1<<3)
+///Is the loop moving the movable outside its control, like it's an external force? e.g. footsteps won't play if enabled.
+#define MOVEMENT_LOOP_OUTSIDE_CONTROL (1<<4)
 
 // Movement loop status flags
 /// Has the loop been paused, soon to be resumed?

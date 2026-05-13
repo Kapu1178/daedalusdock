@@ -1,3 +1,6 @@
+TYPEINFO_DEF(/obj/structure/low_wall)
+	default_armor = list(BLUNT = 20, PUNCTURE = 0, SLASH = 90, LASER = 0, ENERGY = 0, BOMB = 25, BIO = 100, FIRE = 80, ACID = 100)
+
 /obj/structure/low_wall
 	name = "low wall"
 	desc = "A low wall, with space to mount windows or grilles on top of it."
@@ -15,7 +18,6 @@
 	smoothing_flags = SMOOTH_BITMASK
 	smoothing_groups = SMOOTH_GROUP_LOW_WALL
 	canSmoothWith = SMOOTH_GROUP_SHUTTERS_BLASTDOORS + SMOOTH_GROUP_AIRLOCK + SMOOTH_GROUP_LOW_WALL + SMOOTH_GROUP_WALLS
-	armor = list(BLUNT = 20, PUNCTURE = 0, SLASH = 90, LASER = 0, ENERGY = 0, BOMB = 25, BIO = 100, FIRE = 80, ACID = 100)
 
 	/// Material used in construction
 	var/plating_material = /datum/material/iron
@@ -97,10 +99,17 @@
 		return
 	if(mover.throwing)
 		return TRUE
-	if(locate(/obj/structure/low_wall) in get_turf(mover))
+
+	var/turf/mover_turf = get_turf(mover)
+	if(locate(/obj/structure/low_wall) in mover_turf)
 		return TRUE
-	var/obj/structure/table/T = locate() in get_turf(mover)
-	if(T && T.flipped != TRUE)
+
+	var/obj/structure/table/T = locate() in mover_turf
+	if(T && !T.is_flipped())
+		return TRUE
+
+	var/obj/structure/stairs/stairs = locate() in mover_turf
+	if(stairs && stairs.dir == REVERSE_DIR(border_dir))
 		return TRUE
 
 /obj/structure/low_wall/IsObscured()
@@ -191,7 +200,7 @@
 	var/datum/material/mat_ref = GET_MATERIAL_REF(plating_material)
 
 	material_color = mat_ref.wall_color
-	stripe_icon = mat_ref.wall_stripe_icon
+	stripe_icon = mat_ref.low_wall_stripe_icon
 
 	if(update_appearance)
 		update_appearance()
@@ -222,3 +231,7 @@
 /obj/structure/low_wall/prepainted/daedalus
 	wall_paint = PAINT_WALL_DAEDALUS
 	stripe_paint = PAINT_STRIPE_DAEDALUS
+
+/obj/structure/low_wall/prepainted/marsexec
+	wall_paint = PAINT_WALL_MARS
+	stripe_paint = PAINT_STRIPE_MARS

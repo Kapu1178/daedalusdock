@@ -1,6 +1,6 @@
 /datum/slapcraft_recipe/bola
 	name = "bola"
-	examine_hint = "You could tie some weighted balls together with cable to make a bola..."
+	examine_hint = "You craft a bola with some metal balls and cable."
 	category = SLAP_CAT_WEAPONS
 	steps = list(
 		//this looks deranged but it makes more sense to use cable on a ball, rather then the other way around.

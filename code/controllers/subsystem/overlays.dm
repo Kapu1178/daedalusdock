@@ -121,3 +121,23 @@ SUBSYSTEM_DEF(overlays)
 			overlays |= cached_other
 	else if(cut_old)
 		cut_overlays()
+
+/// Recursively removes overlays that do not render to the game plane from an appearance.
+/proc/remove_non_canon_overlays(mutable_appearance/appearance)
+	for(var/mutable_appearance/overlay as anything in appearance.overlays)
+		if(overlay.plane != GAME_PLANE && overlay.plane != FLOAT_PLANE)
+			appearance.overlays -= overlay
+
+		if(length(overlay.overlays))
+			appearance.overlays -= overlay
+			appearance.overlays += .(new /mutable_appearance(overlay))
+
+	return appearance
+
+/// Remove lighting underlays from an appearance. Not recursive since I cannot fathom why that'd happen.
+/proc/remove_lighting_underlays(mutable_appearance/appearance)
+	for(var/mutable_appearance/underlay as anything in appearance.underlays)
+		if(underlay.plane == O_LIGHTING_VISUAL_PLANE)
+			appearance.underlays -= underlay
+
+	return appearance

@@ -29,6 +29,9 @@
 	#define COMPONENT_BLOCK_BUCKLE (1<<0)
 ///from base of atom/movable/buckle_mob(): (mob, force)
 #define COMSIG_MOVABLE_BUCKLE "buckle"
+///from base of atom/movable/unbuckle_mob(): (mob)
+#define COMSIG_MOVABLE_PRE_UNBUCKLE_MOB "preunbucklemob"
+	#define COMPONENT_BLOCK_UNBUCKLE (1<<0)
 ///from base of atom/movable/unbuckle_mob(): (mob, force)
 #define COMSIG_MOVABLE_UNBUCKLE "unbuckle"
 ///from /obj/vehicle/proc/driver_move, caught by the riding component to check and execute the driver trying to drive the vehicle
@@ -55,9 +58,14 @@
 	#define HEARING_SPEAKER 2
 	#define HEARING_LANGUAGE 3
 	#define HEARING_RAW_MESSAGE 4
-	/* #define HEARING_RADIO_FREQ 5
+	#define HEARING_RADIO_FREQ 5
 	#define HEARING_SPANS 6
-	#define HEARING_MESSAGE_MODE 7 */
+	#define HEARING_MESSAGE_MODE 7
+	#define HEARING_SOUND_LOC 8
+	#define HEARING_MESSAGE_RANGE 9
+
+/// Same as the above but RAW_MESSAGE will be replaced with the mob's interpretation of the message.
+#define COMSIG_LIVING_HEAR_POST_TRANSLATION "living_hear_after_translate"
 
 ///called when the movable is added to a disposal holder object for disposal movement: (obj/structure/disposalholder/holder, obj/machinery/disposal/source)
 #define COMSIG_MOVABLE_DISPOSING "movable_disposing"
@@ -88,3 +96,8 @@
 /// from base of atom/movable/Process_Spacemove(): (movement_dir, continuous_move)
 #define COMSIG_MOVABLE_SPACEMOVE "spacemove"
 	#define COMSIG_MOVABLE_STOP_SPACEMOVE (1<<0)
+
+/// from base of atom/uv_illuminate(): (uv_source, animate_time, new_alpha)
+#define COMSIG_MOVABLE_UV_EXPOSE "atom_uv_expose"
+#define COMSIG_MOVABLE_UV_HIDE "atom_uv_hide"
+

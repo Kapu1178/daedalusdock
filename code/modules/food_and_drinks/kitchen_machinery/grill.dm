@@ -50,7 +50,7 @@
 	if(I.resistance_flags & INDESTRUCTIBLE)
 		to_chat(user, span_warning("You don't feel it would be wise to grill [I]..."))
 		return ..()
-	if(istype(I, /obj/item/reagent_containers/food/drinks))
+	if(istype(I, /obj/item/reagent_containers/cup/glass))
 		if(I.reagents.has_reagent(/datum/reagent/consumable/monkey_energy))
 			grill_fuel += (20 * (I.reagents.get_reagent_amount(/datum/reagent/consumable/monkey_energy)))
 			to_chat(user, span_notice("You pour the Monkey Energy in [src]."))
@@ -85,8 +85,8 @@
 	else
 		grill_fuel -= GRILL_FUELUSAGE_IDLE * delta_time
 		if(DT_PROB(0.5, delta_time))
-			var/datum/effect_system/smoke_spread/bad/smoke = new
-			smoke.set_up(1, loc)
+			var/datum/effect_system/fluid_spread/smoke/bad/smoke = new
+			smoke.set_up(1, location = loc)
 			smoke.start()
 	if(grilled_item)
 		SEND_SIGNAL(grilled_item, COMSIG_ITEM_GRILLED, src, delta_time)

@@ -1,10 +1,12 @@
 
+TYPEINFO_DEF(/obj/vehicle/ridden/secway)
+	default_armor = list(BLUNT = 10, PUNCTURE = 0, SLASH = 0, LASER = 10, ENERGY = 0, BOMB = 0, BIO = 0, FIRE = 60, ACID = 60)
+
 /obj/vehicle/ridden/secway
 	name = "secway"
 	desc = "A brave security cyborg gave its life to help you look like a complete tool."
 	icon_state = "secway"
 	max_integrity = 60
-	armor = list(BLUNT = 10, PUNCTURE = 0, SLASH = 0, LASER = 10, ENERGY = 0, BOMB = 0, BIO = 0, FIRE = 60, ACID = 60)
 	key_type = /obj/item/key/security
 	integrity_failure = 0.5
 
@@ -24,8 +26,8 @@
 		return PROCESS_KILL
 	if(DT_PROB(10, delta_time))
 		return
-	var/datum/effect_system/smoke_spread/smoke = new
-	smoke.set_up(0, src)
+	var/datum/effect_system/fluid_spread/smoke/smoke = new
+	smoke.set_up(0, location = src)
 	smoke.start()
 
 /obj/vehicle/ridden/secway/welder_act(mob/living/user, obj/item/I)

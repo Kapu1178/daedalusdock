@@ -8,6 +8,8 @@
 	eat_time = 15 //Quick snack
 	w_class = WEIGHT_CLASS_SMALL
 
+	food_buffs = list(/datum/status_effect/food/refreshed, /datum/status_effect/food/warm)
+
 /obj/item/food/burger/plain
 	name = "plain burger"
 	desc = "The cornerstone of every nutritious breakfast."
@@ -19,7 +21,7 @@
 /obj/item/food/burger/plain/Initialize(mapload)
 	. = ..()
 	if(prob(1))
-		new/obj/effect/particle_effect/smoke(get_turf(src))
+		new/obj/effect/particle_effect/fluid/smoke(get_turf(src))
 		playsound(src, 'sound/effects/smoke.ogg', 50, TRUE)
 		visible_message(span_warning("Oh, ye gods! [src] is ruined! But what if...?"))
 		name = "steamed ham"
@@ -71,6 +73,8 @@
 	foodtypes = GRAIN | SEAFOOD
 	venue_value = FOOD_PRICE_EXOTIC
 
+	food_buffs = list(/datum/status_effect/food/healthy/blood, /datum/status_effect/food/warm)
+
 /obj/item/food/burger/tofu
 	name = "tofu burger"
 	desc = "What.. is that meat?"
@@ -79,6 +83,8 @@
 	tastes = list("bun" = 4, "tofu" = 4)
 	foodtypes = GRAIN | VEGETABLES
 	venue_value = FOOD_PRICE_CHEAP
+
+	food_buffs = list(/datum/status_effect/food/healthy/organs, /datum/status_effect/food/warm)
 
 /obj/item/food/burger/xeno
 	name = "xenoburger"
@@ -89,6 +95,8 @@
 	foodtypes = GRAIN | MEAT
 	venue_value = FOOD_PRICE_EXOTIC
 
+	food_buffs = list(/datum/status_effect/food/healthy/blood, /datum/status_effect/food/warm)
+
 /obj/item/food/burger/bearger
 	name = "bearger"
 	desc = "Best served rawr."
@@ -96,6 +104,8 @@
 	food_reagents = list(/datum/reagent/consumable/nutriment = 3, /datum/reagent/consumable/nutriment/protein = 6, /datum/reagent/consumable/nutriment/vitamin = 5)
 	foodtypes = GRAIN | MEAT
 	venue_value = FOOD_PRICE_EXOTIC
+
+	food_buffs = list(/datum/status_effect/food/healthy/blood, /datum/status_effect/food/warm)
 
 /obj/item/food/burger/clown
 	name = "clown burger"
@@ -279,6 +289,8 @@
 	foodtypes = GRAIN | MEAT | DAIRY
 	venue_value = FOOD_PRICE_EXOTIC
 
+	food_buffs = list(/datum/status_effect/food/healthy/blood, /datum/status_effect/food/warm)
+
 /obj/item/food/burger/superbite/suicide_act(mob/user)
 	user.visible_message(span_suicide("[user] starts to eat [src] in one bite, it looks like [user.p_theyre()] trying to commit suicide!"))
 	var/datum/component/edible/component = GetComponent(/datum/component/edible)
@@ -301,6 +313,8 @@
 	foodtypes = GRAIN | MEAT | GROSS
 	venue_value = FOOD_PRICE_CHEAP
 
+	food_buffs = list(/datum/status_effect/food/healthy/blood, /datum/status_effect/food/warm)
+
 /obj/item/food/burger/baseball
 	name = "home run baseball burger"
 	desc = "It's still warm. The steam coming off of it looks like baseball."
@@ -319,6 +333,8 @@
 	foodtypes = GRAIN | MEAT
 	custom_premium_price = PAYCHECK_ASSISTANT * 1.6
 	venue_value = FOOD_PRICE_NORMAL
+
+	food_buffs = list(/datum/status_effect/food/healthy/blood, /datum/status_effect/food/warm)
 
 /obj/item/food/burger/empoweredburger
 	name = "empowered burger"
@@ -345,6 +361,8 @@
 	tastes = list("bun" = 2, "crab meat" = 4)
 	foodtypes = GRAIN | SEAFOOD
 	venue_value = FOOD_PRICE_NORMAL
+
+	food_buffs = list(/datum/status_effect/food/healthy/blood, /datum/status_effect/food/warm)
 
 /obj/item/food/burger/soylent
 	name = "soylent burger"
@@ -382,6 +400,8 @@
 	foodtypes = GRAIN | MEAT | FRIED
 	venue_value = FOOD_PRICE_NORMAL
 
+	food_buffs = list(/datum/status_effect/food/healthy/blood, /datum/status_effect/food/warm)
+
 /obj/item/food/burger/cheese
 	name = "cheese burger"
 	desc = "This noble burger stands proudly clad in golden cheese."
@@ -414,8 +434,8 @@
 
 /obj/item/food/burger/crazy/process(delta_time) // DIT EES HORRIBLE
 	if(DT_PROB(2.5, delta_time))
-		var/datum/effect_system/smoke_spread/bad/green/smoke = new
-		smoke.set_up(0, src)
+		var/datum/effect_system/fluid_spread/smoke/bad/green/smoke = new
+		smoke.set_up(0, location = src)
 		smoke.start()
 
 // empty burger you can customize

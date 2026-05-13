@@ -6,6 +6,9 @@
 	lefthand_file = 'icons/mob/inhands/equipment/shields_lefthand.dmi'
 	righthand_file = 'icons/mob/inhands/equipment/shields_righthand.dmi'
 
+TYPEINFO_DEF(/obj/item/pizzabox)
+	default_materials = list(/datum/material/cardboard = 2000)
+
 /obj/item/pizzabox
 	name = "pizza box"
 	desc = "A box suited for pizzas."
@@ -15,7 +18,6 @@
 	inhand_icon_state = "pizzabox"
 	lefthand_file = 'icons/mob/inhands/misc/food_lefthand.dmi'
 	righthand_file = 'icons/mob/inhands/misc/food_righthand.dmi'
-	custom_materials = list(/datum/material/cardboard = 2000)
 
 	var/open = FALSE
 	var/can_open_on_fall = TRUE //if FALSE, this pizza box will never open if it falls from a stack
@@ -362,16 +364,11 @@
 
 	//list our ckey and assign it a favourite pizza
 	if(!pizza_preferences[nommer.ckey])
-		if(nommer.has_quirk(/datum/quirk/pineapple_liker))
-			pizza_preferences[nommer.ckey] = /obj/item/food/pizza/pineapple
-		else if(nommer.has_quirk(/datum/quirk/pineapple_hater))
-			var/list/pineapple_pizza_liker = pizza_types.Copy()
-			pineapple_pizza_liker -= /obj/item/food/pizza/pineapple
-			pizza_preferences[nommer.ckey] = pick_weight(pineapple_pizza_liker)
-		else if(nommer.mind?.assigned_role.title == /datum/job/botanist)
+		if(istype(nommer.mind?.assigned_role, /datum/job/botanist))
 			pizza_preferences[nommer.ckey] = /obj/item/food/pizza/dank
 		else
 			pizza_preferences[nommer.ckey] = pick_weight(pizza_types)
+
 	if(pizza)
 		//if the pizza isn't our favourite, delete it
 		if(pizza.type != pizza_preferences[nommer.ckey])

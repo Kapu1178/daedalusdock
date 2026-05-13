@@ -94,7 +94,7 @@ GLOBAL_VAR(restart_counter)
 	#endif
 
 /world/proc/InitTgs()
-	TgsNew(new /datum/tgs_event_handler/impl, TGS_SECURITY_TRUSTED)
+	TgsNew(new /datum/tgs_event_handler/impl, TGS_SECURITY_TRUSTED, new /datum/tgs_http_handler/rustg)
 	GLOB.revdata.load_tgs_info()
 
 /world/proc/HandleTestRun()
@@ -106,7 +106,7 @@ GLOBAL_VAR(restart_counter)
 #ifdef UNIT_TESTS
 	cb = CALLBACK(GLOBAL_PROC, GLOBAL_PROC_REF(RunUnitTests))
 #else
-	cb = VARSET_CALLBACK(SSticker, force_ending, TRUE)
+	cb = CALLBACK(SSticker, TYPE_PROC_REF(/datum/controller/subsystem/ticker, end_round))
 #endif
 	SSticker.OnRoundstart(CALLBACK(GLOBAL_PROC, GLOBAL_PROC_REF(_addtimer), cb, 10 SECONDS))
 
@@ -136,6 +136,7 @@ GLOBAL_VAR(restart_counter)
 	GLOB.world_game_log = "[GLOB.log_directory]/game.log"
 	GLOB.world_silicon_log = "[GLOB.log_directory]/silicon.log"
 	GLOB.world_tool_log = "[GLOB.log_directory]/tools.log"
+	GLOB.world_graffiti_log = "[GLOB.log_directory]/graffiti.log"
 	GLOB.world_suspicious_login_log = "[GLOB.log_directory]/suspicious_logins.log"
 	GLOB.world_mecha_log = "[GLOB.log_directory]/mecha.log"
 	GLOB.world_virus_log = "[GLOB.log_directory]/virus.log"
@@ -271,16 +272,16 @@ GLOBAL_VAR(restart_counter)
 	else
 		log_world("Test run failed!\n[fail_reasons.Join("\n")]")
 	sleep(0) //yes, 0, this'll let Reboot finish and prevent byond memes
-	qdel(src) //shut it down
+	del(src) //shut it down
 
 /world/Reboot(reason = 0, fast_track = FALSE)
 	if (reason || fast_track) //special reboot, do none of the normal stuff
 		if (usr)
 			log_admin("[key_name(usr)] Has requested an immediate world restart via client side debugging tools")
 			message_admins("[key_name_admin(usr)] Has requested an immediate world restart via client side debugging tools")
-		to_chat(world, span_boldannounce("Rebooting World immediately due to host request."))
+		to_chat(world, systemtext("Rebooting World immediately due to host request."))
 	else
-		to_chat(world, span_boldannounce("Rebooting world..."))
+		to_chat(world, systemtext("Rebooting world..."))
 		Master.Shutdown() //run SS shutdowns
 
 	#ifdef UNIT_TESTS
@@ -311,8 +312,8 @@ GLOBAL_VAR(restart_counter)
 
 	log_world("World rebooted at [time_stamp()]")
 
-	TgsReboot()
-	shutdown_logging() // Past this point, no logging procs can be used, at risk of data loss.
+	shutdown_logging() // Past this point, no logging procs can be used besides log_world() at risk of data loss.
+	TgsReboot() // TGS can decide to kill us right here, so it's important to do it last
 	..()
 
 /world/proc/update_status()
@@ -425,7 +426,7 @@ GLOBAL_VAR(restart_counter)
 		else
 			CRASH("Unsupported platform: [system_type]")
 
-	var/init_result = call(library, "init")()
+	var/init_result = call_ext(library, "init")()
 	if (init_result != "0")
 		CRASH("Error initializing byond-tracy: [init_result]")
 

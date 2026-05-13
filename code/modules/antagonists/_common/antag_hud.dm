@@ -24,12 +24,12 @@ GLOBAL_LIST_EMPTY_TYPED(has_antagonist_huds, /datum/atom_hud/alternate_appearanc
 
 	var/datum/mind/mind
 
-/datum/atom_hud/alternate_appearance/basic/antagonist_hud/New(key, datum/mind/mind)
+/datum/atom_hud/alternate_appearance/basic/antagonist_hud/New(key, atom/movable/target, datum/mind/mind)
 	src.mind = mind
 
-	antag_hud_images = get_antag_hud_images(mind)
+	antag_hud_images = get_antag_hud_images(mind, target)
 
-	var/image/first_antagonist = get_antag_image(1) || image(icon('icons/blanks/32x32.dmi', "nothing"), mind.current)
+	var/image/first_antagonist = get_antag_image(1) || image(icon('icons/blanks/32x32.dmi', "nothing"), target)
 
 	RegisterSignal(
 		mind,
@@ -42,12 +42,14 @@ GLOBAL_LIST_EMPTY_TYPED(has_antagonist_huds, /datum/atom_hud/alternate_appearanc
 	return ..(key, first_antagonist, NONE)
 
 /datum/atom_hud/alternate_appearance/basic/antagonist_hud/Destroy()
-	QDEL_LIST(antag_hud_images)
 	STOP_PROCESSING(SSantag_hud, src)
 	mind.antag_hud = null
 	mind = null
 
 	return ..()
+
+/datum/atom_hud/alternate_appearance/basic/antagonist_hud/mimic(atom/movable/openspace/mimic)
+	new type(appearance_key, mimic, mind)
 
 /datum/atom_hud/alternate_appearance/basic/antagonist_hud/mobShouldSee(mob/mob)
 	return Master.current_runlevel >= RUNLEVEL_POSTGAME || (mob.client?.combo_hud_enabled && !isnull(mob.client?.holder))
@@ -67,13 +69,13 @@ GLOBAL_LIST_EMPTY_TYPED(has_antagonist_huds, /datum/atom_hud/alternate_appearanc
 	if (antag_hud_images.len)
 		return antag_hud_images[(index % antag_hud_images.len) + 1]
 
-/datum/atom_hud/alternate_appearance/basic/antagonist_hud/proc/get_antag_hud_images(datum/mind/mind)
+/datum/atom_hud/alternate_appearance/basic/antagonist_hud/proc/get_antag_hud_images(datum/mind/mind, atom/movable/target)
 	var/list/final_antag_hud_images = list()
 
 	for (var/datum/antagonist/antagonist as anything in mind?.antag_datums)
 		if (isnull(antagonist.antag_hud_name))
 			continue
-		final_antag_hud_images += image(antagonist.hud_icon, mind.current, antagonist.antag_hud_name)
+		final_antag_hud_images += image(antagonist.hud_icon, target, antagonist.antag_hud_name)
 
 	return final_antag_hud_images
 

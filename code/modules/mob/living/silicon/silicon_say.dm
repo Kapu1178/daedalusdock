@@ -5,11 +5,11 @@
 		var/mob/living/silicon/S = src
 		desig = trim_left(S.designation + " " + S.job)
 	var/message_a = say_quote(message)
-	var/rendered = "Robotic Talk, [span_name("[name]")] <span class='message'>[message_a]</span>"
+	var/rendered = "[RADIO_TAG("robo.png")][span_name("[name]")] <span class='message'>[message_a]</span>"
 	for(var/mob/M in GLOB.player_list)
 		if(M.binarycheck())
 			if(isAI(M))
-				var/renderedAI = span_binarysay("Robotic Talk, <a href='?src=[REF(M)];track=[html_encode(name)]'>[span_name("[name] ([desig])")]</a> <span class='message'>[message_a]</span>")
+				var/renderedAI = span_binarysay("[RADIO_TAG("robo.png")]<a href='?src=[REF(M)];track=[html_encode(name)]'>[span_name("[name] ([desig])")]</a> <span class='message'>[message_a]</span>")
 				to_chat(M, renderedAI, avoid_highlighting = src == M)
 			else
 				to_chat(M, span_binarysay("[rendered]"), avoid_highlighting = src == M)
@@ -34,7 +34,7 @@
 		if(radio)
 			radio.talk_into(src, message, , spans, language, message_mods)
 		return REDUCE_RANGE
-	else if(message_mods[RADIO_EXTENSION] in GLOB.radiochannels)
+	else if(message_mods[RADIO_EXTENSION] in GLOB.radio_channel_to_frequency)
 		if(radio)
 			radio.talk_into(src, message, message_mods[RADIO_EXTENSION], spans, language, message_mods)
 			return ITALICS | REDUCE_RANGE

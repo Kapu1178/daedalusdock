@@ -7,9 +7,8 @@
 const webpack = require('webpack');
 const path = require('path');
 const ExtractCssPlugin = require('mini-css-extract-plugin');
-const { createBabelConfig } = require('./babel.config.js');
 
-const createStats = verbose => ({
+const createStats = (verbose) => ({
   assets: verbose,
   builtAt: verbose,
   cached: false,
@@ -30,16 +29,10 @@ module.exports = (env = {}, argv) => {
   const config = {
     mode: mode === 'production' ? 'production' : 'development',
     context: path.resolve(__dirname),
-    target: ['web', 'es3', 'browserslist:ie 8'],
+    target: ['web', 'browserslist:edge>=123'],
     entry: {
-      'tgui': [
-        './packages/tgui-polyfill',
-        './packages/tgui',
-      ],
-      'tgui-panel': [
-        './packages/tgui-polyfill',
-        './packages/tgui-panel',
-      ],
+      tgui: ['./packages/tgui'],
+      'tgui-panel': ['./packages/tgui-panel'],
     },
     output: {
       path: argv.useTmpFolder
@@ -48,26 +41,27 @@ module.exports = (env = {}, argv) => {
       filename: '[name].bundle.js',
       chunkFilename: '[name].bundle.js',
       chunkLoadTimeout: 15000,
+      publicPath: '/',
     },
     resolve: {
-      extensions: ['.tsx', '.ts', '.js'],
-      alias: {},
+      extensions: ['.tsx', '.ts', '.js', '.jsx'],
+      alias: {
+        shared_assets: path.resolve(__dirname, 'packages/common/assets'),
+      },
     },
     module: {
       rules: [
         {
-          test: /\.(js|cjs|ts|tsx)$/,
+          test: /\.([tj]s(x)?|cjs)$/,
+          exclude: /node_modules/,
           use: [
             {
-              loader: require.resolve('babel-loader'),
-              options: createBabelConfig({
-                removeConsole: !bench,
-              }),
+              loader: require.resolve('swc-loader'),
             },
           ],
         },
         {
-          test: /\.scss$/,
+          test: /\.(s)?css$/,
           use: [
             {
               loader: ExtractCssPlugin.loader,
@@ -87,7 +81,7 @@ module.exports = (env = {}, argv) => {
           ],
         },
         {
-          test: /\.(png|jpg|svg)$/,
+          test: /\.cur$/,
           use: [
             {
               loader: require.resolve('url-loader'),
@@ -96,6 +90,10 @@ module.exports = (env = {}, argv) => {
               },
             },
           ],
+        },
+        {
+          test: /\.(png|jpg|svg)$/,
+          type: 'asset/inline',
         },
       ],
     },
@@ -129,26 +127,17 @@ module.exports = (env = {}, argv) => {
 
   if (bench) {
     config.entry = {
-      'tgui-bench': [
-        './packages/tgui-polyfill',
-        './packages/tgui-bench/entrypoint',
-      ],
+      'tgui-bench': ['./packages/tgui-bench/entrypoint'],
     };
   }
 
   // Production build specific options
   if (mode === 'production') {
-    const TerserPlugin = require('terser-webpack-plugin');
+    const { EsbuildPlugin } = require('esbuild-loader');
     config.optimization.minimizer = [
-      new TerserPlugin({
-        extractComments: false,
-        terserOptions: {
-          ie8: true,
-          output: {
-            ascii_only: true,
-            comments: false,
-          },
-        },
+      new EsbuildPlugin({
+        css: true,
+        legalComments: 'none',
       }),
     ];
   }

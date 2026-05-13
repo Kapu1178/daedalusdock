@@ -1,3 +1,6 @@
+TYPEINFO_DEF(/obj/item/clothing/shoes/magboots)
+	default_armor = list(BLUNT = 15, PUNCTURE = 15, SLASH = 30, LASER = 20, ENERGY = 10, BOMB = 20, BIO = 10, FIRE = 100, ACID = 50)
+
 /obj/item/clothing/shoes/magboots
 	desc = "Magnetic boots, often used during extravehicular activity to ensure the user remains safely attached to the vehicle."
 	name = "magboots"
@@ -11,7 +14,6 @@
 	resistance_flags = FIRE_PROOF
 	supports_variations_flags = CLOTHING_DIGITIGRADE_VARIATION | CLOTHING_TESHARI_VARIATION | CLOTHING_VOX_VARIATION
 
-	slowdown = SHOES_SLOWDOWN
 	/// Whether the magpulse system is active
 	var/magpulse = FALSE
 	/// Slowdown applied wwhen magpulse is active. This is added onto existing slowdown
@@ -66,7 +68,7 @@
 	name = "advanced magboots"
 	icon_state = "advmag0"
 	base_icon_state = "advmag"
-	slowdown_active = SHOES_SLOWDOWN // ZERO active slowdown
+	slowdown_active = parent_type::slowdown // ZERO active slowdown
 	resistance_flags = INDESTRUCTIBLE | LAVA_PROOF | FIRE_PROOF | ACID_PROOF
 
 /obj/item/clothing/shoes/magboots/syndie
