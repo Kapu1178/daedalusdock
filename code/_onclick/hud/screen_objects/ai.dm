@@ -45,17 +45,6 @@
 		return
 	AI.ai_camera_track(target_name)
 
-/atom/movable/screen/ai/camera_light
-	name = "Toggle Camera Light"
-	icon_state = "camera_light"
-	screen_loc = ui_ai_camera_light
-
-/atom/movable/screen/ai/camera_light/Click()
-	if(..())
-		return
-	var/mob/living/silicon/ai/AI = usr
-	AI.toggle_camera_light()
-
 /atom/movable/screen/ai/modpc
 	name = "Messenger"
 	icon_state = "pda_send"
@@ -83,12 +72,6 @@
 	name = "Crew Manifest"
 	icon_state = "manifest"
 	screen_loc = ui_ai_crew_manifest
-
-/atom/movable/screen/ai/crew_manifest/Click()
-	if(..())
-		return
-	var/mob/living/silicon/ai/AI = usr
-	AI.ai_roster()
 
 /atom/movable/screen/ai/alerts
 	name = "Show Alerts"

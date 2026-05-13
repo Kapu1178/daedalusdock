@@ -10,7 +10,6 @@
 	add_screen_object(/atom/movable/screen/pai/light, HUDKEY_CYBORG_LAMP, HUDGROUP_STATIC_INVENTORY)
 	add_screen_object(/atom/movable/screen/pai/newscaster, HUDKEY_PAI_NEWSCASTER, HUDGROUP_STATIC_INVENTORY)
 	add_screen_object(/atom/movable/screen/pai/host_monitor, HUDKEY_PAI_HOST_MONITOR, HUDGROUP_STATIC_INVENTORY)
-	add_screen_object(/atom/movable/screen/pai/crew_manifest, HUDKEY_AI_CREW_MANIFEST, HUDGROUP_STATIC_INVENTORY)
 	add_screen_object(/atom/movable/screen/pai/state_laws, HUDKEY_AI_STATE_LAWS, HUDGROUP_STATIC_INVENTORY)
 	add_screen_object(/atom/movable/screen/pai/internal_gps, HUDKEY_PAI_GPS, HUDGROUP_STATIC_INVENTORY)
 	add_screen_object(/atom/movable/screen/pai/image_take, HUDKEY_AI_TAKE_IMAGE, HUDGROUP_STATIC_INVENTORY)

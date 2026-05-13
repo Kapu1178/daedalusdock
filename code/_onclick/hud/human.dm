@@ -196,7 +196,6 @@
 		if(eyes?.no_glasses)
 			blocked_slots |= ITEM_SLOT_EYES
 
-	var/datum/species/S = H.dna.species
 	for(var/atom/movable/screen/inventory/inv in screen_objects)
 		if(inv.slot_id)
 			inv.alpha = (blocked_slots & inv.slot_id) ? 128 : initial(inv.alpha)

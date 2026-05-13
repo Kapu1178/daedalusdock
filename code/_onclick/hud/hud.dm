@@ -65,8 +65,6 @@ GLOBAL_LIST_INIT(available_ui_styles, list(
 
 	var/atom/movable/screen/holomap/holomap_container
 	var/atom/movable/screen/vis_holder/vis_holder
-	// subtypes can override this to force a specific UI style
-	var/ui_style
 
 /datum/hud/New(mob/owner)
 	mymob = owner
@@ -114,11 +112,16 @@ GLOBAL_LIST_INIT(available_ui_styles, list(
 	if(mymob.hud_used == src)
 		mymob.hud_used = null
 
+	QDEL_NULL(palette_actions)
+	QDEL_NULL(listed_actions)
+	QDEL_LIST(floating_actions)
+	screentip_text = null
 	screen_groups = null
-	QDEL_LIST_ASSOC_VAL(screen_objects)
 
 	inv_slots.Cut()
+	hand_slots.Cut()
 
+	QDEL_LIST_ASSOC_VAL(screen_objects)
 	QDEL_LIST_ASSOC_VAL(plane_masters)
 	QDEL_LIST_ASSOC_VAL(plane_master_controllers)
 	mymob = null
@@ -143,7 +146,7 @@ GLOBAL_LIST_INIT(available_ui_styles, list(
 	SEND_SIGNAL(src, COMSIG_MOB_HUD_CREATED)
 
 /// Add a managed screen object.
-/datum/hud/proc/add_screen_object(atom/movable/screen/new_object, hud_key, group_key = HUDGROUP_STATIC_INVENTORY, new_ui_style, update_screen = FALSE)
+/datum/hud/proc/add_screen_object(atom/movable/screen/new_object, hud_key, group_key = HUDGROUP_STATIC_INVENTORY, new_ui_style, update_screen = FALSE) as /atom/movable/screen
 	if(ispath(new_object))
 		new_object = new new_object(null, src)
 
@@ -164,6 +167,24 @@ GLOBAL_LIST_INIT(available_ui_styles, list(
 	if(update_screen)
 		show_hud(hud_version)
 	return new_object
+
+/// Remove a managed screen object.
+/datum/hud/proc/remove_screen_object(hud_key, update_screen = FALSE) as /atom/movable/screen
+	var/atom/movable/screen/removed = screen_objects[hud_key]
+	if(!removed)
+		return
+
+	screen_objects -= hud_key
+	removed.hud_key = null
+
+	if(removed.hud_group_key)
+		LAZYREMOVE(screen_groups[removed.hud_group_key], removed)
+		removed.hud_group_key = null
+
+	if(update_screen)
+		show_hud(hud_version)
+
+	return removed
 
 //Version denotes which style should be displayed. blank or 0 means "next version"
 /datum/hud/proc/show_hud(version = 0, mob/viewmob)

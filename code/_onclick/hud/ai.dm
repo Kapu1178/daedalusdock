@@ -8,7 +8,6 @@
 	add_screen_object(/atom/movable/screen/ai/aicore, HUDKEY_AI_AICORE, HUDGROUP_STATIC_INVENTORY)
 	add_screen_object(/atom/movable/screen/ai/camera_list, HUDKEY_AI_CAMERA_LIST, HUDGROUP_STATIC_INVENTORY)
 	add_screen_object(/atom/movable/screen/ai/camera_track, HUDKEY_AI_CAMERA_TRACK, HUDGROUP_STATIC_INVENTORY)
-	add_screen_object(/atom/movable/screen/ai/camera_light, HUDKEY_AI_CAMERA_LIGHT, HUDGROUP_STATIC_INVENTORY)
 	add_screen_object(/atom/movable/screen/ai/crew_monitor, HUDKEY_AI_CREW_MONITOR, HUDGROUP_STATIC_INVENTORY)
 	add_screen_object(/atom/movable/screen/ai/crew_manifest, HUDKEY_AI_CREW_MANIFEST, HUDGROUP_STATIC_INVENTORY)
 	add_screen_object(/atom/movable/screen/ai/alerts, HUDKEY_SILICON_ALERTS, HUDGROUP_STATIC_INVENTORY)

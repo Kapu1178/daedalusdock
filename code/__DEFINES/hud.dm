@@ -274,6 +274,7 @@
 #define HUDKEY_MOB_GUN_RADIO "mobgunradio"
 #define HUDKEY_MOB_GUN_MODE "mobgunmode"
 #define HUDKEY_MOB_CRAFTING_MENU "mobcrafting"
+#define HUDKEY_MOB_MOOD "mobmood"
 
 #define HUDKEY_ITEM_SLOT(slot) "item_slot:[slot]"
 /// Converts item slots to hud keys as a compiler constant
@@ -351,3 +352,9 @@
 
 #define HUDKEY_CHANGELING_CHEMS "changelingchems"
 #define HUDKEY_CHANGELING_STING "changelingsting"
+
+#define HUDKEY_FLOCK_RELAY_STATUS "flockrelaystatus"
+
+#define HUDKEY_FLOCKDRONE_CONVERTER "flockdroneconverter"
+#define HUDKEY_FLOCKDRONE_INCAPACITATOR "flockdroneincapacitator"
+#define HUDKEY_FLOCKDRONE_ABSORBER "flockdroneabsorber"

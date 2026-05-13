@@ -16,7 +16,7 @@
 
 	if(isliving(user.mob))
 		var/mob/living/user_mob = user.mob
-		user_mob.hud_used?.action_intent?.update_appearance()
+		user_mob.hud_used?.screen_objects[HUDKEY_MOB_INTENTS]?.update_appearance()
 
 /datum/keybinding/rawkey/ctrl/down(client/user)
 	. = ..()
@@ -25,7 +25,7 @@
 
 	if(isliving(user.mob))
 		var/mob/living/user_mob = user.mob
-		user_mob.hud_used?.action_intent?.update_appearance()
+		user_mob.hud_used?.screen_objects[HUDKEY_MOB_INTENTS]?.update_appearance()
 
 /datum/keybinding/rawkey/shift
 	hotkey_keys = list("Shift")

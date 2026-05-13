@@ -109,18 +109,6 @@
 		to_chat(usr, span_warning("You are not being carried by anyone!"))
 		return FALSE
 
-/atom/movable/screen/pai/crew_manifest
-	name = "Crew Manifest"
-	icon_state = "manifest"
-	required_software = "crew manifest"
-	screen_loc = ui_pai_crew_manifest
-
-/atom/movable/screen/pai/crew_manifest/Click()
-	if(!..())
-		return
-	var/mob/living/silicon/pai/pAI = usr
-	pAI.ai_roster()
-
 /atom/movable/screen/pai/state_laws
 	name = "State Laws"
 	icon_state = "state_laws"
