@@ -95,7 +95,7 @@ TYPEINFO_DEF(/obj/item/clothing/under/rank/medical/chemist)
 	default_armor = list(BLUNT = 0, PUNCTURE = 0, SLASH = 0, LASER = 0, ENERGY = 0, BOMB = 0, BIO = 10, FIRE = 50, ACID = 65)
 
 /obj/item/clothing/under/rank/medical/chemist
-	desc = "It's made of a special fiber that gives special protection against biohazards. It has a chemist rank stripe on it."
+	desc = "It's made of a special fiber that gives special protection against biohazards."
 	name = "chemist's jumpsuit"
 	icon_state = "chemistry"
 	inhand_icon_state = "w_suit"
@@ -103,7 +103,7 @@ TYPEINFO_DEF(/obj/item/clothing/under/rank/medical/chemist)
 
 /obj/item/clothing/under/rank/medical/chemist/skirt
 	name = "chemist's jumpskirt"
-	desc = "It's made of a special fiber that gives special protection against biohazards. It has a chemist rank stripe on it."
+	desc = "It's made of a special fiber that gives special protection against biohazards."
 	icon_state = "chemistrywhite_skirt"
 	inhand_icon_state = "w_suit"
 	body_parts_covered = CHEST|GROIN|ARMS

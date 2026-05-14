@@ -434,7 +434,7 @@ TYPEINFO_DEF(/obj/item/storage/bag/tray)
  */
 
 /obj/item/storage/bag/chemistry
-	name = "chemistry bag"
+	name = "apothecary bag"
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "bag"
 	worn_icon_state = "chembag"
