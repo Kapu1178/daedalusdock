@@ -331,7 +331,7 @@
 		if(dna.temporary_mutations[mut] < world.time)
 			if(mut == UI_CHANGED)
 				if(dna.previous["UI"])
-					dna.unique_identity = merge_text(dna.unique_identity,dna.previous["UI"])
+					dna.set_unique_identity(merge_text(dna.unique_identity,dna.previous["UI"]))
 					updateappearance(mutations_overlay_update=1)
 					dna.previous.Remove("UI")
 				dna.temporary_mutations.Remove(mut)

@@ -100,11 +100,19 @@ GLOBAL_LIST_INIT(total_uf_len_by_block, populate_total_uf_len_by_block())
 
 	return ..()
 
+/// Setter for unique_identity.
+/datum/dna/proc/set_unique_identity(new_identity, update_fingerprints = FALSE)
+	unique_identity = new_identity
+	if(update_fingerprints && ishuman(holder))
+		var/mob/living/carbon/human/H = holder
+		astype(H.get_bodypart(BODY_ZONE_R_ARM), /obj/item/bodypart/arm)?.inherit_fingerprints()
+		astype(H.get_bodypart(BODY_ZONE_L_ARM), /obj/item/bodypart/arm)?.inherit_fingerprints()
+
 /datum/dna/proc/transfer_identity(mob/living/carbon/destination, transfer_SE = 0)
 	if(!istype(destination))
 		return
 	destination.dna.unique_enzymes = unique_enzymes
-	destination.dna.unique_identity = unique_identity
+	destination.dna.set_unique_identity(unique_identity)
 	destination.dna.blood_type = blood_type
 	destination.set_species(species.type, icon_update=0)
 	destination.dna.unique_features = unique_features
@@ -120,7 +128,7 @@ GLOBAL_LIST_INIT(total_uf_len_by_block, populate_total_uf_len_by_block())
 	new_dna.unique_enzymes = unique_enzymes
 	new_dna.mutation_index = mutation_index
 	new_dna.default_mutation_genes = default_mutation_genes
-	new_dna.unique_identity = unique_identity
+	new_dna.set_unique_identity(unique_identity)
 	new_dna.unique_features = unique_features
 	new_dna.blood_type = blood_type
 	new_dna.features = features.Copy()
@@ -309,13 +317,13 @@ GLOBAL_LIST_INIT(total_uf_len_by_block, populate_total_uf_len_by_block())
 /datum/dna/proc/set_uni_identity_block(blocknum, input)
 	var/precesing_blocks = copytext(unique_identity, 1, GLOB.total_ui_len_by_block[blocknum])
 	var/succeeding_blocks = blocknum < GLOB.total_ui_len_by_block.len ? copytext(unique_identity, GLOB.total_ui_len_by_block[blocknum+1]) : ""
-	unique_identity = precesing_blocks + input + succeeding_blocks
+	set_unique_identity(precesing_blocks + input + succeeding_blocks)
 
 ///Setter macro used to modify unique features blocks.
 /datum/dna/proc/set_uni_feature_block(blocknum, input)
 	var/precesing_blocks = copytext(unique_features, 1, GLOB.total_uf_len_by_block[blocknum])
 	var/succeeding_blocks = blocknum < GLOB.total_uf_len_by_block.len ? copytext(unique_features, GLOB.total_uf_len_by_block[blocknum+1]) : ""
-	unique_features = precesing_blocks + input + succeeding_blocks
+	set_unique_identity(precesing_blocks + input + succeeding_blocks)
 
 /datum/dna/proc/update_ui_block(blocknumber)
 	if(!blocknumber)
@@ -470,16 +478,18 @@ GLOBAL_LIST_INIT(total_uf_len_by_block, populate_total_uf_len_by_block())
 			to_chat(holder, message)
 
 //used to update dna UI, UE, and dna.real_name.
-/datum/dna/proc/update_dna_identity()
-	unique_identity = generate_unique_identity()
+/datum/dna/proc/update_dna_identity(update_fingerprints = FALSE)
+	set_unique_identity(generate_unique_identity(), update_fingerprints = update_fingerprints)
 	unique_enzymes = generate_unique_enzymes()
 	unique_features = generate_unique_features()
 
 /datum/dna/proc/initialize_dna(newblood_type, skip_index = FALSE)
 	if(newblood_type)
 		blood_type = newblood_type
+
 	unique_enzymes = generate_unique_enzymes()
-	unique_identity = generate_unique_identity()
+	set_unique_identity(generate_unique_identity())
+
 	if(!skip_index) //I hate this
 		generate_dna_blocks()
 	features = random_features()
@@ -601,7 +611,7 @@ GLOBAL_LIST_INIT(total_uf_len_by_block, populate_total_uf_len_by_block())
 		dna.blood_type = newblood_type
 
 	if(ui)
-		dna.unique_identity = ui
+		dna.set_unique_identity(ui)
 		updateappearance(icon_update=0)
 
 	if(LAZYLEN(mutation_index))

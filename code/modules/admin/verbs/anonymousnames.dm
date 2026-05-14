@@ -98,7 +98,7 @@ GLOBAL_DATUM(current_anonymous_theme, /datum/anonymous_theme)
 		player.fully_replace_character_name(original_name, anonymous_name(player))
 		if(extras_enabled)
 			player_extras(player)
-		human_mob.dna.update_dna_identity()
+		human_mob.dna.update_dna_identity(update_fingerprints = TRUE)
 
 /**
  * restore_all_players: sets all crewmembers on station back to their preference name.
