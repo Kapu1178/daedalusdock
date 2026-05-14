@@ -201,8 +201,8 @@
 /mob/living/simple_animal/update_health_hud()
 	var/severity = 0
 	var/healthpercent = ceil((health/maxHealth) * 100)
-	if(hud_used?.healthdoll) //to really put you in the boots of a simplemob
-		var/atom/movable/screen/flockdrone_health/healthdoll = hud_used.healthdoll
+	if(hud_used?.screen_objects[HUDKEY_MOB_HEALTH]) //to really put you in the boots of a simplemob
+		var/atom/movable/screen/flockdrone_health/healthdoll = hud_used?.screen_objects[HUDKEY_MOB_HEALTH]
 		switch(healthpercent)
 			if(100 to INFINITY)
 				severity = 0

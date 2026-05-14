@@ -626,9 +626,9 @@
 	for(var/mob/camera/flock/ghost_bird in (traces + overmind))
 		var/atom/movable/screen/flock_relay_status/status
 		if(ghost_bird.controlling_bird)
-			status = astype(ghost_bird.controlling_bird.hud_used, /datum/hud/flockdrone)?.relay_status
+			status = ghost_bird.controlling_bird.hud_used?.screen_objects[HUDKEY_FLOCK_RELAY_STATUS]
 		else
-			status = astype(ghost_bird.hud_used, /datum/hud/flockghost)?.relay_status
+			status = ghost_bird.hud_used?.screen_objects[HUDKEY_FLOCK_RELAY_STATUS]
 
 		status.desc = new_desc
 		status.alpha = new_alpha
