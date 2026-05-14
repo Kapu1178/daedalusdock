@@ -7,4 +7,4 @@
 
 	var/obj/item/bodypart/arm/arm = dummy.get_bodypart(BODY_ZONE_L_ARM)
 
-	TEST_ASSERT(md5(human.unique_identity) == arm.fingerprints, "Arm fingerprint does not match DNA fingerprint.")
+	TEST_ASSERT(md5(dummy.dna.unique_identity) == arm.fingerprints, "Arm fingerprint does not match DNA fingerprint.")
