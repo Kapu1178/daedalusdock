@@ -1,0 +1,3 @@
+2026-05-10:
+  Floyd (Yes, _that_ Floyd):
+  - bugfix: Sounds powered by sound-tokens start playing after logging back in.

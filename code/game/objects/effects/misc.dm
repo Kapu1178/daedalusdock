@@ -85,7 +85,8 @@
 
 /obj/effect/abstract/marker/intercom
 	name = "intercom range marker"
-	color = COLOR_YELLOW
+	icon = 'modular_pariah/master_files/icons/testing/Zone.dmi'
+	icon_state = "created"
 
 /obj/effect/dummy/lighting_obj
 	name = "lighting fx obj"
@@ -116,3 +117,7 @@
 	if(!ismob(loc))
 		return INITIALIZE_HINT_QDEL
 
+/// Used by RangedReachCheck
+/obj/effect/abstract/reach_checker
+	pass_flags = PASSTABLE
+	invisibility = INVISIBILITY_ABSTRACT

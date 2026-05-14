@@ -21,7 +21,7 @@ GLOBAL_LIST_EMPTY(announcement_systems)
 	var/datum/radio_frequency/common_freq
 
 	var/obj/item/radio/headset/radio
-	var/arrival = "%PERSON has signed up as %RANK"
+	var/arrival = "%PERSON, %RANK has boarded the station."
 	var/arrivalToggle = 1
 	var/newhead = "%PERSON, %RANK, is the department head."
 	var/newheadToggle = 1
@@ -32,9 +32,9 @@ GLOBAL_LIST_EMPTY(announcement_systems)
 
 /obj/machinery/announcement_system/Initialize(mapload)
 	. = ..()
-	GLOB.announcement_systems += src
+	GLOB.announcement_systems |= src
 	// Voice Radio makes me cry.
-	radio = new /obj/item/radio/headset/silicon/ai(src)
+	radio = new /obj/item/radio/internal(src)
 	// We don't need to be *present* on the frequency, just be able to send packets on it.
 	common_freq = SSpackets.return_frequency(FREQ_COMMON)
 	update_appearance()
@@ -58,6 +58,12 @@ GLOBAL_LIST_EMPTY(announcement_systems)
 	QDEL_NULL(radio)
 	GLOB.announcement_systems -= src //"OH GOD WHY ARE THERE 100,000 LISTED ANNOUNCEMENT SYSTEMS?!!"
 	return ..()
+
+/obj/machinery/announcement_system/on_set_is_operational(old_value)
+	if(is_operational)
+		GLOB.announcement_systems |= src
+	else
+		GLOB.announcement_systems -= src
 
 /obj/machinery/announcement_system/screwdriver_act(mob/living/user, obj/item/tool)
 	tool.play_tool_sound(src)
@@ -103,11 +109,12 @@ GLOBAL_LIST_EMPTY(announcement_systems)
 /// Sends a message to the appropriate channels.
 /obj/machinery/announcement_system/proc/broadcast(message, list/channels)
 	use_power(active_power_usage)
-	if(channels.len == 0)
+	if(!length(channels))
 		radio.talk_into(src, message, null)
 	else
 		for(var/channel in channels)
 			radio.talk_into(src, message, channel)
+	return TRUE
 
 /obj/machinery/announcement_system/ui_interact(mob/user, datum/tgui/ui)
 	ui = SStgui.try_update_ui(user, src, ui)
@@ -218,8 +225,8 @@ GLOBAL_LIST_EMPTY(announcement_systems)
 	for(var/next_addr in targets)
 		var/datum/signal/outgoing = create_signal(next_addr, list(
 			PACKET_CMD = NETCMD_PDAMESSAGE,
-			"name" = "Security Department Update",
-			"job" = "Automated Announcement System",
+			"name" = "Automated Announcement System",
+			"job" = "Security Department Update",
 			"message" = "Officer [officer.real_name] has been assigned to your department, [department].",
 			"automated" = TRUE,
 		))
@@ -229,18 +236,87 @@ GLOBAL_LIST_EMPTY(announcement_systems)
 /obj/machinery/announcement_system/proc/notify_citation(cited_name, cite_message, fine_amount)
 	if (!is_operational)
 		return
+
 	for (var/obj/item/modular_computer/tablet in GLOB.TabletMessengers)
 		if(tablet.saved_identification == cited_name)
 			var/obj/item/computer_hardware/network_card/packetnet/rfcard = tablet.all_components[MC_NET]
 			if(!istype(rfcard))
 				break //No RF card to send to.
-			var/message = "You have been fined [fine_amount] credits for '[cite_message]'. Fines may be paid at security."
+			var/message = "You have been fined [fine_amount] marks for '[cite_message]'. Fines may be paid at security."
 			var/datum/signal/outgoing = create_signal(rfcard.hardware_id, list(
 				PACKET_CMD = NETCMD_PDAMESSAGE,
-				"name" = "Security Citation",
-				"job" = "Citation Server",
+				"name" = "Automated Announcement System",
+				"job" = "Security Citation",
 				"message" = message,
 				"automated" = TRUE,
 			))
 			outgoing.transmission_method = TRANSMISSION_RADIO
 			common_freq.post_signal(outgoing, RADIO_PDAMESSAGE)
+
+/// A helper proc for sending an announcement to PDAs. Takes a list of hardware IDs as targets
+/obj/machinery/announcement_system/proc/mass_pda_message(list/recipients, message, reason)
+	for(var/next_addr in recipients)
+		var/datum/signal/outgoing = create_signal(next_addr, list(
+			PACKET_CMD = NETCMD_PDAMESSAGE,
+			"name" = "Automated Announcement System",
+			"job" = reason,
+			"message" = message,
+			"automated" = TRUE,
+		))
+		outgoing.transmission_method = TRANSMISSION_RADIO
+		common_freq.post_signal(outgoing, RADIO_PDAMESSAGE)
+	return TRUE
+
+/// A helper proc for sending an announcement to a single PDA.
+/obj/machinery/announcement_system/proc/pda_message(recipient, message, reason)
+	var/datum/signal/outgoing = create_signal(recipient, list(
+		PACKET_CMD = NETCMD_PDAMESSAGE,
+		"name" = "Automated Announcement System",
+		"job" = reason,
+		"message" = message,
+		"automated" = TRUE,
+	))
+	outgoing.transmission_method = TRANSMISSION_RADIO
+	common_freq.post_signal(outgoing, RADIO_PDAMESSAGE)
+	return TRUE
+
+/// Get an announcement system and call pda_message()
+/proc/aas_pda_message(recipient, message, reason)
+	var/obj/machinery/announcement_system/AAS = pick(GLOB.announcement_systems)
+	if(!AAS)
+		return FALSE
+
+	return AAS.pda_message(arglist(args))
+
+/// Get an announcement system and call mass_pda_message()
+/proc/aas_mass_pda_message(recipients, message, reason)
+	var/obj/machinery/announcement_system/AAS = pick(GLOB.announcement_systems)
+	if(!AAS)
+		return FALSE
+
+	return AAS.mass_pda_message(arglist(args))
+
+/// Send an ASS pda message to a given name
+/proc/aas_pda_message_name(name, record_type, message, reason)
+	var/datum/data/record/R = SSdatacore.get_record_by_name(name, record_type)
+	if(!R || !R.fields[DATACORE_PDA_ID])
+		return FALSE
+
+	return aas_pda_message(R.fields[DATACORE_PDA_ID], message)
+
+/// Send an ASS pda message to an entire department
+/proc/aas_pda_message_department(department, message, reason)
+	. = list()
+	for(var/datum/data/record/R as anything in SSdatacore.get_records(department))
+		var/id = R.fields[DATACORE_PDA_ID]
+		if(id)
+			. += id
+
+	return aas_mass_pda_message(., message, reason)
+
+/proc/aas_radio_message(message, list/channels)
+	var/obj/machinery/announcement_system/AAS = pick(GLOB.announcement_systems)
+	if(!AAS)
+		return FALSE
+
+	return AAS.broadcast(message, channels)

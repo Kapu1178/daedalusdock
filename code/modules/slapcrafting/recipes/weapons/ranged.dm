@@ -1,7 +1,7 @@
 //Is a flamethrower a gun? I'm still not sure.
 /datum/slapcraft_recipe/flamethrower
 	name = "flamethrower"
-	examine_hint = "You could craft a flamethrower, starting by attaching an igniter..."
+	examine_hint = "You could craft a flamethrower with a welding tool and igniter."
 	category = SLAP_CAT_WEAPONS
 	steps = list(
 		/datum/slapcraft_step/item/welder/base_only,

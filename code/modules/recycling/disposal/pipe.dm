@@ -1,5 +1,8 @@
 // Disposal pipes
 
+TYPEINFO_DEF(/obj/structure/disposalpipe)
+	default_armor = list(BLUNT = 25, PUNCTURE = 10, SLASH = 0, LASER = 10, ENERGY = 100, BOMB = 0, BIO = 100, FIRE = 90, ACID = 30)
+
 /obj/structure/disposalpipe
 	name = "disposal pipe"
 	desc = "An underfloor disposal pipe."
@@ -9,7 +12,6 @@
 	obj_flags = CAN_BE_HIT
 	dir = NONE // dir will contain dominant direction for junction pipes
 	max_integrity = 200
-	armor = list(BLUNT = 25, PUNCTURE = 10, SLASH = 0, LASER = 10, ENERGY = 100, BOMB = 0, BIO = 100, FIRE = 90, ACID = 30)
 	layer = DISPOSAL_PIPE_LAYER // slightly lower than wires and other pipes
 	damage_deflection = 5
 	var/dpdir = NONE // bitmask of pipe directions
@@ -83,9 +85,19 @@
 	if(H2 && !H2.active)
 		H.merge(H2)
 
-	for(var/mob/living/L in H)
-		var/armor = L.run_armor_check(attack_flag = BLUNT, silent = TRUE)
-		L.apply_damage(3, BRUTE, blocked = armor, spread_damage = TRUE)
+	if(prob(5) && (locate(/mob/living) in H))
+		var/list/mobs = list()
+
+		for(var/mob/living/L in H)
+			mobs += L
+
+		var/message = pick("CLUNK!", "CLONK!", "CLANK!", "BANG!")
+		audible_message(span_hear("[icon2html(src, hearers(src) | mobs)] [message]"))
+		playsound(src, 'sound/effects/clang.ogg', 50, FALSE, FALSE)
+
+		for(var/mob/living/L as anything in mobs)
+			var/armor = L.run_armor_check(attack_flag = BLUNT, silent = TRUE)
+			L.apply_damage(5, BRUTE, blocked = armor, spread_damage = TRUE)
 
 	H.forceMove(P)
 	return P

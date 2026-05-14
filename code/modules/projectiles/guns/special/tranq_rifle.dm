@@ -1,3 +1,6 @@
+TYPEINFO_DEF(/obj/item/gun/ballistic/rifle/tranqrifle)
+	default_materials = list(/datum/material/iron=2000)
+
 /obj/item/gun/ballistic/rifle/tranqrifle
 	name = "tranquilizer rifle"
 	desc = "A veterinary tranquilizer rifle chambered in .308 caliber. The bolt will only open if there's a magazine inserted or the chamber is empty."
@@ -10,10 +13,9 @@
 	slot_flags = null
 	throw_range = 7
 	force = 6
-	custom_materials = list(/datum/material/iron=2000)
 	clumsy_check = FALSE
 	fire_sound = 'sound/items/syringeproj.ogg'
-	mag_type = /obj/item/ammo_box/magazine/tranq_rifle
+	mag_type = /obj/item/ammo_box/magazine/tranq_rifle/ryetalyn
 	internal_magazine = FALSE
 	empty_alarm = FALSE
 	hidden_chambered = TRUE

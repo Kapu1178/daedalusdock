@@ -122,6 +122,12 @@
 	layer = CURSE_LAYER
 	plane = FULLSCREEN_PLANE
 
+/atom/movable/screen/fullscreen/curse/bloodlust
+
+/atom/movable/screen/fullscreen/curse/bloodlust/Initialize(mapload, datum/hud/hud_owner)
+	. = ..()
+	color = color_matrix_rotate_hue(90)
+
 /atom/movable/screen/fullscreen/ivanov_display
 	icon_state = "ivanov"
 	alpha = 180
@@ -133,6 +139,9 @@
 	icon = 'icons/hud/screen_gen.dmi'
 	screen_loc = "WEST,SOUTH to EAST,NORTH"
 	icon_state = "flash"
+
+/atom/movable/screen/fullscreen/flash/over_blind
+	layer = FOV_EFFECTS_LAYER
 
 /atom/movable/screen/fullscreen/flash/black
 	icon = 'icons/hud/screen_gen.dmi'
@@ -184,7 +193,7 @@
 /atom/movable/screen/fullscreen/lighting_backdrop
 	icon = 'icons/hud/screen_gen.dmi'
 	icon_state = "flash"
-	transform = matrix(200, 0, 0, 0, 200, 0)
+	screen_loc = "WEST,SOUTH to EAST,NORTH"
 	plane = LIGHTING_PLANE
 	blend_mode = BLEND_OVERLAY
 	show_when_dead = TRUE
@@ -194,12 +203,11 @@
 	invisibility = INVISIBILITY_LIGHTING
 	layer = BACKGROUND_LAYER+21
 	color = "#000"
-	show_when_dead = TRUE
 
 //Provides whiteness in case you don't see lights so everything is still visible
 /atom/movable/screen/fullscreen/lighting_backdrop/unlit
 	layer = BACKGROUND_LAYER+20
-	show_when_dead = TRUE
+
 
 /atom/movable/screen/fullscreen/see_through_darkness
 	icon_state = "nightvision"
@@ -222,3 +230,9 @@
 	layer = DITHER_LAYER
 	show_when_dead = TRUE
 	screen_loc = "WEST,SOUTH to EAST,NORTH"
+
+/atom/movable/screen/fullscreen/flock_convert
+	icon = 'goon/icons/hud/flockmindcircuit.dmi'
+	icon_state = "flockmindcircuit"
+	layer = FLOCK_CONVERT_LAYER
+	show_when_dead = FALSE

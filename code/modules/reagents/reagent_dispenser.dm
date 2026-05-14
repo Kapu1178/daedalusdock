@@ -17,7 +17,7 @@
 	if(icon_state == "water" && SSevents.holidays?[APRIL_FOOLS])
 		icon_state = "water_fools"
 
-/obj/structure/reagent_dispensers/take_damage(damage_amount, damage_type = BRUTE, damage_flag = 0, sound_effect = 1, attack_dir)
+/obj/structure/reagent_dispensers/take_damage(damage_amount, damage_type = BRUTE, damage_flag = 0, sound_effect = 1, attack_dir, armor_penetration = 0, allow_break = TRUE)
 	. = ..()
 	if(. && atom_integrity > 0)
 		if(tank_volume && (damage_flag == PUNCTURE || damage_flag == LASER))
@@ -180,7 +180,7 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/reagent_dispensers/wall/peppertank, 3
 		to_chat(user, span_warning("There aren't any cups left!"))
 		return
 	user.visible_message(span_notice("[user] takes a cup from [src]."), span_notice("You take a paper cup from [src]."))
-	var/obj/item/reagent_containers/food/drinks/sillycup/S = new(get_turf(src))
+	var/obj/item/reagent_containers/cup/glass/sillycup/S = new(get_turf(src))
 	user.put_in_hands(S)
 	paper_cups--
 

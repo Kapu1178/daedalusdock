@@ -154,6 +154,11 @@
 	// This serves a similar purpose, I want the pipes to pop
 	add_filter("pipe_dropshadow", 1, drop_shadow_filter(x = -1, y= -1, size = 1, color = "#0000007A"))
 
+/atom/movable/screen/plane_master/info_tag
+	name = "info tag plane master"
+	plane = INFO_TAG_PLANE
+	blend_mode = BLEND_OVERLAY
+
 /atom/movable/screen/plane_master/camera_static
 	name = "camera static plane master"
 	plane = CAMERA_STATIC_PLANE
@@ -195,7 +200,7 @@
 	gas_heat_object = new /obj/effect/abstract/particle_emitter/heat(null, -1)
 	gas_heat_object.particles?.count = 250
 	gas_heat_object.particles?.spawning = 15
-	vis_contents += gas_heat_object
+	add_viscontents(gas_heat_object)
 
 /atom/movable/screen/plane_master/area
 	name = "area plane"

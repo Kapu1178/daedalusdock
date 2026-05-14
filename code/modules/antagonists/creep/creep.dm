@@ -25,11 +25,11 @@
 	C.gain_trauma(/datum/brain_trauma/special/obsessed)//ZAP
 
 /datum/antagonist/obsessed/greet()
+	. = ..()
 	owner.current.playsound_local(get_turf(owner.current), 'sound/ambience/antag/creepalert.ogg', 100, FALSE, pressure_affected = FALSE, use_reverb = FALSE)
 	var/policy = get_policy(ROLE_OBSESSED)
 	if(policy)
 		to_chat(owner, policy)
-	owner.announce_objectives()
 
 /datum/antagonist/obsessed/Destroy()
 	if(trauma)
@@ -66,11 +66,6 @@
 	mask = /obj/item/clothing/mask/surgical
 	l_hand = /obj/item/camera
 	suit = /obj/item/clothing/suit/apron/surgical
-
-/datum/outfit/obsessed/post_equip(mob/living/carbon/human/H)
-	for(var/obj/item/carried_item in H.get_equipped_items(TRUE))
-		carried_item.add_mob_blood(H)//Oh yes, there will be blood...
-	H.regenerate_icons()
 
 /datum/antagonist/obsessed/proc/forge_objectives(datum/mind/obsessionmind)
 	var/list/objectives_left = list("spendtime", "polaroid", "hug")
@@ -110,10 +105,7 @@
 	for(var/datum/objective/O in objectives)
 		O.update_explanation_text()
 
-/datum/antagonist/obsessed/roundend_report_header()
-	return "<span class='header'>Someone became obsessed!</span><br>"
-
-/datum/antagonist/obsessed/roundend_report()
+/datum/antagonist/obsessed/roundend_report_article_column_body()
 	var/list/report = list()
 
 	if(!owner)
@@ -137,9 +129,9 @@
 		report += span_redtext("The [name] had no trauma attached to their antagonist ways! Either it bugged out or an admin incorrectly gave this good samaritan antag and it broke! You might as well show yourself!!")
 
 	if(objectives.len == 0 || objectives_complete)
-		report += "<span class='greentext big'>The [name] was successful!</span>"
+		report += "<span class='good big'>The [name] was successful!</span>"
 	else
-		report += "<span class='redtext big'>The [name] has failed!</span>"
+		report += "<span class='bad big'>The [name] has failed!</span>"
 
 	return report.Join("<br>")
 

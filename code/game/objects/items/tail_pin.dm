@@ -1,3 +1,6 @@
+TYPEINFO_DEF(/obj/item/tail_pin)
+	default_materials = list(/datum/material/iron=1000)
+
 /obj/item/tail_pin
 	icon_state = "tailpin"
 	name = "tail pin"
@@ -7,12 +10,11 @@
 	throwforce = 0
 	throw_speed = 1
 	embedding = EMBED_HARMLESS
-	custom_materials = list(/datum/material/iron=1000)
 	hitsound = 'sound/weapons/bladeslice.ogg'
 	attack_verb_continuous = list("pokes", "jabs", "pins the tail on")
 	attack_verb_simple = list("poke", "jab")
 	sharpness = SHARP_POINTY
-	max_integrity = 200
+	max_integrity = 1
 	layer = CORGI_ASS_PIN_LAYER
 
 /obj/item/poster/tail_board

@@ -159,6 +159,8 @@ SUBSYSTEM_DEF(shuttle)
 
 		supply_packs[pack.id] = pack
 
+	sortTim(supply_packs, GLOBAL_PROC_REF(cmp_name_asc), associative = TRUE)
+
 	setup_shuttles(stationary_docking_ports)
 	has_purchase_shuttle_access = init_has_purchase_shuttle_access()
 
@@ -188,6 +190,7 @@ SUBSYSTEM_DEF(shuttle)
 			continue
 		var/obj/docking_port/mobile/P = thing
 		P.check()
+
 	for(var/thing in transit_docking_ports)
 		var/obj/docking_port/stationary/transit/T = thing
 		if(!T.owner)
@@ -436,9 +439,9 @@ SUBSYSTEM_DEF(shuttle)
 			log_shuttle("There is no means of calling the emergency shuttle anymore. Shuttle automatically called.")
 			message_admins("All the communications consoles were destroyed and all AIs are inactive. Shuttle called.")
 
-/datum/controller/subsystem/shuttle/proc/registerHostileEnvironment(datum/bad)
+/datum/controller/subsystem/shuttle/proc/registerHostileEnvironment(datum/bad, announce = TRUE)
 	hostile_environments[bad] = TRUE
-	checkHostileEnvironment()
+	checkHostileEnvironment(announce)
 
 /datum/controller/subsystem/shuttle/proc/clearHostileEnvironment(datum/bad)
 	hostile_environments -= bad
@@ -468,22 +471,26 @@ SUBSYSTEM_DEF(shuttle)
 		supply.mode = SHUTTLE_DOCKED
 		//Make all cargo consoles speak up
 
-/datum/controller/subsystem/shuttle/proc/checkHostileEnvironment()
+/datum/controller/subsystem/shuttle/proc/checkHostileEnvironment(announce = TRUE)
 	for(var/datum/d in hostile_environments)
 		if(!istype(d) || QDELETED(d))
 			hostile_environments -= d
+
 	emergency_no_escape = hostile_environments.len
 
 	if(emergency_no_escape && (emergency.mode == SHUTTLE_IGNITING))
 		emergency.mode = SHUTTLE_STRANDED
 		emergency.timer = null
 		emergency.sound_played = FALSE
-		priority_announce("Hostile environment detected. \
-			Departure has been postponed indefinitely pending \
-			conflict resolution.",
-			"LRSV Icarus Announcement",
-			do_not_modify = TRUE
-		)
+
+		if(announce)
+			priority_announce("Hostile environment detected. \
+				Departure has been postponed indefinitely pending \
+				conflict resolution.",
+				"LRSV Icarus Announcement",
+				do_not_modify = TRUE
+			)
+
 	if(!emergency_no_escape && (emergency.mode == SHUTTLE_STRANDED))
 		emergency.mode = SHUTTLE_DOCKED
 		emergency.setTimer(emergency_dock_time)
@@ -507,7 +514,7 @@ SUBSYSTEM_DEF(shuttle)
 		if(shuttle_port.request(getDock(destination)))
 			return DOCKING_IMMOBILIZED
 	else
-		if(shuttle_port.initiate_docking(getDock(destination)) != DOCKING_SUCCESS)
+		if(shuttle_port.Dock(getDock(destination)) != DOCKING_SUCCESS)
 			return DOCKING_IMMOBILIZED
 	return DOCKING_SUCCESS //dock successful
 
@@ -522,7 +529,7 @@ SUBSYSTEM_DEF(shuttle)
 		if(shuttle_port.request(docking_target))
 			return DOCKING_IMMOBILIZED
 	else
-		if(shuttle_port.initiate_docking(docking_target) != DOCKING_SUCCESS)
+		if(shuttle_port.Dock(docking_target) != DOCKING_SUCCESS)
 			return DOCKING_IMMOBILIZED
 	return DOCKING_SUCCESS //dock successful
 
@@ -814,7 +821,7 @@ SUBSYSTEM_DEF(shuttle)
 	var/list/force_memory = preview_shuttle.movement_force
 	preview_shuttle.movement_force = list("KNOCKDOWN" = 0, "THROW" = 0)
 	preview_shuttle.mode = SHUTTLE_PREARRIVAL//No idle shuttle moving. Transit dock get removed if shuttle moves too long.
-	preview_shuttle.initiate_docking(D)
+	preview_shuttle.Dock(D)
 	preview_shuttle.movement_force = force_memory
 
 	. = preview_shuttle

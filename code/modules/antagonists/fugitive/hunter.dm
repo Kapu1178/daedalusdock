@@ -33,7 +33,6 @@
 			to_chat(src, span_danger("We will not be able to make ends meet without our cargo, so we must do as he says and capture them."))
 
 	to_chat(owner, span_boldannounce("You are not an antagonist in that you may kill whomever you please, but you can do anything to ensure the capture of the fugitives, even if that means going through the station."))
-	owner.announce_objectives()
 
 /datum/antagonist/fugitive_hunter/create_team(datum/team/fugitive_hunters/new_team)
 	if(!new_team)
@@ -117,7 +116,7 @@
 		else//all fugitives died, all hunters died, nobody brought back. seems weird to not give fugitives a victory if they managed to kill the hunters but literally no progress to either goal should lead to a nobody wins situation
 			return FUGITIVE_RESULT_STALEMATE
 
-/datum/team/fugitive_hunters/roundend_report() //shows the number of fugitives, but not if they won in case there is no security
+/datum/team/fugitive_hunters/roundend_report_article_column_body() //shows the number of fugitives, but not if they won in case there is no security
 	if(!members.len)
 		return
 

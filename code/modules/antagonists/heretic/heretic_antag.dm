@@ -336,7 +336,7 @@
 
 	var/num_heads = 0
 	for(var/mob/player in GLOB.alive_player_list)
-		if(player.mind.assigned_role.departments_bitflags & DEPARTMENT_BITFLAG_COMMAND)
+		if(player.mind.assigned_role.departments_bitflags & DEPARTMENT_BITFLAG_COMPANY_LEADER)
 			num_heads++
 
 	var/datum/objective/minor_sacrifice/sac_objective = new()
@@ -344,6 +344,7 @@
 	if(num_heads < 2) // They won't get major sacrifice, so bump up minor sacrifice a bit
 		sac_objective.target_amount += 2
 		sac_objective.update_explanation_text()
+
 	objectives += sac_objective
 
 	if(num_heads >= 2)
@@ -394,7 +395,7 @@
 		to_chat(owner.current, "[span_hear("You hear a whisper...")] [span_hypnophrase(pick(strings(HERETIC_INFLUENCE_FILE, "drain_message")))]")
 	addtimer(CALLBACK(src, PROC_REF(passive_influence_gain)), passive_gain_timer)
 
-/datum/antagonist/heretic/roundend_report()
+/datum/antagonist/heretic/roundend_report_article_column_body()
 	var/list/parts = list()
 
 	var/succeeded = TRUE
@@ -710,10 +711,6 @@
 /datum/outfit/heretic
 	name = "Heretic (Preview only)"
 
+	head = /obj/item/clothing/head/hooded/cult_hoodie/eldritch
 	suit = /obj/item/clothing/suit/hooded/cultrobes/eldritch
 	r_hand = /obj/item/melee/touch_attack/mansus_fist
-
-/datum/outfit/heretic/post_equip(mob/living/carbon/human/equipper, visualsOnly)
-	var/obj/item/clothing/suit/hooded/hooded = locate() in equipper
-	hooded.MakeHood() // This is usually created on Initialize, but we run before atoms
-	hooded.ToggleHood()

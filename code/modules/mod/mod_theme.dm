@@ -410,8 +410,6 @@
 	default_skin = "mining"
 	armor = list(BLUNT = 30, PUNCTURE = 10, SLASH = 0, LASER = 25, ENERGY = 10, BOMB = 30, BIO = 100, FIRE = 100, ACID = 70)
 	resistance_flags = FIRE_PROOF|LAVA_PROOF
-	max_heat_protection_temperature = FIRE_SUIT_MAX_TEMP_PROTECT
-	min_cold_protection_temperature = FIRE_SUIT_MIN_TEMP_PROTECT
 	complexity_max = DEFAULT_MAX_COMPLEXITY - 5
 	charge_drain = DEFAULT_CHARGE_DRAIN * 2
 	allowed_suit_storage = list(
@@ -571,8 +569,8 @@
 		/obj/item/tank/internals,
 		/obj/item/healthanalyzer,
 		/obj/item/reagent_containers/dropper,
-		/obj/item/reagent_containers/glass/beaker,
-		/obj/item/reagent_containers/glass/bottle,
+		/obj/item/reagent_containers/cup/beaker,
+		/obj/item/reagent_containers/cup/bottle,
 		/obj/item/reagent_containers/hypospray,
 		/obj/item/reagent_containers/pill,
 		/obj/item/reagent_containers/syringe,
@@ -671,8 +669,8 @@
 		/obj/item/tank/internals,
 		/obj/item/healthanalyzer,
 		/obj/item/reagent_containers/dropper,
-		/obj/item/reagent_containers/glass/beaker,
-		/obj/item/reagent_containers/glass/bottle,
+		/obj/item/reagent_containers/cup/beaker,
+		/obj/item/reagent_containers/cup/bottle,
 		/obj/item/reagent_containers/hypospray,
 		/obj/item/reagent_containers/pill,
 		/obj/item/reagent_containers/syringe,
@@ -903,7 +901,7 @@
 /datum/mod_theme/magnate
 	name = "magnate"
 	desc = "A fancy, very protective suit for Daedalus' captains. Shock, fire and acid-proof while also having a large capacity and high speed."
-	extended_desc = "They say it costs four hundred thousand credits to run this MODsuit... for twelve seconds. \
+	extended_desc = "They say it costs four hundred thousand marks to run this MODsuit... for twelve seconds. \
 		The Magnate suit is designed for protection, comfort, and luxury for Daedalus Captains. \
 		The onboard air filters have been preprogrammed with an additional five hundred different fragrances that can \
 		be pumped into the helmet, all of highly-endangered flowers. A bespoke Tralex mechanical clock has been placed \

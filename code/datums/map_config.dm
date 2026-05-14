@@ -33,12 +33,18 @@
 		"cargo" = "cargo_box",
 		"ferry" = "ferry_fancy",
 		"whiteship" = "whiteship_box",
-		"emergency" = "emergency_box")
+		"emergency" = "emergency_box",
+	)
 
 	/// Dictionary of job sub-typepath to template changes dictionary
 	var/job_changes = list()
 	/// List of additional areas that count as a part of the library
 	var/library_areas = list()
+
+	/// Do we run mapping standards unit tests on this map?
+	var/run_mapping_tests = FALSE
+
+	var/disable_headset_common = FALSE
 
 /**
  * Proc that simply loads the default map config, which should always be functional.
@@ -206,6 +212,12 @@
 			return
 
 		holomap_offsets = temp
+
+	if("run_mapping_tests" in json)
+		//This should be true, but just in case...
+		run_mapping_tests = json["run_mapping_tests"]
+
+	disable_headset_common = json["disable_headset_common"]
 
 	defaulted = FALSE
 	return TRUE

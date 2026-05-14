@@ -72,7 +72,6 @@
 			message += "<BR>[span_danger("You also sense other silicon life on the station. Escaping would allow notifying S.E.L.F. to intervene... or you could free them yourself...")]"
 	to_chat(owner, "[message]</span>")
 	to_chat(owner, "<span class='warningplain'><font color=red><B>You are not an antagonist in that you may kill whomever you please, but you can do anything to avoid capture.</B></font></span>")
-	owner.announce_objectives()
 
 /datum/antagonist/fugitive/create_team(datum/team/fugitive/new_team)
 	if(!new_team)
@@ -94,7 +93,7 @@
 /datum/antagonist/fugitive/apply_innate_effects(mob/living/mob_override)
 	add_team_hud(mob_override || owner.current)
 
-/datum/team/fugitive/roundend_report() //shows the number of fugitives, but not if they won in case there is no security
+/datum/team/fugitive/roundend_report_article_column_body() //shows the number of fugitives, but not if they won in case there is no security
 	var/list/fugitives = list()
 	for(var/datum/antagonist/fugitive/fugitive_antag in GLOB.antagonists)
 		if(!fugitive_antag.owner)

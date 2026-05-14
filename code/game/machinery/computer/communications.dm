@@ -13,7 +13,7 @@
 	desc = "A console used for high-priority announcements and emergencies."
 	icon_screen = "comm"
 	icon_keyboard = "tech_key"
-	req_access = list(ACCESS_HEADS)
+	req_access = list(ACCESS_FEDERATION)
 	circuit = /obj/item/circuitboard/computer/communications
 	light_color = LIGHT_COLOR_BLUE
 
@@ -35,7 +35,8 @@
 
 	/// The name of the user who logged in
 	var/authorize_name
-
+	/// The name of the job of the user who logged in
+	var/authorize_job
 	/// The access that the card had on login
 	var/list/authorize_access
 
@@ -123,7 +124,7 @@
 	obj_flags |= EMAGGED
 
 	if (authenticated)
-		authorize_access = SSid_access.get_region_access_list(list(REGION_ALL_STATION))
+		authorize_access = SSid_access.get_access_for_group(list(/datum/access_group/station/all))
 
 	to_chat(user, span_danger("You scramble the communication routing circuits!"))
 	playsound(src, 'sound/machines/terminal_alert.ogg', 50, FALSE)
@@ -220,7 +221,9 @@
 		if ("makePriorityAnnouncement")
 			if (!authenticated_as_silicon_or_captain(usr) && !syndicate)
 				return
+
 			make_announcement(usr)
+
 		if ("messageAssociates")
 			if (!authenticated_as_non_silicon_captain(usr))
 				return
@@ -272,7 +275,7 @@
 			bank_account.adjust_money(-shuttle.credit_cost)
 
 			var/purchaser_name = (obj_flags & EMAGGED) ? scramble_message_replace_chars("AUTHENTICATION FAILURE: CVE-2018-17107", 60) : usr.real_name
-			minor_announce("[purchaser_name] has purchased [shuttle.name] for [shuttle.credit_cost] credits.[shuttle.extra_desc ? " [shuttle.extra_desc]" : ""]" , "Shuttle Purchase")
+			minor_announce("[purchaser_name] has purchased [shuttle.name] for [shuttle.credit_cost] marks.[shuttle.extra_desc ? " [shuttle.extra_desc]" : ""]" , "Shuttle Purchase")
 
 			message_admins("[ADMIN_LOOKUPFLW(usr)] purchased [shuttle.name].")
 			log_shuttle("[key_name(usr)] has purchased [shuttle.name].")
@@ -368,13 +371,15 @@
 				authenticated = FALSE
 				authorize_access = null
 				authorize_name = null
+				authorize_job = null
 				playsound(src, 'sound/machines/terminal_off.ogg', 50, FALSE)
 				return
 
 			if (obj_flags & EMAGGED)
 				authenticated = TRUE
-				authorize_access = SSid_access.get_region_access_list(list(REGION_ALL_STATION))
+				authorize_access = SSid_access.get_access_for_group(list(/datum/access_group/station/all))
 				authorize_name = "Unknown"
+				authorize_job = null
 				to_chat(usr, span_warning("[src] lets out a quiet alarm as its login is overridden."))
 				playsound(src, 'sound/machines/terminal_alert.ogg', 25, FALSE)
 			else if(isliving(usr))
@@ -383,7 +388,8 @@
 				if (check_access(id_card))
 					authenticated = TRUE
 					authorize_access = id_card.access.Copy()
-					authorize_name = "[id_card.registered_name] - [id_card.assignment]"
+					authorize_name = id_card.registered_name
+					authorize_job = id_card.assignment
 
 			state = STATE_MAIN
 			playsound(src, 'sound/machines/terminal_on.ogg', 50, FALSE)
@@ -414,10 +420,6 @@
 
 			if(SSjob.safe_code_requested)
 				to_chat(usr, span_warning("The safe code has already been requested and delivered to your station!"))
-				return
-
-			if(!SSid_access.spare_id_safe_code)
-				to_chat(usr, span_warning("There is no safe code to deliver to your station!"))
 				return
 
 			var/turf/pod_location = get_turf(src)
@@ -473,7 +475,7 @@
 	var/has_connection = has_communication()
 	data["hasConnection"] = has_connection
 
-	if(!SSjob.assigned_captain && !SSjob.safe_code_requested && SSid_access.spare_id_safe_code && has_connection)
+	if(!SSjob.assigned_captain && !SSjob.safe_code_requested && has_connection)
 		data["canRequestSafeCode"] = TRUE
 		data["safeCodeDeliveryWait"] = 0
 	else
@@ -709,16 +711,27 @@
 	if(!SScommunications.can_announce(user, is_ai))
 		to_chat(user, span_alert("Intercomms recharging. Please stand by."))
 		return
+
 	var/input = tgui_input_text(user, "Message to announce to the station crew", "Announcement")
 	if(!input || !user.canUseTopic(src, USE_CLOSE|USE_SILICON_REACH))
 		return
-	if(!(user.can_speak())) //No more cheating, mime/random mute guy!
-		input = "..."
+
+	var/can_speak = user.can_speak()
+	if(isliving(user) && can_speak)
+		can_speak = !istype(user.get_selected_language(), /datum/language/visual)
+
+	if(!user.can_speak()) //No more cheating, mime/random mute guy!
 		to_chat(user, span_warning("You find yourself unable to speak."))
-	else
-		input = user.treat_message(input) //Adds slurs and so on. Someone should make this use languages too.
+		return
+
+	input = user.treat_message(input) //Adds slurs and so on. Someone should make this use languages too.
+
+	var/sender = authorize_name
+	if(authorize_job)
+		sender = "[sender] ([authorize_job])"
+
 	var/list/players = get_communication_players()
-	SScommunications.make_announcement(user, is_ai, input, syndicate || (obj_flags & EMAGGED), players)
+	SScommunications.make_announcement(user, is_ai, input, syndicate || (obj_flags & EMAGGED), players, sender)
 	deadchat_broadcast(" made a priority announcement from [span_name("[get_area_name(usr, TRUE)]")].", span_name("[user.real_name]"), user, message_type=DEADCHAT_ANNOUNCEMENT)
 
 /obj/machinery/computer/communications/proc/get_communication_players()

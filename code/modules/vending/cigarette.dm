@@ -6,9 +6,9 @@
 	icon_state = "cigs"
 	panel_type = "panel5"
 	products = list(
+		/obj/item/storage/fancy/cigarettes/cigpack_astro = 7,
 		/obj/item/storage/fancy/cigarettes = 5,
 		/obj/item/storage/fancy/cigarettes/cigpack_candy = 4,
-		/obj/item/storage/fancy/cigarettes/cigpack_uplift = 3,
 		/obj/item/storage/fancy/cigarettes/cigpack_robust = 3,
 		/obj/item/storage/fancy/cigarettes/cigpack_carp = 3,
 		/obj/item/storage/fancy/cigarettes/cigpack_midori = 3,
@@ -30,15 +30,15 @@
 	)
 
 	refill_canister = /obj/item/vending_refill/cigarette
-	default_price = PAYCHECK_ASSISTANT
-	extra_price = PAYCHECK_HARD
+	default_price = PAYCHECK_ASSISTANT * 0.9
+	extra_price = PAYCHECK_ASSISTANT * 2.75
 	payment_department = ACCOUNT_STATION_MASTER
 	light_mask = "cigs-light-mask"
 
 /obj/machinery/vending/cigarette/syndicate
 	products = list(
 		/obj/item/storage/fancy/cigarettes/cigpack_syndicate = 7,
-		/obj/item/storage/fancy/cigarettes/cigpack_uplift = 3,
+		/obj/item/storage/fancy/cigarettes/cigpack_astro = 3,
 		/obj/item/storage/fancy/cigarettes/cigpack_candy = 2,
 		/obj/item/storage/fancy/cigarettes/cigpack_robust = 2,
 		/obj/item/storage/fancy/cigarettes/cigpack_carp = 3,

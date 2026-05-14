@@ -242,7 +242,7 @@ SUBSYSTEM_DEF(mapping)
 
 /datum/controller/subsystem/mapping/proc/safety_clear_transit_dock(obj/docking_port/stationary/transit/T, obj/docking_port/mobile/M, list/returning)
 	M.setTimer(0)
-	var/error = M.initiate_docking(M.destination, M.preferred_direction)
+	var/error = M.Dock(M.destination, M.preferred_direction)
 	if(!error)
 		returning += M
 		qdel(T, TRUE)
@@ -293,7 +293,7 @@ Used by the AI doomsday and the self-destruct nuke.
 	z_list = SSmapping.z_list
 	multiz_levels = SSmapping.multiz_levels
 
-#define INIT_ANNOUNCE(X) to_chat(world, span_debug("[X]")); log_world(X)
+#define INIT_ANNOUNCE(X) to_chat(world, systemtext("[X]")); log_world(X)
 /datum/controller/subsystem/mapping/proc/LoadGroup(list/errorList, name, path, files, list/traits, list/default_traits, silent = FALSE)
 	. = list()
 	var/start_time = REALTIMEOFDAY
@@ -317,10 +317,12 @@ Used by the AI doomsday and the self-destruct nuke.
 	if (!length(traits))  // null or empty - default
 		for (var/i in 1 to total_z)
 			traits += list(default_traits)
+
 	else if (total_z != traits.len)  // mismatch
 		INIT_ANNOUNCE("WARNING: [traits.len] trait sets specified for [total_z] z-levels in [path]!")
 		if (total_z < traits.len)  // ignore extra traits
 			traits.Cut(total_z + 1)
+
 		while (total_z > traits.len)  // fall back to defaults on extra levels
 			traits += list(default_traits)
 

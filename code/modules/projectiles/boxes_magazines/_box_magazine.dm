@@ -1,4 +1,7 @@
 //Boxes of ammo
+TYPEINFO_DEF(/obj/item/ammo_box)
+	default_materials = list(/datum/material/iron = 30000)
+
 /obj/item/ammo_box
 	name = "ammo box (null_reference_exception)"
 	desc = "A box of ammo."
@@ -9,7 +12,6 @@
 	worn_icon_state = "ammobox"
 	lefthand_file = 'icons/mob/inhands/equipment/medical_lefthand.dmi'
 	righthand_file = 'icons/mob/inhands/equipment/medical_righthand.dmi'
-	custom_materials = list(/datum/material/iron = 30000)
 	throwforce = 2
 	w_class = WEIGHT_CLASS_TINY
 	throw_range = 7
@@ -17,6 +19,9 @@
 
 	///String, used for checking if ammo of different types but still fits can fit inside it; generally used for magazines
 	var/caliber
+
+	/// Sound to play when loading with a bullet.
+	var/load_sound = 'sound/weapons/gun/general/mag_bullet_insert.ogg'
 
 	///list containing the actual ammo within the magazine
 	var/list/stored_ammo = list()
@@ -65,7 +70,7 @@
 		stack_trace("Tried loading unsupported ammocasing type [load_type] into ammo box [type].")
 		return
 
-	for(var/i in max(1, stored_ammo.len) to max_ammo)
+	for(var/i in max(1, stored_ammo.len + 1) to max_ammo)
 		stored_ammo += new round_check(src)
 	update_ammo_count()
 
@@ -73,12 +78,12 @@
 /obj/item/ammo_box/proc/get_round(keep = FALSE)
 	if (!stored_ammo.len)
 		return null
-	else
-		var/b = stored_ammo[stored_ammo.len]
-		stored_ammo -= b
-		if (keep)
-			stored_ammo.Insert(1,b)
-		return b
+
+	var/b = stored_ammo[stored_ammo.len]
+	stored_ammo -= b
+	if (keep)
+		stored_ammo.Insert(1,b)
+	return b
 
 ///puts a round into the magazine
 /obj/item/ammo_box/proc/give_round(obj/item/ammo_casing/R, replace_spent = 0)
@@ -93,10 +98,13 @@
 
 	//for accessibles magazines (e.g internal ones) when full, start replacing spent ammo
 	else if(replace_spent)
-		for(var/obj/item/ammo_casing/AC in stored_ammo)
-			if(!AC.loaded_projectile)//found a spent ammo
-				stored_ammo -= AC
-				AC.forceMove(get_turf(src.loc))
+		for(var/obj/item/ammo_casing/existing_casing in stored_ammo)
+			if(!existing_casing.loaded_projectile)//found a spent ammo
+				stored_ammo -= existing_casing
+				existing_casing.forceMove(get_turf(src.loc))
+				existing_casing.forceMove(drop_location()) //Eject casing onto ground.
+				existing_casing.bounce_away(TRUE)
+				SEND_SIGNAL(existing_casing, COMSIG_CASING_EJECTED)
 
 				stored_ammo += R
 				R.forceMove(src)
@@ -107,8 +115,18 @@
 /obj/item/ammo_box/proc/can_load(mob/user)
 	return TRUE
 
-/obj/item/ammo_box/attackby(obj/item/A, mob/user, params)
-	return attempt_load_round(A, user)
+/// Returns TRUE if the ammo box is at max capacity. If spent_is_empty = TRUE, spent rounds are counted as not being in the box.
+/obj/item/ammo_box/proc/is_full(spent_is_empty = FALSE)
+	if(spent_is_empty)
+		for(var/obj/item/ammo_casing/casing in stored_ammo)
+			if(!casing.loaded_projectile)
+				return FALSE
+
+	return length(stored_ammo) < max_ammo
+
+/obj/item/ammo_box/item_interaction(mob/living/user, obj/item/tool, list/modifiers)
+	if(attempt_load_round(tool, user))
+		return ITEM_INTERACT_SUCCESS
 
 /obj/item/ammo_box/attack_self(mob/user)
 	var/obj/item/ammo_casing/A = get_round()
@@ -118,52 +136,79 @@
 	A.forceMove(drop_location())
 	if(!user.is_holding(src) || !user.put_in_hands(A)) //incase they're using TK
 		A.bounce_away(FALSE, NONE)
-	playsound(src, 'sound/weapons/gun/general/mag_bullet_insert.ogg', 60, TRUE)
-	to_chat(user, span_notice("You remove a round from [src]!"))
+
+	play_load_sound()
+	to_chat(user, span_notice("You remove a round from [src]."))
 	update_ammo_count()
 
 /// Attempts to load a given item into this ammo box
 /obj/item/ammo_box/proc/attempt_load_round(obj/item/I, mob/user, silent = FALSE, replace_spent = FALSE)
-	var/num_loaded = 0
 	if(!can_load(user))
 		return FALSE
 
+
+	return do_load_round(I, user, silent, replace_spent)
+
+/// Called by attempt_load_round(). Returns the number of rounds loaded.
+/obj/item/ammo_box/proc/do_load_round(obj/item/I, mob/user, silent = FALSE, replace_spent = FALSE)
 	if(istype(I, /obj/item/ammo_box))
-		var/obj/item/ammo_box/AM = I
-		for(var/obj/item/ammo_casing/AC in AM.stored_ammo)
-			if(user && load_delay && !do_after(user, src, load_delay, IGNORE_USER_LOC_CHANGE, FALSE, interaction_key = "load_round"))
-				break
-
-			var/did_load = give_round(AC, replace_spent)
-			if(!did_load)
-				break
-
-			AM.stored_ammo -= AC
-			num_loaded++
-			if(!silent)
-				user?.visible_message(
-					span_notice("[user] loads a round into [src]."),
-					vision_distance = COMBAT_MESSAGE_RANGE,
-				)
-				playsound(src, 'sound/weapons/gun/general/mag_bullet_insert.ogg', 60, TRUE)
-			update_ammo_count()
-			AM.update_ammo_count()
+		return load_from_ammo_box(I, user, silent, replace_spent)
 
 	if(isammocasing(I))
 		var/obj/item/ammo_casing/AC = I
 		if(give_round(AC, replace_spent))
 			user.transferItemToLoc(AC, src, TRUE)
-			num_loaded++
-			if(!silent)
-				playsound(src, 'sound/weapons/gun/general/mag_bullet_insert.ogg', 60, TRUE)
-			update_ammo_count()
+			after_load_round(I, user, silent)
+			return 1 // not TRUE, ONE!!!
+
+	return FALSE
+
+/// Called by do_load_ammo() when the target is an ammo box.
+/obj/item/ammo_box/proc/load_from_ammo_box(obj/item/ammo_box/other_box, mob/user, silent = FALSE, replace_spent = FALSE)
+	var/num_loaded = 0
+
+	var/used_load_delay = load_delay
+	if(istype(user, /mob/living))
+		var/mob/living/living_user = user
+		// Double at 3, half at 18.
+		used_load_delay *= living_user.stats.get_skill_as_scalar(/datum/rpg_skill/fine_motor, 2, inverse = TRUE)
+
+	for(var/obj/item/ammo_casing/AC in other_box.stored_ammo)
+		if(is_full(replace_spent))
+			break
+
+		if(user && load_delay && !do_after(user, src, used_load_delay, DO_IGNORE_USER_LOC_CHANGE|DO_PUBLIC, interaction_key = "load_round", display = other_box))
+			break
+
+		var/did_load = give_round(AC, replace_spent)
+		if(!did_load)
+			break
+
+		other_box.stored_ammo -= AC
+		num_loaded++
+		after_load_round(other_box, user, silent)
 
 	return num_loaded
+
+/// Called after successfully loading a round.
+/obj/item/ammo_box/proc/after_load_round(obj/item/I, mob/user, silent = FALSE)
+	if(!silent)
+		user?.visible_message(
+			span_notice("[user] loads a round into [src]."),
+			vision_distance = COMBAT_MESSAGE_RANGE,
+		)
+		play_load_sound()
+
+	update_ammo_count()
+	astype(I, /obj/item/ammo_box)?.update_ammo_count()
 
 /// Updates the materials and appearance of this ammo box
 /obj/item/ammo_box/proc/update_ammo_count()
 	update_custom_materials()
 	update_appearance()
+
+/obj/item/ammo_box/proc/play_load_sound()
+	playsound(src, load_sound, 30, FALSE, SHORT_RANGE_SOUND_EXTRARANGE)
 
 /obj/item/ammo_box/examine(mob/user)
 	. = ..()

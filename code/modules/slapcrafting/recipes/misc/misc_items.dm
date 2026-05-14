@@ -3,7 +3,7 @@
 
 /datum/slapcraft_recipe/mousetrap
 	name = "mouse trap"
-	examine_hint = "You could add a metal rod to make a mouse trap..."
+	examine_hint = "You could craft a mousetrap with cardboard and a rod."
 	category = SLAP_CAT_MISC
 	steps = list(
 		/datum/slapcraft_step/stack/cardboard/one,
@@ -14,7 +14,7 @@
 //paper
 /datum/slapcraft_recipe/papersack
 	name = "paper sack"
-	examine_hint = "With a cutting tool and more paper, you could make a bag..."
+	examine_hint = "You could craft a papersack, starting by cutting some paper."
 	category = SLAP_CAT_MISC
 	steps = list(
 		/datum/slapcraft_step/item/paper,
@@ -25,17 +25,17 @@
 
 /datum/slapcraft_recipe/papercup
 	name = "paper cup"
-	examine_hint = "If you cut this and add a second sheet of paper, you could make a cup..."
+	examine_hint = "You could cut this into a paper cup."
 	category = SLAP_CAT_MISC
 	steps = list(
 		/datum/slapcraft_step/item/paper,
 		/datum/slapcraft_step/attack/sharp,
 	)
-	result_type = /obj/item/reagent_containers/food/drinks/sillycup
+	result_type = /obj/item/reagent_containers/cup/glass/sillycup
 
 /datum/slapcraft_recipe/paperframe
 	name = "paper frame"
-	examine_hint = "With a plank of wood and some paper, you could make a paper frame for a wall or window..."
+	examine_hint = "You could make a paper wall with wood and some paper."
 	category = SLAP_CAT_MISC
 	steps = list(
 		/datum/slapcraft_step/stack/wood/one,

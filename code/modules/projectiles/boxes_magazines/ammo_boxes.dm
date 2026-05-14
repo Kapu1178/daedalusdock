@@ -12,6 +12,9 @@
 	desc = "Designed to quickly reload revolvers. These rounds are manufactured within extremely tight tolerances, making them easy to show off trickshots with."
 	ammo_type = /obj/item/ammo_casing/a357/match
 
+TYPEINFO_DEF(/obj/item/ammo_box/c38)
+	default_materials = list(/datum/material/iron = 20000)
+
 /obj/item/ammo_box/c38
 	name = "speed loader (.38)"
 	desc = "Designed to quickly reload revolvers."
@@ -19,7 +22,12 @@
 	ammo_type = /obj/item/ammo_casing/c38
 	max_ammo = 6
 	multiple_sprites = AMMO_BOX_PER_BULLET
-	custom_materials = list(/datum/material/iron = 20000)
+
+/obj/item/ammo_box/c38/prostrator
+	name = "speed loader (.38 Prostrator)"
+	desc = parent_type::desc + " Contains a stun cartridge to incapacitate targets with minimal bodily harm. Minimal."
+	icon_state = "38prostrator"
+	ammo_type = /obj/item/ammo_casing/c38/prostrator
 
 /obj/item/ammo_box/c38/trac
 	name = "speed loader (.38 TRAC)"
@@ -50,6 +58,12 @@
 	name = "speed loader (.38 Iceblox)"
 	desc = "Designed to quickly reload revolvers. Iceblox bullets contain a cryogenic payload."
 	ammo_type = /obj/item/ammo_casing/c38/iceblox
+
+/obj/item/ammo_box/c38/blank
+	name = "speed loader (.38 Blank)"
+	desc = "Designed to quickly reload revolvers. Contains harmless blanks."
+	ammo_type = /obj/item/ammo_casing/c38/blank
+	icon_state = "38blank"
 
 /obj/item/ammo_box/c9mm
 	name = "ammo box (9mm)"
@@ -90,10 +104,12 @@
 	ammo_type = /obj/item/ammo_casing/n762
 	max_ammo = 14
 
+TYPEINFO_DEF(/obj/item/ammo_box/foambox)
+	default_materials = list(/datum/material/iron = 500)
+
 /obj/item/ammo_box/foambox
 	name = "ammo box (Foam Darts)"
 	icon = 'icons/obj/guns/toy.dmi'
 	icon_state = "foambox"
 	ammo_type = /obj/item/ammo_casing/caseless/foam_dart
 	max_ammo = 40
-	custom_materials = list(/datum/material/iron = 500)
