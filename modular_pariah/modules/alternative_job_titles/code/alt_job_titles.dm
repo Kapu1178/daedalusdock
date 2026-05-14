@@ -42,7 +42,7 @@
 	alt_titles = list(JOB_PARAMEDIC)
 
 /datum/job/chemist
-	alt_titles = list(JOB_CHEMIST)
+	alt_titles = list(JOB_ALCHEMIST)
 
 /datum/job/virologist
 	alt_titles = list(JOB_VIROLOGIST)

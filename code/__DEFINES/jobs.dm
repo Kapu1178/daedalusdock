@@ -51,7 +51,7 @@
 #define JOB_AUGUR "Augur"
 #define JOB_ACOLYTE "Acolyte"
 #define JOB_PARAMEDIC "Paramedic"
-#define JOB_CHEMIST "Chemist"
+#define JOB_ALCHEMIST "Alchemist"
 #define JOB_VIROLOGIST "Virologist"
 //Supply
 #define JOB_QUARTERMASTER "Quartermaster"
