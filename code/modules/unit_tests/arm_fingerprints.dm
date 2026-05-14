@@ -1,4 +1,3 @@
-/// Ensure that anonymous themes works without changing your preferences
 /datum/unit_test/arm_fingerprints
 	name = "Arms Shall Inherit Fingerprints"
 
