@@ -1,45 +1,22 @@
 /datum/hud/flockdrone
 	ui_style = 'goon/icons/hud/flock_ui.dmi'
 
-	var/atom/movable/screen/flock_relay_status/relay_status
-
 /datum/hud/flockdrone/New(mob/owner)
 	. = ..()
-	var/atom/movable/screen/using
+	add_screen_object(/atom/movable/screen/flockdrone_part/converter, HUDKEY_FLOCKDRONE_CONVERTER, HUDGROUP_STATIC_INVENTORY)
+	add_screen_object(/atom/movable/screen/flockdrone_part/incapacitator, HUDKEY_FLOCKDRONE_INCAPACITATOR, HUDGROUP_STATIC_INVENTORY)
+	add_screen_object(/atom/movable/screen/flockdrone_part/absorber, HUDKEY_FLOCKDRONE_ABSORBER, HUDGROUP_STATIC_INVENTORY)
 
-	using = new /atom/movable/screen/flockdrone_part/converter(null, src)
-	static_inventory += using
-
-	using = new /atom/movable/screen/flockdrone_part/incapacitator(null, src)
-	static_inventory += using
-
-	using = new /atom/movable/screen/flockdrone_part/absorber(null, src)
-	static_inventory += using
-
-	healthdoll = new /atom/movable/screen/flockdrone_health(null, src)
-	infodisplay += healthdoll
-
-	relay_status = new(null, src)
-	infodisplay += relay_status
-
-/datum/hud/flockdrone/Destroy()
-	QDEL_NULL(relay_status)
-	return ..()
+	add_screen_object(/atom/movable/screen/flockdrone_health, HUDKEY_MOB_HEALTH, HUDGROUP_INFO_DISPLAY)
+	add_screen_object(/atom/movable/screen/flock_relay_status, HUDKEY_FLOCK_RELAY_STATUS, HUDGROUP_INFO_DISPLAY)
 
 // Used for flock traces and the overmind
 /datum/hud/flockghost
 	ui_style = 'goon/icons/hud/flock_ui.dmi'
 
-	var/atom/movable/screen/flock_relay_status/relay_status
-
 /datum/hud/flockghost/New(mob/owner)
 	. = ..()
-	relay_status = new(null, src)
-	infodisplay += relay_status
-
-/datum/hud/flockghost/Destroy()
-	QDEL_NULL(relay_status)
-	return ..()
+	add_screen_object(/atom/movable/screen/flock_relay_status, HUDKEY_FLOCK_RELAY_STATUS, HUDGROUP_INFO_DISPLAY)
 
 /atom/movable/screen/flockdrone_health
 	icon = 'goon/icons/hud/flock_ui.dmi'

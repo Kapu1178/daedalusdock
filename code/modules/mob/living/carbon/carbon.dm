@@ -103,16 +103,15 @@
 /mob/living/carbon/proc/throw_mode_off(method)
 	if(throw_mode > method) //A toggle doesnt affect a hold
 		return
+
 	throw_mode = THROW_MODE_DISABLED
-	if(hud_used)
-		hud_used.throw_icon.icon_state = "act_throw_off"
+	hud_used?.screen_objects[HUDKEY_MOB_THROW].icon_state = "act_throw_off"
 	update_mouse_pointer()
 
 
 /mob/living/carbon/proc/throw_mode_on(mode = THROW_MODE_TOGGLE)
 	throw_mode = mode
-	if(hud_used)
-		hud_used.throw_icon.icon_state = "act_throw_on"
+	hud_used?.screen_objects[HUDKEY_MOB_THROW].icon_state = "act_throw_on"
 	update_mouse_pointer()
 
 /mob/proc/throw_item(atom/target)
@@ -680,55 +679,73 @@
 /mob/living/carbon/update_health_hud(shown_health_amount)
 	if(!client || !hud_used)
 		return
-	if(hud_used.healths)
-		if(stat != DEAD)
-			. = 1
-			if(shown_health_amount == null)
-				shown_health_amount = health
-			if(shown_health_amount >= maxHealth)
-				hud_used.healths.icon_state = "health0"
-			else if(shown_health_amount > maxHealth*0.8)
-				hud_used.healths.icon_state = "health1"
-			else if(shown_health_amount > maxHealth*0.6)
-				hud_used.healths.icon_state = "health2"
-			else if(shown_health_amount > maxHealth*0.4)
-				hud_used.healths.icon_state = "health3"
-			else if(shown_health_amount > maxHealth*0.2)
-				hud_used.healths.icon_state = "health4"
-			else if(shown_health_amount > 0)
-				hud_used.healths.icon_state = "health5"
-			else
-				hud_used.healths.icon_state = "health6"
-		else
-			hud_used.healths.icon_state = "health7"
+
+	var/atom/movable/screen/healths = hud_used.screen_objects[HUDKEY_MOB_HEALTH]
+	if(!healths)
+		return
+
+	if(stat == DEAD)
+		healths.icon_state = "health7"
+		return
+
+	if(hal_screwyhud != SCREWYHUD_NONE)
+		switch(hal_screwyhud)
+			if(SCREWYHUD_CRIT)
+				healths.icon_state = "health6"
+			if(SCREWYHUD_DEAD)
+				healths.icon_state = "health7"
+			if(SCREWYHUD_HEALTHY)
+				healths.icon_state = "health0"
+		return
+
+	if(shown_health_amount == null)
+		shown_health_amount = health
+	if(shown_health_amount >= maxHealth)
+		healths.icon_state = "health0"
+	else if(shown_health_amount > maxHealth*0.8)
+		healths.icon_state = "health1"
+	else if(shown_health_amount > maxHealth*0.6)
+		healths.icon_state = "health2"
+	else if(shown_health_amount > maxHealth*0.4)
+		healths.icon_state = "health3"
+	else if(shown_health_amount > maxHealth*0.2)
+		healths.icon_state = "health4"
+	else if(shown_health_amount > 0)
+		healths.icon_state = "health5"
+	else
+		healths.icon_state = "health6"
 
 /mob/living/carbon/update_stamina_hud(shown_stamina_amount)
-	if(!client || !hud_used?.stamina)
+	if(!client)
 		return
+
+	var/atom/movable/screen/stamina_icon = hud_used?.screen_objects[HUDKEY_MOB_STAMINA]
+	if(!stamina_icon)
+		return
+
 	if(stat == DEAD)
-		hud_used.stamina.icon_state = "stamina6"
+		stamina_icon.icon_state = "stamina6"
 	else
 		var/max = stamina.maximum
 		if(shown_stamina_amount == null)
 			shown_stamina_amount = stamina.current
 		if(shown_stamina_amount == max)
-			hud_used.stamina.icon_state = "stamina0"
+			stamina_icon.icon_state = "stamina0"
 		else if(shown_stamina_amount > max*0.8)
-			hud_used.stamina.icon_state = "stamina1"
+			stamina_icon.icon_state = "stamina1"
 		else if(shown_stamina_amount > max*0.6)
-			hud_used.stamina.icon_state = "stamina2"
+			stamina_icon.icon_state = "stamina2"
 		else if(shown_stamina_amount > max*0.4)
-			hud_used.stamina.icon_state = "stamina3"
+			stamina_icon.icon_state = "stamina3"
 		else if(shown_stamina_amount > max*0.2)
-			hud_used.stamina.icon_state = "stamina4"
+			stamina_icon.icon_state = "stamina4"
 		else if(shown_stamina_amount > 1)
-			hud_used.stamina.icon_state = "stamina5"
+			stamina_icon.icon_state = "stamina5"
 		else
-			hud_used.stamina.icon_state = "stamina6"
+			stamina_icon.icon_state = "stamina6"
 
 /mob/living/carbon/proc/update_spacesuit_hud_icon(cell_state = "empty")
-	if(hud_used?.spacesuit)
-		hud_used.spacesuit.icon_state = "spacesuit_[cell_state]"
+	hud_used?.screen_objects[HUDKEY_MOB_SPACESUIT].icon_state = "spacesuit_[cell_state]"
 
 
 /mob/living/carbon/set_health(new_value)
