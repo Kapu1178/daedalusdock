@@ -96,13 +96,13 @@ TYPEINFO_DEF(/obj/item/clothing/under/rank/medical/chemist)
 
 /obj/item/clothing/under/rank/medical/chemist
 	desc = "It's made of a special fiber that gives special protection against biohazards."
-	name = "chemist's jumpsuit"
+	name = "alchemist's jumpsuit"
 	icon_state = "chemistry"
 	inhand_icon_state = "w_suit"
 	supports_variations_flags = CLOTHING_DIGITIGRADE_VARIATION | CLOTHING_TESHARI_VARIATION | CLOTHING_VOX_VARIATION
 
 /obj/item/clothing/under/rank/medical/chemist/skirt
-	name = "chemist's jumpskirt"
+	name = "alchemist's jumpskirt"
 	desc = "It's made of a special fiber that gives special protection against biohazards."
 	icon_state = "chemistrywhite_skirt"
 	inhand_icon_state = "w_suit"

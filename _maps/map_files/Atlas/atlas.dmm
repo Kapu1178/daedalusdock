@@ -1346,7 +1346,7 @@
 	icon_state = "3"
 	},
 /turf/open/floor/iron,
-/area/station/medical/pharmacy)
+/area/station/medical/chemistry)
 "bDd" = (
 /obj/structure/table/wood,
 /obj/effect/turf_decal/siding/fancy/wood{
@@ -1842,7 +1842,7 @@
 	dir = 8
 	},
 /turf/open/floor/engine,
-/area/station/medical/pharmacy)
+/area/station/medical/chemistry)
 "bZf" = (
 /obj/machinery/door/airlock/medical/glass{
 	name = "Medical Storage"
@@ -4102,7 +4102,7 @@
 	icon_state = "3"
 	},
 /turf/open/floor/iron,
-/area/station/medical/pharmacy)
+/area/station/medical/chemistry)
 "epJ" = (
 /obj/effect/turf_decal/tile/neutral/half,
 /obj/structure/cable/yellow{
@@ -4668,7 +4668,7 @@
 	dir = 1
 	},
 /turf/open/floor/iron,
-/area/station/medical/pharmacy)
+/area/station/medical/chemistry)
 "eTd" = (
 /obj/effect/turf_decal/trimline/red/filled/line,
 /obj/machinery/camera/autoname/directional/south{
@@ -8308,7 +8308,7 @@
 	name = "Chemical Laboratory Viewport Shutter button"
 	},
 /turf/open/floor/iron,
-/area/station/medical/pharmacy)
+/area/station/medical/chemistry)
 "iqM" = (
 /obj/structure/lattice,
 /obj/structure/railing{
@@ -8479,7 +8479,7 @@
 /obj/machinery/light/cold/directional/south,
 /obj/machinery/power/apc/auto_name/directional/west,
 /turf/open/floor/iron,
-/area/station/medical/pharmacy)
+/area/station/medical/chemistry)
 "izd" = (
 /obj/machinery/cryopod{
 	icon_state = "cryopod-open";
@@ -9982,7 +9982,7 @@
 /area/station/cargo/storage)
 "kjm" = (
 /turf/closed/wall/prepainted/medical,
-/area/station/medical/pharmacy)
+/area/station/medical/chemistry)
 "kks" = (
 /turf/closed/wall/r_wall,
 /area/station/service/kitchen/coldroom)
@@ -10285,7 +10285,7 @@
 	dir = 4
 	},
 /turf/open/floor/plating,
-/area/station/medical/pharmacy)
+/area/station/medical/chemistry)
 "kBS" = (
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
 /obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
@@ -11753,7 +11753,7 @@
 	},
 /obj/machinery/light/cold/directional/east,
 /turf/open/floor/engine,
-/area/station/medical/pharmacy)
+/area/station/medical/chemistry)
 "lTq" = (
 /obj/machinery/atmospherics/pipe/smart/manifold/orange/visible,
 /turf/open/floor/iron/ported/techfloor_maint,
@@ -11970,7 +11970,7 @@
 "mfI" = (
 /obj/machinery/chem_dispenser,
 /turf/open/floor/engine,
-/area/station/medical/pharmacy)
+/area/station/medical/chemistry)
 "mfT" = (
 /obj/effect/turf_decal/siding/fancy/grey/corner,
 /obj/effect/turf_decal/siding/fancy/grey/corner{
@@ -12192,7 +12192,7 @@
 	name = "Chemical Laboratory Viewport Shutter"
 	},
 /turf/open/floor/plating,
-/area/station/medical/pharmacy)
+/area/station/medical/chemistry)
 "mnG" = (
 /obj/structure/table/wood,
 /turf/open/floor/carpet/red,
@@ -15803,7 +15803,7 @@
 	icon_state = "4"
 	},
 /turf/open/floor/iron,
-/area/station/medical/pharmacy)
+/area/station/medical/chemistry)
 "pSD" = (
 /obj/effect/turf_decal/tile/yellow{
 	dir = 4
@@ -17921,7 +17921,7 @@
 	dir = 1
 	},
 /turf/open/floor/iron,
-/area/station/medical/pharmacy)
+/area/station/medical/chemistry)
 "rQG" = (
 /obj/machinery/light_switch/directional/east,
 /obj/machinery/vending/wardrobe/engi_wardrobe,
@@ -18033,7 +18033,7 @@
 	dir = 8
 	},
 /turf/open/floor/iron,
-/area/station/medical/pharmacy)
+/area/station/medical/chemistry)
 "rWg" = (
 /obj/structure/cable/yellow{
 	icon_state = "12"
@@ -18183,7 +18183,7 @@
 	},
 /obj/machinery/airalarm/directional/east,
 /turf/open/floor/iron,
-/area/station/medical/pharmacy)
+/area/station/medical/chemistry)
 "sdZ" = (
 /obj/effect/turf_decal/tile/yellow/opposingcorners,
 /turf/open/floor/iron/dark,
@@ -18261,7 +18261,7 @@
 /obj/structure/table/reinforced/rglass,
 /obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
 /turf/open/floor/iron,
-/area/station/medical/pharmacy)
+/area/station/medical/chemistry)
 "siM" = (
 /obj/structure/closet/secure_closet/chemical,
 /obj/item/storage/box/beakers,
@@ -18992,7 +18992,7 @@
 	icon_state = "10"
 	},
 /turf/open/floor/iron,
-/area/station/medical/pharmacy)
+/area/station/medical/chemistry)
 "sSD" = (
 /obj/machinery/shieldgen,
 /turf/open/floor/iron,
@@ -19887,7 +19887,7 @@
 /area/station/command/bridge)
 "ubi" = (
 /turf/open/floor/iron,
-/area/station/medical/pharmacy)
+/area/station/medical/chemistry)
 "ubj" = (
 /turf/closed/wall/r_wall/prepainted/daedalus,
 /area/station/engineering/engine_smes)
@@ -20377,7 +20377,7 @@
 /obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
 /obj/machinery/door/firedoor,
 /turf/open/floor/iron/white/white_large,
-/area/station/medical/pharmacy)
+/area/station/medical/chemistry)
 "uyf" = (
 /obj/machinery/door/airlock{
 	name = "Cabin 2";
@@ -21397,7 +21397,7 @@
 	name = "Chemical Laboratory Viewport Shutter"
 	},
 /turf/open/floor/iron/white/white_large,
-/area/station/medical/pharmacy)
+/area/station/medical/chemistry)
 "vxj" = (
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
 /obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
@@ -21783,7 +21783,7 @@
 	},
 /obj/machinery/atmospherics/components/unary/vent_scrubber/on/layer2,
 /turf/open/floor/iron,
-/area/station/medical/pharmacy)
+/area/station/medical/chemistry)
 "vQT" = (
 /obj/structure/trash_can,
 /obj/machinery/c4_embedded_controller/airlock_pinpad/bolt/directional/north{
