@@ -133,7 +133,7 @@ GLOBAL_LIST_INIT(available_ui_styles, list(
 	return ..()
 
 /atom/movable/screen/shadow_mask
-	screen_loc = "CENTER"
+	screen_loc = "1,1"
 	plane = 0
 	appearance_flags = TILE_BOUND
 	icon = 'icons/walls_fov.dmi'

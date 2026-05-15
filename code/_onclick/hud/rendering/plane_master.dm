@@ -264,9 +264,7 @@
 	add_filter("displacement9", 11, displacement_map_filter(render_source = SHADOW_MASK_RENDER_TARGET + "7", size = (1<<6), flags = FILTER_OVERLAY))
 	add_filter("displacement10", 12, displacement_map_filter(render_source = SHADOW_MASK_RENDER_TARGET + "8", size = (1<<7), flags = FILTER_OVERLAY))
 	add_filter("displacement11", 13, displacement_map_filter(render_source = SHADOW_MASK_RENDER_TARGET + "9", size = (1<<8), flags = FILTER_OVERLAY))
-
-	add_filter("displacement12", 14, displacement_map_filter(render_source = SHADOW_MASK_RENDER_TARGET + "10", size = (1<<9), flags = FILTER_OVERLAY))
-	add_filter("blur", 15, gauss_blur_filter(size = 5))
+	add_filter("blur", 15, gauss_blur_filter(size = 2))
 
 /atom/movable/atom_shadow
 	name = "shadow"
