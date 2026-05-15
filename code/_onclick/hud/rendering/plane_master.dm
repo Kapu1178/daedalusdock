@@ -250,15 +250,12 @@
 	color = list(1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,2)
 
 	render_relay_plane = RENDER_PLANE_GAME
-	render_target = "SHADOW_MASK_PLANE_RENDER_TARGET"
 
 /atom/movable/screen/plane_master/wall_fov/mask/New()
 	. = ..()
 	add_filter("layering", 1, layering_filter(render_source = SHADOW_RENDER_TARGET, flags = FILTER_UNDERLAY))
 	add_filter("displacement1", 2, displacement_map_filter(render_source = SHADOW_MASK_RENDER_TARGET + "1", size = (1<<0), flags = FILTER_OVERLAY))
 	add_filter("alpha mask", 3, alpha_mask_filter(render_source = SHADOW_RENDER_TARGET, flags = MASK_INVERSE))
-	add_filter("displacement2", 4, displacement_map_filter(render_source = SHADOW_MASK_RENDER_TARGET + "1", size = (1<<0), flags = FILTER_OVERLAY))
-	add_filter("displacement3", 5, displacement_map_filter(render_source = SHADOW_MASK_RENDER_TARGET + "1", size = (1<<0), flags = FILTER_OVERLAY))
 	add_filter("displacement4", 6, displacement_map_filter(render_source = SHADOW_MASK_RENDER_TARGET + "2", size = (1<<1), flags = FILTER_OVERLAY))
 	add_filter("displacement5", 7, displacement_map_filter(render_source = SHADOW_MASK_RENDER_TARGET + "3", size = (1<<2), flags = FILTER_OVERLAY))
 	add_filter("displacement6", 8, displacement_map_filter(render_source = SHADOW_MASK_RENDER_TARGET + "4", size = (1<<3), flags = FILTER_OVERLAY))
