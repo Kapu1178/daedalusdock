@@ -66,6 +66,8 @@ GLOBAL_LIST_INIT(available_ui_styles, list(
 	var/atom/movable/screen/holomap/holomap_container
 	var/atom/movable/screen/vis_holder/vis_holder
 
+	var/list/atom/movable/screen/shadow_masks = list()
+
 /datum/hud/New(mob/owner)
 	mymob = owner
 	mymob.hud_used = src
@@ -100,6 +102,9 @@ GLOBAL_LIST_INIT(available_ui_styles, list(
 	holomap_container = new(null, src)
 	vis_holder = new(null, src)
 
+	for(var/i in 1 to 9)
+		shadow_masks += new /atom/movable/screen/shadow_mask(null, src, i)
+
 	RegisterSignal(mymob, COMSIG_VIEWDATA_UPDATE, PROC_REF(on_viewdata_update))
 
 	initialize_screens()
@@ -126,6 +131,17 @@ GLOBAL_LIST_INIT(available_ui_styles, list(
 	QDEL_LIST_ASSOC_VAL(plane_master_controllers)
 	mymob = null
 	return ..()
+
+/atom/movable/screen/shadow_mask
+	screen_loc = "CENTER"
+	plane = 0
+	appearance_flags = TILE_BOUND
+	icon = 'icons/walls_fov.dmi'
+
+/atom/movable/screen/shadow_mask/Initialize(mapload, datum/hud/hud_owner, num)
+	. = ..()
+	icon_state = "[num]"
+	render_target = SHADOW_MASK_RENDER_TARGET + "[num]"
 
 /// Called in New() to create default screen objects
 /datum/hud/proc/initialize_screens()
@@ -283,6 +299,9 @@ GLOBAL_LIST_INIT(available_ui_styles, list(
 
 	if(vis_holder)
 		screenmob.client.screen += vis_holder
+
+	if(shadow_masks)
+		screenmob.client.screen += shadow_masks
 
 	hud_version = display_hud_version
 	update_gunpoint(screenmob)

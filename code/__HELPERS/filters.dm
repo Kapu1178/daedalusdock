@@ -168,7 +168,7 @@ GLOBAL_LIST_INIT(master_filter_info, list(
 	if(!isnull(space))
 		.["space"] = space
 
-/proc/displacement_map_filter(icon, render_source, x, y, size = 32)
+/proc/displacement_map_filter(icon, render_source, x, y, size = 32, flags)
 	. = list("type" = "displace")
 	if(!isnull(icon))
 		.["icon"] = icon
@@ -180,6 +180,8 @@ GLOBAL_LIST_INIT(master_filter_info, list(
 		.["y"] = y
 	if(!isnull(size))
 		.["size"] = size
+	if(!isnull(flags))
+		.["flags"] = flags
 
 /proc/drop_shadow_filter(x, y, size, offset, color)
 	. = list("type" = "drop_shadow")
