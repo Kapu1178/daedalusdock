@@ -1,4 +1,0 @@
-author: francinum
-delete-after: true
-changes:
-  - refactor: Computer4 styling has been altered and is now packet-safe.
