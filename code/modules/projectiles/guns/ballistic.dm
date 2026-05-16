@@ -466,7 +466,7 @@
 		misfire_probability += misfire_percentage_increment
 		misfire_probability = clamp(misfire_probability, 0, misfire_probability_cap)
 
-	AddComponent(/datum/component/smell, INTENSITY_NORMAL, SCENT_ODOR, "gunpowder", 3, 15 MINUTES)
+	AddComponent(/datum/component/smell, INTENSITY_NORMAL, SCENT_ODOR, "gunpowder", 3, 10 MINUTES)
 
 /obj/item/gun/ballistic/after_chambering(from_firing)
 	. = ..()
