@@ -873,7 +873,7 @@ GLOBAL_LIST_EMPTY(vending_products)
 		return
 	switch(action)
 		if("vend")
-			. = vend(ui.user, locate(params["ref"]))
+			. = vend(ui.user, TRUE, locate(params["ref"]))
 		if("select_colors")
 			. = select_colors(params)
 		if("dispense_cash")
@@ -942,27 +942,41 @@ GLOBAL_LIST_EMPTY(vending_products)
 	if(!menu.target.can_interact(usr))
 		return
 
-	vend(usr, vend_datum, menu.split_colors)
+	vend(usr, TRUE, vend_datum, menu.split_colors)
 
 /// The core vend proc used by normal vendors.
-/obj/machinery/vending/proc/vend(mob/user, datum/data/vending_product/R, list/greyscale_colors)
-	SHOULD_NOT_SLEEP(TRUE)
-
+/obj/machinery/vending/proc/vend(mob/user, delayed = FALSE, datum/data/vending_product/vend_datum, list/greyscale_colors)
 	if(!can_user_vend(user))
 		return
 
-	if(!sanitize_vend(user, R))
+	if(!sanitize_vend(user, vend_datum))
 		return
 
 	usr?.animate_interact(src)
+	playsound(src, 'goon/sounds/button.ogg', 50)
 
-	if (R.amount <= 0)
+	if (vend_datum.amount <= 0)
 		speak("Sold out.")
 		z_flick(icon_deny,src)
 		return
 
-	if(onstation && (pay_for_vend(user, R) == -1))
+	if(onstation && (pay_for_vend(user, vend_datum) == -1))
 		return
+
+	if(delayed)
+		vend_ready = FALSE
+		addtimer(CALLBACK(src, PROC_REF(complete_vend), user, vend_datum, greyscale_colors), vend_delay_animation(), TIMER_DELETE_ME)
+	else
+		complete_vend(user, vend_datum, greyscale_colors)
+	return TRUE
+
+/// Complete the vend.
+/obj/machinery/vending/proc/complete_vend(mob/user, datum/data/vending_product/vend_datum, list/greyscale_colors)
+	SHOULD_NOT_SLEEP(TRUE)
+
+	vend_ready = TRUE
+	if(!is_operational)
+		return FALSE // Lol sucks to suck!
 
 	thank_shopper(user)
 
@@ -973,11 +987,9 @@ GLOBAL_LIST_EMPTY(vending_products)
 
 	playsound(src, 'sound/machines/machine_vend.ogg', 50, TRUE, extrarange = -3)
 
-	dispense_item(usr, R)
+	dispense_item(usr, vend_datum)
 
-	SSblackbox.record_feedback("nested tally", "vending_machine_usage", 1, list("[type]", "[R.product_path]"))
-	vend_ready = TRUE
-	return TRUE
+	SSblackbox.record_feedback("nested tally", "vending_machine_usage", 1, list("[type]", "[vend_datum.product_path]"))
 
 /// Sanitizes the input of vend().
 /obj/machinery/vending/proc/sanitize_vend(mob/user, datum/data/vending_product/vend_datum)
@@ -1034,6 +1046,67 @@ GLOBAL_LIST_EMPTY(vending_products)
 	else
 		vended_item.do_drop_animation(src)
 		to_chat(user, span_notice("[vended_item] falls onto the floor."))
+
+/// Animation/effects to play while doing a delayed vend. Returns the duration of the animation in deciseconds.
+/obj/machinery/vending/proc/vend_delay_animation() as num
+	SHOULD_NOT_SLEEP(TRUE)
+
+	// if(prob(95))
+	// 	return 2 SECONDS
+
+	// Sometimes you want to deliberately write stupid code.
+	var/pixel_x = src.pixel_x
+	var/pixel_y = src.pixel_y
+	var/offset_x_1 = pixel_x + pick(-3, -2, -1, 1, 2, 3)
+	var/offset_y_1 = pixel_y + pick(-3, -2, -1, 1, 2, 3)
+
+	var/offset_x_2 = pixel_x + pick(-3, -2, -1, 1, 2, 3)
+	var/offset_y_2 = pixel_y + pick(-3, -2, -1, 1, 2, 3)
+
+	var/offset_x_3 = pixel_x + pick(-3, -2, -1, 1, 2, 3)
+	var/offset_y_3 = pixel_y + pick(-3, -2, -1, 1, 2, 3)
+
+	var/matrix/original_transform = transform
+	var/matrix/target_transform_1 = transform.Turn(rand(5, 15) * (pick(1, -1)))
+	var/matrix/target_transform_2 = transform.Turn(rand(5, 15) * (pick(1, -1)))
+
+	var/wait_durations = 0.8 SECONDS
+	var/shake_out_time_1 = rand(0.2 SECONDS, 0.4 SECONDS)
+	var/shake_out_time_2 = rand(0.2 SECONDS, 0.4 SECONDS)
+	var/shake_out_time_3 = rand(0.2 SECONDS, 0.4 SECONDS)
+
+	var/shake_in_time = 0.2 SECONDS
+
+	// Transform animation takes 0.5 seconds to complete.
+	z_animate(src, transform = target_transform_1, time = 0.2 SECONDS, flags = ANIMATION_PARALLEL)
+	z_animate(src, transform = original_transform, time = 0.2 SECONDS, flags = ANIMATION_CONTINUE)
+
+	for(var/atom/movable/AM as anything in get_associated_mimics() + src)
+		animate(AM, pixel_x = offset_x_1, pixel_y = offset_y_1, time = shake_out_time_1, flags = ANIMATION_PARALLEL)
+		animate(pixel_x = pixel_x, pixel_y = pixel_y, time = shake_in_time)
+
+	// Wait takes 0.8 seconds
+	spawn(wait_durations)
+		if(!is_operational)
+			return
+
+		for(var/atom/movable/AM as anything in get_associated_mimics() + src)
+			animate(AM, pixel_x = offset_x_2, pixel_y = offset_y_2, time = shake_out_time_2, flags = ANIMATION_PARALLEL)
+			animate(pixel_x = pixel_x, pixel_y = pixel_y, time = shake_in_time)
+
+		playsound(src, 'sound/weapons/smash.ogg', 50)
+
+		spawn(wait_durations)
+			if(!is_operational)
+				return
+			z_animate(src, transform = target_transform_2, time = 0.2 SECONDS, flags = ANIMATION_PARALLEL)
+			z_animate(src, transform = original_transform, time = 0.2 SECONDS, flags = ANIMATION_CONTINUE)
+
+			for(var/atom/movable/AM as anything in get_associated_mimics() + src)
+				animate(AM, pixel_x = offset_x_3, pixel_y = offset_y_3, time = shake_out_time_3, flags = ANIMATION_PARALLEL)
+				animate(pixel_x = pixel_x, pixel_y = pixel_y, time = shake_in_time)
+
+	return (0.4 SECONDS) + (shake_out_time_1 + shake_in_time) + (shake_out_time_2 + shake_in_time) + (shake_out_time_3 + shake_in_time) + (wait_durations * 2)
 
 /obj/machinery/vending/process(delta_time)
 	if(machine_stat & (BROKEN|NOPOWER))

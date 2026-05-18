@@ -92,7 +92,6 @@
 	return FALSE
 
 /obj/machinery/vending/custom/deconstruct(disassembled)
-	var/turf/T = get_turf(src)
 	for(var/obj/item/I in contents)
 		I.forceMove(drop_location())
 	. = ..()
@@ -102,7 +101,7 @@
  * Updating stock, account transactions, alerting users.
  * @return -- TRUE if a valid condition was met, FALSE otherwise.
  */
-/obj/machinery/vending/custom/vend(mob/living/user, item_name)
+/obj/machinery/vending/custom/vend(mob/living/user, delay = FALSE, item_name)
 	if(!vend_ready)
 		return
 
@@ -118,24 +117,38 @@
 		return FALSE
 
 	user.animate_interact(src)
+	playsound(src, 'goon/sounds/button.ogg', 50)
 
 	var/spent = pay_for_vend(user, dispensed_item)
 	if(spent == -1)
 		return FALSE
 
-	/// Charges the user if its not the owner
-	if(spent > 0)
-		/// Send the money to the account of the vendor owner.
-		linked_account.adjust_money(spent)
+	if(delay)
+		vend_ready = FALSE
+		addtimer(CALLBACK(src, PROC_REF(complete_vend), user, dispensed_item, spent > 0), vend_delay_animation(), TIMER_DELETE_ME)
+	else
+		complete_vend(user, dispensed_item, spent > 0)
+	return TRUE
+
+/obj/machinery/vending/custom/complete_vend(mob/user, obj/item/vended_item, thank)
+	vend_ready = TRUE
+	if(!is_operational)
+		return FALSE // Lol sucks to suck!
+
+	if(thank)
 		thank_shopper(user)
 
-	/// Remove the item
+	if(icon_vend) //Show the vending animation if needed
+		z_flick(icon_vend,src)
+
+	playsound(src, 'sound/machines/machine_vend.ogg', 50, TRUE, extrarange = -3)
+
+	// Remove the item
 	loaded_items--
-	give_or_drop_dispensed_item(user, dispensed_item)
+	give_or_drop_dispensed_item(user, vended_item)
 
 	use_power(active_power_usage)
-	vending_machine_input[item_name] = max(vending_machine_input[item_name] - 1, 0)
-	return TRUE
+	vending_machine_input[format_text(vended_item.name)] = max(vending_machine_input[format_text(vended_item.name)] - 1, 0)
 
 /obj/machinery/vending/custom/pay_for_vend(mob/vendor, obj/item/buying_item)
 	if(compartmentLoadAccessCheck(vendor))
@@ -180,11 +193,7 @@
 	contained_cash?.use(deduct_cash)
 	account?.adjust_money(deduct_card)
 
-	// Pay out to owning account, and log to audit log.
-	var/datum/bank_account/owning_account = SSeconomy.department_accounts_by_id[payment_department]
-	if(owning_account)
-		owning_account.adjust_money(price_to_use)
-		SSeconomy.track_purchase(account, price_to_use, name)
+	linked_account.adjust_money(price_to_use)
 
 	// Log to administrator logs.
 	SSblackbox.record_feedback("amount", "vending_spent", price_to_use)

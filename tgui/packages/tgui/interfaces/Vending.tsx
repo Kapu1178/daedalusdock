@@ -205,13 +205,10 @@ const VendingRow = (props) => {
   const discount = !product.premium && access;
   const remaining = custom ? product.amount : productStock.amount;
   const redPrice = Math.round(product.price * jobDiscount);
+  const productPrice = discount ? redPrice : product.price;
   const total_balance = user?.account_balance + inserted_cash;
   const disabled =
-    remaining === 0 ||
-    (onstation && !user) ||
-    (onstation &&
-      !access &&
-      (discount ? redPrice : product.price) > total_balance);
+    remaining === 0 || (onstation && !access && productPrice > total_balance);
 
   return (
     <Table.Row>
