@@ -63,9 +63,9 @@
 ///The range deducted from sound range for things that are considered silent / sneaky
 #define SILENCED_SOUND_EXTRARANGE -11
 ///Percentage of sound's range where no falloff is applied
-#define SOUND_DEFAULT_FALLOFF_DISTANCE 1 //For a normal sound this would be 1 tile of no falloff
+#define SOUND_DEFAULT_FALLOFF_DISTANCE 0 //For a normal sound this would be 1 tile of no falloff
 ///The default exponent of sound falloff
-#define SOUND_FALLOFF_EXPONENT 6
+#define SOUND_FALLOFF_EXPONENT 2.5
 
 //#define SOUND_MINIMUM_PRESSURE 10
 
