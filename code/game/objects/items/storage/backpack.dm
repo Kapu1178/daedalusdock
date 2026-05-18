@@ -218,7 +218,7 @@ TYPEINFO_DEF(/obj/item/storage/backpack/holding)
 	supports_variations_flags = NONE
 
 /obj/item/storage/backpack/chemistry
-	name = "chemistry backpack"
+	name = "apothecary backpack"
 	desc = "A backpack specially designed to repel stains and hazardous liquids."
 	icon_state = "chempack"
 	inhand_icon_state = "chempack"
@@ -460,7 +460,7 @@ TYPEINFO_DEF(/obj/item/storage/backpack/holding)
 	supports_variations_flags = NONE
 
 /obj/item/storage/backpack/duffelbag/chemistry
-	name = "chemistry duffel bag"
+	name = "apothecary duffel bag"
 	desc = "A large duffel bag for holding extra chemical substances."
 	icon_state = "duffel-chemistry"
 	inhand_icon_state = "duffel-chemistry"

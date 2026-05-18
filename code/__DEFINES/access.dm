@@ -29,7 +29,6 @@
 #define ACCESS_KITCHEN 28
 #define ACCESS_ROBOTICS 29
 #define ACCESS_CARGO 31
-///Allows access to chemistry factory areas on compatible maps
 #define ACCESS_HYDROPONICS 35
 #define ACCESS_LIBRARY 37
 #define ACCESS_LAWYER 38

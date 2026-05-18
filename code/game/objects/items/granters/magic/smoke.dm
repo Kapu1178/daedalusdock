@@ -6,7 +6,7 @@
 	remarks = list(
 		"Smoke Bomb! Heh...",
 		"Smoke bomb would do just fine too...",
-		"Wait, there's a machine that does the same thing in chemistry?",
+		"Wait, there's a machine that does the same thing in the apothecary?",
 		"This book smells awful...",
 		"Why all these weed jokes? Just tell me how to cast it...",
 		"Wind will ruin the whole spell, good thing we're in space... Right?",

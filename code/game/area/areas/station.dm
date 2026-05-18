@@ -399,7 +399,7 @@
 	holomap_color = HOLOMAP_AREACOLOR_ENGINEERING
 
 /area/station/command/heads_quarters/cmo
-	name = "\improper Medical Director's Office"
+	name = "\improper Augur's Sanctum"
 	icon_state = "cmo_office"
 	holomap_color = HOLOMAP_AREACOLOR_MEDICAL
 
@@ -1042,7 +1042,7 @@
 	spook_level = SPOOK_AMT_CORPSE * -10 // The morgue lays spirits to rest or something
 
 /area/station/medical/chemistry
-	name = "Chemistry"
+	name = "Apothecary"
 	icon_state = "chem"
 
 /area/station/medical/pharmacy

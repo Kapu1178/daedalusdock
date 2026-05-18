@@ -1,12 +1,11 @@
 /datum/job/chemist
-	title = JOB_CHEMIST
-	description = "Supply the doctors with chemicals, make medicine, as well as \
-		less likable substances in the comfort of a fully reinforced room."
-	department_head = list("Medical Director")
+	title = JOB_ALCHEMIST
+	description = "Supply the Ward with necessary reagents for surgery and outpatient care. Obtain Ambrosia from Botany to create Tinctures for \"specialty\" care."
+	department_head = list(JOB_AUGUR)
 	faction = FACTION_STATION
 	total_positions = 2
 	spawn_positions = 2
-	supervisors = "the medical director"
+	supervisors = "the " + JOB_AUGUR
 	selection_color = "#013d3b"
 	exp_requirements = 60
 	exp_required_type = EXP_TYPE_CREW
@@ -41,7 +40,7 @@
 
 
 /datum/outfit/job/chemist
-	name = "Chemist"
+	name = JOB_ALCHEMIST
 	jobtype = /datum/job/chemist
 
 	id_template = /datum/access_template/job/chemist

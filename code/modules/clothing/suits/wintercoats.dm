@@ -240,7 +240,7 @@ TYPEINFO_DEF(/obj/item/clothing/head/hooded/winterhood/medical/cmo)
 
 // Chemist
 /obj/item/clothing/suit/hooded/wintercoat/medical/chemistry
-	name = "chemistry winter coat"
+	name = "apothecary winter coat"
 	desc = "A lab-grade winter coat made with acid resistant polymers. For the enterprising chemist who was exiled to a frozen wasteland on the go."
 	icon_state = "coatchemistry"
 	inhand_icon_state = "coatchemistry"

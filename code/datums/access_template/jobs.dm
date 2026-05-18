@@ -157,7 +157,7 @@
 	job = /datum/job/chaplain
 
 /datum/access_template/job/chemist
-	assignment = JOB_CHEMIST
+	assignment = JOB_ALCHEMIST
 	template_state = "trim_chemist"
 	sechud_icon_state = SECHUD_CHEMIST
 	minimal_access = list(ACCESS_PHARMACY, ACCESS_MECH_MEDICAL, ACCESS_MEDICAL, ACCESS_MINERAL_STOREROOM, ACCESS_PHARMACY)

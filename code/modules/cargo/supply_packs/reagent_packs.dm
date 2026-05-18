@@ -6,7 +6,7 @@
 	crate_type = /obj/structure/closet/crate/medical
 
 /datum/supply_pack/reagent/chemical_carts
-	name = "Full Chemistry Cartridge Pack"
+	name = "Full Chemical Cartridge Pack"
 	desc = "Contains a full set of chem dispenser cartridges with every chemical you'll need for making pharmaceuticals."
 	cost = PAYCHECK_ASSISTANT * 50 + CARGO_CRATE_VALUE //price may need balancing
 	crate_name = "chemical cartridges crate"
