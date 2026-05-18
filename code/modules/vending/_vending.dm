@@ -1001,7 +1001,7 @@ GLOBAL_LIST_EMPTY(vending_products)
 /// Thank our patron.
 /obj/machinery/vending/proc/thank_shopper(mob/shopper)
 	if(last_shopper != REF(shopper) || purchase_message_cooldown < world.time)
-		say("Thank you for shopping with [src]!")
+		speak("Thank you for shopping with [src]!")
 		purchase_message_cooldown = world.time + 5 SECONDS
 		last_shopper = REF(shopper)
 
