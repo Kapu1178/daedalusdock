@@ -119,7 +119,7 @@
 		flock_talk(src, message, flock, forced)
 
 // changing the default arg value here
-/mob/living/simple_animal/flock/treat_message(message, correct_grammar = FALSE)
+/mob/living/simple_animal/flock/treat_message(message, correct_grammar = FALSE, is_visual_language = FALSE)
 	. = ..()
 
 /mob/living/simple_animal/flock/update_icon_state()
