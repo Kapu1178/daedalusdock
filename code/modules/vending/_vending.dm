@@ -874,6 +874,7 @@ GLOBAL_LIST_EMPTY(vending_products)
 	switch(action)
 		if("vend")
 			. = vend(ui.user, TRUE, locate(params["ref"]))
+			ui.user.changeNext_move(CLICK_CD_RAPID) // chat spam from "insufficient funds"
 		if("select_colors")
 			. = select_colors(params)
 		if("dispense_cash")

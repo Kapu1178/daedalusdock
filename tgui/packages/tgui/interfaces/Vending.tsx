@@ -153,8 +153,8 @@ const ProductDisplay = (_) => {
   let cashButton = (
     <Button
       icon="money-bill"
-      //fontSize="16px"
       color="green"
+      disabled={!inserted_cash}
       onClick={() => act('dispense_cash')}
     >
       {inserted_cash} mk
@@ -205,10 +205,6 @@ const VendingRow = (props) => {
   const discount = !product.premium && access;
   const remaining = custom ? product.amount : productStock.amount;
   const redPrice = Math.round(product.price * jobDiscount);
-  const productPrice = discount ? redPrice : product.price;
-  const total_balance = user?.account_balance + inserted_cash;
-  const disabled =
-    remaining === 0 || (onstation && !access && productPrice > total_balance);
 
   return (
     <Table.Row>
@@ -219,9 +215,7 @@ const VendingRow = (props) => {
         {product.name.replace(/^\w/, (c) => c.toUpperCase())}
       </Table.Cell>
       <Table.Cell>
-        {!!productStock?.colorable && (
-          <ProductColorSelect disabled={disabled} product={product} />
-        )}
+        {!!productStock?.colorable && <ProductColorSelect product={product} />}
       </Table.Cell>
       <Table.Cell collapsing textAlign="right">
         <ProductStock custom={custom} product={product} remaining={remaining} />
@@ -229,7 +223,6 @@ const VendingRow = (props) => {
       <Table.Cell collapsing textAlign="center">
         <ProductButton
           custom={custom}
-          disabled={disabled}
           discount={discount}
           free={free}
           product={product}
@@ -267,13 +260,12 @@ const ProductImage = (props) => {
  */
 const ProductColorSelect = (props) => {
   const { act } = useBackend<VendingData>();
-  const { disabled, product } = props;
+  const { product } = props;
 
   return (
     <Button
       icon="palette"
       tooltip="Change color"
-      disabled={disabled}
       onClick={() => act('select_colors', { ref: product.ref })}
     />
   );
@@ -300,7 +292,7 @@ const ProductStock = (props) => {
 const ProductButton = (props) => {
   const { act, data } = useBackend<VendingData>();
   const { access } = data;
-  const { custom, discount, disabled, free, product, redPrice } = props;
+  const { custom, discount, free, product, redPrice } = props;
   const customPrice = access ? 'FREE' : product.price + ' cr';
   let standardPrice = product.price + ' cr';
   if (free) {
@@ -311,7 +303,6 @@ const ProductButton = (props) => {
   return (
     <Button
       fluid
-      disabled={disabled}
       onClick={() =>
         act('vend', {
           ref: product.ref,
