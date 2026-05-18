@@ -466,7 +466,7 @@ GLOBAL_LIST_EMPTY(vending_products)
 
 		if(!istype(user_money, /obj/item/stack/spacecash/c1) || (contained_cash && contained_cash.amount == contained_cash.max_amount)) // pain
 			to_chat(user, span_warning("[src] rejects [user_money]."))
-			playsound(src, 'sound/machines/buzz-two.ogg', 50)
+			playsound(src, 'sound/machines/buzz-two.ogg', 50, extrarange = SHORT_RANGE_SOUND_EXTRARANGE)
 			return ITEM_INTERACT_BLOCKING
 
 		if(!contained_cash)
@@ -479,7 +479,7 @@ GLOBAL_LIST_EMPTY(vending_products)
 			user_money.use(insert_amount, TRUE)
 			contained_cash.add(insert_amount)
 
-		playsound(src, 'sound/machines/cash_insert.ogg', 20)
+		playsound(src, 'sound/machines/cash_insert.ogg', 20, extrarange = SHORT_RANGE_SOUND_EXTRARANGE)
 		user.visible_message(span_notice("[user] inserts [tool] into [src]."))
 		return ITEM_INTERACT_SUCCESS
 
@@ -885,7 +885,7 @@ GLOBAL_LIST_EMPTY(vending_products)
 	if(!contained_cash)
 		return FALSE
 
-	playsound(src, 'sound/machines/cash_desert.ogg', 20)
+	playsound(src, 'sound/machines/cash_desert.ogg', 20, extrarange = SHORT_RANGE_SOUND_EXTRARANGE)
 
 	if(user?.put_in_hands(contained_cash))
 		contained_cash.do_pickup_animation(user, get_turf(src))
@@ -954,7 +954,7 @@ GLOBAL_LIST_EMPTY(vending_products)
 		return
 
 	usr?.animate_interact(src)
-	playsound(src, 'goon/sounds/button.ogg', 50)
+	playsound(src, 'goon/sounds/button.ogg', 50, extrarange = SILENCED_SOUND_EXTRARANGE)
 
 	if (vend_datum.amount <= 0)
 		speak("Sold out.")
@@ -1087,7 +1087,7 @@ GLOBAL_LIST_EMPTY(vending_products)
 		z_animate(src, pixel_x = offset_x_1, pixel_y = offset_y_1, time = shake_out_time_1, flags = ANIMATION_PARALLEL)
 		z_animate(src, pixel_x = pixel_x, pixel_y = pixel_y, time = shake_in_time, flags = ANIMATION_CONTINUE)
 
-		playsound(src, 'sound/weapons/smash.ogg', 50)
+		playsound(src, 'sound/weapons/smash.ogg', 50, extrarange = SHORT_RANGE_SOUND_EXTRARANGE)
 
 		spawn(wait_duration)
 			if(!is_operational)
@@ -1098,7 +1098,7 @@ GLOBAL_LIST_EMPTY(vending_products)
 			z_animate(src, pixel_x = offset_x_2, pixel_y = offset_y_2, time = shake_out_time_2, flags = ANIMATION_PARALLEL)
 			z_animate(src, pixel_x = pixel_x, pixel_y = pixel_y, time = shake_in_time, flags = ANIMATION_CONTINUE)
 
-			playsound(src, 'sound/weapons/smash.ogg', 50)
+			playsound(src, 'sound/weapons/smash.ogg', 50, extrarange = SHORT_RANGE_SOUND_EXTRARANGE)
 
 	// An extra wait_duration is tacked on intentionally.
 	return (transform_total_duration * 2) + (shake_out_time_1 + shake_in_time) + (shake_out_time_2 + shake_in_time) + (wait_duration * 3)
