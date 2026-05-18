@@ -46,6 +46,9 @@
  * * BB_NEXT_HUNGRY - set by this subtree, is when the controller is next hungry
  */
 /datum/ai_planning_subtree/generic_hunger/SelectBehaviors(datum/ai_controller/controller, delta_time)
+	if(astype(controller.pawn, /mob/living).get_fullness() > NUTRITION_LEVEL_HUNGRY)
+		return
+
 	var/next_eat = controller.blackboard[BB_NEXT_HUNGRY]
 	if(!next_eat)
 		//inits the blackboard timer
