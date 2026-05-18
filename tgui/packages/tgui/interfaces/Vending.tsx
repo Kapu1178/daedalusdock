@@ -15,9 +15,9 @@ import { Window } from '../layouts';
 type VendingData = {
   access: boolean;
   coin_records: CoinRecord[];
-  department: string;
   extended_inventory: boolean;
   hidden_records: HiddenRecord[];
+  inserted_cash: number;
   jobDiscount: number;
   onstation: boolean;
   product_records: ProductRecord[];
@@ -59,9 +59,7 @@ type HiddenRecord = {
 };
 
 type UserData = {
-  cash: number;
-  department: string;
-  job: string;
+  account_balance: number;
   name: string;
 };
 
@@ -118,9 +116,6 @@ export const UserDetails = (_) => {
           <Stack.Item>
             <LabeledList>
               <LabeledList.Item label="User">{user.name}</LabeledList.Item>
-              <LabeledList.Item label="Occupation">
-                {user.job || 'Unemployed'}
-              </LabeledList.Item>
             </LabeledList>
           </Stack.Item>
         </Stack>
@@ -131,8 +126,9 @@ export const UserDetails = (_) => {
 
 /** Displays  products in a section, with user balance at top */
 const ProductDisplay = (_) => {
-  const { data } = useBackend<VendingData>();
+  const { act, data } = useBackend<VendingData>();
   const {
+    inserted_cash,
     onstation,
     user,
     product_records = [],
@@ -154,18 +150,33 @@ const ProductDisplay = (_) => {
   // Just in case we still have undefined values in the list
   inventory = inventory.filter((item) => !!item);
 
+  let cashButton = (
+    <Button
+      icon="money-bill"
+      //fontSize="16px"
+      color="green"
+      onClick={() => act('dispense_cash')}
+    >
+      {inserted_cash} mk
+    </Button>
+  );
+
+  let accountButton = !!onstation && !!user && (
+    <Button icon="address-card" color="gold">
+      {user.account_balance || 0} mk
+    </Button>
+  );
+
   return (
     <Section
       fill
       scrollable
       title="Products"
       buttons={
-        !!onstation &&
-        user && (
-          <Box fontSize="16px" color="green">
-            {(user && user.cash) || 0} cr <Icon name="coins" color="gold" />
-          </Box>
-        )
+        <>
+          {cashButton}
+          {accountButton}
+        </>
       }
     >
       <Table>
@@ -189,17 +200,18 @@ const ProductDisplay = (_) => {
 const VendingRow = (props) => {
   const { data } = useBackend<VendingData>();
   const { custom, product, productStock } = props;
-  const { access, department, jobDiscount, onstation, user } = data;
+  const { access, inserted_cash, jobDiscount, onstation, user } = data;
   const free = !onstation || product.price === 0;
   const discount = !product.premium && access;
   const remaining = custom ? product.amount : productStock.amount;
   const redPrice = Math.round(product.price * jobDiscount);
+  const total_balance = user?.account_balance + inserted_cash;
   const disabled =
     remaining === 0 ||
     (onstation && !user) ||
     (onstation &&
       !access &&
-      (discount ? redPrice : product.price) > user?.cash);
+      (discount ? redPrice : product.price) > total_balance);
 
   return (
     <Table.Row>
