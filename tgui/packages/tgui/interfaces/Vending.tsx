@@ -311,19 +311,7 @@ const ProductButton = (props) => {
   } else if (discount) {
     standardPrice = redPrice + ' cr';
   }
-  return custom ? (
-    <Button
-      fluid
-      disabled={disabled}
-      onClick={() =>
-        act('dispense', {
-          item: product.name,
-        })
-      }
-    >
-      {customPrice}
-    </Button>
-  ) : (
+  return (
     <Button
       fluid
       disabled={disabled}
