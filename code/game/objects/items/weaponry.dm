@@ -14,7 +14,7 @@ TYPEINFO_DEF(/obj/item/banhammer)
 	throw_range = 7
 	attack_verb_continuous = list("bans")
 	attack_verb_simple = list("ban")
-	max_integrity = 200
+	max_integrity = 30
 	resistance_flags = FIRE_PROOF
 
 /obj/item/banhammer/Initialize(mapload)
@@ -81,7 +81,7 @@ TYPEINFO_DEF(/obj/item/claymore)
 	attack_verb_simple = list("attack", "slash", "stab", "slice", "tear", "lacerate", "rip", "dice", "cut")
 	block_chance = 50
 	sharpness = SHARP_EDGED
-	max_integrity = 200
+	max_integrity = 30
 	resistance_flags = FIRE_PROOF
 
 /obj/item/claymore/Initialize(mapload)
@@ -275,7 +275,7 @@ TYPEINFO_DEF(/obj/item/katana)
 	attack_verb_simple = list("attack", "slash", "stab", "slice", "tear", "lacerate", "rip", "dice", "cut")
 	block_chance = 50
 	sharpness = SHARP_EDGED
-	max_integrity = 200
+	max_integrity = 30
 	resistance_flags = FIRE_PROOF
 
 /obj/item/katana/suicide_act(mob/user)
@@ -298,7 +298,7 @@ TYPEINFO_DEF(/obj/item/throwing_star)
 	force = 2
 	throwforce = 10 //10 + 2 (WEIGHT_CLASS_SMALL) * 4 (EMBEDDED_IMPACT_PAIN_MULTIPLIER) = 18 damage on hit due to guaranteed embedding
 	throw_speed = 1.5
-	embedding = list("pain_mult" = 4, "embed_chance" = 100, "fall_chance" = 0)
+	embedding = list("pain_mult" = 4, "embed_chance" = 100, "fall_chance" = 0, "ignore_throwspeed_threshold" = TRUE)
 	armor_penetration = 40
 
 	w_class = WEIGHT_CLASS_SMALL

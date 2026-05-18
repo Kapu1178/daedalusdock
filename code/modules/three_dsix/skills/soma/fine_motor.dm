@@ -32,11 +32,11 @@
 		. -= 2
 		out_sources?["In pain"] = -2
 
-	if(carbon_user.shock_stage > 30)
+	if(carbon_user.traumatic_shock_stage > 30)
 		. -= 2
 		out_sources?["In shock"] = -2
 
-	else if(carbon_user.shock_stage > 10)
+	else if(carbon_user.traumatic_shock_stage > 10)
 		. -= 1
 		out_sources?["In shock"] = -1
 

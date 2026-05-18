@@ -24,29 +24,30 @@
 	. = ..()
 
 	if(!system.get_computer().get_peripheral(PERIPHERAL_TYPE_WIRELESS_CARD))
-		system.println("<b>Error:</b> Unable to locate wireless adapter.")
+		system.println("[ANSI_WRAP_BOLD("Error:")] Unable to locate wireless adapter.")
 
+	system.clear_screen(TRUE)
 	view_home()
 
 /datum/c4_file/terminal_program/directman/std_in(text)
 	. = ..()
-	var/datum/shell_stdin/parsed_stdin = parse_std_in(text)
+	var/datum/parsed_cmdline/parsed_cmdline = parse_cmdline(text)
 
 	var/datum/c4_file/terminal_program/operating_system/system = get_os()
 	system.println(html_encode(text))
 
-	if(home_command.try_exec(parsed_stdin.command, system, src, parsed_stdin.arguments, parsed_stdin.options))
+	if(home_command.try_exec(parsed_cmdline.command, system, src, parsed_cmdline.arguments, parsed_cmdline.options))
 		return TRUE
 
 	switch(current_menu)
 		if(DIRECTMAN_MENU_HOME)
 			for(var/datum/shell_command/potential_command as anything in main_commands)
-				if(potential_command.try_exec(parsed_stdin.command, system, src, parsed_stdin.arguments, parsed_stdin.options))
+				if(potential_command.try_exec(parsed_cmdline.command, system, src, parsed_cmdline.arguments, parsed_cmdline.options))
 					return TRUE
 
 		if(DIRECTMAN_MENU_CURRENT)
-			var/number = text2num(parsed_stdin.raw)
-			if(lowertext(parsed_stdin.raw) == "b")
+			var/number = text2num(parsed_cmdline.raw)
+			if(lowertext(parsed_cmdline.raw) == "b")
 				system.clear_screen(TRUE)
 				view_home()
 				return TRUE
@@ -58,13 +59,13 @@
 			return TRUE
 
 		if(DIRECTMAN_MENU_ACTIVE_DIRECTIVE)
-			if(lowertext(parsed_stdin.raw) == "b")
+			if(lowertext(parsed_cmdline.raw) == "b")
 				system.clear_screen(TRUE)
 				view_current()
 				return TRUE
 
 		if(DIRECTMAN_MENU_NEW_DIRECTIVES)
-			var/number = text2num(parsed_stdin.raw)
+			var/number = text2num(parsed_cmdline.raw)
 			if(!(number in 1 to length(SSdirectives.get_directives_for_selection())))
 				return
 
@@ -76,20 +77,20 @@
 			return TRUE
 
 		if(DIRECTMAN_MENU_NEW_DIRECTIVE)
-			if(lowertext(parsed_stdin.raw) == "b")
+			if(lowertext(parsed_cmdline.raw) == "b")
 				system.clear_screen(TRUE)
 				if(!system.get_computer().get_peripheral(PERIPHERAL_TYPE_WIRELESS_CARD))
 					view_home()
-					system.println("<b>Error:</b> Unable to locate wireless adapter.")
+					system.println("[ANSI_WRAP_BOLD("Error:")] Unable to locate wireless adapter.")
 					return
 				view_new()
 				return TRUE
 
 
-			if(lowertext(parsed_stdin.raw) == "s")
+			if(lowertext(parsed_cmdline.raw) == "s")
 				if(!system.get_computer().get_peripheral(PERIPHERAL_TYPE_WIRELESS_CARD))
 					view_home()
-					system.println("<b>Error:</b> Unable to locate wireless adapter.")
+					system.println("[ANSI_WRAP_BOLD("Error:")] Unable to locate wireless adapter.")
 					return
 
 				addtimer(CALLBACK(SSdirectives, TYPE_PROC_REF(/datum/controller/subsystem/directives, enact_directive), viewing_directive), rand(3, 10) SECONDS)
@@ -102,23 +103,23 @@
 	current_menu = DIRECTMAN_MENU_HOME
 
 	var/list/out = list(
-		@"<pre style='margin: 0px'> ┌┬┐┬┬─┐┌─┐┌─┐┌┬┐╔╦╗╔═╗╔╗╔</pre>",
-		@"<pre style='margin: 0px'>  │││├┬┘├┤ │   │ ║║║╠═╣║║║</pre>",
-		@"<pre style='margin: 0px'> ─┴┘┴┴└─└─┘└─┘ ┴ ╩ ╩╩ ╩╝╚╝</pre>",
-		"Commands:<br>",
-		"\[1\] View Current Directives<br>",
+		@" ┌┬┐┬┬─┐┌─┐┌─┐┌┬┐╔╦╗╔═╗╔╗╔",
+		@"  │││├┬┘├┤ │   │ ║║║╠═╣║║║",
+		@" ─┴┘┴┴└─└─┘└─┘ ┴ ╩ ╩╩ ╩╝╚╝",
+		"Commands:",
+		"\[1\] View Current Directives",
 	)
 
 	if(SSdirectives.get_directives_for_selection())
-		out += "\[2\] View New Directives<br>"
+		out += "\[2\] View New Directives"
 
-	out += "<br>\[R\] Refresh"
+	out += "\[R\] Refresh"
 
-	get_os().println(jointext(out, null))
+	get_os().println(jointext(out, "\n"))
 
 /datum/c4_file/terminal_program/directman/proc/view_current()
 	if(!get_os().get_computer().get_peripheral(PERIPHERAL_TYPE_WIRELESS_CARD))
-		get_os().println("<b>Error:</b> Unable to locate wireless adapter.")
+		get_os().println("[ANSI_WRAP_BOLD("Error:")] Unable to locate wireless adapter.")
 		return
 
 	current_menu = DIRECTMAN_MENU_CURRENT
@@ -129,13 +130,13 @@
 	for(var/datum/directive/directive as anything in SSdirectives.get_active_directives())
 		i++
 		out += "\[[fit_with_zeros("[i]", 2)]\] [directive.name]"
-	out += "<br>\[B\] Return"
+	out += "\n\[B\] Return"
 
-	get_os().println(jointext(out, "<br>"))
+	get_os().println(jointext(out, "\n"))
 
 /datum/c4_file/terminal_program/directman/proc/view_directive(index)
 	if(!get_os().get_computer().get_peripheral(PERIPHERAL_TYPE_WIRELESS_CARD))
-		get_os().println("<b>Error:</b> Unable to locate wireless adapter.")
+		get_os().println("[ANSI_WRAP_BOLD("Error:")] Unable to locate wireless adapter.")
 		return
 
 	current_menu = DIRECTMAN_MENU_ACTIVE_DIRECTIVE
@@ -147,18 +148,18 @@
 		"Description: [directive.desc]",
 		"Severity: [directive.severity]",
 		"Time Given: [active_directives[directive]]",
-		"<br>\[B\] Return",
+		"\n\[B\] Return",
 	)
 
-	get_os().println(jointext(out, "<br>"))
+	get_os().println(jointext(out, "\n"))
 
 /datum/c4_file/terminal_program/directman/proc/view_new()
 	if(!get_os().get_computer().get_peripheral(PERIPHERAL_TYPE_WIRELESS_CARD))
-		get_os().println("<b>Error:</b> Unable to locate wireless adapter.")
+		get_os().println("[ANSI_WRAP_BOLD("Error:")] Unable to locate wireless adapter.")
 		return
 
 	if(!SSdirectives.get_directives_for_selection())
-		get_os().println("<b>Error:</b> No new directives to display.")
+		get_os().println("[ANSI_WRAP_BOLD("Error:")] No new directives to display.")
 		return
 
 	current_menu = DIRECTMAN_MENU_NEW_DIRECTIVES
@@ -169,14 +170,14 @@
 	for(var/datum/directive/directive as anything in SSdirectives.get_directives_for_selection())
 		i++
 		out += "\[[fit_with_zeros("[i]", 2)]\] [directive.name]"
-	out += "<br>\[B\] Return"
+	out += "\n\[B\] Return"
 
-	get_os().println(jointext(out, "<br>"))
+	get_os().println(jointext(out, "\n"))
 
 /datum/c4_file/terminal_program/directman/proc/view_new_directive(index)
 	if(!get_os().get_computer().get_peripheral(PERIPHERAL_TYPE_WIRELESS_CARD))
 		view_home()
-		get_os().println("<b>Error:</b> Unable to locate wireless adapter.")
+		get_os().println("[ANSI_WRAP_BOLD("Error:")] Unable to locate wireless adapter.")
 		return
 
 	get_os().clear_screen(TRUE)
@@ -189,7 +190,7 @@
 		"Description: [viewing_directive.desc]",
 		"Payout: [viewing_directive.reward] mark\s",
 		"Severity: [viewing_directive.severity]",
-		"<br>\[B\] Return | \[S\] Select"
+		"\n\[B\] Return | \[S\] Select"
 	)
 
-	get_os().println(jointext(out, "<br>"))
+	get_os().println(jointext(out, "\n"))

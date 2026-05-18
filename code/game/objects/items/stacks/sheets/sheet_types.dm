@@ -388,7 +388,7 @@ GLOBAL_LIST_INIT(cloth_recipes, list ( \
 	new/datum/stack_recipe("plant bag", /obj/item/storage/bag/plants, 4), \
 	new/datum/stack_recipe("book bag", /obj/item/storage/bag/books, 4), \
 	new/datum/stack_recipe("mining satchel", /obj/item/storage/bag/ore, 4), \
-	new/datum/stack_recipe("chemistry bag", /obj/item/storage/bag/chemistry, 4), \
+	new/datum/stack_recipe("alchemy bag", /obj/item/storage/bag/chemistry, 4), \
 	new/datum/stack_recipe("bio bag", /obj/item/storage/bag/bio, 4), \
 	new/datum/stack_recipe("science bag", /obj/item/storage/bag/xeno, 4), \
 	new/datum/stack_recipe("construction bag", /obj/item/storage/bag/construction, 4), \

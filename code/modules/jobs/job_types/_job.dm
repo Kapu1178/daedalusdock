@@ -497,7 +497,7 @@ GLOBAL_LIST_INIT(job_display_order, list(
 
 
 /// Applies the preference options to the spawning mob, taking the job into account. Assumes the client has the proper mind.
-/mob/living/proc/apply_prefs_job(client/player_client, datum/job/job)
+/mob/proc/apply_prefs_job(client/player_client, datum/job/job)
 	return
 
 /mob/living/carbon/human/apply_prefs_job(client/player_client, datum/job/job)
@@ -538,8 +538,8 @@ GLOBAL_LIST_INIT(job_display_order, list(
 
 			var/gender = player_client.prefs.read_preference(/datum/preference/choiced/gender)
 			set_real_name(species.random_name(gender, TRUE))
-	dna.update_dna_identity()
 
+	dna.update_dna_identity(update_fingerprints = TRUE)
 
 /mob/living/silicon/ai/apply_prefs_job(client/player_client, datum/job/job)
 	if(GLOB.current_anonymous_theme)

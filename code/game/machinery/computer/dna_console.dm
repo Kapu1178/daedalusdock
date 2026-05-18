@@ -1633,7 +1633,7 @@
 				to_chat(usr,span_warning("Genetic data corrupted, unable to apply genetic data."))
 				return FALSE
 			COOLDOWN_START(src, enzyme_copy_timer, ENZYME_COPY_BASE_COOLDOWN)
-			scanner_occupant.dna.unique_identity = buffer_slot["UI"]
+			scanner_occupant.dna.set_unique_identity(buffer_slot["UI"])
 			scanner_occupant.updateappearance(mutations_overlay_update=1)
 			scanner_occupant.AddComponent(/datum/component/genetic_damage, damage_increase)
 			scanner_occupant.domutcheck()
@@ -1674,7 +1674,7 @@
 				to_chat(usr,span_warning("Genetic data corrupted, unable to apply genetic data."))
 				return FALSE
 			COOLDOWN_START(src, enzyme_copy_timer, ENZYME_COPY_BASE_COOLDOWN)
-			scanner_occupant.dna.unique_identity = buffer_slot["UI"]
+			scanner_occupant.dna.set_unique_identity(buffer_slot["UI"])
 			scanner_occupant.dna.unique_features = buffer_slot["UF"]
 			scanner_occupant.updateappearance(mutcolor_update=1, mutations_overlay_update=1)
 			scanner_occupant.real_name = buffer_slot["name"]
@@ -2189,7 +2189,7 @@
 
 	switch(genetic_damage_pulse_type)
 		if(GENETIC_DAMAGE_PULSE_UNIQUE_IDENTITY)
-			scanner_occupant.dna.unique_identity = copytext(scanner_occupant.dna.unique_identity, 1, num) + hex + copytext(scanner_occupant.dna.unique_identity, num + 1)
+			scanner_occupant.dna.set_unique_identity(copytext(scanner_occupant.dna.unique_identity, 1, num) + hex + copytext(scanner_occupant.dna.unique_identity, num + 1))
 		if(GENETIC_DAMAGE_PULSE_UNIQUE_FEATURES)
 			scanner_occupant.dna.unique_features = copytext(scanner_occupant.dna.unique_features, 1, num) + hex + copytext(scanner_occupant.dna.unique_features, num + 1)
 	scanner_occupant.updateappearance(mutcolor_update=1, mutations_overlay_update=1)

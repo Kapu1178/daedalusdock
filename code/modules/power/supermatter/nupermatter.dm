@@ -37,6 +37,8 @@ GLOBAL_DATUM(main_supermatter_engine, /obj/machinery/power/supermatter)
 	///Higher == more overall power
 	var/reaction_power_modifier = 1.1
 
+	/// Controls the turf range of radiation
+	var/radiation_range = 8
 	///Controls how much power is produced by each collector in range - this is the main parameter for tweaking SM balance, as it basically controls how the power variable relates to the rest of the game.
 	var/power_factor = 1.0
 	///Affects how fast the supermatter power decays
@@ -133,7 +135,7 @@ GLOBAL_DATUM(main_supermatter_engine, /obj/machinery/power/supermatter)
 	radio.keyslot = new radio_key
 	radio.canhear_range = -1
 	radio.set_listening(FALSE, TRUE)
-	radio.recalculateChannels()
+	radio.recalculate_channels()
 
 	AddElement(/datum/element/lateral_bound, TRUE)
 	AddComponent(/datum/component/smell, INTENSITY_SUBTLE, SCENT_FRAGRANCE, "weird", 2)
@@ -555,6 +557,8 @@ GLOBAL_DATUM(main_supermatter_engine, /obj/machinery/power/supermatter)
 
 	pull_time = 150
 	explosion_power = 3
+
+	radiation_range = 4
 
 /obj/machinery/power/supermatter/shard/announce_warning() //Shards don't get announcements
 	return

@@ -46,7 +46,7 @@
 	else if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		client?.prefs.safe_transfer_prefs_to(H)
-		H.dna.update_dna_identity()
+		H.dna.update_dna_identity(update_fingerprints = TRUE)
 
 	if(mind && isliving(M))
 		mind.transfer_to(M, 1) // second argument to force key move to new mob

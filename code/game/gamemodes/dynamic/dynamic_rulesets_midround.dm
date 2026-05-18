@@ -338,7 +338,7 @@
 	antag_flag = ROLE_MALF_MIDROUND
 	antag_flag_override = ROLE_MALF
 	enemy_roles = list(
-		JOB_CHEMIST,
+		JOB_ALCHEMIST,
 		JOB_CHIEF_ENGINEER,
 		JOB_SECURITY_MARSHAL,
 		JOB_SECURITY_OFFICER,

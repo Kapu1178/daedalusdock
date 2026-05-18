@@ -121,7 +121,7 @@ TYPEINFO_DEF(/obj/machinery/atmospherics/components/unary/cryo_cell)
 	radio.keyslot = new radio_key
 	radio.subspace_transmission = TRUE
 	radio.canhear_range = -1
-	radio.recalculateChannels()
+	radio.recalculate_channels()
 
 	occupant_vis = new(null, src)
 	add_viscontents(occupant_vis)
@@ -507,6 +507,9 @@ GLOBAL_VAR_INIT(cryo_overlay_cover_off, mutable_appearance('icons/obj/cryogenics
 			node.atmos_init()
 			node.add_member(src)
 		SSairmachines.add_to_rebuild_queue(src)
+
+/obj/machinery/atmospherics/components/unary/cryo_cell/update_layer()
+	return
 
 #undef MAX_TEMPERATURE
 #undef CRYO_MULTIPLY_FACTOR

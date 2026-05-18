@@ -22,11 +22,12 @@
 	if(.)
 		return
 
+	system.clear_screen(TRUE)
 	var/title_text = list(
-		@"<pre style='margin: 0px'>      ___ ___  __        __   ___</pre>",
-		@"<pre style='margin: 0px'>|\ | |__   |  |__)  /\  / _` |__ </pre>",
-		@"<pre style='margin: 0px'>| \| |___  |  |    /~~\ \__> |___</pre>",
-	).Join("")
+		@"      ___ ___  __        __   ___",
+		@"|\ | |__   |  |__)  /\  / _` |__ ",
+		@"| \| |___  |  |    /~~\ \__> |___",
+	).Join("\n")
 	system.println(title_text)
 
 	check_for_errors()
@@ -34,31 +35,31 @@
 
 /datum/c4_file/terminal_program/netpage/std_in(text)
 	. = ..()
-	var/datum/shell_stdin/parsed_stdin = parse_std_in(text)
+	var/datum/parsed_cmdline/parsed_cmdline = parse_cmdline(text)
 
 	var/datum/c4_file/terminal_program/operating_system/system = get_os()
 	system.println(html_encode(text))
 
 	for(var/datum/shell_command/potential_command as anything in commands)
-		if(potential_command.try_exec(parsed_stdin.command, system, src, parsed_stdin.arguments, parsed_stdin.options))
+		if(potential_command.try_exec(parsed_cmdline.command, system, src, parsed_cmdline.arguments, parsed_cmdline.options))
 			return TRUE
 
 /datum/c4_file/terminal_program/netpage/proc/check_for_errors()
 	var/datum/c4_file/terminal_program/operating_system/thinkdos/system = get_os()
 
 	if(!get_adapter())
-		system.println("<b>Error:</b> Unable to locate network adapter.")
+		system.println("[ANSI_WRAP_BOLD("Error:")] Unable to locate network adapter.")
 		. = TRUE
 
 	if(system.needs_login)
 		return .
 
 	if(!get_reader())
-		system.println("<b>Error:</b> Unable to locate card reader.")
+		system.println("[ANSI_WRAP_BOLD("Error:")] Unable to locate card reader.")
 		return TRUE
 
 	if(!get_reader().inserted_card)
-		system.println("<b>Error:</b> No card inserted.")
+		system.println("[ANSI_WRAP_BOLD("Error:")] No card inserted.")
 		return TRUE
 
 	return FALSE

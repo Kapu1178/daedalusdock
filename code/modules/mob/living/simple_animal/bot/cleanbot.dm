@@ -61,7 +61,7 @@
 	var/static/list/medical_titles = list(
 		JOB_AUGUR = "C.M.O.",
 		JOB_ACOLYTE = "M.D.",
-		JOB_CHEMIST = "Pharm.D.",
+		JOB_ALCHEMIST = "Pharm.D.",
 	)
 	var/static/list/legal_titles = list(
 		JOB_LAWYER = "Esq.",

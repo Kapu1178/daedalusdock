@@ -17,7 +17,7 @@
 	GLOB.mob_living_list += src
 	SSpoints_of_interest.make_point_of_interest(src)
 	voice_type = pick(voice_type2sound)
-	mob_mood = new(src)
+	create_mood()
 
 	AddElement(/datum/element/movetype_handler)
 	gravity_setup()
@@ -90,7 +90,7 @@
 	return TRUE
 
 /mob/living/proc/TakeFallDamage(turf/T, levels)
-	adjustBruteLoss((levels * 5) ** 1.5)
+	adjustBruteLoss((levels * 15) ** 1.5)
 	Knockdown(levels * 5 SECONDS)
 	Stun(levels * 2 SECONDS)
 	return TRUE
@@ -618,8 +618,9 @@
 /mob/living/update_health_hud()
 	var/severity = 0
 	var/healthpercent = (health/maxHealth) * 100
-	if(hud_used?.healthdoll) //to really put you in the boots of a simplemob
-		var/atom/movable/screen/healthdoll/living/livingdoll = hud_used.healthdoll
+	var/atom/movable/screen/healthdoll/living/livingdoll = hud_used?.screen_objects[HUDKEY_MOB_HEALTH]
+
+	if(livingdoll) //to really put you in the boots of a simplemob
 		switch(healthpercent)
 			if(100 to INFINITY)
 				severity = 0
@@ -635,15 +636,19 @@
 				severity = 5
 			else
 				severity = 6
+
 		livingdoll.icon_state = "living[severity]"
 		if(!livingdoll.filtered)
 			livingdoll.filtered = TRUE
 			var/icon/mob_mask = icon(icon, icon_state)
+
 			if(mob_mask.Height() > world.icon_size || mob_mask.Width() > world.icon_size)
 				var/health_doll_icon_state = health_doll_icon ? health_doll_icon : "megasprite"
 				mob_mask = icon('icons/hud/screen_gen.dmi', health_doll_icon_state) //swap to something generic if they have no special doll
+
 			livingdoll.add_filter("mob_shape_mask", 1, alpha_mask_filter(icon = mob_mask))
 			livingdoll.add_filter("inset_drop_shadow", 2, drop_shadow_filter(size = -1))
+
 	if(severity > 0)
 		overlay_fullscreen("brute", /atom/movable/screen/fullscreen/brute, severity)
 	else
@@ -1283,8 +1288,8 @@
 
 			// Randomize everything but the species, which was already handled above.
 			new_human.randomize_human_appearance(~RANDOMIZE_SPECIES)
-			new_human.update_body(is_creating = TRUE)
 			new_human.dna.update_dna_identity()
+			new_human.update_body(is_creating = TRUE)
 			new_mob = new_human
 
 	if(!new_mob)
@@ -2335,3 +2340,9 @@ GLOBAL_LIST_EMPTY(fire_appearances)
 /mob/living/set_nutrition(change)
 	. = ..()
 	mob_mood?.update_nutrition_moodlets()
+
+/// This exists so mobs can override mood creation.
+/mob/living/proc/create_mood()
+	if(mob_mood)
+		CRASH("Tried to run create_mood but we already have one.")
+	mob_mood = new(src)

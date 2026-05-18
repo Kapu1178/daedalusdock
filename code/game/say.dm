@@ -23,13 +23,20 @@ GLOBAL_LIST_INIT(freqtospan, list(
 /atom/movable/proc/say(message, bubble_type, list/spans = list(), sanitize = TRUE, datum/language/language = null, ignore_spam = FALSE, forced = null, filterproof = null, range = 7)
 	if(!can_speak())
 		return
+
 	if(sanitize)
 		message = trim(copytext_char(sanitize(message), 1, MAX_MESSAGE_LEN))
+
 	if(message == "" || !message)
 		return
+
 	spans |= speech_span
 	if(!language)
 		language = get_selected_language()
+
+	if(copytext_char(message, -2) == "!!")
+		message = uppertext(message)
+
 	send_speech(message, range, src, , spans, message_language=language)
 
 /atom/movable/proc/Hear(message, atom/movable/speaker, message_language, raw_message, radio_freq, list/spans, list/message_mods = list(), atom/sound_loc, message_range)
@@ -157,6 +164,9 @@ GLOBAL_LIST_INIT(freqtospan, list(
 		say_mod = say_mod(input, message_mods, language)
 
 	if(copytext_char(input, -2) == "!!")
+		spans |= SPAN_BIGYELL
+
+	else if(copytext_char(input, -1) == "!")
 		spans |= SPAN_YELL
 
 	var/spanned = attach_spans(input, spans)
@@ -210,7 +220,7 @@ GLOBAL_LIST_INIT(freqtospan, list(
 /proc/get_radio_name(freq)
 	if(islist(freq)) //Heehoo hijack bullshit
 		return freq["name"]
-	var/returntext = GLOB.reverseradiochannels["[freq]"]
+	var/returntext = GLOB.radio_frequency_to_channel["[freq]"]
 	if(returntext)
 		return returntext
 	return "[copytext_char("[freq]", 1, 4)].[copytext_char("[freq]", 4, 5)]"

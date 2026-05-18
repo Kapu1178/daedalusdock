@@ -103,6 +103,7 @@
 #include "anchored_mobs.dm"
 #include "anonymous_themes.dm"
 #include "area_contents.dm"
+#include "arm_fingerprints.dm"
 #include "autowiki.dm"
 #include "baseturfs.dm"
 #include "bespoke_id.dm"

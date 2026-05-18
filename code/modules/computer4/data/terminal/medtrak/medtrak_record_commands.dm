@@ -34,7 +34,7 @@
 	medtrak.view_record(medtrak.current_record)
 	medtrak.await_input("Are you sure you want to delete '[medtrak.current_record.fields[DATACORE_NAME]]'?(Y/N)", CALLBACK(src, PROC_REF(confirm_delete), medtrak))
 
-/datum/shell_command/medtrak/record/delete/proc/confirm_delete(datum/c4_file/terminal_program/medtrak/medtrak, datum/shell_stdin/stdin)
+/datum/shell_command/medtrak/record/delete/proc/confirm_delete(datum/c4_file/terminal_program/medtrak/medtrak, datum/parsed_cmdline/stdin)
 	switch(lowertext(jointext(stdin.raw, "")))
 		if("y")
 			medtrak.write_log("Record [medtrak.current_record.fields[DATACORE_ID]] deleted.")
@@ -54,11 +54,11 @@
 	var/datum/c4_file/terminal_program/medtrak/medtrak = program
 	var/obj/item/peripheral/printer/printer = system.get_computer().get_peripheral(PERIPHERAL_TYPE_PRINTER)
 	if(!printer)
-		system.println("<b>Error:</b> Unable to locate printer.")
+		system.println("[ANSI_WRAP_BOLD("Error:")] Unable to locate printer.")
 		return
 
 	if(printer.busy)
-		system.println("<b>Error:</b> Printer is busy.")
+		system.println("[ANSI_WRAP_BOLD("Error:")] Printer is busy.")
 		return
 
 	var/list/fields = medtrak.current_record.fields

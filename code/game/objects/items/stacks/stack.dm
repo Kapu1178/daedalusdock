@@ -21,7 +21,7 @@
 	maptext_y = 2
 
 	material_modifier = 0.05 //5%, so that a 50 sheet stack has the effect of 5k materials instead of 100k.
-	max_integrity = 100
+	max_integrity = 10
 
 	var/list/datum/stack_recipe/recipes
 	/// The name of one piece of the stack.
@@ -163,6 +163,10 @@
 /obj/item/stack/on_exit_storage(datum/storage/master_storage)
 	. = ..()
 	update_maptext()
+
+/obj/item/stack/get_controls_info()
+	. = ..()
+	. += "Right Click - Split stack."
 
 /// Set the maptext for the item that shows how much junk is inside the trunk.
 /obj/item/stack/proc/update_maptext()

@@ -449,7 +449,7 @@
 
 /obj/machinery/vending/wardrobe/chem_wardrobe
 	name = "ChemDrobe"
-	desc = "A vending machine for dispensing chemistry related clothing."
+	desc = "A vending machine for dispensing apothecary related clothing."
 	icon_state = "chemdrobe"
 	product_ads = "Our clothes are 0.5% more resistant to acid spills! Get yours now!"
 	vend_reply = "Thank you for using the ChemDrobe!"

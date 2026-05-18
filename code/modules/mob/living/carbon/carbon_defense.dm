@@ -430,7 +430,7 @@
 		who_touched_us.update_worn_gloves()
 
 /mob/living/carbon/proc/help_shake_act(mob/living/carbon/helper)
-	if(on_fire)
+	if(on_fire && helper != src)
 		var/datum/roll_result/result = helper.stat_roll(9, /datum/rpg_skill/electric_body)
 		if(result.outcome >= SUCCESS)
 			result.do_skill_sound(helper)
@@ -440,6 +440,9 @@
 			spreadFire(helper)
 
 	if(SEND_SIGNAL(src, COMSIG_CARBON_PRE_HELP_ACT, helper) & COMPONENT_BLOCK_HELP_ACT)
+		return
+
+	if(helper == src)
 		return
 
 	if(body_position == LYING_DOWN)
@@ -599,14 +602,15 @@
 			ears.adjustEarDamage(ear_damage,deaf)
 
 			if(ears.damage >= 15)
-				to_chat(src, span_warning("Your ears start to ring badly!"))
+				to_chat(src, span_warning("Your ears begin to ring."))
 				if(prob(ears.damage - 5))
 					to_chat(src, span_userdanger("You can't hear anything!"))
 					// Makes you deaf, enough that you need a proper source of healing, it won't self heal
 					// you need earmuffs, inacusiate, or replacement
 					ears.setOrganDamage(ears.maxHealth)
 			else if(ears.damage >= 5)
-				to_chat(src, span_warning("Your ears start to ring!"))
+				to_chat(src, span_warning("Your ears begin to ring."))
+
 			SEND_SOUND(src, sound('sound/weapons/flash_ring.ogg',0,1,0,250))
 		return effect_amount //how soundbanged we are
 

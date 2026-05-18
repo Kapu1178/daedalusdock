@@ -377,7 +377,7 @@
 
 	if(damage >= (maxHealth * high_threshold))
 		if(owner.body_position == STANDING_UP)
-			to_chat(owner, span_danger("You black out!"))
+			to_chat(owner, span_danger("You black out."))
 		owner.Unconscious(5 SECOND)
 
 /obj/item/organ/brain/getToxLoss()
@@ -594,7 +594,7 @@
 /obj/item/organ/brain/proc/get_attacking_limb(mob/living/carbon/human/target)
 	var/obj/item/bodypart/arm/active_hand = owner.get_active_hand()
 
-	if(target.body_position == LYING_DOWN && owner.usable_legs)
+	if(owner.body_position == STANDING_UP && target.body_position == LYING_DOWN && owner.usable_legs)
 		var/obj/item/bodypart/found_bodypart = owner.get_bodypart((active_hand.held_index % 2) ? BODY_ZONE_L_LEG : BODY_ZONE_R_LEG)
 		return found_bodypart || active_hand
 

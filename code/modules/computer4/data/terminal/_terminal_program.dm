@@ -17,18 +17,20 @@
 		return TRUE
 
 	if(!system.current_user)
-		system.println("<b>Error:</b> Unable to locate credentials.")
+		system.println("[ANSI_WRAP_BOLD("Error:")] Unable to locate credentials.")
 		return FALSE
 
 	if(length(req_access & system.current_user.access) != length(req_access))
-		system.println("<b>Error:</b> User '[html_encode(system.current_user.registered_name)]' does not have the required access credentials.")
+		system.println("[ANSI_WRAP_BOLD("Error:")] User '[html_encode(system.current_user.registered_name)]' does not have the required access credentials.")
 		return FALSE
 
 	return TRUE
 
 /// Called when a program is run.
-/datum/c4_file/terminal_program/proc/execute(datum/c4_file/terminal_program/operating_system/thinkdos/system)
-	system.clear_screen(TRUE)
+/// Operating systems will have cmdline provided as a raw string.
+/// Normal programs should expect and be passed a parsed_cmdline
+/datum/c4_file/terminal_program/proc/execute(datum/c4_file/terminal_program/operating_system/thinkdos/system, datum/parsed_cmdline/cmdline)
+	return
 
 /// Called when a program is no longer running
 /datum/c4_file/terminal_program/proc/on_close(datum/c4_file/terminal_program/operating_system/thinkdos/system)
@@ -51,10 +53,10 @@
 	return FALSE
 
 /// Helper for splitting stdin into command and arguments.
-/datum/c4_file/terminal_program/proc/parse_std_in(text) as /datum/shell_stdin
-	RETURN_TYPE(/datum/shell_stdin)
+/datum/c4_file/terminal_program/proc/parse_cmdline(text) as /datum/parsed_cmdline
+	RETURN_TYPE(/datum/parsed_cmdline)
 
-	return new /datum/shell_stdin(text)
+	return new /datum/parsed_cmdline(text)
 
 /// Called by computers to forward commands from peripherals to programs. Should probably be on OS but oh well.
 /datum/c4_file/terminal_program/proc/peripheral_input(obj/item/peripheral/invoker, command, datum/signal/packet)

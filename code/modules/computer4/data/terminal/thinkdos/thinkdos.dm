@@ -13,7 +13,7 @@
 	var/static/list/commands
 
 	/// Lazy queue of shell commands. When the system is active, it will try to run these.
-	var/list/datum/shell_stdin/queued_commands
+	var/list/datum/parsed_cmdline/queued_commands
 
 	/// Boolean, determines if errors are written to the log file.
 	var/log_errors = TRUE
@@ -32,21 +32,21 @@
 
 /datum/c4_file/terminal_program/operating_system/thinkdos/execute()
 	if(!initialize_logs())
-		println("<font color=red>Log system failure.</font>")
+		println("[ANSI_FG_RED]Log system failure.[ANSI_FG_RESET]")
 
 	if(!needs_login)
 		println("Account system disabled.")
 
 	else if(!initialize_accounts())
-		println("<font color=red>Unable to start account system.</font>")
+		println("[ANSI_FG_RED]Unable to start account system.[ANSI_FG_RESET]")
 
 	change_dir(containing_folder)
 
 	var/title_text = list(
-		@"<pre style='margin: 0px'> ___  _    _       _    ___  ___  ___</pre>",
-		@"<pre style='margin: 0px'>|_ _|| |_ &lt;_&gt;._ _ | |__| . \| . |/ __&gt;</pre>",
-		@"<pre style='margin: 0px'> | | | . || || &#39; || / /| | || | |\__ \</pre>",
-		@"<pre style='margin: 0px'> |_| |_|_||_||_|_||_\_\|___/`___&#39;&lt;___/</pre>",
+		"[ANSI_FG_RED]",    @" ___  _    _       _    ___  ___  ___ ", "\n",
+		"[ANSI_FG_YELLOW]", @"|_ _|| |_ <_>._ _ | |__| . \| . |/ __>", "\n",
+		"[ANSI_FG_BLUE]",   @" | | | . || || ' || / /| | || | |\__ \", "\n",
+		"[ANSI_FG_CYAN]",   @" |_| |_|_||_||_|_||_\_\|___/`___'<___/", "[ANSI_FG_RESET]"
 	).Join("")
 	println(title_text)
 
@@ -55,8 +55,8 @@
 	else
 		println("Type 'help' to get started.")
 
-/datum/c4_file/terminal_program/operating_system/thinkdos/parse_std_in(text)
-	RETURN_TYPE(/list/datum/shell_stdin)
+/datum/c4_file/terminal_program/operating_system/thinkdos/parse_cmdline(text)
+	RETURN_TYPE(/list/datum/parsed_cmdline)
 
 	var/list/split_raw = splittext(text, THINKDOS_SYMBOL_SEPARATOR)
 	if(length(split_raw) > THINKDOS_MAX_COMMANDS)
@@ -66,7 +66,7 @@
 
 	. = list()
 	for(var/raw_command in split_raw)
-		. += new /datum/shell_stdin(trimtext(raw_command)) //built-in is faster, don't care about right whitespace
+		. += new /datum/parsed_cmdline(trimtext(raw_command)) //built-in is faster, don't care about right whitespace
 
 /datum/c4_file/terminal_program/operating_system/thinkdos/std_in(text)
 	. = ..()
@@ -77,18 +77,18 @@
 	println(encoded_in)
 	write_log(encoded_in)
 
-	var/list/datum/shell_stdin/parsed_stdins = parse_std_in(text)
-	if(!length(parsed_stdins)) //okay
+	var/list/datum/parsed_cmdline/parsed_cmdlines = parse_cmdline(text)
+	if(!length(parsed_cmdlines)) //okay
 		return TRUE
 
 	if(!current_user && needs_login)
-		var/datum/shell_stdin/login_stdin = parsed_stdins[1]
+		var/datum/parsed_cmdline/login_stdin = parsed_cmdlines[1]
 		var/datum/shell_command/thinkdos/login/login_command = locate() in commands
 		if(!login_command.try_exec(login_stdin.command, src, src, login_stdin.arguments, login_stdin.options))
 			println("Login required. Please login using 'login'.")
 		return
 
-	queued_commands = parsed_stdins
+	queued_commands = parsed_cmdlines
 	handle_command_queue()
 	return TRUE
 
@@ -103,15 +103,30 @@
 		if(active_program != src) //We are now blocking
 			break
 
-		var/datum/shell_stdin/parsed_stdin = popleft(queued_commands)
+		var/datum/parsed_cmdline/parsed_cmdline = popleft(queued_commands)
 		var/recognized = FALSE
 		for(var/datum/shell_command/potential_command as anything in commands)
-			if(potential_command.try_exec(parsed_stdin.command, src, src, parsed_stdin.arguments, parsed_stdin.options))
+			if(potential_command.try_exec(parsed_cmdline.command, src, src, parsed_cmdline.arguments, parsed_cmdline.options))
 				recognized = TRUE
 				break
+		// Check if we executed a shell command, if so, break out of the while loop.
+		if(recognized)
+			continue //We aren't being re-called from unload_program(), so we have to loop back to the start here.
+		// Otherwise,  Search the local directory for a matching program
+		// Argument passing doesn't exist for programs so we can just ignore it.
+		var/datum/c4_file/terminal_program/program_to_run = resolve_filepath(parsed_cmdline.command)
+		if(!istype(program_to_run) || istype(program_to_run, /datum/c4_file/terminal_program/operating_system))
+			// If that one's not good, Search the bin directory for a matching program
+			program_to_run = resolve_filepath(parsed_cmdline.command, get_bin_folder())
+
+		if(istype(program_to_run) && !istype(program_to_run, /datum/c4_file/terminal_program/operating_system))
+			execute_program(program_to_run, parsed_cmdline) //This will block command queue execution.
+			recognized = TRUE
+			break
+
 
 		if(!recognized)
-			println("'[html_encode(parsed_stdin.raw)]' is not recognized as an internal or external command.")
+			println("'[html_encode(parsed_cmdline.raw)]' is not recognized as an internal or external command.")
 
 	UNSETEMPTY(queued_commands)
 
@@ -120,7 +135,7 @@
 	if(!command_log || drive.read_only)
 		return FALSE
 
-	command_log.data += text
+	command_log.data += "[text]\n"
 	return TRUE
 
 /// Write to the command log if it's enabled, then print to the screen.
@@ -157,16 +172,16 @@
 	login_user.access = text2access(account_access)
 	set_current_user(login_user)
 
-	write_log("<b>LOGIN</b>: [html_encode(account_name)] | [html_encode(account_occupation)]")
-	println("Welcome [html_encode(account_name)]!<br><b>Current Directory: [current_directory.path_to_string()]</b>")
+	write_log("[ANSI_WRAP_BOLD("LOGIN")]: [account_name] | [account_occupation]")
+	println("Welcome [html_encode(account_name)]!\n[ANSI_WRAP_BOLD("Current Directory: [current_directory.path_to_string()]")]")
 	return TRUE
 
 /datum/c4_file/terminal_program/operating_system/thinkdos/proc/logout()
 	if(!current_user)
-		print_error("<b>Error:</b> Account system inactive.")
+		print_error("[ANSI_WRAP_BOLD("Error")]: Account system inactive.")
 		return FALSE
 
-	write_log("<b>LOGOUT:</b> [html_encode(current_user.registered_name)]")
+	write_log("[ANSI_WRAP_BOLD("LOGOUT")]: [current_user.registered_name]")
 	set_current_user(null)
 	return TRUE
 
@@ -174,7 +189,7 @@
 	var/datum/c4_file/folder/account_dir = parse_directory("users")
 	if(!istype(account_dir))
 		if(account_dir && !account_dir.containing_folder.try_delete_file(account_dir))
-			print_error("<b>Error:</b> Unable to write account folder.")
+			print_error("[ANSI_WRAP_BOLD("Error")]: Unable to write account folder.")
 			return FALSE
 
 		account_dir = new
@@ -182,7 +197,7 @@
 
 		if(!containing_folder.try_add_file(account_dir))
 			qdel(account_dir)
-			print_error("<b>Error:</b> Unable to write account folder.")
+			print_error("[ANSI_WRAP_BOLD("Error")]: Unable to write account folder.")
 			return FALSE
 
 		RegisterSignal(account_dir, list(COMSIG_COMPUTER4_FILE_RENAMED, COMSIG_COMPUTER4_FILE_ADDED, COMSIG_COMPUTER4_FILE_REMOVED), PROC_REF(user_folder_gone))
@@ -190,7 +205,7 @@
 	var/datum/c4_file/user/user_data = account_dir.get_file("admin", FALSE)
 	if(!istype(user_data))
 		if(user_data && !user_data.containing_folder.try_delete_file(user_data))
-			print_error("<b>Error:</b> Unable to write account folder.")
+			print_error("[ANSI_WRAP_BOLD("Error")]: Unable to write account folder.")
 			return FALSE
 
 		user_data = new
@@ -198,7 +213,7 @@
 
 		if(!account_dir.try_add_file(user_data))
 			qdel(user_data)
-			print_error("<b>Error:</b> Unable to write account file.")
+			print_error("[ANSI_WRAP_BOLD("Error")]: Unable to write account file.")
 			return FALSE
 
 		//set_current_user(user_data)
@@ -215,6 +230,13 @@
 			return null
 
 	return log_dir
+
+/// Get the bin folder. The bin directory holds normal programs.
+/datum/c4_file/terminal_program/operating_system/thinkdos/proc/get_bin_folder()
+	//the `/bin` part here is technically supposed to be reading the physical computer's default program dir.
+	//But that's dumb and /bin should always be correct.
+	return parse_directory(THINKDOS_BIN_DIRECTORY, drive.root, FALSE)
+
 
 /// Create the log file, or append a startup log.
 /datum/c4_file/terminal_program/operating_system/thinkdos/proc/initialize_logs()
@@ -233,8 +255,10 @@
 	command_log = log_file
 	RegisterSignal(command_log, list(COMSIG_COMPUTER4_FILE_RENAMED, COMSIG_COMPUTER4_FILE_ADDED, COMSIG_PARENT_QDELETING), PROC_REF(log_file_gone))
 
-	log_file.data += "<br><b>STARTUP:</b> [stationtime2text()], [stationdate2text()]"
+	log_file.data += "[ANSI_WRAP_BOLD("STARTUP")]: [stationtime2text()], [stationdate2text()]\n"
 	return TRUE
+
+
 
 /datum/c4_file/terminal_program/operating_system/thinkdos/proc/set_current_user(datum/c4_file/user/new_user)
 	if(current_user)

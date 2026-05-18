@@ -135,14 +135,8 @@
 	if(living_mob.hud_used)
 		var/datum/hud/hud_used = living_mob.hud_used
 
-		lingchemdisplay = new /atom/movable/screen/ling/chems(null, hud_used)
-		hud_used.infodisplay += lingchemdisplay
-
-		lingstingdisplay = new /atom/movable/screen/ling/sting(null, hud_used)
-
-		hud_used.infodisplay += lingstingdisplay
-
-		hud_used.show_hud(hud_used.hud_version)
+		hud_used.add_screen_object(/atom/movable/screen/ling/chems, HUDKEY_CHANGELING_CHEMS, HUDGROUP_INFO_DISPLAY)
+		hud_used.add_screen_object(/atom/movable/screen/ling/sting, HUDKEY_CHANGELING_STING, HUDGROUP_INFO_DISPLAY, update_screen = TRUE)
 	else
 		RegisterSignal(living_mob, COMSIG_MOB_HUD_CREATED, PROC_REF(on_hud_created))
 
@@ -157,15 +151,8 @@
 
 	var/datum/hud/ling_hud = owner.current.hud_used
 
-	lingchemdisplay = new
-	lingchemdisplay.hud = ling_hud
-	ling_hud.infodisplay += lingchemdisplay
-
-	lingstingdisplay = new
-	lingstingdisplay.hud = ling_hud
-	ling_hud.infodisplay += lingstingdisplay
-
-	ling_hud.show_hud(ling_hud.hud_version)
+	ling_hud.add_screen_object(/atom/movable/screen/ling/chems, HUDKEY_CHANGELING_CHEMS, HUDGROUP_INFO_DISPLAY)
+	ling_hud.add_screen_object(/atom/movable/screen/ling/sting, HUDKEY_CHANGELING_STING, HUDGROUP_INFO_DISPLAY, update_screen = TRUE)
 
 /datum/antagonist/changeling/remove_innate_effects(mob/living/mob_override)
 	var/mob/living/living_mob = mob_override || owner.current
@@ -175,10 +162,8 @@
 	if(living_mob.hud_used)
 		var/datum/hud/hud_used = living_mob.hud_used
 
-		hud_used.infodisplay -= lingchemdisplay
-		hud_used.infodisplay -= lingstingdisplay
-		QDEL_NULL(lingchemdisplay)
-		QDEL_NULL(lingstingdisplay)
+		qdel(hud_used.screen_objects[HUDKEY_CHANGELING_CHEMS])
+		qdel(hud_used.screen_objects[HUDKEY_CHANGELING_STING])
 
 /datum/antagonist/changeling/on_removal()
 	remove_changeling_powers(include_innate = TRUE)

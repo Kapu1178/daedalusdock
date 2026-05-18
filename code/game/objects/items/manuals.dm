@@ -276,10 +276,10 @@
 		book_data.set_content(wikiinfo, skip_sanitize = TRUE)
 
 /obj/item/book/manual/wiki/chemistry
-	name = "Chemistry Textbook"
+	name = "Alchemy Textbook"
 	icon_state ="chemistrybook"
 	starting_author = "Nanotrasen"
-	starting_title = "Chemistry Textbook"
+	starting_title = "Alchemy Textbook"
 	page_link = "Guide_to_chemistry"
 
 /obj/item/book/manual/wiki/engineering_construction

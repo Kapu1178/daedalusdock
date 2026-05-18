@@ -2,7 +2,8 @@
 	var/list/pain_cooldowns = list()
 
 /mob/living/carbon
-	var/shock_stage
+	/// Traumatic Shock, an integer that increases every life tick according to how much pain the mob is in.
+	var/traumatic_shock_stage
 
 /mob/living/carbon/getPain()
 	. = 0
@@ -25,7 +26,7 @@
 	if(!client || client.prefs?.read_preference(/datum/preference/toggle/disable_pain_flash))
 		return
 
-	flick(severity, hud_used?.pain)
+	flick(severity, hud_used?.screen_objects[HUDKEY_MOB_PAIN])
 
 /mob/living/carbon/apply_pain(amount, def_zone, message, ignore_cd, updating_health = TRUE)
 	if((status_flags & GODMODE) || HAS_TRAIT(src, TRAIT_NO_PAINSHOCK))
@@ -183,16 +184,19 @@
 		return
 
 	if(HAS_TRAIT(src, TRAIT_NO_PAINSHOCK))
-		shock_stage = 0
+		traumatic_shock_stage = 0
 		return
 
 	// If our heart has stopped, INSTANTLY enter shock tier 4
 	var/heart_attack_gaming = undergoing_cardiac_arrest()
 	if(heart_attack_gaming)
-		shock_stage = max(shock_stage + 1, SHOCK_TIER_4 + 1)
+		traumatic_shock_stage = max(traumatic_shock_stage + 1, SHOCK_TIER_4 + 1)
 
 	var/pain = getPain()
 	var/overall_pain_class = pain_class(pain)
+
+	var/previous_traumatic_shock_stage = traumatic_shock_stage
+	var/went_up_in_stage = FALSE
 
 	// Pain mood adjustment
 	switch(overall_pain_class)
@@ -207,19 +211,19 @@
 		if(PAIN_CLASS_NONE)
 			mob_mood.clear_mood_event("pain")
 
-	if(pain >= max(SHOCK_MIN_PAIN_TO_BEGIN, shock_stage * 0.8))
+	if(pain >= max(SHOCK_MIN_PAIN_TO_BEGIN, traumatic_shock_stage * 0.8))
 		// A chance to fight through the pain.
-		if((shock_stage >= SHOCK_TIER_3) && stat == CONSCIOUS && !heart_attack_gaming && stats.cooldown_finished("shrug_off_pain"))
+		if((traumatic_shock_stage >= SHOCK_TIER_3) && stat == CONSCIOUS && !heart_attack_gaming && stats.cooldown_finished("shrug_off_pain"))
 			var/datum/roll_result/result = stat_roll(12, /datum/rpg_skill/knuckle_down)
 			switch(result.outcome)
 				if(CRIT_SUCCESS)
 					to_chat(src, result.create_tooltip("You won't give in now. Stay in the fight."))
-					shock_stage = max(shock_stage - 15, 0)
+					traumatic_shock_stage = max(traumatic_shock_stage - 15, 0)
 					stats.set_cooldown("shrug_off_pain", 180 SECONDS)
 					return
 
 				if(SUCCESS)
-					shock_stage = max(shock_stage - 5, 0)
+					traumatic_shock_stage = max(traumatic_shock_stage - 5, 0)
 					to_chat(src, result.create_tooltip("Not here, not now."))
 					stats.set_cooldown("shrug_off_pain", 180 SECONDS)
 					return
@@ -229,29 +233,30 @@
 					// Do not return
 
 				if(CRIT_FAILURE)
-					shock_stage = min(shock_stage + 1, SHOCK_MAXIMUM)
+					traumatic_shock_stage = min(traumatic_shock_stage + 1, SHOCK_MAXIMUM)
 					to_chat(src, result.create_tooltip("I'm going to die here."))
 					stats.set_cooldown("shrug_off_pain", 60 SECONDS)
 					// Do not return
 
-		if(shock_stage == 0)
+		if(traumatic_shock_stage == 0)
 			throw_alert("traumatic shock", /atom/movable/screen/alert/shock)
-		shock_stage = min(shock_stage + 1, SHOCK_MAXIMUM)
+		traumatic_shock_stage = min(traumatic_shock_stage + 1, SHOCK_MAXIMUM)
+		went_up_in_stage = traumatic_shock_stage > previous_traumatic_shock_stage
 
 	else if(!heart_attack_gaming)
-		shock_stage = min(shock_stage, SHOCK_MAXIMUM)
+		traumatic_shock_stage = min(traumatic_shock_stage, SHOCK_MAXIMUM)
 		var/recovery = 2
-		if(pain < 0.5 * shock_stage)
+		if(pain < 0.5 * traumatic_shock_stage)
 			recovery = 4
-		else if(pain < 0.25 * shock_stage)
+		else if(pain < 0.25 * traumatic_shock_stage)
 			recovery = 3
 
 		// ~25% chance at base to recover twice as fast..
 		if(stat_roll(13, /datum/rpg_skill/knuckle_down).outcome >= SUCCESS)
 			recovery *= 2
 
-		shock_stage = max(shock_stage - recovery, 0)
-		if(shock_stage == 0)
+		traumatic_shock_stage = max(traumatic_shock_stage - recovery, 0)
+		if(traumatic_shock_stage == 0)
 			clear_alert("traumatic shock")
 		return
 
@@ -259,46 +264,71 @@
 		return
 
 	var/message = ""
-	if(shock_stage == SHOCK_TIER_1)
-		message = SHOCK_STRING_MINOR
+	// Handle only-on-entering effects.
+	if(went_up_in_stage)
+		switch(traumatic_shock_stage)
+			if(SHOCK_TIER_1)
+				message = SHOCK_STRING_MINOR
 
-	if((shock_stage > SHOCK_TIER_2 && prob(2)) || shock_stage == SHOCK_TIER_2)
-		if(shock_stage == SHOCK_TIER_2 && organs_by_slot[ORGAN_SLOT_EYES])
-			manual_emote("is having trouble keeping [p_their()] eyes open.")
+			if(SHOCK_TIER_2)
+				message = SHOCK_STRING_MINOR
+				if(stat == CONSCIOUS && getorganslot(ORGAN_SLOT_EYES))
+					manual_emote("is having trouble keeping [p_their()] eyes open.")
+
+			if(SHOCK_TIER_3)
+				message = SHOCK_STRING_MINOR
+
+			if(SHOCK_TIER_4)
+				message = SHOCK_STRING_MAJOR
+				if(body_position == STANDING_UP && stat == CONSCIOUS && !buckled)
+					manual_emote("stumbles over [p_them()]self.")
+
+			if(SHOCK_TIER_5)
+				if(!HAS_TRAIT(src, TRAIT_NOBREATH))
+					message = "I cannot breathe!"
+					losebreath_gasp()
+
+	// Shock 1: Only has a message.
+
+	// Shock 2: 1% chance (per second) to get 10 seconds of blur + stutter. The first time this occurs, an emote will occur.
+	// Shock 2 additionally causes a faster heartrate. See heart.dm
+	if(traumatic_shock_stage >= SHOCK_TIER_2 && ((traumatic_shock_stage == SHOCK_TIER_2 && went_up_in_stage) || DT_PROB(1, delta_time)))
 		blur_eyes(5)
 		set_timed_status_effect(10 SECONDS, /datum/status_effect/speech/stutter, only_if_higher = TRUE)
 
-	if(shock_stage == SHOCK_TIER_3)
-		message = SHOCK_STRING_MAJOR
+	// Shock 3: 10% chance (per second) for 5 seconds of stuttering.
+	if(traumatic_shock_stage >= SHOCK_TIER_3 && ((traumatic_shock_stage == SHOCK_TIER_3 && went_up_in_stage) || DT_PROB(10, delta_time)))
+		set_timed_status_effect(5 SECONDS, /datum/status_effect/speech/stutter, only_if_higher = TRUE)
 
-	else if(shock_stage >= SHOCK_TIER_3)
-		if(prob(20))
-			set_timed_status_effect(5 SECONDS, /datum/status_effect/speech/stutter, only_if_higher = TRUE)
+	// Shocks 4 only occurs whilst standing.
+	if(body_position == STANDING_UP && stat == CONSCIOUS && !buckled)
+		// Shock 4: 5% chance (per second) to stumble, 100% if just entered.
+		if(traumatic_shock_stage >= SHOCK_TIER_4 && ((traumatic_shock_stage == SHOCK_TIER_4 && went_up_in_stage) || DT_PROB(5, delta_time)))
+			Knockdown(2 SECONDS)
 
-	if((shock_stage > SHOCK_TIER_4 && prob(5)) || shock_stage == SHOCK_TIER_4)
-		message = SHOCK_STRING_MAJOR
-		manual_emote("stumbles over [p_them()]self.")
-		Knockdown(2 SECONDS)
+	// Shock 5: 8% chance (per second) to miss a breath.
+	// Shock 5 additionally causes a faster heartrate. See heart.dm
+	// The math on this one gets really weird really quickly. Carbons breathe every 4 life ticks (8 seconds).
+	// So every 1 missed breath has an "impact" of 8 seconds. Except not really, because in the event of a missed breath,
+	// a mob will breathe instantly the neck life tick. So losebreath is decremented every 2 seconds, not every 8 seconds.
+	if(!HAS_TRAIT(src, TRAIT_NOBREATH) && traumatic_shock_stage >= SHOCK_TIER_5 && ((traumatic_shock_stage == SHOCK_TIER_5 && went_up_in_stage) || DT_PROB(8, delta_time)))
+		if(losebreath < 2) // We don't want this stacking ON TOP OF the asystole death spiral.
+			losebreath++
 
-	else if((shock_stage > SHOCK_TIER_5 && prob(10)) || shock_stage == SHOCK_TIER_5)
-		message = SHOCK_STRING_MAJOR
-		manual_emote("stumbles over [p_them()]self.")
-		Knockdown(2 SECONDS)
+	// Shock 6: 1% chance (per second) to black out for 10 seconds (if conscious), 100% if just entered.
+	if(stat == CONSCIOUS && traumatic_shock_stage >= SHOCK_TIER_6 && ((traumatic_shock_stage == SHOCK_TIER_6 && went_up_in_stage) || DT_PROB(1, delta_time)))
+		pain_message("You black out.", traumatic_shock_stage - CHEM_EFFECT_MAGNITUDE(src, CE_PAINKILLER)/3, TRUE)
+		Unconscious(10 SECONDS)
+		return // We'll be generous
 
-	if((shock_stage > SHOCK_TIER_6 && prob(2)) || shock_stage == SHOCK_TIER_6)
-		if (stat == CONSCIOUS)
-			pain_message(pick("You black out.", "I feel like I could die any moment now.", "I can't go on anymore."), shock_stage - CHEM_EFFECT_MAGNITUDE(src, CE_PAINKILLER)/3, TRUE)
-			Unconscious(10 SECONDS)
-			return // We'll be generous
-
-	if(shock_stage >= SHOCK_TIER_7)
-		if(shock_stage == SHOCK_TIER_7)
-			visible_message("<b>[src]</b> falls limp!")
+	// Shock 7: Permanently unconscious.
+	if(traumatic_shock_stage >= SHOCK_TIER_7)
+		if(went_up_in_stage)
+			visible_message("<b>[src]</b> falls limp.")
 		Unconscious(20 SECONDS)
 
-	if(message && !COOLDOWN_FINISHED(src, pain_cooldowns["shock"]))
-		COOLDOWN_START(src, pain_cooldowns["shock"], 20 SECONDS)
-		pain_message(message, shock_stage - CHEM_EFFECT_MAGNITUDE(src, CE_PAINKILLER)/3, TRUE)
+	if(message)
+		pain_message(message, traumatic_shock_stage - CHEM_EFFECT_MAGNITUDE(src, CE_PAINKILLER)/3, TRUE)
 
 #undef SHOCK_STRING_MINOR
 #undef SHOCK_STRING_MAJOR
