@@ -62,6 +62,7 @@
 //Spans. Robot speech, italics, etc. Applied in compose_message().
 #define SPAN_ROBOT "robot"
 #define SPAN_YELL "yell"
+#define SPAN_BIGYELL "bigyell"
 #define SPAN_ITALICS "italics"
 #define SPAN_SANS "sans"
 #define SPAN_PAPYRUS "papyrus"

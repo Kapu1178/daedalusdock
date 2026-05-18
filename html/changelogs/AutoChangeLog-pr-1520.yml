@@ -1,0 +1,6 @@
+author: Kapu1178
+delete-after: true
+changes:
+  - rscadd: Appending two exclamation points to a message will make your character
+      YELL VERY VERY LOUDLY!!
+  - bugfix: Runechat no longer "jitters" for a frame.

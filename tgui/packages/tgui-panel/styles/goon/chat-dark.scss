@@ -227,7 +227,8 @@ a.popt {
 .prefix,
 .admin,
 .medal,
-.yell {
+.yell,
+.bigyell {
   font-weight: bold;
 }
 
@@ -402,8 +403,8 @@ em {
   color: #fdfd34;
 }
 
-.yell {
-  font-weight: bold;
+.bigyell {
+  font-size: 200%;
 }
 
 .alert {
