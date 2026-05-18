@@ -101,8 +101,8 @@ GLOBAL_VAR_INIT(running_create_and_destroy, FALSE)
 	ignore += typesof(/obj/structure/cable/smart_cable)
 	// Throws a warning due to passing a zero-duration argument after mapload
 	ignore += typesof(/obj/effect/abstract/smell_holder)
-	// These expect to be paired with a flockdrone part.
-	ignore += typesof(/atom/movable/screen/flockdrone_part)
+	// Screen objects can depend on a hud datum for behavior leading to runtimes
+	ignore += typesof(/atom/movable/screen)
 
 	var/list/cached_contents = spawn_at.contents.Copy()
 	var/original_turf_type = spawn_at.type
