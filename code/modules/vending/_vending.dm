@@ -1051,8 +1051,8 @@ GLOBAL_LIST_EMPTY(vending_products)
 /obj/machinery/vending/proc/vend_delay_animation() as num
 	SHOULD_NOT_SLEEP(TRUE)
 
-	// if(prob(95))
-	// 	return 2 SECONDS
+	if(prob(95))
+		return 1.5 SECONDS
 
 	// Sometimes you want to deliberately write stupid code.
 	var/pixel_x = src.pixel_x
@@ -1063,50 +1063,44 @@ GLOBAL_LIST_EMPTY(vending_products)
 	var/offset_x_2 = pixel_x + pick(-3, -2, -1, 1, 2, 3)
 	var/offset_y_2 = pixel_y + pick(-3, -2, -1, 1, 2, 3)
 
-	var/offset_x_3 = pixel_x + pick(-3, -2, -1, 1, 2, 3)
-	var/offset_y_3 = pixel_y + pick(-3, -2, -1, 1, 2, 3)
-
 	var/matrix/original_transform = transform
-	var/matrix/target_transform_1 = transform.Turn(rand(5, 15) * (pick(1, -1)))
-	var/matrix/target_transform_2 = transform.Turn(rand(5, 15) * (pick(1, -1)))
+	var/transform_direction_1 = pick(1, -1)
+	var/matrix/target_transform_1 = transform.Turn(rand(5, 15) * (transform_direction_1))
+	var/matrix/target_transform_2 = transform.Turn(rand(5, 15) * (transform_direction_1 * -1))
 
-	var/wait_durations = 0.8 SECONDS
+	var/transform_total_duration = 0.4 SECONDS
+	var/wait_duration = 0.8 SECONDS
 	var/shake_out_time_1 = rand(0.2 SECONDS, 0.4 SECONDS)
 	var/shake_out_time_2 = rand(0.2 SECONDS, 0.4 SECONDS)
-	var/shake_out_time_3 = rand(0.2 SECONDS, 0.4 SECONDS)
 
 	var/shake_in_time = 0.2 SECONDS
 
-	// Transform animation takes 0.5 seconds to complete.
-	z_animate(src, transform = target_transform_1, time = 0.2 SECONDS, flags = ANIMATION_PARALLEL)
-	z_animate(src, transform = original_transform, time = 0.2 SECONDS, flags = ANIMATION_CONTINUE)
-
-	for(var/atom/movable/AM as anything in get_associated_mimics() + src)
-		animate(AM, pixel_x = offset_x_1, pixel_y = offset_y_1, time = shake_out_time_1, flags = ANIMATION_PARALLEL)
-		animate(pixel_x = pixel_x, pixel_y = pixel_y, time = shake_in_time)
-
 	// Wait takes 0.8 seconds
-	spawn(wait_durations)
+	spawn(wait_duration)
 		if(!is_operational)
 			return
 
-		for(var/atom/movable/AM as anything in get_associated_mimics() + src)
-			animate(AM, pixel_x = offset_x_2, pixel_y = offset_y_2, time = shake_out_time_2, flags = ANIMATION_PARALLEL)
-			animate(pixel_x = pixel_x, pixel_y = pixel_y, time = shake_in_time)
+		z_animate(src, transform = target_transform_1, time = transform_total_duration * 0.5, flags = ANIMATION_PARALLEL)
+		z_animate(src, transform = original_transform, time = transform_total_duration * 0.5, flags = ANIMATION_CONTINUE)
+
+		z_animate(src, pixel_x = offset_x_1, pixel_y = offset_y_1, time = shake_out_time_1, flags = ANIMATION_PARALLEL)
+		z_animate(src, pixel_x = pixel_x, pixel_y = pixel_y, time = shake_in_time, flags = ANIMATION_CONTINUE)
 
 		playsound(src, 'sound/weapons/smash.ogg', 50)
 
-		spawn(wait_durations)
+		spawn(wait_duration)
 			if(!is_operational)
 				return
-			z_animate(src, transform = target_transform_2, time = 0.2 SECONDS, flags = ANIMATION_PARALLEL)
-			z_animate(src, transform = original_transform, time = 0.2 SECONDS, flags = ANIMATION_CONTINUE)
+			z_animate(src, transform = target_transform_2, transform_total_duration * 0.5, flags = ANIMATION_PARALLEL)
+			z_animate(src, transform = original_transform, transform_total_duration * 0.5, flags = ANIMATION_CONTINUE)
 
-			for(var/atom/movable/AM as anything in get_associated_mimics() + src)
-				animate(AM, pixel_x = offset_x_3, pixel_y = offset_y_3, time = shake_out_time_3, flags = ANIMATION_PARALLEL)
-				animate(pixel_x = pixel_x, pixel_y = pixel_y, time = shake_in_time)
+			z_animate(src, pixel_x = offset_x_2, pixel_y = offset_y_2, time = shake_out_time_2, flags = ANIMATION_PARALLEL)
+			z_animate(src, pixel_x = pixel_x, pixel_y = pixel_y, time = shake_in_time, flags = ANIMATION_CONTINUE)
 
-	return (0.4 SECONDS) + (shake_out_time_1 + shake_in_time) + (shake_out_time_2 + shake_in_time) + (shake_out_time_3 + shake_in_time) + (wait_durations * 2)
+			playsound(src, 'sound/weapons/smash.ogg', 50)
+
+	// An extra wait_duration is tacked on intentionally.
+	return (transform_total_duration * 2) + (shake_out_time_1 + shake_in_time) + (shake_out_time_2 + shake_in_time) + (wait_duration * 3)
 
 /obj/machinery/vending/process(delta_time)
 	if(machine_stat & (BROKEN|NOPOWER))
@@ -1182,7 +1176,8 @@ GLOBAL_LIST_EMPTY(vending_products)
 	var/datum/bank_account/owning_account = SSeconomy.department_accounts_by_id[payment_department]
 	if(owning_account)
 		owning_account.adjust_money(price_to_use)
-		SSeconomy.track_purchase(account, price_to_use, name)
+		if(account)
+			SSeconomy.track_purchase(account, price_to_use, name)
 
 	// Log to administrator logs.
 	log_econ("[key_name(vendor)] paid [price_to_use] marks to purchase [vend_datum].")

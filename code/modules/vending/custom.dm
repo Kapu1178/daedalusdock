@@ -101,7 +101,7 @@
  * Updating stock, account transactions, alerting users.
  * @return -- TRUE if a valid condition was met, FALSE otherwise.
  */
-/obj/machinery/vending/custom/vend(mob/living/user, delay = FALSE, item_name)
+/obj/machinery/vending/custom/vend(mob/living/user, delayed = FALSE, item_name)
 	if(!vend_ready)
 		return
 
@@ -123,7 +123,7 @@
 	if(spent == -1)
 		return FALSE
 
-	if(delay)
+	if(spent >0 && delayed)
 		vend_ready = FALSE
 		addtimer(CALLBACK(src, PROC_REF(complete_vend), user, dispensed_item, spent > 0), vend_delay_animation(), TIMER_DELETE_ME)
 	else
