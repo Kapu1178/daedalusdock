@@ -579,7 +579,8 @@
 		return
 	return ..()
 
-/mob/living/simple_animal/put_in_hands(obj/item/I, del_on_fail = FALSE, merge_stacks = TRUE, ignore_animation = TRUE)
+/mob/living/simple_animal/put_in_hands(obj/item/I, del_on_fail = FALSE, merge_stacks = TRUE, forced = FALSE, drop_on_fail = TRUE)
+
 	. = ..()
 	update_held_items()
 

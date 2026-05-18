@@ -265,7 +265,7 @@
 //Puts the item our active hand if possible. Failing that it tries other hands. Returns TRUE on success.
 //If both fail it drops it on the floor and returns FALSE.
 //This is probably the main one you need to know :)
-/mob/proc/put_in_hands(obj/item/I, del_on_fail = FALSE, merge_stacks = TRUE, forced = FALSE)
+/mob/proc/put_in_hands(obj/item/I, del_on_fail = FALSE, merge_stacks = TRUE, forced = FALSE, drop_on_fail = TRUE)
 	if(QDELETED(I))
 		return FALSE
 
@@ -292,19 +292,19 @@
 	if(put_in_active_hand(I, forced))
 		return TRUE
 
-	var/hand = get_empty_held_index_for_side(LEFT_HANDS)
-	if(!hand)
-		hand = get_empty_held_index_for_side(RIGHT_HANDS)
-	if(hand)
-		if(put_in_hand(I, hand, forced))
-			return TRUE
+	var/hand = get_empty_held_index_for_side(LEFT_HANDS) || get_empty_held_index_for_side(RIGHT_HANDS)
+	if(hand && put_in_hand(I, hand, forced))
+		return TRUE
+
 	if(del_on_fail)
 		qdel(I)
 		return FALSE
-	I.layer = initial(I.layer)
-	I.plane = initial(I.plane)
-	I.unequipped(src)
-	I.forceMove(drop_location())
+
+	if(drop_on_fail)
+		I.layer = initial(I.layer)
+		I.plane = initial(I.plane)
+		I.unequipped(src)
+		I.forceMove(drop_location())
 	return FALSE
 
 /mob/proc/drop_all_held_items()

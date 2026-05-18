@@ -131,7 +131,7 @@
 
 	/// Remove the item
 	loaded_items--
-	give_or_drop_dispensed_item(dispensed_item)
+	give_or_drop_dispensed_item(user, dispensed_item)
 
 	use_power(active_power_usage)
 	vending_machine_input[item_name] = max(vending_machine_input[item_name] - 1, 0)

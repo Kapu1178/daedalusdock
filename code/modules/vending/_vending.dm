@@ -1022,18 +1022,18 @@ GLOBAL_LIST_EMPTY(vending_products)
 
 	vend_datum.amount--
 
-	give_or_drop_dispensed_item(vended_item)
+	give_or_drop_dispensed_item(user, vended_item)
 	return vended_item
 
 /// It's in the name.
-/obj/machinery/vending/proc/give_or_drop_dispensed_item(obj/item/vended_item)
+/obj/machinery/vending/proc/give_or_drop_dispensed_item(mob/user, obj/item/vended_item)
 	PROTECTED_PROC(TRUE)
-	if(IsReachableBy(usr) && usr.put_in_hands(vended_item))
-		to_chat(usr, span_notice("You take [vended_item] out of the slot."))
-		vended_item.do_pickup_animation(usr, get_turf(src))
+	if(IsReachableBy(user) && usr.put_in_hands(vended_item, drop_on_fail = FALSE))
+		to_chat(user, span_notice("You take [vended_item] out of the slot."))
+		vended_item.do_pickup_animation(user, get_turf(src))
 	else
 		vended_item.do_drop_animation(src)
-		to_chat(usr, span_notice("[vended_item] falls onto the floor."))
+		to_chat(user, span_notice("[vended_item] falls onto the floor."))
 
 /obj/machinery/vending/process(delta_time)
 	if(machine_stat & (BROKEN|NOPOWER))
@@ -1103,7 +1103,7 @@ GLOBAL_LIST_EMPTY(vending_products)
 
 	// Deduct money from payment sources.
 	contained_cash?.use(deduct_cash)
-	account?.adjust_money(deduct_card)
+	account?.adjust_money(-deduct_card)
 
 	// Pay out to owning account, and log to audit log.
 	var/datum/bank_account/owning_account = SSeconomy.department_accounts_by_id[payment_department]
