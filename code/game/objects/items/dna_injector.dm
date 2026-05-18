@@ -39,7 +39,7 @@
 				M.dna.blood_type = fields[DATACORE_BLOOD_TYPE]
 
 			if(fields["UI"]) //UI+UE
-				M.dna.unique_identity = merge_text(M.dna.unique_identity, fields["UI"])
+				M.dna.set_unique_identity(merge_text(M.dna.unique_identity, fields["UI"]))
 
 			if(fields["UF"])
 				M.dna.unique_features = merge_text(M.dna.unique_features, fields["UF"])
@@ -509,7 +509,7 @@
 			if(fields["UI"]) //UI+UE
 				if(!M.dna.previous["UI"])
 					M.dna.previous["UI"] = M.dna.unique_identity
-				M.dna.unique_identity = merge_text(M.dna.unique_identity, fields["UI"])
+				M.dna.set_unique_identity(merge_text(M.dna.unique_identity, fields["UI"]))
 				M.dna.temporary_mutations[UI_CHANGED] = endtime
 			if(fields["UF"]) //UI+UE
 				if(!M.dna.previous["UF"])

@@ -90,7 +90,7 @@ Traitors and the like can also be revived with the previous role mostly intact.
 		new_character.hardset_dna(record_found.fields[DATACORE_DNA_IDENTITY], record_found.fields["enzymes"], null, record_found.fields[DATACORE_NAME], record_found.fields[DATACORE_BLOOD_TYPE], new record_found.fields[DATACORE_SPECIES], record_found.fields[DATACORE_DNA_FEATURES])
 	else
 		new_character.randomize_human_appearance()
-		new_character.dna.update_dna_identity()
+		new_character.dna.update_dna_identity(update_fingerprints = TRUE)
 
 	new_character.name = new_character.real_name
 

@@ -1288,8 +1288,8 @@
 
 			// Randomize everything but the species, which was already handled above.
 			new_human.randomize_human_appearance(~RANDOMIZE_SPECIES)
-			new_human.update_body(is_creating = TRUE)
 			new_human.dna.update_dna_identity()
+			new_human.update_body(is_creating = TRUE)
 			new_mob = new_human
 
 	if(!new_mob)

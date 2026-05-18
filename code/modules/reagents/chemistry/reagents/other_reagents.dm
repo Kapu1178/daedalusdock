@@ -778,7 +778,7 @@
 	to_chat(H, span_warning("You grit your teeth in pain as your body rapidly mutates!"))
 	H.visible_message(span_danger("[H]'s skin melts away, as they morph into a new form!"))
 	randomize_human(H)
-	H.dna.update_dna_identity()
+	H.dna.update_dna_identity(update_fingerprints = TRUE)
 
 
 /datum/reagent/lye
