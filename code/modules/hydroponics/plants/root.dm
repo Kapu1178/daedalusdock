@@ -17,7 +17,7 @@
 	force_single_harvest = TRUE
 
 	seed_path = /obj/item/seeds/carrot
-	product_path = /datum/plant/carrot
+	product_path = /obj/item/food/grown/carrot
 
 	reagents_per_potency = list(/datum/reagent/medicine/imidazoline = 0.25, /datum/reagent/consumable/nutriment/vitamin = 0.04, /datum/reagent/consumable/nutriment = 0.05)
 	possible_mutations = list(/datum/plant_mutation/carrot_parsnip)
