@@ -6,7 +6,7 @@
 
 import { Theme } from './settings/constants';
 
-const COLOR_DARK_BG = '#222020';
+const COLOR_DARK_BG = '#1a1a1b';
 const COLOR_DARK_BG_DARKER = '#171717';
 const COLOR_DARK_TEXT = '#ABC7A2';
 

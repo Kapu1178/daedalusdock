@@ -3,6 +3,12 @@
  * SPDX-License-Identifier: MIT
  */
 
+/*
+ Kapu's sanity here!
+ tgui-panel\styles\main.scss contains the BACKGROUND color for the chatpane
+ You also need to change tgui-panel\themes.ts
+*/
+
 em {
   font-style: normal;
   font-weight: bold;
@@ -309,7 +315,7 @@ em {
 }
 
 .name {
-  font-weight: bold;
+  color: #5bb498;
 }
 
 .say,
@@ -317,6 +323,10 @@ em {
 .infoplain,
 .oocplain,
 .warningplain {
+}
+
+.say {
+  color: #ccdbeb;
 }
 
 .deadsay {
@@ -418,18 +428,18 @@ em {
 }
 
 .bolddanger {
-  color: #dd3535;
-  text-shadow: 0 0 0.3em #ff0000;
+  color: #c14343;
+  text-shadow: 0 0 0.4em #ff0000;
   font-weight: bold;
 }
 
 .danger {
-  color: #dd3535;
-  text-shadow: 0 0 0.3em #ff0000;
+  color: #c14343;
+  text-shadow: 0 0 0.4em #ff0000;
 }
 
 .warning {
-  color: #ff6d6d;
+  color: #b17e7e;
   font-style: italic;
 }
 
@@ -479,12 +489,12 @@ em {
 }
 
 .notice {
-  color: #d47d5a;
+  color: #3273a8;
 }
 
 .obviousnotice {
   color: #44e4e4;
-  text-shadow: 0 0 0.1em #f5aa42;
+  font-weight: bold;
 }
 .obviousnotice a {
   text-shadow: none;
@@ -968,10 +978,6 @@ em {
   margin: 8px 16px 8px 16px;
 }
 
-.talk {
-  //color: #A5D6C1;
-}
-
 .sayverb {
   color: #bbbbad;
   font-style: italic;
@@ -1009,17 +1015,15 @@ em {
   border-style: solid;
 }
 
-// If you change this, change the code in roll.dm
 .statsGood {
   color: #03fca1;
-  text-shadow: 0 0 0.1em #dd3535;
+  text-shadow: 0 0 0.5em #5bb498;
   font-style: italic;
 }
 
-// If you change this, change the code in roll.dm
 .statsBad {
-  color: #fc4b32;
-  text-shadow: 0 0 0.1em #8a8888;
+  color: #b8046d;
+  text-shadow: 0 0 0.5em #b8044c;
   font-style: italic;
 }
 

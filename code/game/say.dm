@@ -90,7 +90,7 @@ GLOBAL_LIST_INIT(freqtospan, list(
 	//Radio freq/name display
 	var/freqpart = ""
 	if(radio_freq)
-		freqpart = "[RADIO_TAG(get_radio_icon(radio_freq))]\[[get_radio_name(radio_freq)]\] "
+		freqpart = "[RADIO_TAG(get_radio_icon(radio_freq))]\[[uppertext(get_radio_name(radio_freq))]\] "
 
 	//Speaker name
 	var/namepart = "[voice][alt_name]"

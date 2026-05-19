@@ -156,16 +156,16 @@ GLOBAL_DATUM_INIT(success_roll, /datum/roll_result/success, new)
 		prefix = "<span style='font-style: italic;color: #03fca1'>[uppertext(initial(skill_type_used.name))]</span> "
 		body = span_statsgood(body)
 	else
-		prefix = "<span style='font-style: italic;color: #fc4b32'>[uppertext(initial(skill_type_used.name))]</span> "
+		prefix = "<span style='font-style: italic;color: #b8046d'>[uppertext(initial(skill_type_used.name))]</span> "
 		body = span_statsbad(body)
 
 	var/modifier_string = ""
 	if(modifier != 0)
 		var/modifier_string_inner = modifier > 0 ? "+[modifier]" : "[modifier]"
-		var/modifier_color = (modifier >= 0) ? "#03fca1" : "#fc4b32"
+		var/modifier_color = (modifier >= 0) ? "#03fca1" : "#b8046d"
 		modifier_string = " (<span style='font-weight: bold;color: [modifier_color]'>[modifier_string_inner]</span>)"
 
-	var/result_color = (outcome >= SUCCESS) ? "#03fca1" : "#fc4b32"
+	var/result_color = (outcome >= SUCCESS) ? "#03fca1" : "#b8046d"
 	var/result_string = "Result: <span style='font-weight: bold;color: [result_color]'><b>[roll]</b></span>[modifier_string]"
 	var/tooltip_html = "[success_prob]% | [result_string] | Check: <b>[requirement]</b>"
 	var/seperator = "<span style='color: #bbbbad;font-style: italic'>: </span>"
