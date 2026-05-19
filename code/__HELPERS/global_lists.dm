@@ -280,8 +280,11 @@ GLOBAL_LIST_EMPTY(special_attacks)
 	for(var/datum/special_attack/path as anything in subtypesof(/datum/special_attack))
 		GLOB.special_attacks[path] = new path
 
+GLOBAL_LIST_EMPTY(radio_channel_templates_by_key)
 /proc/init_radio_channels()
 	for(var/datum/radio_channel/channel_template as anything in subtypesof(/datum/radio_channel))
+		channel_template = new channel_template
+		GLOB.radio_channel_templates_by_key[channel_template.key] = channel_template
 		GLOB.radio_frequency_to_channel["[channel_template.frequency]"] = channel_template.key
 		GLOB.radio_channel_to_frequency[channel_template.key] = channel_template.frequency
 		GLOB.freq2icon["[channel_template.frequency]"] = channel_template.icon
