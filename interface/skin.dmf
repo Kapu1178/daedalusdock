@@ -266,7 +266,7 @@ window "infowindow"
 		anchor2 = -1,-1
 		saved-params = "pos;size;is-minimized;is-maximized"
 		is-pane = true
-	elem "info"
+	elem "statpane_and_output"
 		type = CHILD
 		pos = 0,5
 		size = 640x475
@@ -287,7 +287,7 @@ window "outputwindow"
 		anchor2 = -1,-1
 		saved-params = "pos;size;is-minimized;is-maximized"
 		is-pane = true
-	elem "output_input_child"
+	elem "output_and_verb_bar"
 		type = CHILD
 		pos = 0,0
 		size = 640x475
