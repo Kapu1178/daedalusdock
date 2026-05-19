@@ -258,7 +258,7 @@ GLOBAL_REAL(Master, /datum/controller/master) = new
 			current_initializing_subsystem = subsystem
 
 			if(GLOB.is_debug_server)
-				to_chat(world, systemtext(span_notice("Initializing [subsystem.name]...")))
+				to_chat(world, systemtext(span_info("Initializing [subsystem.name]...")))
 
 			SSlobby.set_game_status_text(sub_text = "Initializing [subsystem.name]")
 
