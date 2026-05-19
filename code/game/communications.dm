@@ -227,7 +227,7 @@ GLOBAL_LIST_EMPTY(freq2icon)
 
 /// Returns the text to attach to the front of speech, should end in a space.
 /datum/radio_channel/proc/init_speech_prefix()
-	return "[RADIO_TAG(icon)]\[[uppertext(key)]\] "
+	return "[RADIO_TAG(icon)]\[[key]\] "
 
 /datum/radio_channel/common
 	key = RADIO_CHANNEL_COMMON

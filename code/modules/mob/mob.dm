@@ -361,7 +361,8 @@
 
 	var/raw_msg = message
 	if(audible_message_flags & EMOTE_MESSAGE)
-		message = "<span class='emote'><b>[src]</b>[separation][message]</span>" //PARIAH EDIT - Better emotes
+		message = "<span class='emote'><b>[src]</b>[separation][message]</span>"
+
 	for(var/atom/movable/AM as anything in hearers)
 		if(istype(AM, /obj))
 			continue
