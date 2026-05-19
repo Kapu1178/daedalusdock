@@ -52,7 +52,7 @@
 
 	for(var/mob/target in players)
 		if(!isnewplayer(target) && target.can_hear())
-			to_chat(target, examine_block(announcement))
+			to_chat(target, examine_block_centered(announcement))
 			if(target.client.prefs.toggles & SOUND_ANNOUNCEMENTS)
 				SEND_SOUND(target, sound2use)
 
@@ -128,7 +128,7 @@
 
 	for(var/mob/target in players)
 		if(!isnewplayer(target) && target.can_hear())
-			to_chat(target, examine_block(span_minorannounce(message)))
+			to_chat(target, examine_block_centered(span_minorannounce(message)))
 			if(target.client.prefs.toggles & SOUND_ANNOUNCEMENTS)
 				if(alert)
 					SEND_SOUND(target, sound('sound/misc/notice1.ogg'))
