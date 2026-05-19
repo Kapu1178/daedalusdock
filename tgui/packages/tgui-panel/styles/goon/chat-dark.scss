@@ -422,7 +422,7 @@ em {
 }
 
 .userdanger {
-  color: #dd3535;
+  color: #c14343;
   font-weight: bold;
   font-size: 185%;
 }
@@ -1050,4 +1050,23 @@ em {
 
 .flocknpc {
   color: #afc9c3;
+}
+
+// Announcements
+.priorityAnnounceHeader {
+  text-align: center;
+  > h1 {
+    font-size: 2.5rem;
+    color: #c14343;
+  }
+
+  > h2 {
+    font-size: 2rem;
+    color: #dfdfcf;
+  }
+}
+
+.priorityAnnounceBody {
+  font-size: 1.5rem;
+  color: #dfdfcf;
 }

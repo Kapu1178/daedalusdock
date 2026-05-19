@@ -126,9 +126,9 @@
 		var/repeal = (authorized.len < old_len)
 		var/remaining = max(0, auth_need - authorized.len)
 		if(authorized.len && remaining)
-			minor_announce("[remaining] authorizations needed until shuttle is launched early", null, alert)
+			priority_announce("[remaining] authorizations needed until shuttle is launched early", "[SSshuttle.emergency.name] Announcement", sound_type = alert ? ANNOUNCER_ALERT : ANNOUNCER_DEFAULT)
 		if(repeal)
-			minor_announce("Early launch authorization revoked, [remaining] authorizations needed")
+			priority_announce("Early launch authorization revoked, [remaining] authorizations needed", "[SSshuttle.emergency.name] Announcement")
 
 	acted_recently += user
 	ui_interact(user)
@@ -174,9 +174,8 @@
 	if((authorized.len >= auth_need) || (obj_flags & EMAGGED))
 		// shuttle timers use 1/10th seconds internally
 		SSshuttle.emergency.setTimer(ENGINES_START_TIME)
-		var/system_error = obj_flags & EMAGGED ? "SYSTEM ERROR:" : null
-		minor_announce("The emergency shuttle will launch in \
-			[TIME_LEFT] seconds", system_error, alert=TRUE)
+		var/title = obj_flags & EMAGGED ? "SYSTEM ERROR:" : "[SSshuttle.emergency.name] Announcement"
+		priority_announce("The [SSshuttle.emergency.name] will launch in [TIME_LEFT] seconds", title, sound_type = ANNOUNCER_ALERT)
 		. = TRUE
 
 /obj/machinery/computer/emergency_shuttle/proc/increase_hijack_stage()
@@ -247,7 +246,8 @@
 			msg = "SYSTEM OVERRIDE - Resetting course to \[[scramble_message_replace_chars("###########", 100)]\] \
 			([scramble_message_replace_chars("#######", 100)]/[scramble_message_replace_chars("#######", 100)]/[scramble_message_replace_chars("#######", 100)]) \
 			{AUTH - ROOT (uid: 0)}.</font>[SSshuttle.emergency.mode == SHUTTLE_ESCAPE ? "Diverting from existing route - Bluespace exit in [hijack_completion_flight_time_set/10] seconds." : ""]"
-	minor_announce(scramble_message_replace_chars(msg, replaceprob = 10), "Emergency Shuttle", TRUE)
+
+	priority_announce(scramble_message_replace_chars(msg, replaceprob = 10), "[SSshuttle.emergency.name] Announcement", sound_type = ANNOUNCER_ALERT)
 
 /obj/machinery/computer/emergency_shuttle/emag_act(mob/user)
 	// How did you even get on the shuttle before it go to the station?
@@ -544,9 +544,12 @@
 				var/destination_dock = "emergency_away"
 				if(is_hijacked() || elimination_hijack())
 					destination_dock = "emergency_syndicate"
-					minor_announce("Corruption detected in \
-						shuttle navigation protocols. Please contact your \
-						supervisor.", "SYSTEM ERROR:", alert=TRUE)
+					priority_announce(
+						"Corruption detected in shuttle navigation protocols. Please contact your supervisor.",
+						"[name]",
+						"SYSTEM ERROR",
+						sound_type = ANNOUNCER_ALERT
+					)
 
 				dock_id(destination_dock)
 				mode = SHUTTLE_ENDGAME
@@ -559,7 +562,7 @@
 	mode = SHUTTLE_ESCAPE
 	launch_status = ENDGAME_LAUNCHED
 	setTimer(SSshuttle.emergency_escape_time)
-	priority_announce("The Emergency Shuttle is preparing for direct jump. Estimate [timeLeft(600)] minutes until the shuttle docks at [FLAVOR_CENTCOM_SHORT].", "LSRV Icarus Announcement")
+	priority_announce("The Emergency Shuttle is preparing for direct jump. Estimate [timeLeft(600)] minutes until the shuttle docks at [FLAVOR_CENTCOM_SHORT].", "[name] Announcement")
 
 
 /obj/docking_port/mobile/pod

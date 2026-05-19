@@ -4,13 +4,15 @@
  *
  * args:
  * * text (string) The body of the announcement
- * * title (string) The title of the announcement. Default: "Colony Announcement"
+ * * super_title (string) The title of the announcement. Default: "Colony Announcement"
+ * * sub_title (string or null) A sub title between the super title and body of the announcement.
  * * sound_type (string OR sound) The sound to play alongside the message. If given a string like PA_COMMAND, it will pick the sound for you.
  * * send_to_newscaster (boolean) Whether or not to post this to newscasters
  * * do_not_modify (boolean) Whether or not station announcers can add to this message.
  * * players (list or null) The players we're sending to. If null, send to all players.
+ * * use_announcer_sound (boolean) If FALSE, will play the voiceless chime instead of using the station announcer.
  */
-/proc/priority_announce(text = "", super_title = "Colony Announcement", sub_title = "", sound_type = ANNOUNCER_DEFAULT, send_to_newscaster, do_not_modify = FALSE, list/players)
+/proc/priority_announce(text = "", super_title = "Colony Announcement", sub_title = "", sound_type = ANNOUNCER_DEFAULT, send_to_newscaster = FALSE, do_not_modify = FALSE, list/players, use_announcer_sound = TRUE)
 	if(!text)
 		return
 
@@ -18,20 +20,19 @@
 		players = GLOB.player_list
 
 
-	var/announcement = "<h1 class='alert'>[html_encode(super_title)]</h1>"
+	var/announcement = "<div class='priorityAnnounceHeader'><h1>[uppertext(html_encode(super_title))]</h1>"
 
 	if(sub_title)
-		announcement += "<h2 class='alert'>[html_encode(sub_title)]</h2>"
+		announcement += "<h2'>[html_encode(sub_title)]</h2>"
 
+	announcement += "</div><hr>"
 	///If the announcer overrides alert messages, use that message.
 	if(SSstation.announcer.custom_alert_message && !do_not_modify)
-		announcement += SSstation.announcer.custom_alert_message
+		announcement += "<div class='priorityAnnounceBody'[SSstation.announcer.custom_alert_message]</div>"
 	else
-		announcement += "<br><span style='font-size:120%'>[span_alert("[html_encode(text)]")]</span>"
+		announcement += "<div class='priorityAnnounceBody'>[html_encode(text)]</div>"
 
-	announcement += "<br>"
-
-	var/sound/sound2use = SSstation.announcer.event_sounds[sound_type]
+	var/sound/sound2use = use_announcer_sound ? SSstation.announcer.event_sounds[sound_type] : 'goon/sounds/announcement_1.ogg'
 
 	//Find the sound requested if it isn't covered by announcer events already
 	if(isnull(sound2use))
@@ -111,26 +112,3 @@
 	M.content = text
 
 	SScommunications.send_message(M)
-
-/proc/minor_announce(message, title = "Station Announcement", alert, html_encode = TRUE, list/players)
-	if(!message)
-		return
-
-	if (html_encode)
-		title = html_encode(title)
-		message = html_encode(message)
-
-	if(!players)
-		players = GLOB.player_list
-
-	if(title)
-		message = "<font color = red>[title]</font color><BR>[message]"
-
-	for(var/mob/target in players)
-		if(!isnewplayer(target) && target.can_hear())
-			to_chat(target, examine_block_centered(span_minorannounce(message)))
-			if(target.client.prefs.toggles & SOUND_ANNOUNCEMENTS)
-				if(alert)
-					SEND_SOUND(target, sound('sound/misc/notice1.ogg'))
-				else
-					SEND_SOUND(target, sound('goon/sounds/announcement_1.ogg'))
