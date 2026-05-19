@@ -624,6 +624,9 @@
 		if(!findtext(result[i], "<hr>"))
 			result[i] += "\n"
 
+	if(result[length(result)] == "<hr>")
+		result.len--
+
 	to_chat(src, "<div class='examine_block'><span class='infoplain'>[result.Join()]</span></div>") //PARIAH EDIT CHANGE
 	SEND_SIGNAL(src, COMSIG_MOB_EXAMINATE, examinify)
 	return TRUE
