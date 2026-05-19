@@ -50,13 +50,13 @@
 
 	if(patient == user)
 		if(!silent)
-			user.visible_message(span_notice("[user] starts to apply [src] on [user.p_them()]self..."), span_notice("You begin applying [src] on yourself..."))
+			user.visible_message(span_subtle("[user] begins to apply [src] on [user.p_them()]self..."))
 		if(!do_after(user, patient, self_delay, DO_PUBLIC, extra_checks=CALLBACK(patient, TYPE_PROC_REF(/mob/living, try_inject), user, null, INJECT_TRY_SHOW_ERROR_MESSAGE), display = src))
 			return ITEM_INTERACT_BLOCKING
 
 	else if(other_delay)
 		if(!silent)
-			user.visible_message(span_notice("[user] starts to apply [src] on [patient]."), span_notice("You begin applying [src] on [patient]..."))
+			user.visible_message(span_subtle("[user] begins to apply [src] on [patient]."))
 		if(!do_after(user, patient, other_delay, DO_PUBLIC, extra_checks=CALLBACK(patient, TYPE_PROC_REF(/mob/living, try_inject), user, null, INJECT_TRY_SHOW_ERROR_MESSAGE), display = src))
 			return ITEM_INTERACT_BLOCKING
 
@@ -75,10 +75,6 @@
 
 /// Apply the actual effects of the healing if it's a simple animal, goes to [/obj/item/stack/medical/proc/heal_carbon] if it's a carbon, returns TRUE if it works, FALSE if it doesn't
 /obj/item/stack/medical/proc/heal(mob/living/patient, mob/user)
-	if(patient.stat == DEAD)
-		to_chat(user, span_warning("[patient] is dead! You can not help [patient.p_them()]."))
-		return
-
 	if(isanimal(patient) && heal_brute) // only brute can heal
 		var/mob/living/simple_animal/critter = patient
 		if (!critter.healable)
@@ -89,7 +85,7 @@
 			to_chat(user, span_notice("[patient] is at full health."))
 			return FALSE
 
-		user.visible_message("<span class='infoplain'><span class='green'>[user] applies [src] on [patient].</span></span>", "<span class='infoplain'><span class='green'>You apply [src] on [patient].</span></span>")
+		user.visible_message(span_notice("[user] applies [src] to [patient]."))
 		patient.heal_bodypart_damage((heal_brute * 0.5))
 		return TRUE
 
