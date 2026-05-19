@@ -365,9 +365,12 @@ GLOBAL_LIST_INIT(malf_modules, subtypesof(/datum/ai_module))
 
 	priority_announce("Hostile runtime detected in door controllers. Isolation lockdown protocols are now in effect. Please remain calm.","Network Alert", sound_type = ANNOUNCER_ALERT)
 	to_chat(owner, span_danger("Lockdown initiated. Network reset in 90 seconds."))
-	addtimer(CALLBACK(GLOBAL_PROC, GLOBAL_PROC_REF(minor_announce),
-		"Automatic system reboot complete. Have a secure day.",
-		"Network reset:"), 900)
+	addtimer(CALLBACK(GLOBAL_PROC, GLOBAL_PROC_REF(priority_announce),\
+			"Automatic system reboot complete. Have a secure day.",\
+			null,\
+			"Network Reset"),\
+		900\
+	)
 
 /// Override Machine: Allows the AI to override a machine, animating it into an angry, living version of itself.
 /datum/ai_module/destructive/override_machine

@@ -101,13 +101,13 @@
 
 /// Are we a silicon, OR we're logged in as the captain?
 /obj/machinery/computer/communications/proc/authenticated_as_silicon_or_captain(mob/user)
-	if (issilicon(user))
+	if (issilicon(user) || user.has_unlimited_silicon_privilege)
 		return TRUE
 	return ACCESS_CAPTAIN in authorize_access
 
 /// Are we a silicon, OR logged in?
 /obj/machinery/computer/communications/proc/authenticated(mob/user)
-	if (issilicon(user))
+	if (issilicon(user) || user.has_unlimited_silicon_privilege)
 		return TRUE
 	return authenticated
 
@@ -163,6 +163,7 @@
 				return
 			message.answered = answer_index
 			message.answer_callback.InvokeAsync()
+
 		if ("callShuttle")
 			if (!authenticated(usr) || syndicate)
 				return
@@ -171,12 +172,13 @@
 				return
 			SSshuttle.requestEvac(usr, reason)
 			post_status("shuttle")
+
 		if ("changeSecurityLevel")
 			if (!authenticated_as_silicon_or_captain(usr))
 				return
 
 			// Check if they have
-			if (!issilicon(usr))
+			if (!(issilicon(usr) || usr.has_unlimited_silicon_privilege))
 				var/obj/item/held_item = usr.get_active_held_item()
 				var/obj/item/card/id/id_card = held_item?.GetID()
 				if (!istype(id_card))
@@ -475,7 +477,7 @@
 		"syndicate" = syndicate,
 	)
 
-	var/ui_state = issilicon(user) ? cyborg_state : state
+	var/ui_state = (issilicon(user) || user.has_unlimited_silicon_privilege) ? cyborg_state : state
 
 	var/has_connection = has_communication()
 	data["hasConnection"] = has_connection
@@ -492,9 +494,9 @@
 			data["safeCodeDeliveryWait"] = 0
 			data["safeCodeDeliveryArea"] = null
 
-	if (authenticated || issilicon(user))
+	if (authenticated || (issilicon(user) || user.has_unlimited_silicon_privilege))
 		data["authenticated"] = TRUE
-		data["canLogOut"] = !issilicon(user)
+		data["canLogOut"] = !(issilicon(user) || user.has_unlimited_silicon_privilege)
 		data["page"] = ui_state
 
 		if ((obj_flags & EMAGGED) || syndicate)
@@ -505,7 +507,7 @@
 				data["canBuyShuttles"] = can_buy_shuttles(user)
 				data["canMakeAnnouncement"] = FALSE
 				data["canMessageAssociates"] = FALSE
-				data["canRecallShuttles"] = !issilicon(user)
+				data["canRecallShuttles"] = !(issilicon(user) || user.has_unlimited_silicon_privilege)
 				data["canRequestNuke"] = FALSE
 				data["canSendToSectors"] = FALSE
 				data["canSetAlertLevel"] = FALSE
@@ -516,7 +518,7 @@
 				data["aprilFools"] = SSevents.holidays && SSevents.holidays[APRIL_FOOLS]
 				data["alertLevel"] = get_security_level()
 				data["authorizeName"] = authorize_name
-				data["canLogOut"] = !issilicon(user)
+				data["canLogOut"] = !(issilicon(user) || user.has_unlimited_silicon_privilege)
 				data["shuttleCanEvacOrFailReason"] = SSshuttle.canEvac(user)
 				if(syndicate)
 					data["shuttleCanEvacOrFailReason"] = "You cannot summon the shuttle from this console!"
@@ -544,7 +546,7 @@
 
 					data["alertLevelTick"] = alert_level_tick
 					data["canMakeAnnouncement"] = TRUE
-					data["canSetAlertLevel"] = issilicon(user) ? "NO_SWIPE_NEEDED" : "SWIPE_NEEDED"
+					data["canSetAlertLevel"] = (issilicon(user) || user.has_unlimited_silicon_privilege) ? "NO_SWIPE_NEEDED" : "SWIPE_NEEDED"
 				else if(syndicate)
 					data["canMakeAnnouncement"] = TRUE
 
@@ -642,7 +644,7 @@
 	return is_station_level(z_level) || is_centcom_level(z_level)
 
 /obj/machinery/computer/communications/proc/set_state(mob/user, new_state)
-	if (issilicon(user))
+	if ((issilicon(user) || user.has_unlimited_silicon_privilege))
 		cyborg_state = new_state
 	else
 		state = new_state
@@ -652,7 +654,7 @@
 /obj/machinery/computer/communications/proc/can_buy_shuttles(mob/user)
 	if (!SSmapping.config.allow_custom_shuttles)
 		return FALSE
-	if (issilicon(user))
+	if ((issilicon(user) || user.has_unlimited_silicon_privilege))
 		return FALSE
 
 	var/has_access = FALSE
@@ -712,7 +714,7 @@
 	deadchat_broadcast(" called an emergency meeting from [span_name("[get_area_name(usr, TRUE)]")].", span_name("[user.real_name]"), user, message_type=DEADCHAT_ANNOUNCEMENT)
 
 /obj/machinery/computer/communications/proc/make_announcement(mob/living/user)
-	var/is_ai = issilicon(user)
+	var/is_ai = (issilicon(user) || user.has_unlimited_silicon_privilege)
 	if(!SScommunications.can_announce(user, is_ai))
 		to_chat(user, span_alert("Intercomms recharging. Please stand by."))
 		return
@@ -725,11 +727,12 @@
 	if(isliving(user) && can_speak)
 		can_speak = !istype(user.get_selected_language(), /datum/language/visual)
 
-	if(!user.can_speak()) //No more cheating, mime/random mute guy!
+	if(!can_speak) //No more cheating, mime/random mute guy!
 		to_chat(user, span_warning("You find yourself unable to speak."))
 		return
 
-	input = user.treat_message(input) //Adds slurs and so on. Someone should make this use languages too.
+	if(isliving(user)) // adminghosts
+		input = user.treat_message(input) //Adds slurs and so on. Someone should make this use languages too.
 
 	var/sender = authorize_name
 	if(authorize_job)
