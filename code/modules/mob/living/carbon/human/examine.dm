@@ -64,12 +64,12 @@
 
 	//mask
 	if(wear_mask && !(obscured & ITEM_SLOT_MASK)  && !(wear_mask.item_flags & EXAMINE_SKIP))
-		. += "[t_He] [t_has] <span class='info'>[wear_mask.get_examine_string(user)] [EXAMINE_LINK(wear_mask)]</span> on [t_his] face."
+		. += "[t_He] [t_is] wearing <span class='info'>[wear_mask.get_examine_string(user)] [EXAMINE_LINK(wear_mask)]</span> on [t_his] face."
 
 	//eyes
 	if(!(obscured & ITEM_SLOT_EYES) )
 		if(glasses  && !(glasses.item_flags & EXAMINE_SKIP))
-			. += "[t_He] [t_has] <span class='info'>[glasses.get_examine_string(user)] [EXAMINE_LINK(glasses)]</span> covering [t_his] eyes."
+			. += "[t_He] [t_is] wearing <span class='info'>[glasses.get_examine_string(user)] [EXAMINE_LINK(glasses)]</span> covering [t_his] eyes."
 
 		else if(getorganslot(ORGAN_SLOT_EYES))
 			if(HAS_TRAIT(src, TRAIT_UNNATURAL_RED_GLOWY_EYES))
@@ -87,7 +87,7 @@
 
 	//ears
 	if(ears && !(obscured & ITEM_SLOT_EARS) && !(ears.item_flags & EXAMINE_SKIP))
-		. += "[t_He] [t_has] <span class='info'>[ears.get_examine_string(user)] [EXAMINE_LINK(ears)]</span> on [t_his] ears."
+		. += "[t_He] [t_is] wearing <span class='info'>[ears.get_examine_string(user)] [EXAMINE_LINK(ears)]</span> on [t_his] ears."
 
 	//neck
 	if(wear_neck && !(obscured & ITEM_SLOT_NECK)  && !(wear_neck.item_flags & EXAMINE_SKIP))
@@ -113,16 +113,16 @@
 
 	//back
 	if(back && !(back.item_flags & EXAMINE_SKIP))
-		. += "[t_He] [t_has] <span class='info'>[back.get_examine_string(user)] [EXAMINE_LINK(back)]</span> on [t_his] back."
+		. += "[t_He] [t_is] wearing <span class='info'>[back.get_examine_string(user)] [EXAMINE_LINK(back)]</span> on [t_his] back."
 
 	//belt
 	if(belt && !(belt.item_flags & EXAMINE_SKIP))
-		. += "[t_He] [t_has] <span class='info'>[belt.get_examine_string(user)] [EXAMINE_LINK(belt)]</span> about [t_his] waist."
+		. += "[t_He] [t_is] wearing <span class='info'>[belt.get_examine_string(user)] [EXAMINE_LINK(belt)]</span> about [t_his] waist."
 
 	//gloves
 	var/gloves_shown = gloves && !(obscured & ITEM_SLOT_GLOVES) && !(gloves.item_flags & EXAMINE_SKIP)
 	if(gloves_shown)
-		. += "[t_He] [t_has] <span class='info'>[gloves.get_examine_string(user)] [EXAMINE_LINK(gloves)]</span> on [t_his] hands."
+		. += "[t_He] [t_is] wearing <span class='info'>[gloves.get_examine_string(user)] [EXAMINE_LINK(gloves)]</span> on [t_his] hands."
 
 	//shoes
 	if(shoes && !(obscured & ITEM_SLOT_FEET)  && !(shoes.item_flags & EXAMINE_SKIP))
