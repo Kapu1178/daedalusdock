@@ -25,7 +25,7 @@ TYPEINFO_DEF(/obj/item/assembly/mousetrap)
 
 /obj/item/assembly/mousetrap/examine(mob/user)
 	. = ..()
-	. += span_notice("The pressure plate is [armed?"primed":"safe"].")
+	. += span_info("The pressure plate is [armed?"primed":"safe"].")
 
 /obj/item/assembly/mousetrap/activate()
 	if(..())

@@ -41,7 +41,7 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/machinery/atm, 32)
 /obj/machinery/atm/examine(mob/user)
 	. = ..()
 	if(inserted_card)
-		. += span_notice("There is a card in the card slot.")
+		. += span_info("There is a card in the card slot.")
 
 /obj/machinery/atm/update_icon_state()
 	if(machine_stat & NOPOWER)

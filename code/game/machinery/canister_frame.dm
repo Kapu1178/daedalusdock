@@ -54,19 +54,19 @@
 
 /obj/structure/canister_frame/machine/examine(user)
 	. = ..()
-	. += span_notice("It can be dismantled by removing the <b>bolts</b>.")
+	. += span_info("It can be dismantled by removing the <b>bolts</b>.")
 
 	if(ispath(next_tier))
 		var/item_name = initial(next_tier_reqitem.singular_name)
 		if(!item_name)
 			item_name = initial(next_tier_reqitem.name)
 		if(next_tier_reqitem_am > 1)
-			. += span_notice("It can be improved using [next_tier_reqitem_am] [item_name]\s.")
+			. += span_info("It can be improved using [next_tier_reqitem_am] [item_name]\s.")
 		else
-			. += span_notice("It can be improved using \a [item_name].")
+			. += span_info("It can be improved using \a [item_name].")
 
 	if(ispath(finished_obj))
-		. += span_notice("It can be finished off by <b>screwing</b> it together.")
+		. += span_info("It can be finished off by <b>screwing</b> it together.")
 
 /obj/structure/canister_frame/machine/attackby(obj/item/S, mob/user, params)
 	if (ispath(next_tier) && istype(S, next_tier_reqitem))

@@ -21,8 +21,8 @@
 	if(!IS_HERETIC(user))
 		return
 
-	. += span_notice("Allows you to transmute objects by invoking the rune after collecting the prerequisites overhead.")
-	. += span_notice("You can use your <i>Mansus Grasp</i> on the rune to remove it.")
+	. += span_info("Allows you to transmute objects by invoking the rune after collecting the prerequisites overhead.")
+	. += span_info("You can use your <i>Mansus Grasp</i> on the rune to remove it.")
 
 /obj/effect/heretic_rune/can_interact(mob/living/user)
 	. = ..()

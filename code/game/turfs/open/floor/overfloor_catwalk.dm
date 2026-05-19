@@ -65,8 +65,8 @@
 
 /obj/structure/overfloor_catwalk/examine(mob/user)
 	. = ..()
-	. += span_notice("The mesh comes out with a few simple <b>screws</b>.")
-	. += span_notice("The frame can be popped out with some <b>leverage</b>.")
+	. += span_info("The mesh comes out with a few simple <b>screws</b>.")
+	. += span_info("The frame can be popped out with some <b>leverage</b>.")
 
 /obj/structure/overfloor_catwalk/update_overlays()
 	. = ..()

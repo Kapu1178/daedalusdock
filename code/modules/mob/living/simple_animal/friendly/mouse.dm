@@ -207,7 +207,7 @@
 /obj/item/food/deadmouse/examine(mob/user)
 	. = ..()
 	if (reagents?.has_reagent(/datum/reagent/yuck) || reagents?.has_reagent(/datum/reagent/fuel))
-		. += span_warning("They're dripping with fuel and smells terrible.")
+		. += span_alert("They're dripping with fuel and smells terrible.")
 
 /obj/item/food/deadmouse/attackby(obj/item/I, mob/living/user, params)
 	if((I.sharpness & SHARP_EDGED) && user.combat_mode)

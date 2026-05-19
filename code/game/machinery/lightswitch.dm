@@ -141,12 +141,12 @@ MAPPING_DIRECTIONAL_HELPERS_ROBUST_INVERSE_DIR(/obj/machinery/light_switch, 28, 
 	. = ..()
 	if(panel_open)
 		if(has_wires)
-			. += span_notice("The wires are visible and could be <i>screwed</i> in place.")
+			. += span_info("The wires are visible and could be <i>screwed</i> in place.")
 		else
-			. += span_notice("The circuitry needs to be <i>wired</i> to be functional.")
+			. += span_info("The circuitry needs to be <i>wired</i> to be functional.")
 		return .
 
-	. += span_notice("It is in the [area.lightswitch ? "on" : "off"] position.")
+	. += span_info("It is in the [area.lightswitch ? "on" : "off"] position.")
 
 /obj/machinery/light_switch/interact(mob/user)
 	. = ..()

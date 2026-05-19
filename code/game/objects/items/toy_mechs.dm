@@ -253,15 +253,15 @@
 
 /obj/item/toy/mecha/examine()
 	. = ..()
-	. += span_notice("This toy's special attack is [special_attack_cry], [spec_attack_type_message]")
+	. += span_info("This toy's special attack is [special_attack_cry], [spec_attack_type_message]")
 	if(in_combat)
-		. += span_notice("This toy has a maximum health of [max_combat_health]. Currently, it's [combat_health].")
-		. += span_notice("Its special move light is [special_attack_cooldown? "flashing red." : "green and is ready!"]")
+		. += span_info("This toy has a maximum health of [max_combat_health]. Currently, it's [combat_health].")
+		. += span_info("Its special move light is [special_attack_cooldown? "flashing red." : "green and is ready!"]")
 	else
-		. += span_notice("This toy has a maximum health of [max_combat_health].")
+		. += span_info("This toy has a maximum health of [max_combat_health].")
 
 	if(wins || losses)
-		. += span_notice("This toy has [wins] wins, and [losses] losses.")
+		. += span_info("This toy has [wins] wins, and [losses] losses.")
 
 /**
  * Override the say proc if they're mute

@@ -24,8 +24,8 @@
 
 /obj/item/mcobject/messaging/dispatch/examine(mob/user)
 	. = ..()
-	. += span_notice("Exact match mode: [exact_match ? "on" : "off"]")
-	. += span_notice("Single output mode: [single_output ? "on" : "off"]")
+	. += span_info("Exact match mode: [exact_match ? "on" : "off"]")
+	. += span_info("Single output mode: [single_output ? "on" : "off"]")
 
 /obj/item/mcobject/messaging/dispatch/proc/toggle_match(mob/user, obj/item/tool)
 	exact_match = !exact_match

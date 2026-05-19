@@ -318,7 +318,7 @@
 	if(welded)
 		. += "It seems welded shut."
 	if(!COOLDOWN_FINISHED(src, hibernating))
-		. += span_notice("It is sleeping to conserve power.")
+		. += span_info("It is sleeping to conserve power.")
 
 /obj/machinery/atmospherics/components/unary/vent_pump/power_change()
 	. = ..()

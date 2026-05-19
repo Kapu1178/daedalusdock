@@ -18,10 +18,10 @@
 
 /obj/item/mcobject/messaging/signal_check/examine(mob/user)
 	. = ..()
-	. += span_notice("[!fire_on_found ? "Component triggers when Signal is NOT found.":"Component triggers when Signal IS found."]")
-	. += span_notice("Message Replacement is [replace_message ? "on.":"off."]")
-	. += span_notice("Currently checking for: [strip_html(trigger)]")
-	. += span_notice("Exact Search is [exact ? "on" : "off"].")
+	. += span_info("[!fire_on_found ? "Component triggers when Signal is NOT found.":"Component triggers when Signal IS found."]")
+	. += span_info("Message Replacement is [replace_message ? "on.":"off."]")
+	. += span_info("Currently checking for: [strip_html(trigger)]")
+	. += span_info("Exact Search is [exact ? "on" : "off"].")
 
 /obj/item/mcobject/messaging/signal_check/proc/set_trigger_comp(datum/mcmessage/input)
 	trigger = input.cmd

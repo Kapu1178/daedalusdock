@@ -480,9 +480,9 @@ TYPEINFO_DEF(/obj/item/melee/baton/security)
 /obj/item/melee/baton/security/examine(mob/user)
 	. = ..()
 	if(cell)
-		. += span_notice("\The [src] is [round(cell.percent())]% charged.")
+		. += span_info("\The [src] is [round(cell.percent())]% charged.")
 	else
-		. += span_warning("\The [src] does not have a power source installed.")
+		. += span_alert("\The [src] does not have a power source installed.")
 
 /obj/item/melee/baton/security/screwdriver_act(mob/living/user, obj/item/tool)
 	if(tryremovecell(user))

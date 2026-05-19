@@ -207,7 +207,7 @@
 
 /obj/item/toy/captainsaid/examine_more(mob/user)
 	. = ..()
-	. += span_notice("You could swear you've been hearing advertisments for the 'soon upcoming' release of a tablet version for the better part of 3 years...")
+	. += span_info("You could swear you've been hearing advertisments for the 'soon upcoming' release of a tablet version for the better part of 3 years...")
 
 /obj/item/toy/captainsaid/attack_self(mob/living/user)
 	current_mode++

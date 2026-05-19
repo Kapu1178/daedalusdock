@@ -321,10 +321,10 @@
 
 /obj/item/sales_tagger/examine(mob/user)
 	. = ..()
-	. += span_notice("[src] has [paper_count]/[max_paper_count] available barcodes. Refill with paper.")
-	. += span_notice("Profit split on sale is currently set to [round(cut_multiplier*100)]%. <b>Alt-click</b> to change.")
+	. += span_info("[src] has [paper_count]/[max_paper_count] available barcodes. Refill with paper.")
+	. += span_info("Profit split on sale is currently set to [round(cut_multiplier*100)]%. <b>Alt-click</b> to change.")
 	if(payments_acc)
-		. += span_notice("<b>Ctrl-click</b> to clear the registered account.")
+		. += span_info("<b>Ctrl-click</b> to clear the registered account.")
 
 /obj/item/sales_tagger/attackby(obj/item/item, mob/living/user, params)
 	. = ..()

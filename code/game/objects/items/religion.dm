@@ -21,7 +21,7 @@
 /obj/item/banner/examine(mob/user)
 	. = ..()
 	if(inspiration_available)
-		. += span_notice("Activate it in your hand to inspire nearby allies of this banner's allegiance!")
+		. += span_info("Activate it in your hand to inspire nearby allies of this banner's allegiance!")
 
 /obj/item/banner/attack_self(mob/living/carbon/human/user)
 	if(!inspiration_available)

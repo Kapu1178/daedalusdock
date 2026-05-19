@@ -244,7 +244,7 @@ TYPEINFO_DEF(/obj/item/weldingtool)
 
 /obj/item/weldingtool/examine(mob/user)
 	. = ..()
-	. += span_notice("It contains [get_fuel()] unit\s of fuel out of [max_fuel].")
+	. += span_info("It contains [get_fuel()] unit\s of fuel out of [max_fuel].")
 
 /obj/item/weldingtool/get_temperature()
 	return welding * heat

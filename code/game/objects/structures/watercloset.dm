@@ -293,7 +293,7 @@ TYPEINFO_DEF(/obj/item/bikehorn/rubberducky/plasticducky)
 
 /obj/structure/sink/examine(mob/user)
 	. = ..()
-	. += span_notice("[reagents.total_volume]/[reagents.maximum_volume] liquids remaining.")
+	. += span_info("[reagents.total_volume]/[reagents.maximum_volume] liquids remaining.")
 
 /obj/structure/sink/attack_hand(mob/living/user, list/modifiers)
 	. = ..()

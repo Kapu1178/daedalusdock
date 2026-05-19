@@ -21,11 +21,11 @@
 
 /obj/item/reagent_containers/cup/maunamug/examine(mob/user)
 	. = ..()
-	. += span_notice("The status display reads: Current temperature: <b>[reagents.chem_temp]K</b> Current Charge:[cell ? "[cell.charge / cell.maxcharge * 100]%" : "No cell found"].")
+	. += span_info("The status display reads: Current temperature: <b>[reagents.chem_temp]K</b> Current Charge:[cell ? "[cell.charge / cell.maxcharge * 100]%" : "No cell found"].")
 	if(open)
-		. += span_notice("The battery case is open.")
+		. += span_info("The battery case is open.")
 	if(cell && cell.charge > 0)
-		. += span_notice("<b>Ctrl+Click</b> to toggle the power.")
+		. += span_info("<b>Ctrl+Click</b> to toggle the power.")
 
 /obj/item/reagent_containers/cup/maunamug/process(delta_time)
 	..()

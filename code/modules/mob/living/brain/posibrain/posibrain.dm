@@ -306,7 +306,7 @@ GLOBAL_VAR(posibrain_notify_cooldown)
 	else
 		. += "[dead_message]"
 		if(ask_role)
-			. += span_notice("Current consciousness seed: \"[ask_role]\"")
+			. += span_info("Current consciousness seed: \"[ask_role]\"")
 		. += span_boldnotice("Alt-click to set a consciousness seed, specifying what [src] will be used for. This can help generate a personality interested in that role.")
 
 /obj/item/organ/posibrain/update_icon_state()

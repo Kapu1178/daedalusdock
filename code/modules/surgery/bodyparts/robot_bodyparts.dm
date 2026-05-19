@@ -294,7 +294,7 @@ TYPEINFO_DEF(/obj/item/bodypart/head/robot)
 			[span_info("It has an empty eye socket for another <b>flash</b>.")]"}
 		else
 			. += "It has two eye sockets occupied by flashes."
-		. += span_notice("You can remove the seated flash[single_flash ? "":"es"] with a <b>crowbar</b>.")
+		. += span_info("You can remove the seated flash[single_flash ? "":"es"] with a <b>crowbar</b>.")
 
 /obj/item/bodypart/head/robot/attackby(obj/item/weapon, mob/user, params)
 	if(istype(weapon, /obj/item/assembly/flash/handheld))

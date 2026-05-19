@@ -127,7 +127,7 @@ TYPEINFO_DEF(/obj/item/spear)
 
 /obj/item/spear/explosive/examine(mob/user)
 	. = ..()
-	. += span_notice("Alt-click to set your war cry.")
+	. += span_info("Alt-click to set your war cry.")
 
 /obj/item/spear/explosive/AltClick(mob/user)
 	if(user.canUseTopic(src, USE_CLOSE))

@@ -50,7 +50,7 @@
 /obj/machinery/power/energy_accumulator/tesla_coil/examine(mob/user)
 	. = ..()
 	if(in_range(user, src) || isobserver(user))
-		. += span_notice("The status display reads:<br>" + \
+		. += span_info("The status display reads:<br>" + \
 		  "Power generation at <b>[input_power_multiplier*100]%</b>.<br>" + \
 			"Shock interval at <b>[zap_cooldown*0.1]</b> seconds.<br>" + \
 			"Stored <b>[display_joules(get_stored_joules())]</b>.<br>" + \
@@ -133,7 +133,7 @@
 /obj/machinery/power/energy_accumulator/grounding_rod/examine(mob/user)
 	. = ..()
 	if(in_range(user, src) || isobserver(user))
-		. += span_notice("The status display reads:<br>" + \
+		. += span_info("The status display reads:<br>" + \
 		  "Recently grounded <b>[display_joules(get_stored_joules())]</b>.<br>" + \
 			"This energy would sustainably release <b>[display_power(get_power_output())]</b>.")
 

@@ -113,7 +113,7 @@
 
 /obj/item/paper/examine(mob/user)
 	. = ..()
-	. += span_notice("Alt-click [src] to fold it into a paper plane.")
+	. += span_info("Alt-click [src] to fold it into a paper plane.")
 
 /obj/item/paper/AltClick(mob/living/user, obj/item/I)
 	if(!user.canUseTopic(src, USE_CLOSE|USE_IGNORE_TK|USE_NEED_HANDS))

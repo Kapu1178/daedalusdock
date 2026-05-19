@@ -44,11 +44,11 @@
 	. = ..()
 	if(!(machine_stat & BROKEN))
 		if(cart_griddle.machine_stat & BROKEN)
-			. += span_warning("The stand's <b>griddle</b> is completely broken!")
+			. += span_alert("The stand's <b>griddle</b> is completely broken!")
 		else
-			. += span_notice("The stand's <b>griddle</b> is intact.")
-		. += span_notice("The stand's <b>fridge</b> seems fine.") //weirdly enough, these fridges don't break
-		. += span_notice("The stand's <b>table</b> seems fine.")
+			. += span_info("The stand's <b>griddle</b> is intact.")
+		. += span_info("The stand's <b>fridge</b> seems fine.") //weirdly enough, these fridges don't break
+		. += span_info("The stand's <b>table</b> seems fine.")
 
 /obj/machinery/food_cart/proc/pack_up()
 	if(!unpacked)

@@ -208,7 +208,7 @@ TYPEINFO_DEF(/obj/item/flamethrower)
 /obj/item/flamethrower/examine(mob/user)
 	. = ..()
 	if(ptank)
-		. += span_notice("\The [src] has \a [ptank] attached. Alt-click to remove it.")
+		. += span_info("\The [src] has \a [ptank] attached. Alt-click to remove it.")
 
 /obj/item/flamethrower/proc/toggle_igniter(mob/user)
 	if(!ptank)

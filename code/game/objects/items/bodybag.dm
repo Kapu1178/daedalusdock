@@ -55,7 +55,7 @@
 	. = ..()
 	if(contents.len)
 		var/s = contents.len == 1 ? "" : "s"
-		. += span_notice("You can make out the shape[s] of [contents.len] object[s] through the fabric.")
+		. += span_info("You can make out the shape[s] of [contents.len] object[s] through the fabric.")
 
 /obj/item/bodybag/bluespace/Destroy()
 	for(var/atom/movable/A in contents)

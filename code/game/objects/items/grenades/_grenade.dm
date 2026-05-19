@@ -100,7 +100,7 @@
 		else
 			. += "\The [src] is set for instant detonation."
 	if (dud_flags & GRENADE_USED)
-		. += span_warning("It looks like [p_theyve()] already been used.")
+		. += span_alert("It looks like [p_theyve()] already been used.")
 
 /obj/item/grenade/attack_self(mob/user)
 	if(HAS_TRAIT(src, TRAIT_NODROP))

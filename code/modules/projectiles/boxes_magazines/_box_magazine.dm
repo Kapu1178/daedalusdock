@@ -212,7 +212,7 @@ TYPEINFO_DEF(/obj/item/ammo_box)
 
 /obj/item/ammo_box/examine(mob/user)
 	. = ..()
-	. += span_notice(get_ammo_desc())
+	. += span_info(get_ammo_desc())
 
 /obj/item/ammo_box/update_icon_state()
 	var/shells_left = LAZYLEN(stored_ammo)

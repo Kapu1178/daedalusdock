@@ -40,10 +40,10 @@
 /obj/item/clipboard/examine()
 	. = ..()
 	if(!integrated_pen && pen)
-		. += span_notice("Alt-click to remove [pen].")
+		. += span_info("Alt-click to remove [pen].")
 	var/obj/item/paper/toppaper = toppaper_ref?.resolve()
 	if(toppaper)
-		. += span_notice("Right-click to remove [toppaper].")
+		. += span_info("Right-click to remove [toppaper].")
 
 /// Take out the topmost paper
 /obj/item/clipboard/proc/remove_paper(obj/item/paper/paper, mob/user)

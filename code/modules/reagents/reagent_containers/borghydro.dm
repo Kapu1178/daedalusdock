@@ -133,7 +133,7 @@ Borg Hypospray
 	. += DescribeContents() //Because using the standardized reagents datum was just too cool for whatever fuckwit wrote this
 	var/datum/reagent/loaded = modes[mode]
 	. += "Currently loaded: [initial(loaded.name)]. [initial(loaded.description)]"
-	. += span_notice("<i>Alt+Click</i> to change transfer amount. Currently set to [amount_per_transfer_from_this == 5 ? "dose normally (5u)" : "microdose (2u)"].")
+	. += span_info("<i>Alt+Click</i> to change transfer amount. Currently set to [amount_per_transfer_from_this == 5 ? "dose normally (5u)" : "microdose (2u)"].")
 
 /obj/item/reagent_containers/borghypo/proc/DescribeContents()
 	. = list()
@@ -142,11 +142,11 @@ Borg Hypospray
 	for(var/datum/reagents/RS in reagent_list)
 		var/datum/reagent/R = locate() in RS.reagent_list
 		if(R)
-			. += span_notice("It currently has [R.volume] unit\s of [R.name] stored.")
+			. += span_info("It currently has [R.volume] unit\s of [R.name] stored.")
 			empty = FALSE
 
 	if(empty)
-		. += span_warning("It is currently empty! Allow some time for the internal synthesizer to produce more.")
+		. += span_alert("It is currently empty! Allow some time for the internal synthesizer to produce more.")
 
 /obj/item/reagent_containers/borghypo/AltClick(mob/living/user)
 	. = ..()

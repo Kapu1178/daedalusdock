@@ -157,14 +157,14 @@
 /obj/item/paper/report/examine(mob/user)
 	. = ..()
 	if(scanned_area?.name)
-		. += span_notice("\The [src] contains data on [scanned_area.name].")
+		. += span_info("\The [src] contains data on [scanned_area.name].")
 	else if(scanned_area)
-		. += span_notice("\The [src] contains data on a vague area on station, you should throw it away.")
+		. += span_info("\The [src] contains data on a vague area on station, you should throw it away.")
 	else if(get_info_length())
 		icon_state = "slipfull"
-		. += span_notice("Wait a minute, this isn't an encrypted inspection report! You should throw it away.")
+		. += span_info("Wait a minute, this isn't an encrypted inspection report! You should throw it away.")
 	else
-		. += span_notice("Wait a minute, this thing's blank! You should throw it away.")
+		. += span_info("Wait a minute, this thing's blank! You should throw it away.")
 
 /**
  * # Fake N-spect scanner
@@ -358,13 +358,13 @@
 /obj/item/paper/fake_report/examine(mob/user)
 	. = ..()
 	if(scanned_area?.name)
-		. += span_notice("\The [src] contains no data on [scanned_area.name].")
+		. += span_info("\The [src] contains no data on [scanned_area.name].")
 	else if(scanned_area)
-		. += span_notice("\The [src] contains no data on a vague area on station, you should throw it away.")
+		. += span_info("\The [src] contains no data on a vague area on station, you should throw it away.")
 	else if(get_info_length())
-		. += span_notice("Wait a minute, this isn't an encrypted inspection report! You should throw it away.")
+		. += span_info("Wait a minute, this isn't an encrypted inspection report! You should throw it away.")
 	else
-		. += span_notice("Wait a minute, this thing's blank! You should throw it away.")
+		. += span_info("Wait a minute, this thing's blank! You should throw it away.")
 
 /**
  * # Fake report made of water

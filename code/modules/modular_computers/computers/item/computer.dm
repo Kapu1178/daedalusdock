@@ -300,7 +300,7 @@ TYPEINFO_DEF(/obj/item/modular_computer)
 	if(atom_integrity <= integrity_failure * max_integrity)
 		. += span_danger("It is heavily damaged!")
 	else if(atom_integrity < max_integrity)
-		. += span_warning("It is damaged.")
+		. += span_alert("It is damaged.")
 
 	. += get_modular_computer_parts_examine(user)
 

@@ -249,7 +249,7 @@ TYPEINFO_DEF(/obj/structure/sign/picture_frame)
 /obj/structure/sign/picture_frame/portrait/examine_more(mob/user)
 	. = ..()
 	if(!framed)
-		. += span_notice("The frame and the picture are glued together, but you guess you could slip a photo between the two.")
+		. += span_info("The frame and the picture are glued together, but you guess you could slip a photo between the two.")
 
 //persistent frames, make sure the same ID doesn't appear more than once per map
 /obj/structure/sign/picture_frame/showroom/one

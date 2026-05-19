@@ -50,7 +50,7 @@ TYPEINFO_DEF(/obj/item/clothing/head/helmet/space/eva)
 
 /obj/item/clothing/head/helmet/space/eva/examine(mob/user)
 	. = ..()
-	. += span_notice("You can start constructing a critter sized mecha with a [span_bold("cyborg leg")].")
+	. += span_info("You can start constructing a critter sized mecha with a [span_bold("cyborg leg")].")
 
 /obj/item/clothing/head/helmet/space/eva/attackby(obj/item/attacked_with, mob/user, params)
 	. = ..()

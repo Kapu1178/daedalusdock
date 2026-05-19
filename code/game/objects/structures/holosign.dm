@@ -146,7 +146,7 @@ TYPEINFO_DEF(/obj/structure/holosign)
 
 /obj/structure/holosign/barrier/medical/examine(mob/user)
 	. = ..()
-	. += span_notice("The biometric scanners are <b>[force_allaccess ? "off" : "on"]</b>.")
+	. += span_info("The biometric scanners are <b>[force_allaccess ? "off" : "on"]</b>.")
 
 /obj/structure/holosign/barrier/medical/CanAllowThrough(atom/movable/mover, border_dir)
 	. = ..()

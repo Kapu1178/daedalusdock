@@ -43,9 +43,9 @@
 		. += "It is set to [rotation_angle] degrees, and the rotation is [can_rotate ? "unlocked" : "locked"]."
 		if(!admin)
 			if(can_rotate)
-				. += span_notice("Alt-click to adjust its direction.")
+				. += span_info("Alt-click to adjust its direction.")
 			else
-				. += span_notice("Use screwdriver to unlock the rotation.")
+				. += span_info("Use screwdriver to unlock the rotation.")
 
 /obj/structure/reflector/proc/set_angle(new_angle)
 	if(can_rotate)

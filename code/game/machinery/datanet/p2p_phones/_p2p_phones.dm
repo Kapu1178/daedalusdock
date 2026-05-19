@@ -489,9 +489,9 @@
 	. = ..()
 	//mic mute
 	if(mic_muted)
-		. += span_warning("The mute button is glowing red.")
+		. += span_alert("The mute button is glowing red.")
 	else
-		. += span_notice("The mute button is dark.")
+		. += span_info("The mute button is dark.")
 	//Are we somehow missing our callstation?
 	if(!callstation)
 		. += span_boldwarning("It isn't connected to anything? Call a coder. Or a priest.")

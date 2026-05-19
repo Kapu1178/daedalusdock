@@ -57,9 +57,9 @@ TYPEINFO_DEF(/obj/item/defibrillator)
 /obj/item/defibrillator/examine(mob/user)
 	. = ..()
 	if(cell)
-		. += span_notice("Use a screwdriver to remove the cell.")
+		. += span_info("Use a screwdriver to remove the cell.")
 	else
-		. += span_warning("It has no power cell!")
+		. += span_alert("It has no power cell!")
 
 /obj/item/defibrillator/fire_act(exposed_temperature, exposed_volume, turf/adjacent)
 	. = ..()

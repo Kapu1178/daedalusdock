@@ -108,11 +108,11 @@
 	if(istype(user,/mob/living/simple_animal/hostile/rat))
 		var/mob/living/simple_animal/hostile/rat/ratself = user
 		if(ratself.faction_check_atom(src, TRUE))
-			. += span_notice("This is your king. Long live their majesty!")
+			. += span_info("This is your king. Long live their majesty!")
 		else
-			. += span_warning("This is a false king! Strike them down!")
+			. += span_alert("This is a false king! Strike them down!")
 	else if(user != src && istype(user,/mob/living/simple_animal/hostile/regalrat))
-		. += span_warning("Who is this foolish false king? This will not stand!")
+		. += span_alert("Who is this foolish false king? This will not stand!")
 
 /mob/living/simple_animal/hostile/regalrat/handle_environment(datum/gas_mixture/environment)
 	. = ..()
@@ -330,15 +330,15 @@
 	if(istype(user,/mob/living/simple_animal/hostile/rat))
 		var/mob/living/simple_animal/hostile/rat/ratself = user
 		if(ratself.faction_check_atom(src, TRUE))
-			. += span_notice("You both serve the same king.")
+			. += span_info("You both serve the same king.")
 		else
-			. += span_warning("This fool serves a different king!")
+			. += span_alert("This fool serves a different king!")
 	else if(istype(user,/mob/living/simple_animal/hostile/regalrat))
 		var/mob/living/simple_animal/hostile/regalrat/ratking = user
 		if(ratking.faction_check_atom(src, TRUE))
-			. += span_notice("This rat serves under you.")
+			. += span_info("This rat serves under you.")
 		else
-			. += span_warning("This peasant serves a different king! Strike them down!")
+			. += span_alert("This peasant serves a different king! Strike them down!")
 
 /mob/living/simple_animal/hostile/rat/CanAttack(atom/the_target)
 	if(istype(the_target,/mob/living/simple_animal))

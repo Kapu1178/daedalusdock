@@ -50,13 +50,13 @@
 			if(101 to INFINITY)
 				age_text = "withering away"
 
-		. += span_notice("[t_He] appear[t_s] to be [age_text].")
+		. += span_info("[t_He] appear[t_s] to be [age_text].")
 
 		if(dna.species?.use_skintones && HAS_MIND_TRAIT(user, TRAIT_ADVANCED_RACE_THEORY))
 			var/obj/item/bodypart/head = get_bodypart(BODY_ZONE_HEAD)
 			if(head.skin_tone)
 				var/_skintone = "\improper[head.skin_tone]"
-				. += span_notice("[t_He] appear[t_s] to be \a [_skintone].")
+				. += span_info("[t_He] appear[t_s] to be \a [_skintone].")
 
 	//uniform
 	if(w_uniform && !(obscured & ITEM_SLOT_ICLOTHING) && !(w_uniform.item_flags & EXAMINE_SKIP))
@@ -157,7 +157,7 @@
 			. += span_alert("[t_He] is not moving.")
 		else
 			if(stat == UNCONSCIOUS && !HAS_TRAIT(src, TRAIT_FAKEDEATH))
-				. += span_notice("[t_He] [t_is] unconsious.")
+				. += span_info("[t_He] [t_is] unconsious.")
 				if(failed_last_breath)
 					. += span_alert("[t_He] isn't breathing.")
 			else
@@ -381,7 +381,7 @@
 		else
 			flavor_text_link = span_notice("...?")
 		if (flavor_text_link)
-			. += span_notice(flavor_text_link)
+			. += span_info(flavor_text_link)
 
 	// AT THIS POINT WE'RE DONE WITH EXAMINE STUFF
 	var/mob/living/living_user = user

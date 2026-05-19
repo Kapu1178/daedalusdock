@@ -15,7 +15,7 @@
 
 /obj/item/mcobject/messaging/and/examine(mob/user)
 	. = ..()
-	. += span_notice("Check window: <b>[time_window]</b> tenths of a second.")
+	. += span_info("Check window: <b>[time_window]</b> tenths of a second.")
 
 /obj/item/mcobject/messaging/and/proc/set_time(mob/user, obj/item/tool)
 	var/time = input("Enter the window in tenths of a second", "Configure Component", time_window) as null|num

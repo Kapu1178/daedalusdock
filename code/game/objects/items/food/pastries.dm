@@ -49,7 +49,7 @@
 	if(moffin_observer.dna.species.liked_food & CLOTH)
 		. += span_nicegreen("Ooh! It's even got bits of clothes on it! Yummy!")
 	else
-		. += span_warning("You're not too sure what's on top though...")
+		. += span_alert("You're not too sure what's on top though...")
 
 ////////////////////////////////////////////WAFFLES////////////////////////////////////////////
 

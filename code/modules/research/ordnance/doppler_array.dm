@@ -46,7 +46,7 @@
 
 /obj/machinery/doppler_array/examine(mob/user)
 	. = ..()
-	. += span_notice("It is currently facing [dir2text(dir)]")
+	. += span_info("It is currently facing [dir2text(dir)]")
 
 /obj/machinery/doppler_array/attackby(obj/item/item, mob/user, params)
 	if(istype(item, /obj/item/computer_hardware/hard_drive/portable))

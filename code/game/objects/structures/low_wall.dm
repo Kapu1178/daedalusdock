@@ -52,11 +52,11 @@ TYPEINFO_DEF(/obj/structure/low_wall)
 
 /obj/structure/low_wall/examine(mob/user)
 	. = ..()
-	. += span_notice("You could <b>weld</b> it down.")
+	. += span_info("You could <b>weld</b> it down.")
 	if(wall_paint)
-		. += span_notice("It's coated with a <font color=[wall_paint]>layer of paint</font>.")
+		. += span_info("It's coated with a <font color=[wall_paint]>layer of paint</font>.")
 	if(stripe_paint)
-		. += span_notice("It has a <font color=[stripe_paint]>painted stripe</font> around its base.")
+		. += span_info("It has a <font color=[stripe_paint]>painted stripe</font> around its base.")
 
 /obj/structure/low_wall/update_overlays()
 	overlays.len = 0

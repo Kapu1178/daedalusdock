@@ -11,7 +11,7 @@
 /obj/item/assembly/control/examine(mob/user)
 	. = ..()
 	if(id)
-		. += span_notice("Its channel ID is '[id]'.")
+		. += span_info("Its channel ID is '[id]'.")
 
 /obj/item/assembly/control/multitool_act(mob/living/user)
 	var/change_id = tgui_input_number(user, "Set the door controllers ID", "Door ID", id, 100)
@@ -39,7 +39,7 @@
 /obj/item/assembly/control/curtain/examine(mob/user)
 	. = ..()
 	if(id)
-		. += span_notice("Its channel ID is '[id]'.")
+		. += span_info("Its channel ID is '[id]'.")
 
 /obj/item/assembly/control/curtain/activate()
 	var/openclose

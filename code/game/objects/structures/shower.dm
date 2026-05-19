@@ -46,7 +46,7 @@
 
 /obj/machinery/shower/examine(mob/user)
 	. = ..()
-	. += span_notice("[reagents.total_volume]/[reagents.maximum_volume] liquids remaining.")
+	. += span_info("[reagents.total_volume]/[reagents.maximum_volume] liquids remaining.")
 
 /obj/machinery/shower/Destroy()
 	QDEL_NULL(soundloop)

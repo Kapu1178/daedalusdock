@@ -250,7 +250,7 @@
 
 /obj/item/hypospray/mkii/examine(mob/user)
 	. = ..()
-	. += span_notice("<b>Left-Click</b> on patients to inject, <b>Right-Click</b> to spray.")
+	. += span_info("<b>Left-Click</b> on patients to inject, <b>Right-Click</b> to spray.")
 
 #undef HYPO_SPRAY
 #undef HYPO_INJECT

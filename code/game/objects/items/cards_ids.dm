@@ -224,7 +224,7 @@ TYPEINFO_DEF(/obj/item/card/id)
 	. = ..()
 	. += "<a href='?src=\ref[src];look_at_id=1'>\[Look at ID\]</a>"
 	if(registered_account)
-		. += span_notice("The account linked to the ID belongs to '[registered_account.account_holder]'.")
+		. += span_info("The account linked to the ID belongs to '[registered_account.account_holder]'.")
 
 	if(HAS_TRAIT(user, TRAIT_ID_APPRAISER))
 		. += HAS_TRAIT(src, TRAIT_JOB_FIRST_ID_CARD) ? span_boldnotice("Hmm... yes, this ID was issued from Central Command!") : span_boldnotice("This ID was created in this sector, not by Central Command.")
@@ -738,9 +738,9 @@ TYPEINFO_DEF(/obj/item/card/id)
 	. = ..()
 	if(timed)
 		if(time_left <= 0)
-			. += span_notice("The digital timer on the card has zero seconds remaining. You leave a changed man, but a free man nonetheless.")
+			. += span_info("The digital timer on the card has zero seconds remaining. You leave a changed man, but a free man nonetheless.")
 		else
-			. += span_notice("The digital timer on the card has [time_left] seconds remaining. Don't do the crime if you can't do the time.")
+			. += span_info("The digital timer on the card has [time_left] seconds remaining. Don't do the crime if you can't do the time.")
 
 /obj/item/card/id/advanced/prisoner/process(delta_time)
 	if(!timed)

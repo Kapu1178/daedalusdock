@@ -60,15 +60,15 @@
 	if(user.is_holding(src))
 		user.visible_message(span_notice("[user] checks [user.p_their()] card."), span_notice("The card reads: [cardname]."))
 		if(blank)
-			. += span_notice("The card is blank. Write on it with a pen.")
+			. += span_info("The card is blank. Write on it with a pen.")
 	else if(HAS_TRAIT(user, TRAIT_XRAY_VISION))
-		. += span_notice("You scan the card with your x-ray vision and it reads: [cardname].")
+		. += span_info("You scan the card with your x-ray vision and it reads: [cardname].")
 	else
-		. += span_warning("You need to have the card in your hand to check it!")
+		. += span_alert("You need to have the card in your hand to check it!")
 
 	var/marked_color = getMarkedColor(user)
 	if(marked_color)
-		. += span_notice("The card has a [marked_color] mark on the corner!")
+		. += span_info("The card has a [marked_color] mark on the corner!")
 
 /obj/item/toy/singlecard/add_context(atom/source, list/context, obj/item/held_item, mob/living/user)
 	if(isnull(held_item) || src == held_item)

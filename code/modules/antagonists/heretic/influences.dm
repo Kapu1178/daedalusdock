@@ -300,7 +300,7 @@
 	if(prob(50))
 		return
 
-	examine_list += span_warning("[source]'s hand seems to be glowing a [span_hypnophrase("strange purple")]...")
+	examine_list += span_alert("[source]'s hand seems to be glowing a [span_hypnophrase("strange purple")]...")
 
 /*
  * Add a mind to the list of tracked minds,

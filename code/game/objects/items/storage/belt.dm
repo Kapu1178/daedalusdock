@@ -828,7 +828,7 @@ TYPEINFO_DEF(/obj/item/storage/belt/champion)
 /obj/item/storage/belt/sabre/examine(mob/user)
 	. = ..()
 	if(length(contents))
-		. += span_notice("Alt-click it to quickly draw the blade.")
+		. += span_info("Alt-click it to quickly draw the blade.")
 
 /obj/item/storage/belt/sabre/AltClick(mob/user)
 	if(!user.canUseTopic(src, USE_CLOSE|USE_DEXTERITY|USE_NEED_HANDS))

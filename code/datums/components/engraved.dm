@@ -58,7 +58,7 @@
 /datum/component/engraved/proc/on_examine(datum/source, mob/user, list/examine_list)
 	SIGNAL_HANDLER
 	examine_list += span_boldnotice(engraved_description)
-	examine_list += span_notice("You can probably get this out with a <b>welding tool</b>.")
+	examine_list += span_info("You can probably get this out with a <b>welding tool</b>.")
 
 /datum/component/engraved/proc/on_tool_act(datum/source, mob/user, obj/item/tool)
 	SIGNAL_HANDLER

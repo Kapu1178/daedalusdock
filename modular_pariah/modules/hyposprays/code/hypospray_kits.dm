@@ -14,7 +14,7 @@
 //Code to give hypospray kits selectable paterns.
 /obj/item/storage/hypospraykit/examine(mob/living/user)
 	. = ..()
-	. += span_notice("Ctrl-Shift-Click to reskin this")
+	. += span_info("Ctrl-Shift-Click to reskin this")
 
 /obj/item/storage/hypospraykit/Initialize()
 	. = ..()

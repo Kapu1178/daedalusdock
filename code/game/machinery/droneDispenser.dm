@@ -126,7 +126,7 @@
 /obj/machinery/drone_dispenser/examine(mob/user)
 	. = ..()
 	if((mode == DRONE_RECHARGING) && !machine_stat && recharging_text)
-		. += span_warning("[recharging_text]")
+		. += span_alert("[recharging_text]")
 
 /obj/machinery/drone_dispenser/process()
 	..()

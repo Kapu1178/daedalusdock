@@ -81,7 +81,7 @@
 
 /obj/item/circuit_component/printer/proc/on_examine(datum/source, mob/user, list/examine_list)
 	SIGNAL_HANDLER
-	examine_list += span_notice("It's a printer component installed in. Right-click with paper to reload it.")
+	examine_list += span_info("It's a printer component installed in. Right-click with paper to reload it.")
 
 /obj/item/circuit_component/printer/attackby(obj/item/item, mob/living/user, params)
 	if(istype(item, /obj/item/paper))

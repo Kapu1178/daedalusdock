@@ -331,7 +331,7 @@
 	if(welded)
 		. += "It seems welded shut."
 	if(!COOLDOWN_FINISHED(src, hibernating))
-		. += span_notice("It is sleeping to conserve power.")
+		. += span_info("It is sleeping to conserve power.")
 
 /obj/machinery/atmospherics/components/unary/vent_scrubber/attack_alien(mob/user, list/modifiers)
 	if(!welded || !(do_after(user, src, 20)))

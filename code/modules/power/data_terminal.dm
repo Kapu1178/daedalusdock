@@ -105,7 +105,7 @@
 
 /obj/item/data_terminal_construct/examine(mob/user)
 	. = ..()
-	. += span_notice("You can [span_bold("screw")] it to the floor to install it.")
+	. += span_info("You can [span_bold("screw")] it to the floor to install it.")
 
 /obj/item/data_terminal_construct/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ..()

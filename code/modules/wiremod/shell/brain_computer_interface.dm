@@ -204,7 +204,7 @@
 	SIGNAL_HANDLER
 
 	if (isobserver(mob))
-		examine_text += span_notice("[source.p_they(capitalized = TRUE)] [source.p_have()] <a href='?src=[REF(src)];open_bci=1'>\a [parent] implanted in [source.p_them()]</a>.")
+		examine_text += span_info("[source.p_they(capitalized = TRUE)] [source.p_have()] <a href='?src=[REF(src)];open_bci=1'>\a [parent] implanted in [source.p_them()]</a>.")
 
 /obj/item/circuit_component/bci_core/Topic(href, list/href_list)
 	..()
@@ -300,9 +300,9 @@
 	. = ..()
 
 	if (isnull(bci_to_implant?.resolve()))
-		. += span_notice("There is no BCI inserted.")
+		. += span_info("There is no BCI inserted.")
 	else
-		. += span_notice("Right-click to remove current BCI.")
+		. += span_info("Right-click to remove current BCI.")
 
 /obj/machinery/bci_implanter/proc/set_busy(status, working_icon)
 	busy = status

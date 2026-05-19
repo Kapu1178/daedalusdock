@@ -168,11 +168,11 @@
 /obj/item/clothing/neck/link_scryer/examine(mob/user)
 	. = ..()
 	if(cell)
-		. += span_notice("The battery charge reads [cell.percent()]%. <b>Right-click</b> with an empty hand to remove it.")
+		. += span_info("The battery charge reads [cell.percent()]%. <b>Right-click</b> with an empty hand to remove it.")
 	else
-		. += span_notice("It is missing a battery, one can be installed by clicking with a power cell on it.")
-	. += span_notice("The MODlink ID is [mod_link.id], frequency is [mod_link.frequency || "unset"]. <b>Right-click</b> with multitool to copy/imprint frequency.")
-	. += span_notice("Use in hand to set name.")
+		. += span_info("It is missing a battery, one can be installed by clicking with a power cell on it.")
+	. += span_info("The MODlink ID is [mod_link.id], frequency is [mod_link.frequency || "unset"]. <b>Right-click</b> with multitool to copy/imprint frequency.")
+	. += span_info("Use in hand to set name.")
 
 /obj/item/clothing/neck/link_scryer/equipped(mob/living/user, slot)
 	. = ..()

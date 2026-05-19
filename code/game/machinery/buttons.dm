@@ -331,8 +331,8 @@ TYPEINFO_DEF(/obj/item/wallframe/button)
 
 /obj/machinery/button/elevator/examine(mob/user)
 	. = ..()
-	. += span_notice("There's a small inscription on the button...")
-	. += span_notice("THIS CALLS THE ELEVATOR! IT DOES NOT OPERATE IT! Interact with the elevator itself to use it!")
+	. += span_info("There's a small inscription on the button...")
+	. += span_info("THIS CALLS THE ELEVATOR! IT DOES NOT OPERATE IT! Interact with the elevator itself to use it!")
 
 /obj/machinery/button/tram
 	name = "tram caller"
@@ -350,5 +350,5 @@ TYPEINFO_DEF(/obj/item/wallframe/button)
 
 /obj/machinery/button/tram/examine(mob/user)
 	. = ..()
-	. += span_notice("There's a small inscription on the button...")
-	. += span_notice("THIS CALLS THE TRAM! IT DOES NOT OPERATE IT! The console on the tram tells it where to go!")
+	. += span_info("There's a small inscription on the button...")
+	. += span_info("THIS CALLS THE TRAM! IT DOES NOT OPERATE IT! The console on the tram tells it where to go!")

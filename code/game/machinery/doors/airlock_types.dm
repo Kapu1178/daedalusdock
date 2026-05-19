@@ -355,7 +355,7 @@ TYPEINFO_DEF(/obj/machinery/door/airlock/plasma)
 /obj/machinery/door/airlock/external/examine(mob/user)
 	. = ..()
 	if(space_dir)
-		. += span_notice("It has labels indicating that it has an emergency mechanism to open from the [dir2text(space_dir)] side with <b>just your hands</b> even if there's no power.")
+		. += span_info("It has labels indicating that it has an emergency mechanism to open from the [dir2text(space_dir)] side with <b>just your hands</b> even if there's no power.")
 
 /obj/machinery/door/airlock/external/cyclelinkairlock()
 	. = ..()

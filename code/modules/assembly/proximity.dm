@@ -27,7 +27,7 @@ TYPEINFO_DEF(/obj/item/assembly/prox_sensor)
 
 /obj/item/assembly/prox_sensor/examine(mob/user)
 	. = ..()
-	. += span_notice("The proximity sensor is [timing ? "arming" : (scanning ? "armed" : "disarmed")].")
+	. += span_info("The proximity sensor is [timing ? "arming" : (scanning ? "armed" : "disarmed")].")
 
 /obj/item/assembly/prox_sensor/activate()
 	if(!..())

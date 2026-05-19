@@ -33,11 +33,11 @@
 
 /obj/machinery/quantumpad/examine(mob/user)
 	. = ..()
-	. += span_notice("It is [ linked_pad ? "currently" : "not"] linked to another pad.")
+	. += span_info("It is [ linked_pad ? "currently" : "not"] linked to another pad.")
 	if(!panel_open)
-		. += span_notice("The panel is <i>screwed</i> in, obstructing the linking device.")
+		. += span_info("The panel is <i>screwed</i> in, obstructing the linking device.")
 	else
-		. += span_notice("The <i>linking</i> device is now able to be <i>scanned<i> with a multitool.")
+		. += span_info("The <i>linking</i> device is now able to be <i>scanned<i> with a multitool.")
 
 /obj/machinery/quantumpad/RefreshParts()
 	. = ..()

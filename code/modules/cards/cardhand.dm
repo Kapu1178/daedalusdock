@@ -39,10 +39,10 @@
 	. = ..()
 	for(var/obj/item/toy/singlecard/card in cards)
 		if(HAS_TRAIT(user, TRAIT_XRAY_VISION))
-			. += span_notice("You scan the cardhand with your x-ray vision and there is a: [card.cardname]")
+			. += span_info("You scan the cardhand with your x-ray vision and there is a: [card.cardname]")
 		var/marked_color = card.getMarkedColor(user)
 		if(marked_color)
-			. += span_notice("There is a [marked_color] mark on the corner of a card in the cardhand!")
+			. += span_info("There is a [marked_color] mark on the corner of a card in the cardhand!")
 
 /obj/item/toy/cards/cardhand/add_context(atom/source, list/context, obj/item/held_item, mob/living/user)
 	if(istype(held_item, /obj/item/toy/cards/deck))

@@ -41,9 +41,9 @@
 /obj/item/reagent_containers/examine()
 	. = ..()
 	if(possible_transfer_amounts.len > 1)
-		. += span_notice("Left-click or right-click in-hand to increase or decrease its transfer amount.")
+		. += span_info("Left-click or right-click in-hand to increase or decrease its transfer amount.")
 	else if(possible_transfer_amounts.len)
-		. += span_notice("Left-click or right-click in-hand to view its transfer amount.")
+		. += span_info("Left-click or right-click in-hand to view its transfer amount.")
 
 /obj/item/reagent_containers/create_reagents(max_vol, flags)
 	. = ..()

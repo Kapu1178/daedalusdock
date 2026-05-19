@@ -122,13 +122,13 @@ TYPEINFO_DEF(/obj/machinery/portable_atmospherics/canister)
 
 /obj/machinery/portable_atmospherics/canister/examine(user)
 	. = ..()
-	. += span_notice("A sticker on its side says <b>MAX SAFE PRESSURE: [siunit_pressure(initial(pressure_limit), 0)]; MAX SAFE TEMPERATURE: [siunit(heat_limit, "K", 0)]</b>.")
+	. += span_info("A sticker on its side says <b>MAX SAFE PRESSURE: [siunit_pressure(initial(pressure_limit), 0)]; MAX SAFE TEMPERATURE: [siunit(heat_limit, "K", 0)]</b>.")
 	if(internal_cell)
-		. += span_notice("The internal cell has [internal_cell.percent()]% of its total charge.")
+		. += span_info("The internal cell has [internal_cell.percent()]% of its total charge.")
 	else
-		. += span_notice("Warning, no cell installed, use a screwdriver to open the hatch and insert one.")
+		. += span_info("Warning, no cell installed, use a screwdriver to open the hatch and insert one.")
 	if(cell_container_opened)
-		. += span_notice("Cell hatch open, close it with a screwdriver.")
+		. += span_info("Cell hatch open, close it with a screwdriver.")
 
 // Please keep the canister types sorted
 // Basic canister per gas below here

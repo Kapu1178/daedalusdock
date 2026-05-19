@@ -33,7 +33,7 @@
 /obj/machinery/teleport/hub/examine(mob/user)
 	. = ..()
 	if(in_range(user, src) || isobserver(user))
-		. += span_notice("The status display reads: Probability of malfunction decreased by <b>[(accuracy*25)-25]%</b>.")
+		. += span_info("The status display reads: Probability of malfunction decreased by <b>[(accuracy*25)-25]%</b>.")
 
 /obj/machinery/teleport/hub/proc/link_power_station()
 	if(power_station)
@@ -129,11 +129,11 @@
 /obj/machinery/teleport/station/examine(mob/user)
 	. = ..()
 	if(!panel_open)
-		. += span_notice("The panel is <i>screwed</i> in, obstructing the linking device and wiring panel.")
+		. += span_info("The panel is <i>screwed</i> in, obstructing the linking device and wiring panel.")
 	else
-		. += span_notice("The <i>linking</i> device is now able to be <i>scanned</i> with a multitool.")
+		. += span_info("The <i>linking</i> device is now able to be <i>scanned</i> with a multitool.")
 	if(in_range(user, src) || isobserver(user))
-		. += span_notice("The status display reads: This station can be linked to <b>[efficiency]</b> other station(s).")
+		. += span_info("The status display reads: This station can be linked to <b>[efficiency]</b> other station(s).")
 
 /obj/machinery/teleport/station/proc/link_console_and_hub()
 	for(var/direction in GLOB.cardinals)

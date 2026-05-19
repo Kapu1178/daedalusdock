@@ -29,7 +29,7 @@
 /obj/machinery/recharger/examine(mob/user)
 	. = ..()
 	if(!in_range(user, src) && !issilicon(user) && !isobserver(user))
-		. += span_warning("You're too far away to examine [src]'s contents and display!")
+		. += span_alert("You're too far away to examine [src]'s contents and display!")
 		return
 
 	if(charging)
@@ -37,11 +37,11 @@
 		[span_notice("- \A [charging].")]"}
 
 	if(!(machine_stat & (NOPOWER|BROKEN)))
-		. += span_notice("The status display reads:")
-		. += span_notice("- Recharging <b>[recharge_coeff*10]%</b> cell charge per cycle.")
+		. += span_info("The status display reads:")
+		. += span_info("- Recharging <b>[recharge_coeff*10]%</b> cell charge per cycle.")
 		if(charging)
 			var/obj/item/stock_parts/cell/C = charging.get_cell()
-			. += span_notice("- \The [charging]'s cell is at <b>[C.percent()]%</b>.")
+			. += span_info("- \The [charging]'s cell is at <b>[C.percent()]%</b>.")
 
 
 /obj/machinery/recharger/proc/setCharging(new_charging)

@@ -77,7 +77,7 @@ TYPEINFO_DEF(/obj/item/shield/riot)
 		if(25 to 50)
 			. += span_info("It appears heavily damaged.")
 		if(0 to 25)
-			. += span_warning("It's falling apart!")
+			. += span_alert("It's falling apart!")
 
 /obj/item/shield/riot/proc/shatter(mob/living/carbon/human/owner)
 	playsound(owner, 'sound/effects/glassbr3.ogg', 100)

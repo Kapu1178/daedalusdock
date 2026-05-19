@@ -107,7 +107,7 @@
 	. = ..()
 
 	if(!beehome)
-		. += span_warning("This bee is homeless!")
+		. += span_alert("This bee is homeless!")
 
 /mob/living/simple_animal/hostile/bee/ListTargets() // Bee processing is expessive, so we override them finding targets here.
 	if(!search_objects) //In case we want to have purely hostile bees
