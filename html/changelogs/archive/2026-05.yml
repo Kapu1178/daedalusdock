@@ -4,3 +4,10 @@
 2026-05-15:
   francinum:
   - refactor: Computer4 styling has been altered and is now packet-safe.
+2026-05-19:
+  Kapu1178:
+  - tweak: Renamed the Chemist to the Alchemist
+  - tweak: Renamed Chemistry (location) to the Apothecary
+  - rscadd: Appending two exclamation points to a message will make your character
+      YELL VERY VERY LOUDLY!!
+  - bugfix: Runechat no longer "jitters" for a frame.
