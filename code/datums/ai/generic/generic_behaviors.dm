@@ -158,7 +158,7 @@
 		return BEHAVIOR_PERFORM_COOLDOWN | BEHAVIOR_PERFORM_FAILURE
 
 	if(!(living_pawn.is_holding(target)))
-		if(!living_pawn.put_in_hands(target))
+		if(!target.IsReachableBy(living_pawn) || !living_pawn.put_in_hands(target))
 			return BEHAVIOR_PERFORM_COOLDOWN | BEHAVIOR_PERFORM_FAILURE
 
 	target.melee_attack_chain(living_pawn, living_pawn)

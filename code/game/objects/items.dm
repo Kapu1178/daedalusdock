@@ -1799,6 +1799,7 @@ DEFINE_INTERACTABLE(/obj/item)
 	pickup_animation.layer = ABOVE_MOB_LAYER
 	pickup_animation.transform.Scale(0.75)
 	pickup_animation.appearance_flags = APPEARANCE_UI_IGNORE_ALPHA
+	pickup_animation.maptext = null
 
 	// Preventing overlay lighting images from stacking during pickup animations.
 	remove_lighting_underlays(pickup_animation)

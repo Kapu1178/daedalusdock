@@ -118,6 +118,10 @@
 
 	// Register client who owns this message
 	owned_by = owner.client
+	if(isnull(owned_by))
+		qdel(src)
+		return
+
 	RegisterSignal(owned_by, COMSIG_PARENT_QDELETING, PROC_REF(on_parent_qdel))
 
 	// Remove spans in the message from things like the recorder
