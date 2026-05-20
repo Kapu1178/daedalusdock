@@ -271,8 +271,8 @@
 		. = span_notice("[user] touches the end of [src] to \the [A], using the residual heat to ignite it in a puff of smoke. What a badass.")
 
 /obj/item/gun/ballistic/revolver/detective
-	name = "\improper Colt Detective Special"
-	desc = "A revolver with a small horse engraved into it."
+	name = "\improper BOLT Instigator"
+	desc = "A revolver with a small lightning bolt engraved into it."
 	mag_type = /obj/item/ammo_box/magazine/internal/cylinder/rev38
 	icon_state = "detective"
 	fire_sound = 'sound/weapons/gun/revolver/shot.ogg'
@@ -290,7 +290,7 @@
 	var/datum/roll_result/result = user.get_examine_result("detgun_examine", 13, /datum/rpg_skill/fourteen_eyes)
 	if(result?.outcome >= SUCCESS)
 		result.do_skill_sound(user)
-		. += result.create_tooltip("No mere firearm – a cultural artifact. An all-time classic, chambered in .38 Special and packing six rounds, perfect for six criminals. ", body_only = TRUE)
+		. += result.create_tooltip("No mere firearm – a cultural artifact. BOLT was the leading arms manufacturer for the Federation before collaspe of the resonance highway. Any weapons floating around the sector are exceedingly rare and typically in the possession of the Federation Remnant.", body_only = TRUE)
 
 /obj/item/gun/ballistic/revolver/detective/disco_flavor(mob/living/carbon/human/user, nearby, is_station_level)
 	. = ..()
