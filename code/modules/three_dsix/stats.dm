@@ -436,7 +436,39 @@
 		client?.give_award(/datum/award/achievement/disco_inferno)
 	return returned_result
 
+/// Helper proc for disco_flavor() and disco-in-examine effects.
+/mob/proc/disco_made_easy(
+	id,
+	requirement = 14,
+	skill_path = /datum/rpg_skill/fourteen_eyes,
+	modifier,
+	is_examine = FALSE,
+	success_text,
+	crit_success_text,
+	failure_text,
+	crit_failure_text,
+	trait_succeed,
+	trait_fail
+) as text
+	var/datum/roll_result/result = get_examine_result(id, requirement, skill_path, modifier, trait_succeed, trait_fail, is_examine)
+	if(isnull(result))
+		return
 
+	var/text
+	if(result.outcome == CRIT_FAILURE && crit_failure_text)
+		text = result.create_tooltip(crit_failure_text, is_examine)
+	else if(result.outcome <= FAILURE && failure_text)
+		text = result.create_tooltip(failure_text, is_examine)
+	else if(result.outcome == CRIT_SUCCESS && crit_success_text)
+		text = result.create_tooltip(crit_success_text, is_examine)
+	else if(success_text)
+		text = result.create_tooltip(success_text, is_examine)
+
+	if(text)
+		result.do_skill_sound(src)
+		if(!is_examine)
+			to_chat(src, text)
+	return text
 
 /mob/living/carbon/human/verb/check_skills()
 	set name = "Character Sheet"

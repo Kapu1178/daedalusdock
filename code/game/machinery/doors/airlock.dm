@@ -602,7 +602,7 @@
 		var/datum/roll_result/result = user.get_examine_result("airlock", 12)
 		if(result?.outcome >= SUCCESS)
 			result.do_skill_sound(user)
-			. += result.create_tooltip("Nearly two thousand kilograms of cold steel, and a time-tested design.", body_only = TRUE)
+			. += result.create_tooltip("Nearly two thousand kilograms of cold steel, and a time-tested Saxon design.", body_only = TRUE)
 
 /obj/machinery/door/airlock/disco_flavor(mob/living/carbon/human/user, nearby, is_station_level)
 	. = ..()

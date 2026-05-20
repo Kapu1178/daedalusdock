@@ -616,6 +616,7 @@
 	else
 		result = examinify.examine(src) // if a tree is examined but no client is there to see it, did the tree ever really exist?
 
+	list_clear_nulls(result)
 
 	if(result[length(result)] == "") // Pop off a trailing space
 		result.len -= 1
