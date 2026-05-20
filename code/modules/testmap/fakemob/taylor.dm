@@ -22,16 +22,6 @@
 	taylor.equipOutfit(/datum/outfit/memory/taylor)
 	return taylor
 
-/obj/effect/fakemob/taylor/
-/obj/effect/fakemob/taylor/reset_dialogue()
-	. = ..()
-	dialogue = shuffle(list(
-		"Please leave.",
-		"I can't stand to see you.",
-		"I'm working on it.",
-		"I'm sorry.",
-	))
-
 /obj/effect/fakemob/taylor/item_interaction(mob/living/user, obj/item/tool, list/modifiers)
 	if(given_item || giving_item)
 		return
@@ -41,6 +31,13 @@
 		SSnowhere.you_did_something_right()
 		COOLDOWN_START(src, dialogue_cd, 10 SECONDS)
 		reset_dialogue()
+		dialogue = shuffle(list(
+				"Please leave.",
+				"I can't stand to see you.",
+				"I'm working on it.",
+				"I'm sorry.",
+			))
+
 		spawn(-1)
 			face_atom(user)
 			sleep(1 SECONDS)
@@ -48,7 +45,7 @@
 			sleep(1 SECONDS)
 			var/obj/item/disk/data/floppy/document/code/disk = new
 			if(!user.put_in_hands(disk))
-				disk.forceMove(get_turf(src))
+				disk.forceMove(get_turf(user))
 			sleep(2 SECONDS)
 			setDir(SOUTH)
 		return ITEM_INTERACT_SUCCESS
