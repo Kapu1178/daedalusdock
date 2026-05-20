@@ -734,7 +734,7 @@
 	//reset to baseline
 	idle_power_usage = initial(idle_power_usage)
 	active_power_usage = initial(active_power_usage)
-	if(length(component_parts.len))
+	if(!length(component_parts))
 		return
 
 	var/parts_energy_rating = 0
