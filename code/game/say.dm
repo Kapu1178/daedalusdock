@@ -74,7 +74,7 @@ And the base of the send_speech() proc, which is the core of saycode.
 		if(channel_template)
 			radio_span = channel_template.span
 		//HACK: Presently used so that phones (manually call compose_message()) render chat as a faux radio.
-		else if(islist(radio_span))
+		else if(islist(radio_freq))
 			radio_span = radio_freq["span"]
 
 		if(radio_span)
