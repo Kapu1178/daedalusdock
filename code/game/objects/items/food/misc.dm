@@ -422,7 +422,7 @@
 
 /obj/item/food/lollipop
 	name = "lollipop"
-	desc = "A delicious lollipop. Makes for a great Valentine's present."
+	desc = "Doc Iron's POP-EM'S! WARNING: May cause spontaneous detonation, ingest with caution"
 	icon = 'icons/obj/lollipop.dmi'
 	icon_state = "lollipop_stick"
 	inhand_icon_state = "lollipop_stick"
