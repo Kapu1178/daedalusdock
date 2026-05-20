@@ -8,12 +8,13 @@
 	announceWhen = 50
 	endWhen = 20
 	var/list/area/areasToOpen = list()
-	var/list/potential_areas = list(/area/station/command,
-									/area/station/engineering,
-									/area/station/medical,
-									/area/station/security,
-									/area/station/cargo,
-									/area/station/science)
+	var/list/potential_areas = list(
+		/area/station/command,
+		/area/station/engineering,
+		/area/station/medical,
+		/area/station/security,
+		/area/station/cargo,
+	)
 	var/severity = 1
 
 
@@ -38,12 +39,13 @@
 
 /datum/round_event/grey_tide/start()
 	for(var/area/A in areasToOpen)
-		for(var/obj/machinery/light/L in A)
+		for(var/obj/machinery/light/L in A.lights)
 			L.flicker(10)
 
 /datum/round_event/grey_tide/end()
 	for(var/area/A in areasToOpen)
 		for(var/obj/O in A)
+			CHECK_TICK
 			if(istype(O, /obj/structure/closet/secure_closet))
 				var/obj/structure/closet/secure_closet/temp = O
 				temp.locked = FALSE

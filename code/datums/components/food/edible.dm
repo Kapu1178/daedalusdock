@@ -335,11 +335,11 @@ Behavior that's still missing from this component that original food items had t
 			//if we're too full, return because we can't eat whatever it is we're trying to eat
 			return
 
-		else if(fullness > 500)
+		else if(fullness > NUTRITION_LEVEL_FULL)
 			message_to_nearby_audience = span_notice("[eater] unwillingly [eatverb]s a bit of \the [parent].")
 			message_to_consumer = span_notice("You unwillingly [eatverb] a bit of \the [parent].")
 
-		else if(fullness > 150)
+		else if(fullness > NUTRITION_LEVEL_STARVING)
 			message_to_nearby_audience = span_notice("[eater] [eatverb]s \the [parent].")
 			message_to_consumer = span_notice("You [eatverb] \the [parent].")
 		else if(fullness > 50)

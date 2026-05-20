@@ -603,6 +603,7 @@ TYPEINFO_DEF(/obj/item/radio)
 /// An internal type to give to machines, please stop giving machines the AI's headset.
 /obj/item/radio/internal
 	command = TRUE
+	canhear_range = -1
 
 /obj/item/radio/internal/Initialize(mapload)
 	keyslot = new /obj/item/encryptionkey/all_station(src)

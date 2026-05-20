@@ -52,8 +52,10 @@ INITIALIZE_IMMEDIATE(/atom/movable/screen)
 
 /atom/movable/screen/Destroy()
 	if(!QDELETED(hud))
-		hud.screen_groups?[hud_group_key] -= src
-		hud.screen_objects -= hud_key
+		if(hud.screen_groups?[hud_group_key])
+			hud.screen_groups[hud_group_key] -= src
+		if(hud.screen_objects)
+			hud.screen_objects -= hud_key
 
 	master_ref = null
 	hud = null

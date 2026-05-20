@@ -900,7 +900,6 @@ GLOBAL_LIST_INIT(strippable_parrot_items, create_strippable_list(list(
 	if(rounds_survived == longest_survival)
 		speak += pick("...[longest_survival].", "The things I've seen!", "I have lived many lives!", "What are you before me?")
 		desc += " Old as sin, and just as loud. Claimed to be [rounds_survived]."
-		speak_chance = 20 //His hubris has made him more annoying/easier to justify killing
 		add_atom_colour("#EEEE22", FIXED_COLOUR_PRIORITY)
 	else if(rounds_survived == longest_deathstreak)
 		speak += pick("What are you waiting for!", "Violence breeds violence!", "Blood! Blood!", "Strike me down if you dare!")
