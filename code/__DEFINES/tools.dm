@@ -35,7 +35,7 @@
 #define ITEM_INTERACT_ATTACK (1<<2)
 
 /// Combination flag for any item interaction that blocks the rest of the attack chain
-#define ITEM_INTERACT_ANY_BLOCKER (ITEM_INTERACT_SUCCESS | ITEM_INTERACT_BLOCKING)
+#define ITEM_INTERACT_ANY_BLOCKER (ITEM_INTERACT_SUCCESS | ITEM_INTERACT_BLOCKING | ITEM_INTERACT_ATTACK)
 
 /// Put this in interact_with_atom to just attack instead of interacting if the user has combat mode on.
 #define ATTACK_IF_COMBAT_MODE(user, item) if(user.combat_mode && item.combat_mode_force_attack) { return ITEM_INTERACT_ATTACK }
