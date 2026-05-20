@@ -377,7 +377,7 @@
 			The Colony Echo
 		</div>
 		<div class='newspaper_headline'>
-			FEDERATION SIEZES CONTROL OF [uppertext(station_name())]
+			FEDERATION REMNANT SIEZES CONTROL OF [uppertext(station_name())]
 		</div>
 		<div class='content'>
 			<div class='columns'>
@@ -388,9 +388,12 @@
 					<div class='headline subhead'>
 						An ill omen of what is to come?
 					</div>
-					The Minervan Federation has come aboard our humble remote colony and declared a state of emergency. They brought with them
+					The Federation Remnant has come aboard our humble remote colony and declared a state of emergency. They brought with them
 					a <u>praetorian guard</u> in the form of mercenaries from the Mars People's Coalition. Their "Superintendent" proclaims himself the representative of the Federation's will.
 					Not more than 72 hours ago were we enjoying peace on our station, what does this mean for our people?
+
+					Fifty years ago the Resonance Highway collapsed and the Federation's hold on the sector large went with it. The Federation Remnant has been aggressively
+					expanding it's territory as of late, spelling trouble for minor colonies in the region.
 				</div>
 				<div class='column'>
 					<div class='headline'>
