@@ -34,6 +34,10 @@ TYPEINFO_DEF(/obj/item/wrench)
 	playsound(loc, 'sound/weapons/genhit.ogg', 50, TRUE, -1)
 	return (BRUTELOSS)
 
+/obj/item/wrench/disco_flavor(mob/living/carbon/human/user, nearby, is_station_level)
+	. = ..()
+	user.disco_made_easy("wrench_combat", 8, /datum/rpg_skill/bloodsport, success_text = "It has a pleasant heft, would make short work of an unprepared assailant.")
+
 TYPEINFO_DEF(/obj/item/wrench/abductor)
 	default_materials = list(/datum/material/iron = 5000, /datum/material/silver = 2500, /datum/material/plasma = 1000, /datum/material/titanium = 2000, /datum/material/diamond = 2000)
 
