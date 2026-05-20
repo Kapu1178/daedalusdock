@@ -294,11 +294,8 @@
 
 /obj/item/gun/ballistic/revolver/detective/disco_flavor(mob/living/carbon/human/user, nearby, is_station_level)
 	. = ..()
-	if(user.mind?.assigned_role?.title != JOB_DETECTIVE)
-		return
-
-	var/datum/roll_result/result = user.get_examine_result("detgun_suicide_flavor", 13, /datum/rpg_skill/electric_body, only_once = TRUE)
-	if(result?.outcome >= SUCCESS)
+	var/datum/roll_result/result = user.get_examine_result("detgun_suicide_flavor", 1, /datum/rpg_skill/electric_body, only_once = TRUE, trait_fail = TRAIT_DICK)
+	if(result?.outcome <= FAILURE)
 		result.do_skill_sound(user)
 		to_chat(
 			user,
