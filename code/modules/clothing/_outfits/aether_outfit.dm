@@ -37,6 +37,11 @@ TYPEINFO_DEF(/obj/item/clothing/mask/utopia)
 	permeability_coefficient = 0.01
 	clothing_flags = parent_type::clothing_flags | MASKINTERNALS
 
+/obj/item/clothing/mask/utopia/augur/Initialize(mapload)
+	. = ..()
+	AddComponent(/datum/component/disco_clothing, "augur_mask_lore", 8, success_text = "A high-ranking member of the Aether Society. They lead the local medical ward, ensuring service with a smile.")
+	AddComponent(/datum/component/disco_clothing, "augur_mask_unsettling", 12, /datum/rpg_skill/willpower, failure_text = "A chill runs down your spine. That awful smile...")
+
 /obj/item/clothing/mask/utopia/augur/disco_flavor(mob/living/carbon/human/user, nearby, is_station_level)
 	. = ..()
 	var/datum/roll_result/result = user.get_examine_result("auger_mask_flavor", 15, only_once = TRUE)
@@ -74,6 +79,7 @@ TYPEINFO_DEF(/obj/item/clothing/under/aether_robes)
 /obj/item/clothing/under/aether_robes/Initialize(mapload)
 	. = ..()
 	AddComponent(/datum/component/hooded, /obj/item/clothing/head/aether_hood)
+	AddComponent(/datum/component/disco_clothing, "aether_robe_wearer", 8, success_text = "They're here to help, even if they don't look the part.")
 
 /obj/item/clothing/under/aether_robes/examine(mob/user)
 	. = ..()
