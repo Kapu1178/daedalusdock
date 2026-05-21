@@ -155,6 +155,10 @@
 	inhand_icon_state = "r_suit"
 	supports_variations_flags = CLOTHING_DIGITIGRADE_VARIATION | CLOTHING_TESHARI_VARIATION | CLOTHING_VOX_VARIATION //need to do these
 
+/obj/item/clothing/under/rank/security/marshal/Initialize(mapload)
+	. = ..()
+	AddComponent(/datum/component/disco_clothing, "marshal__outfit_parent_examine", 8, success_text = "A big dickhead with an even bigger gun. Their word is law and it isn't a democracy. Prick.")
+
 //old hos stuff
 /obj/item/clothing/under/rank/security/head_of_security
 	name = "security marshal's jumpsuit"
