@@ -402,7 +402,7 @@
 					COOLDOWN_START(src, pain_cooldowns[highest_bp_pain_class], 60 SECONDS)
 
 			if(msg)
-				pain_message(msg, highest_bp_pain, TRUE)
+				notify_pain(highest_bp_pain, msg, TRUE)
 
 
 	// Damage to internal organs hurts a lot.
