@@ -875,6 +875,7 @@
 #include "code\datums\components\dejavu.dm"
 #include "code\datums\components\deployable.dm"
 #include "code\datums\components\diggable.dm"
+#include "code\datums\components\disco_clothing.dm"
 #include "code\datums\components\drift.dm"
 #include "code\datums\components\earprotection.dm"
 #include "code\datums\components\edit_complainer.dm"
