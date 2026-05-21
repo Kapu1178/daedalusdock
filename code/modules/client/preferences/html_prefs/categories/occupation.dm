@@ -41,17 +41,17 @@
 	var/static/priority2text = list("Never", "Low", "Medium", "High")
 
 	var/list/job_bans = get_job_bans(prefs.parent?.mob)
-	var/employer = prefs.read_preference(/datum/preference/choiced/employer)
-	employer = SSjob.GetEmployer(employer).type
+	var/datum/employer/employer = prefs.read_preference(/datum/preference/choiced/employer)
 
 	var/datum/preference/choiced/employer/employer_pref = GLOB.preference_entries[/datum/preference/choiced/employer]
-	var/info_button = button_element(prefs, "?", "pref_act=[/datum/preference/choiced/employer];info=1")
 
 	. += {"
-		<div class='flexColumn' style='justify-content: center;align-items: center; gap:3px; width:100%'>
-		<div class='computerLegend' style='margin: auto'><b>Faction</b></div>
-		<div style='font-size: 20px;text-align:center;width: 100%'>[employer_pref.get_button(prefs)][info_button]</div>
-		<div style='width: 100%'><HR></div>
+		<div class='flexColumn' style='justify-content: center;align-items: center; gap:3px;'>
+			<div class='computerLegend' style='margin: 4px auto'><b>Faction</b></div>
+			<div style='font-size: 20px;text-align:center;'>[employer_pref.get_button(prefs)]</div>
+			<div class='computerLegend' style='font-size: 1.2rem; margin: 4px auto;width:70%;height: 64px;'>
+			[employer.creator_info]
+			</div>
 		</div>
 	"}
 	// Table within a table for alignment, also allows you to easily add more columns.
