@@ -371,8 +371,8 @@
 	desc = "There's no label on this wine bottle."
 
 /obj/item/reagent_containers/cup/glass/bottle/wine/unlabeled/generate_vintage()
-	var/current_year = 77
-	var/year = rand(current_year-50,current_year)
+	var/current_year = CURRENT_STATION_YEAR
+	var/year = rand(current_year-100,current_year-10)
 	var/type = pick("Sparkling","Dry White","Sweet White","Rich White","Rose","Light Red","Medium Red","Bold Red","Dessert")
 	var/origin = pick("Ananke", "Daedalus","Syndicate","Local")
 	return "'[year] [origin] [type]"
