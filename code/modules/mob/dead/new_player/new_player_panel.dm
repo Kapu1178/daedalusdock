@@ -372,7 +372,7 @@
 
 /datum/new_player_panel/proc/view_primer()
 	var/content = {"
-	<div class='newspaper' style='height: 600px'>
+	<div class='newspaper' style='height: 650px'>
 		<div class='newspaper_header'>
 			The Colony Echo
 		</div>
@@ -391,8 +391,15 @@
 					The Federation Remnant has come aboard our humble remote colony and declared a state of emergency. They brought with them
 					a <u>praetorian guard</u> in the form of mercenaries from the Mars People's Coalition. Their "Superintendent" proclaims himself the representative of the Federation's will.
 					Not more than 72 hours ago were we enjoying peace on our station, what does this mean for our people?
-
-					Fifty years ago the Resonance Highway collapsed and the Federation's hold on the sector large went with it. The Federation Remnant has been aggressively
+				</div>
+				<div class='column'>
+					<div class='headline'>
+						200 Years Later
+					</div>
+					<div class='headline subhead'>
+						A Brief History
+					</div>
+					Two-hundred years ago an event known as the Little Bang occured which our connection to the rest of the Pool, along with the Federation's hold on the sector. The Federation Remnant has been aggressively
 					expanding it's territory as of late, spelling trouble for minor colonies in the region.
 				</div>
 				<div class='column'>
@@ -410,7 +417,7 @@
 	</div>
 	"}
 
-	var/datum/browser/popup = new(parent, "primer", "", 900, 600)
+	var/datum/browser/popup = new(parent, "primer", "", 900, 650)
 	popup.set_content(content)
 	popup.add_stylesheet("roundend", 'html/browser/primer.css')
 
