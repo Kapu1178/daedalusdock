@@ -40,7 +40,7 @@ TYPEINFO_DEF(/obj/item/clothing/mask/utopia)
 /obj/item/clothing/mask/utopia/augur/Initialize(mapload)
 	. = ..()
 	AddComponent(/datum/component/disco_clothing, "augur_mask_lore", 8, success_text = "A high-ranking member of the Aether Society. They lead the local medical ward, ensuring service with a smile.")
-	AddComponent(/datum/component/disco_clothing, "augur_mask_unsettling", 12, /datum/rpg_skill/willpower, failure_text = "A chill runs down your spine. That awful smile...")
+	AddComponent(/datum/component/disco_clothing, "augur_mask_unsettling", 12, /datum/rpg_skill/electric_body, failure_text = "A chill runs down your spine. That awful smile...")
 
 /obj/item/clothing/mask/utopia/augur/disco_flavor(mob/living/carbon/human/user, nearby, is_station_level)
 	. = ..()
