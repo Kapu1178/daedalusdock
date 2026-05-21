@@ -67950,10 +67950,10 @@
 /area/station/tcommsat/computer)
 "yaI" = (
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
-/obj/structure/plaque/static_plaque/golden/commission/meta,
 /obj/structure/cable/yellow{
 	icon_state = "3"
 	},
+/obj/structure/plaque/static_plaque/golden/commission/daedalus,
 /turf/open/floor/iron,
 /area/station/hallway/secondary/command)
 "yaL" = (

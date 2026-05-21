@@ -36,7 +36,7 @@
 	var/datum/roll_result/result = user.get_examine_result("fedmark_examine", 7)
 	if(result?.outcome >= SUCCESS)
 		result.do_skill_sound(user)
-		. += result.create_tooltip("The post-war currency instated by the Federation after its formation in '29.", body_only = TRUE)
+		. += result.create_tooltip("Despite the severance of the Federation's control on the sector, the Mark remains the dominant currency to maintain the status quo.", body_only = TRUE)
 
 /obj/item/stack/spacecash/get_item_credit_value()
 	return (amount*value)
