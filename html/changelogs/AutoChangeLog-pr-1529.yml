@@ -1,6 +1,0 @@
-author: Kapu1178
-delete-after: true
-changes:
-  - rscadd: Vending machines now accept cash.
-  - tweak: Adjusted the formula for sound falloff, everything should be SLIGHTLY louder
-      and notably more consistent.

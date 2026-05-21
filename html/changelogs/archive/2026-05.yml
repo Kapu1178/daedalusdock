@@ -11,3 +11,13 @@
   - rscadd: Appending two exclamation points to a message will make your character
       YELL VERY VERY LOUDLY!!
   - bugfix: Runechat no longer "jitters" for a frame.
+2026-05-21:
+  Kapu1178:
+  - rscadd: Vending machines now accept cash.
+  - tweak: Adjusted the formula for sound falloff, everything should be SLIGHTLY louder
+      and notably more consistent.
+  - bugfix: Some machines consume slightly less power.
+  - bugfix: Carrots don't break everything relating to hydroponics.
+  - bugfix: Internal radios no longer act as wire taps.
+  - bugfix: Monkeys are less hungry.
+  - bugfix: Runtimes.

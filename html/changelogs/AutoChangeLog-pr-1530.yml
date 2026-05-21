@@ -1,7 +1,0 @@
-author: Kapu1178
-delete-after: true
-changes:
-  - bugfix: Carrots don't break everything relating to hydroponics.
-  - bugfix: Internal radios no longer act as wire taps.
-  - bugfix: Monkeys are less hungry.
-  - bugfix: Runtimes.
