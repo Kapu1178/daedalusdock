@@ -49,6 +49,11 @@
 		view_primer()
 		return TRUE
 
+	if(href_list["change_character"])
+		var/datum/preferences/preferences = parent.client.prefs
+		preferences.change_character(usr)
+		return TRUE
+
 	if(href_list["character_setup"])
 		var/datum/preferences/preferences = parent.client.prefs
 		preferences.html_show(usr)
@@ -271,6 +276,9 @@
 					>[LINKIFY_CONSOLE_OPTION("Modify [name].txt", "character_setup=1")]
 				</div>
 				<div>
+					>[LINKIFY_CONSOLE_OPTION("Change Character.ps1", "change_character=1")]
+				</div>
+				<div>
 					>[CONSOLE_BACK]
 				</div>
 				<br>
@@ -299,7 +307,7 @@
 				<div class='flexItem'>[LINKIFY_READY("Observe", PLAYER_READY_TO_OBSERVE)]</div>
 			</div>
 		"}
-		output += "<div class='flexItem' style='margin-top: 8px'>[button_element(src, "View Station Manifests", "manifest=1")]</div>"
+		output += "<div class='flexItem' style='margin-top: 8px'>[button_element(src, "View Colony Census", "manifest=1")]</div>"
 	else
 		switch(parent.ready)
 			if(PLAYER_NOT_READY)
