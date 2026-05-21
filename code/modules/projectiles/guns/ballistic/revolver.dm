@@ -290,7 +290,7 @@
 	var/datum/roll_result/result = user.get_examine_result("detgun_examine", 13, /datum/rpg_skill/fourteen_eyes)
 	if(result?.outcome >= SUCCESS)
 		result.do_skill_sound(user)
-		. += result.create_tooltip("No mere firearm – a cultural artifact. BOLT was the leading arms manufacturer for the Federation before collaspe of the resonance highway. Any weapons floating around the sector are exceedingly rare and typically in the possession of the Federation Remnant.", body_only = TRUE)
+		. += result.create_tooltip("No mere firearm – a cultural artifact. BOLT was the leading arms manufacturer for the Federation before the Little Bang. Any weapons floating around the sector are exceedingly rare and typically in the possession of the Federation Remnant.", body_only = TRUE)
 
 /obj/item/gun/ballistic/revolver/detective/disco_flavor(mob/living/carbon/human/user, nearby, is_station_level)
 	. = ..()
