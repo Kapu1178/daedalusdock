@@ -755,3 +755,32 @@ span.color_holder_box {
 	min-height: 0;
 	flex-grow: 1;
 }
+
+.nppLanguageListContainer {
+	display: flex;
+	min-height: 0;
+	min-width: 40%;
+	max-width: 40%;
+	margin: 0 auto;
+}
+
+.nppLanguageList {
+	display: flex;
+	flex-direction: column;
+	overflow-y: auto;
+}
+
+.nppQuirkListContainer {
+	display: flex;
+	min-height: 0;
+	min-width: 40%;
+	max-width: 40%;
+	margin: 0 auto;
+}
+
+.nppQuirkList {
+	display: flex;
+	flex-direction: column;
+	overflow-y: auto;
+	width: 100%;
+}
