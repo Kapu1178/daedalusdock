@@ -611,28 +611,38 @@ SUBSYSTEM_DEF(job)
 			handle_auto_deadmin_roles(player_client, job.title)
 
 	if(player_client)
-		job.on_join_message(player_client, chosen_title)
 		job.on_join_popup(player_client, chosen_title)
 
-	if(player_client)
-		var/related_policy = get_policy(job.title)
-		if(related_policy)
-			to_chat(player_client, related_policy)
+	if(equipping.mind)
+		equipping.mind.roundstart_messages[ROUNDSTART_INFOKEY_JOB] = job.get_join_message(player_client, chosen_title)
+		var/policy = get_policy(job.title)
+		if(policy)
+			equipping.mind.roundstart_messages[ROUNDSTART_INFOKEY_POLICY] = "<span>[policy]</span>"
 
-		if(CONFIG_GET(number/minimal_access_threshold))
-			to_chat(player_client, span_notice("<B>As this station was initially staffed with a [CONFIG_GET(flag/jobs_have_minimal_access) ? "full crew, only your job's necessities" : "skeleton crew, additional access may"] have been added to your ID card.</B>"))
+		if(CONFIG_GET(number/minimal_access_threshold) && !CONFIG_GET(flag/jobs_have_minimal_access))
+			equipping.mind.roundstart_messages[ROUNDSTART_INFOKEY_OOC] += "As this colony is small, you may have expanded access on your identification card."
+
+		if(job.radio_help_message)
+			equipping.mind.roundstart_messages[ROUNDSTART_INFOKEY_OOC] += job.radio_help_message
 
 	if(ishuman(equipping))
 		var/mob/living/carbon/human/wageslave = equipping
 		var/datum/bank_account/bank = SSeconomy.bank_accounts_by_id["[wageslave.account_id]"]
 
-		wageslave.mind.set_note(NOTES_BANK_ACCOUNT, list("Account ID: [wageslave.account_id]<br>Account PIN: [bank.account_pin]"))
-		to_chat(player_client, span_obviousnotice("Your bank account pin is: <b>[bank.account_pin]</b>"))
+		wageslave.mind.set_note(NOTES_BANK_ACCOUNT, "Account ID: [wageslave.account_id]<br>Account PIN: [bank.account_pin]")
+		equipping.mind.roundstart_messages[ROUNDSTART_INFOKEY_MEMORIES] += span_info("Your bank account pin: <b>[bank.account_pin]</b>")
+
+		if(job.pinpad_key)
+			var/pin = SSid_access.get_static_pincode(job.pinpad_key)
+			equipping.mind.set_note(NOTES_DOOR_CODES, "The pin to your doors is [pin]")
+			equipping.mind.roundstart_messages[ROUNDSTART_INFOKEY_MEMORIES] += span_info("The pin to your doors: <b>[pin]</b>")
 
 		setup_alt_job_items(wageslave, job, player_client) //PARIAH EDIT ADDITION
 
 	job.after_spawn(equipping, player_client)
 
+	if(equipping.mind)
+		SSticker.OnRoundstart(CALLBACK(equipping.mind, TYPE_PROC_REF(/datum/mind, give_roundstart_message)))
 
 /datum/controller/subsystem/job/proc/handle_auto_deadmin_roles(client/C, rank)
 	if(!C?.holder)

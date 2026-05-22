@@ -155,6 +155,7 @@
 #include "code\__DEFINES\memory_defines.dm"
 #include "code\__DEFINES\mergers.dm"
 #include "code\__DEFINES\midrounds.dm"
+#include "code\__DEFINES\mind.dm"
 #include "code\__DEFINES\mob_spawn.dm"
 #include "code\__DEFINES\mobs.dm"
 #include "code\__DEFINES\mod.dm"

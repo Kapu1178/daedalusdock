@@ -1,7 +1,7 @@
 /datum/job/cyborg
 	title = JOB_CYBORG
 	description = "Assist the crew, follow your laws, obey your AI."
-	radio_help_message = "<b>Prefix your message with :b to speak with other cyborgs and AI.</b>"
+	radio_help_message = "Prefix your message with :b to speak with other cyborgs and AI."
 	auto_deadmin_role_flags = DEADMIN_POSITION_SILICON
 	faction = FACTION_STATION
 

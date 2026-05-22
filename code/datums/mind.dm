@@ -104,6 +104,13 @@
 	/// Lazylist of requitals targeting this character.
 	var/list/datum/requital/targeted_requitals
 
+	/// Messages to play at roundstart after spawning in. All of these will be contained within an examine_block_centered()
+	var/list/roundstart_messages = list(
+		ROUNDSTART_INFOKEY_MEMORIES = list(),
+		ROUNDSTART_INFOKEY_OOC = list(),
+		ROUNDSTART_INFOKEY_REQUITALS = list()
+	)
+
 /datum/mind/New(_key)
 	key = _key
 	martial_art = default_martial_art
@@ -120,7 +127,6 @@
 	QDEL_LIST(targeted_requitals)
 	set_current(null)
 	return ..()
-
 
 /datum/mind/vv_edit_var(var_name, var_value)
 	switch(var_name)
@@ -933,12 +939,40 @@
 
 	notes[note_key] += content
 
+/// Compiles all of the messages the player needs when the round starts or they join the game.
+/datum/mind/proc/give_roundstart_message()
+	if(!current.client)
+		return
+
+	var/list/divs = list(
+		roundstart_messages[ROUNDSTART_INFOKEY_JOB],
+	)
+
+	if(length(roundstart_messages[ROUNDSTART_INFOKEY_MEMORIES]))
+		divs += "<div class='entryHeader'><h1>Memories</h1><h2>You remember...</h2></div>"
+		divs += "<div>[jointext(roundstart_messages[ROUNDSTART_INFOKEY_MEMORIES], "<br>")]</div>"
+
+	if(length(roundstart_messages[ROUNDSTART_INFOKEY_REQUITALS]))
+		divs += "<div class='entryHeader'><h1>Requitals</h1></div>"
+		divs += jointext(roundstart_messages[ROUNDSTART_INFOKEY_REQUITALS], "<br>")
+
+	if(roundstart_messages[ROUNDSTART_INFOKEY_POLICY])
+		divs += "<div class='entryHeader'><h1>Rules</h1></div>"
+		divs += roundstart_messages[ROUNDSTART_INFOKEY_POLICY]
+
+	if(length(roundstart_messages[ROUNDSTART_INFOKEY_OOC]))
+		divs += "<div class='entryHeader'><h1>Other</h1></div>"
+		divs += jointext(roundstart_messages[ROUNDSTART_INFOKEY_OOC], "<br>")
+
+	list_clear_nulls(divs)
+
+	to_chat(current.client, "<div class='examine_block roundstartNotifications'>[jointext(divs, "<hr>")]</div>")
+
 /mob/dead/new_player/sync_mind()
 	return
 
 /mob/dead/observer/sync_mind()
 	return
-
 
 //Initialisation procs
 /mob/proc/mind_initialize()

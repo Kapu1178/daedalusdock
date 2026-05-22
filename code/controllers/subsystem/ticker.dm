@@ -275,17 +275,9 @@ SUBSYSTEM_DEF(ticker)
 	equip_characters()
 
 	SSdatacore.generate_manifest()
-	divide_requitals()
 
 	transfer_characters() //transfer keys to the new mobs
-
-	// TODO: cleanup roundstart to_chats, add to Memories
-	for(var/datum/mind/mind in minds)
-		for(var/datum/requital/owned as anything in mind.owned_requitals)
-			to_chat(mind.current, examine_block_centered("<div class='priorityAnnounceHeader'><h1>Requitals</h1></div><hr>[span_statsgood(owned.get_owner_text(mind))]"))
-
-		for(var/datum/requital/target_of as anything in mind.targeted_requitals)
-			to_chat(mind.current, examine_block_centered("<div class='priorityAnnounceHeader'><h1>Requitals</h1></div><hr>[span_statsbad(target_of.get_target_text(mind))]"))
+	divide_requitals()
 
 	for(var/I in round_start_events)
 		var/datum/callback/cb = I
@@ -489,7 +481,7 @@ SUBSYSTEM_DEF(ticker)
 		pawn.mind.assigned_role?.before_roundstart_possess(pawn)
 
 		player.transfer_character()
-		player.mind_initialize()
+		pawn.mind_initialize()
 
 		pawn.mind.assigned_role?.after_roundstart_possess(pawn)
 		pawn.notransform = TRUE
@@ -879,12 +871,33 @@ SUBSYSTEM_DEF(ticker)
 			prefiltered_minds -= M
 
 	while(length(requital_types))
-		var/path = requital_types[1]
-		var/datum/requital/potential_requital = new path()
-		if(prob(potential_requital.appearance_chance) && potential_requital.setup(prefiltered_minds.Copy()))
-			LAZYADD(generated_requitals[path], potential_requital)
+		var/datum/requital/potential_requital = requital_types[1]
+		if(isabstract(potential_requital))
+			requital_types -= potential_requital
+			continue
+
+		if(!prob(potential_requital.appearance_chance))
+			requital_types -= potential_requital
+			continue
+
+		potential_requital = new potential_requital()
+
+		if(potential_requital.setup(prefiltered_minds.Copy()))
+			LAZYADD(generated_requitals[potential_requital], potential_requital)
 		else
 			qdel(potential_requital)
 
-		if(QDELING(potential_requital) || length(generated_requitals[path]) == potential_requital.appearance_max)
-			requital_types -= path
+		if(QDELING(potential_requital) || length(generated_requitals[potential_requital.type]) == potential_requital.appearance_max)
+			requital_types -= potential_requital.type
+
+	// TODO: cleanup roundstart to_chats, add to Memories
+	for(var/datum/mind/mind in minds)
+		for(var/datum/requital/owned as anything in mind.owned_requitals)
+			var/text = owned.get_owner_text(mind)
+			mind.append_note(NOTES_REQUITALS, "[text]<br>")
+			mind.roundstart_messages[ROUNDSTART_INFOKEY_REQUITALS] += span_statsgood(text)
+
+		for(var/datum/requital/target_of as anything in mind.targeted_requitals)
+			var/text = target_of.get_target_text(mind)
+			mind.append_note(NOTES_REQUITALS, "[text]<br>")
+			mind.roundstart_messages[ROUNDSTART_INFOKEY_REQUITALS] += span_statsbad(text)
