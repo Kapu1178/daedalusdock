@@ -734,10 +734,15 @@ span.color_holder_box {
 	min-height: 0;
 	justify-content: center;
 }
+
 .nppOccupationFaction {
 	display: flex;
 	flex-direction: column;
 	width: 32%;
+}
+
+.nppOccupationFaction div {
+	font-family: "Lucida Console", monospace;
 }
 
 .nppOccupationFaction > .allowed {
