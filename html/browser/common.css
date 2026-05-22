@@ -726,6 +726,21 @@ span.color_holder_box {
 	flex-direction: column;
 	min-height: 0;
 }
+
+.nppCategoryLoadout {
+	display: flex;
+	flex-grow: 1;
+	flex-direction: column;
+	min-height: 0;
+	overflow-y: auto;
+}
+
+.nppLoadoutTable {
+	background-color: #13171c;
+	width: 100%;
+	height: 1%; /*Tables treat w/h as minimum because HTML i guess */
+}
+
 .nppCategoryAntagonists {
 	display: flex;
 	flex-grow: 1;
