@@ -688,28 +688,44 @@ span.color_holder_box {
 /* New Player Panel classes */
 .nppMaster {
 	height: 900px;
+	min-height: 0;
+	display: flex;
+	flex-direction: column;
 }
 
 .nppMaster hr {
 	width: 100%;
 	background-color: #202020;
+	min-height: 0;
 }
 
 .nppSubHeader {
 	text-align: center;
+	min-height: 0;
 }
 
 .nppCategorySelector {
 	text-align: center;
+	min-height: 0;
 }
 
 .nppCategoryContent {
 	display: flex;
-	flex-wrap: wrap;
 	flex-grow: 1;
 	min-height: 0;
 }
 
+.nppCategoryGeneral {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.nppCategoryOccupation {
+	display: flex;
+	flex-grow: 1;
+	flex-direction: column;
+	min-height: 0;
+}
 .nppCategoryAntagonists {
 	display: flex;
 	flex-grow: 1;

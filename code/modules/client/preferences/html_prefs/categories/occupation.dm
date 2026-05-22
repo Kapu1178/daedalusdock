@@ -44,15 +44,15 @@
 	var/datum/employer/employer = prefs.read_preference(/datum/preference/choiced/employer)
 
 	var/datum/preference/choiced/employer/employer_pref = GLOB.preference_entries[/datum/preference/choiced/employer]
-
 	. += {"
-		<div class='flexColumn' style='justify-content: center;align-items: center; gap:3px;'>
-			<div class='computerLegend' style='margin: 4px auto'><b>Faction</b></div>
-			<div style='font-size: 20px;text-align:center;'>[employer_pref.get_button(prefs)]</div>
-			<div class='computerLegend' style='font-size: 1.2rem; margin: 4px auto;width:70%;height: 64px;'>
-			[employer.creator_info]
+		<div class='nppCategoryOccupation'>
+			<div class='flexColumn' style='justify-content: center;align-items: center; gap:3px;'>
+				<div class='computerLegend' style='margin: 4px auto'><b>Faction</b></div>
+				<div style='font-size: 20px;text-align:center;'>[employer_pref.get_button(prefs)]</div>
+				<div class='computerLegend' style='font-size: 1.2rem; margin: 4px auto;width:70%;height: 64px;'>
+				[employer.creator_info]
+				</div>
 			</div>
-		</div>
 	"}
 	// Table within a table for alignment, also allows you to easily add more columns.
 	. += {"
@@ -111,12 +111,13 @@
 
 
 	.+= {"
-					</table>
-				</td>
-			</tr>
-		</table>
-	</center>
-	</tt>
+						</table>
+					</td>
+				</tr>
+			</table>
+		</center>
+		</tt>
+		</div>
 	</div>
 	"}
 
