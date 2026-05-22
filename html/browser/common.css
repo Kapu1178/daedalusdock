@@ -727,6 +727,36 @@ span.color_holder_box {
 	min-height: 0;
 }
 
+.nppOccupationFactionListParent {
+	display: flex;
+	flex-grow: 1;
+	flex-wrap: wrap;
+	min-height: 0;
+	justify-content: center;
+}
+.nppOccupationFaction {
+	display: flex;
+	flex-direction: column;
+	width: 32%;
+}
+
+.nppOccupationFaction .job {
+	display: flex;
+	flex-direction: row;
+}
+
+.nppOccupationFaction > .job > div {
+	padding: 0 4px;
+}
+
+.nppOccupationFaction > .job > :first-child {
+	flex-grow: 1;
+}
+
+.nppOccupationFaction > .job > :not(:first-child) {
+	justify-self: flex-end;
+}
+
 .nppCategoryLoadout {
 	display: flex;
 	flex-grow: 1;
