@@ -1,8 +1,6 @@
 /datum/job/warden
 	title = JOB_WARDEN
-	description = "Watch over the Brig and Prison Wing, manage prisoners, \
-		issue equipment to security, work with the Security Marshal \
-		to organize security."
+	description = "Keep a close eye on any \"criminals\" the boys bring in and manage the armaments of the force."
 	auto_deadmin_role_flags = DEADMIN_POSITION_SECURITY
 	department_head = list(JOB_SECURITY_MARSHAL)
 	faction = FACTION_STATION

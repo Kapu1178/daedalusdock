@@ -1,7 +1,6 @@
 /datum/job/quartermaster
 	title = JOB_QUARTERMASTER
-	description = "Manage your Deckhands and Prospectors, assist with \
-		economical purchasing."
+	description = "Manipulate the colony's economy to your benefit with the help of your Deckhands."
 	faction = FACTION_STATION
 	total_positions = 1
 	spawn_positions = 1

@@ -1,6 +1,6 @@
 /datum/job/botanist
 	title = JOB_BOTANIST
-	description = "Grow plants for the cook, for medicine, and for recreation."
+	description = "Grow plants to sell to the Ward and Kitchen."
 	department_head = list(JOB_HEAD_OF_PERSONNEL)
 	faction = FACTION_STATION
 

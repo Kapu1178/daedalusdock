@@ -1,6 +1,6 @@
 /datum/job/security_officer
 	title = JOB_SECURITY_OFFICER
-	description = "Carry out the Federation's will."
+	description = "Assist the Federation in maintaining order to get your bonus check."
 	auto_deadmin_role_flags = DEADMIN_POSITION_SECURITY
 	department_head = list(JOB_SECURITY_MARSHAL)
 	faction = FACTION_STATION

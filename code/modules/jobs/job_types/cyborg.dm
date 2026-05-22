@@ -6,7 +6,7 @@
 	faction = FACTION_STATION
 
 	total_positions = 0
-	spawn_positions = 1
+	spawn_positions = 0
 
 	supervisors = "your laws and the AI" //Nodrak
 	selection_color = "#254c25"
@@ -21,7 +21,7 @@
 		/datum/job_department/silicon,
 		)
 	spawn_logic = JOBSPAWN_FORCE_FIXED
-	job_flags = JOB_NEW_PLAYER_JOINABLE | JOB_EQUIP_RANK
+	job_flags = JOB_EQUIP_RANK
 
 
 /datum/job/cyborg/after_spawn(mob/living/spawned, client/player_client)
