@@ -1,5 +1,5 @@
 /datum/preference_group/category/antagonists
-	name = "Antagonists"
+	name = "Wildcard Roles"
 	priority = 30
 
 	modules = list(
@@ -18,7 +18,7 @@
 	. += {"
 	<fieldset class='computerPaneNested nppCategoryAntagonists'>
 		<legend class='computerLegend tooltip'>
-			<b>Antagonists</b>
+			<b>Wildcard Roles</b>
 			<span class='tooltiptext'>Trouble lurks in the tunnels... you.</span>
 		</legend>
 		<div style='text-align: center'>
