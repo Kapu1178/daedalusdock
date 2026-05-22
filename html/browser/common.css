@@ -752,6 +752,7 @@ span.color_holder_box {
 
 .nppOccupationFaction > .job.head {
 	font-weight: bold;
+	font-size: 1.2em;
 	border-bottom: 2px solid rgba(255, 183, 0, 0.5);
 	margin-bottom: 4px;
 }
@@ -762,6 +763,12 @@ span.color_holder_box {
 
 .nppOccupationFaction > .job .jobTitle {
 	text-align: center;
+}
+
+.nppOccupationFaction > .job .jobTitle.banned {
+	text-decoration: line-through;
+	text-decoration-color: #c14343;
+	text-decoration-thickness: 2px;
 }
 
 .nppOccupationFaction > .job > .banned {

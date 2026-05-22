@@ -85,7 +85,7 @@
 			job_divs += {"
 				<div class='job [(job_data[department_name]["head"] == job.title) && "head"]'>
 					<div>
-						<div class='jobTitle'>
+						<div class='jobTitle [rejection_reason && "banned"]'>
 							[uppertext(job.title)]
 						</div>
 					</div>
