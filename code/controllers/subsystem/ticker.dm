@@ -864,7 +864,7 @@ SUBSYSTEM_DEF(ticker)
 	// Sorted by type
 	var/list/generated_requitals = list()
 	// Do common filtering before hand.
-	var/list/prefiltered_minds = minds.Copy()
+	var/list/prefiltered_minds = shuffle(minds)
 
 	for(var/datum/mind/M as anything in prefiltered_minds)
 		if(!(M.assigned_role?.job_flags & JOB_CREW_MEMBER))
