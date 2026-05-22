@@ -890,7 +890,6 @@ SUBSYSTEM_DEF(ticker)
 		if(QDELING(potential_requital) || length(generated_requitals[potential_requital.type]) == potential_requital.appearance_max)
 			requital_types -= potential_requital.type
 
-	// TODO: cleanup roundstart to_chats, add to Memories
 	for(var/datum/mind/mind in minds)
 		for(var/datum/requital/owned as anything in mind.owned_requitals)
 			var/text = owned.get_owner_text(mind)
