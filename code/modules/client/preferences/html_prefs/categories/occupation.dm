@@ -54,7 +54,7 @@
 				</div>
 			</div>
 	"}
-	// Table within a table for alignment, also allows you to easily add more columns.
+
 	. += {"
 		<div class='nppOccupationFactionListParent'>
 	"}
@@ -62,6 +62,8 @@
 
 	for(var/department_name in job_data)
 		var/list/job_divs = list()
+
+		var/can_select_from_department = FALSE
 
 		for(var/datum/job/job in job_data[department_name]["jobs"])
 			var/is_banned = job_bans[job.title] == "banned"
@@ -74,27 +76,31 @@
 			else if(is_too_new)
 				rejection_reason = "\[[is_too_new]]"
 			else if(length(job.employers) && !(employer in job.employers))
-				rejection_reason = "\[CHANGE FACTION]"
+				rejection_reason = "\[FACTION]"
+			else
+				can_select_from_department = TRUE
 
 			var/static/vs_appeaser = "\]\]\]"
 			vs_appeaser = vs_appeaser
 			job_divs += {"
-				<div class='job' style='background-color:[job.selection_color]'>
+				<div class='job [(job_data[department_name]["head"] == job.title) && "head"]'>
 					<div>
-						[uppertext(job.title)]
+						<div class='jobTitle'>
+							[uppertext(job.title)]
+						</div>
 					</div>
 					<div>
 						[button_element(src, "?", "job_info=[job.title]")]
 					</div>
-					<div>
+					<div class='[rejection_reason && "banned"]'>
 						<b>[rejection_reason || button_element(prefs, job_priority, "pref_act=[/datum/preference/blob/job_priority];job=[job.title]")]</b>
 					</div>
 				</div>
 			"}
 
 		. += {"
-		<fieldset class='computerPaneNested nppOccupationFaction'>
-			<legend class='computerLegend'>[department_name]</legend>
+		<fieldset class='computerLegend nppOccupationFaction'>
+			<legend class='computerLegend [can_select_from_department && "allowed"]'>[department_name]</legend>
 			[jointext(job_divs, "")]
 		</fieldset>
 		"}

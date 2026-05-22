@@ -740,13 +740,33 @@ span.color_holder_box {
 	width: 32%;
 }
 
+.nppOccupationFaction > .allowed {
+	color: rgb(14, 163, 14);
+	text-shadow: 0 0 0.4em rgb(17, 139, 17);
+}
+
 .nppOccupationFaction .job {
 	display: flex;
 	flex-direction: row;
 }
 
+.nppOccupationFaction > .job.head {
+	font-weight: bold;
+	border-bottom: 2px solid rgba(255, 183, 0, 0.5);
+	margin-bottom: 4px;
+}
+
 .nppOccupationFaction > .job > div {
-	padding: 0 4px;
+	padding: 3px 4px;
+}
+
+.nppOccupationFaction > .job .jobTitle {
+	text-align: center;
+}
+
+.nppOccupationFaction > .job > .banned {
+	color: #c14343;
+	text-shadow: 0 0 0.4em #ff0000;
 }
 
 .nppOccupationFaction > .job > :first-child {
@@ -755,6 +775,11 @@ span.color_holder_box {
 
 .nppOccupationFaction > .job > :not(:first-child) {
 	justify-self: flex-end;
+}
+
+.nppOccupationFaction > .job > :last-child {
+	min-width: 18%;
+	white-space: nowrap;
 }
 
 .nppCategoryLoadout {
