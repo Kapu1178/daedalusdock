@@ -1229,6 +1229,8 @@
 #include "code\datums\quirks\bane.dm"
 #include "code\datums\quirks\boon.dm"
 #include "code\datums\quirks\neutral.dm"
+#include "code\datums\requitals\_requital.dm"
+#include "code\datums\requitals\basic_requital.dm"
 #include "code\datums\ruins\space.dm"
 #include "code\datums\screentips\atom_context.dm"
 #include "code\datums\screentips\item_context.dm"

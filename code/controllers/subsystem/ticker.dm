@@ -275,8 +275,17 @@ SUBSYSTEM_DEF(ticker)
 	equip_characters()
 
 	SSdatacore.generate_manifest()
+	divide_requitals()
 
 	transfer_characters() //transfer keys to the new mobs
+
+	// TODO: cleanup roundstart to_chats, add to Memories
+	for(var/datum/mind/mind in minds)
+		for(var/datum/requital/owned as anything in mind.owned_requitals)
+			to_chat(mind.current, examine_block_centered("<div class='priorityAnnounceHeader'><h1>Requitals</h1></div><hr>[span_statsgood(owned.get_owner_text(mind))]"))
+
+		for(var/datum/requital/target_of as anything in mind.targeted_requitals)
+			to_chat(mind.current, examine_block_centered("<div class='priorityAnnounceHeader'><h1>Requitals</h1></div><hr>[span_statsbad(target_of.get_target_text(mind))]"))
 
 	for(var/I in round_start_events)
 		var/datum/callback/cb = I
@@ -303,6 +312,7 @@ SUBSYSTEM_DEF(ticker)
 	//Setup the antags AFTTTTER theyve gotten their jobs
 	mode.setup_antags()
 	PostSetup()
+
 	SSticker.ready_players = null
 	SSlobby.game_status?.alpha = 0
 	return TRUE
@@ -475,14 +485,15 @@ SUBSYSTEM_DEF(ticker)
 			continue
 
 		var/mob/pawn = player.new_character
+		pawns += pawn
 		pawn.mind.assigned_role?.before_roundstart_possess(pawn)
 
 		player.transfer_character()
+		player.mind_initialize()
 
 		pawn.mind.assigned_role?.after_roundstart_possess(pawn)
 		pawn.notransform = TRUE
 		pawn.client?.init_verbs()
-		pawns += pawn
 
 	if(pawns.len)
 		addtimer(CALLBACK(src, PROC_REF(release_characters), pawns), 3 SECONDS, TIMER_CLIENT_TIME)
@@ -855,3 +866,25 @@ SUBSYSTEM_DEF(ticker)
 
 	log_game("Gamemode successfully initialized, chose: [mode.name]")
 	return TRUE
+
+/datum/controller/subsystem/ticker/proc/divide_requitals()
+	var/list/requital_types = subtypesof(/datum/requital)
+	// Sorted by type
+	var/list/generated_requitals = list()
+	// Do common filtering before hand.
+	var/list/prefiltered_minds = minds.Copy()
+
+	for(var/datum/mind/M as anything in prefiltered_minds)
+		if(!(M.assigned_role?.job_flags & JOB_CREW_MEMBER))
+			prefiltered_minds -= M
+
+	while(length(requital_types))
+		var/path = requital_types[1]
+		var/datum/requital/potential_requital = new path()
+		if(prob(potential_requital.appearance_chance) && potential_requital.setup(prefiltered_minds.Copy()))
+			LAZYADD(generated_requitals[path], potential_requital)
+		else
+			qdel(potential_requital)
+
+		if(QDELING(potential_requital) || length(generated_requitals[path]) == potential_requital.appearance_max)
+			requital_types -= path

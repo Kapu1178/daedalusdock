@@ -99,6 +99,11 @@
 	/// A lazylist of dream types we have fully experienced
 	var/list/finished_dream_types
 
+	/// Lazylist of requitals this character owns.
+	var/list/datum/requital/owned_requitals
+	/// Lazylist of requitals targeting this character.
+	var/list/datum/requital/targeted_requitals
+
 /datum/mind/New(_key)
 	key = _key
 	martial_art = default_martial_art
@@ -111,6 +116,8 @@
 	QDEL_NULL(note_panel)
 	QDEL_LIST(antag_datums)
 	QDEL_NULL(language_holder)
+	QDEL_LIST(owned_requitals)
+	QDEL_LIST(targeted_requitals)
 	set_current(null)
 	return ..()
 
