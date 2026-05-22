@@ -56,6 +56,7 @@
 	"}
 	// Table within a table for alignment, also allows you to easily add more columns.
 	. += {"
+		<div id='tableContainer'>
 		<center>
 		<tt>
 		<table width='100%' cellpadding='1' cellspacing='0'>
@@ -116,6 +117,7 @@
 		</table>
 	</center>
 	</tt>
+	</div>
 	"}
 
 /datum/preference_group/category/occupation/proc/compile_job_data()
