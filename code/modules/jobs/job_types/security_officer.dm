@@ -49,22 +49,6 @@
 	. = ..()
 	spawned.apply_status_effect(/datum/status_effect/skill_mod/security)
 
-#warn todo
-// /datum/job/security_officer/on_join_popup(client/C, job_title_pref)
-// 	var/content = {"
-// 		<div style='width:100%; text-align:center; font-size: 20px'>
-// 		You are the <b>[title]</b>
-// 		</div>
-// 		<br>
-// 		<div style='padding: 0px 30px; text-align: center; font-size: 14px;'>
-// 		You have been hired by the Federation for "peacekeeping" aboard a remote colony. You know good things do not befall those who disobey them.
-// 		</div>
-// 	"}
-// 	var/datum/browser/popup = new(C.mob, "jobinfo", "Role Information", 480, 360)
-// 	popup.set_window_options("can_close=1;can_resize=0")
-// 	popup.set_content(content)
-// 	popup.open(FALSE)
-
 /datum/outfit/job/security
 	name = "Security Officer"
 	jobtype = /datum/job/security_officer
