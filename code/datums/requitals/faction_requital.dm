@@ -36,7 +36,7 @@
 		chosen_faction = SSjob.get_department_type(mind_faction)
 		break
 
-	return select_owners_from_faction(minds, chosen_faction.type)
+	return select_owners_from_faction(minds, chosen_faction?.type)
 
 /datum/requital/faction/debt
 	appearance_chance = 100

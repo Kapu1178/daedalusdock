@@ -81,11 +81,11 @@
 /// Given a list of minds, trims it down based on the job filters.
 /datum/requital/proc/filter_owning_jobs(list/minds)
 	for(var/datum/mind/M in minds)
-		if(length(owning_job_whitelist) && !(M.assigned_role in owning_job_whitelist))
+		if(length(owning_job_whitelist) && !(M.assigned_role.type in owning_job_whitelist))
 			minds -= M
 			continue
 
-		if(length(owning_job_blacklist) && (M.assigned_role in owning_job_blacklist))
+		if(length(owning_job_blacklist) && (M.assigned_role.type in owning_job_blacklist))
 			minds -= M
 			continue
 
@@ -94,11 +94,11 @@
 /// Given a list of minds, trims it down based on the job filters.
 /datum/requital/proc/filter_target_jobs(list/minds)
 	for(var/datum/mind/M in minds)
-		if(length(target_job_whitelist) && !(M.assigned_role in target_job_whitelist))
+		if(length(target_job_whitelist) && !(M.assigned_role.type in target_job_whitelist))
 			minds -= M
 			continue
 
-		if(length(target_job_blacklist) && (M.assigned_role in target_job_blacklist))
+		if(length(target_job_blacklist) && (M.assigned_role.type in target_job_blacklist))
 			minds -= M
 			continue
 
@@ -165,6 +165,8 @@
 
 	for(var/datum/mind/M in targets)
 		LAZYADD(M.targeted_requitals, src)
+
+	message_admins("[english_list(owners)] [length(owners) > 1 ? "were" : "was"] granted [type] targeting [english_list(targets)]")
 
 /// Just read the proc dude.
 /datum/requital/proc/parse_text(text)

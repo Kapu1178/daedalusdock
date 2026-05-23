@@ -890,6 +890,8 @@ SUBSYSTEM_DEF(ticker)
 	// Type -> int
 	var/list/max_amounts = list()
 
+	shuffle_inplace(requital_types)
+
 	while(length(requital_types))
 		var/datum/requital/potential_requital = requital_types[1]
 		if(isabstract(potential_requital))
