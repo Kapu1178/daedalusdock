@@ -861,14 +861,34 @@ SUBSYSTEM_DEF(ticker)
 
 /datum/controller/subsystem/ticker/proc/divide_requitals()
 	var/list/requital_types = subtypesof(/datum/requital)
-	// Sorted by type
-	var/list/generated_requitals = list()
 	// Do common filtering before hand.
 	var/list/prefiltered_minds = shuffle(minds)
 
 	for(var/datum/mind/M as anything in prefiltered_minds)
 		if(!(M.assigned_role?.job_flags & JOB_CREW_MEMBER))
 			prefiltered_minds -= M
+
+	// Do non-faction ones first.
+	generate_requitals(prefiltered_minds, subtypesof(/datum/requital) - typesof(/datum/requital/faction))
+	// Then faction ones.
+	generate_requitals(prefiltered_minds, subtypesof(/datum/requital/faction))
+
+	for(var/datum/mind/mind in minds)
+		for(var/datum/requital/owned as anything in mind.owned_requitals)
+			var/text = owned.get_owner_text(mind)
+			mind.append_note(NOTES_REQUITALS, "[text]<br>")
+			mind.roundstart_messages[ROUNDSTART_INFOKEY_REQUITALS] += span_statsgood(text)
+
+		for(var/datum/requital/target_of as anything in mind.targeted_requitals)
+			var/text = target_of.get_target_text(mind)
+			mind.append_note(NOTES_REQUITALS, "[text]<br>")
+			mind.roundstart_messages[ROUNDSTART_INFOKEY_REQUITALS] += span_statsbad(text)
+
+/datum/controller/subsystem/ticker/proc/generate_requitals(list/minds, list/requital_types)
+	// Sorted by type
+	var/list/generated_requitals = list()
+	// Type -> int
+	var/list/max_amounts = list()
 
 	while(length(requital_types))
 		var/datum/requital/potential_requital = requital_types[1]
@@ -882,21 +902,15 @@ SUBSYSTEM_DEF(ticker)
 
 		potential_requital = new potential_requital()
 
-		if(potential_requital.setup(prefiltered_minds.Copy()))
-			LAZYADD(generated_requitals[potential_requital], potential_requital)
+		if(potential_requital.setup(minds.Copy()))
+			if(!generated_requitals[potential_requital.type])
+				generated_requitals[potential_requital.type] = list()
+				// Set the max amounts here.
+				max_amounts[potential_requital.type] = rand(1, potential_requital.appearance_max)
+
+			generated_requitals[potential_requital.type] += potential_requital
 		else
 			qdel(potential_requital)
 
-		if(QDELING(potential_requital) || length(generated_requitals[potential_requital.type]) == potential_requital.appearance_max)
+		if(QDELING(potential_requital) || length(generated_requitals[potential_requital.type]) == max_amounts[potential_requital.type])
 			requital_types -= potential_requital.type
-
-	for(var/datum/mind/mind in minds)
-		for(var/datum/requital/owned as anything in mind.owned_requitals)
-			var/text = owned.get_owner_text(mind)
-			mind.append_note(NOTES_REQUITALS, "[text]<br>")
-			mind.roundstart_messages[ROUNDSTART_INFOKEY_REQUITALS] += span_statsgood(text)
-
-		for(var/datum/requital/target_of as anything in mind.targeted_requitals)
-			var/text = target_of.get_target_text(mind)
-			mind.append_note(NOTES_REQUITALS, "[text]<br>")
-			mind.roundstart_messages[ROUNDSTART_INFOKEY_REQUITALS] += span_statsbad(text)
