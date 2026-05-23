@@ -860,7 +860,6 @@ SUBSYSTEM_DEF(ticker)
 	return TRUE
 
 /datum/controller/subsystem/ticker/proc/divide_requitals()
-	var/list/requital_types = subtypesof(/datum/requital)
 	// Do common filtering before hand.
 	var/list/prefiltered_minds = shuffle(minds)
 
