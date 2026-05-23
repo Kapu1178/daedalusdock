@@ -119,6 +119,7 @@
 		. = override_list?.Copy() || data.all_minds.Copy()
 
 	. -= data.is_target
+	. -= owners
 
 	for(var/datum/mind/M in .)
 		for(var/datum/requital/owned_requital as anything in M.owned_requitals)
