@@ -15,31 +15,27 @@
 	/// A reference to the job department chosen.
 	var/datum/job_department/chosen_faction
 
-/datum/requital/faction/select_owners(list/minds)
-	for(var/datum/mind/mind as anything in minds)
-		if(!length(mind.assigned_role.departments_list))
-			continue
+/datum/requital/faction/is_valid_initial_owner(datum/mind/M)
+	. = ..()
+	if(!.)
+		return
 
-		if(locate(/datum/requital/faction) in mind.owned_requitals)
-			continue
+	if(length(faction_whitelist) && !(M.assigned_role.departments_list[1] in faction_whitelist))
+		return FALSE
 
-		var/datum/job_department/mind_faction = mind.assigned_role.departments_list[1]
-		if(mind_faction.is_not_real_department)
-			continue
+	if(length(faction_blacklist) && (M.assigned_role.departments_list[1] in faction_blacklist))
+		return FALSE
 
-		if(length(faction_whitelist) && !(mind_faction in faction_whitelist))
-			continue
+	return TRUE
 
-		if(length(faction_blacklist) && (mind_faction in faction_blacklist))
-			continue
+/datum/requital/faction/get_valid_owners(datum/requital_data/data, list/override_list)
+	. = ..(data, data.minds_by_faction[owners[1].assigned_role.departments_list[1]])
 
-		chosen_faction = SSjob.get_department_type(mind_faction)
-		break
-
-	return select_owners_from_faction(minds, chosen_faction?.type)
+/datum/requital/faction/finalize()
+	. = ..()
+	chosen_faction = SSjob.get_department_type(owners[1].assigned_role.departments_list[1])
 
 /datum/requital/faction/debt
-	appearance_chance = 100
 	faction_whitelist = list(
 		/datum/job_department/cargo,
 		/datum/job_department/medical,

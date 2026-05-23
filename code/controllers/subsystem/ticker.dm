@@ -883,35 +883,32 @@ SUBSYSTEM_DEF(ticker)
 			mind.append_note(NOTES_REQUITALS, "[text]<br>")
 			mind.roundstart_messages[ROUNDSTART_INFOKEY_REQUITALS] += span_statsbad(text)
 
-/datum/controller/subsystem/ticker/proc/generate_requitals(list/minds, list/requital_types)
-	// Sorted by type
-	var/list/generated_requitals = list()
-	// Type -> int
-	var/list/max_amounts = list()
+/datum/controller/subsystem/ticker/proc/generate_requitals(list/filtered_minds, list/types)
+	var/datum/requital_data/data = new(filtered_minds)
+	// instance -> weight (int)
+	var/list/datum/requital/templates = list()
+	// type -> used (int)
+	var/list/used_templates = list()
 
-	shuffle_inplace(requital_types)
+	for(var/datum/requital/path as anything in types)
+		if(!isabstract(path))
+			templates[new path] = path.weight
 
-	while(length(requital_types))
-		var/datum/requital/potential_requital = requital_types[1]
-		if(isabstract(potential_requital))
-			requital_types -= potential_requital
-			continue
+	for(var/datum/mind/M in filtered_minds)
+		var/list/available_templates = templates.Copy()
+		while(length(available_templates))
+			var/datum/requital/template = pick_n_take(available_templates)
+			var/template_type = template.type
+			if(used_templates[template_type] == template.max_instances)
+				continue
 
-		if(!prob(potential_requital.appearance_chance))
-			requital_types -= potential_requital
-			continue
+			if(!template.is_valid_initial_owner(M))
+				continue
 
-		potential_requital = new potential_requital()
+			var/datum/requital/instance = new template_type()
+			if(!instance.setup(data, M))
+				qdel(instance)
+				continue
 
-		if(potential_requital.setup(minds.Copy()))
-			if(!generated_requitals[potential_requital.type])
-				generated_requitals[potential_requital.type] = list()
-				// Set the max amounts here.
-				max_amounts[potential_requital.type] = rand(1, potential_requital.appearance_max)
-
-			generated_requitals[potential_requital.type] += potential_requital
-		else
-			qdel(potential_requital)
-
-		if(QDELING(potential_requital) || length(generated_requitals[potential_requital.type]) == max_amounts[potential_requital.type])
-			requital_types -= potential_requital.type
+			used_templates[template_type]++
+			break

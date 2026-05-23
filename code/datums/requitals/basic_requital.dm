@@ -16,16 +16,14 @@
 
 // Someone owes someone else a favor. Easy.
 /datum/requital/basic/favor
-	appearance_chance = 100
-
-	appearance_max = 5
+	max_instances = 5
 
 	base_target_string = "I owe %OWNER% a favor for helping me out in the past."
 	base_owner_string = "%TARGET% owes me a favor for helping them out in the past."
 
 // This is like the faction debt one but for the indies.
 /datum/requital/basic/dodging_payment
-	appearance_chance = 80
+	weight = 80
 
 	owning_job_whitelist = list(
 		/datum/job/botanist,
@@ -45,7 +43,7 @@
 
 // I bribed a cop!
 /datum/requital/basic/bribe
-	appearance_chance = 75
+	weight = 50
 
 	owning_job_blacklist = list(
 		/datum/job/security_officer,
@@ -66,7 +64,6 @@
 
 // Someone got promoted when you totally deserved it!
 /datum/requital/basic/rival
-	appearance_chance = 20
 
 	owning_job_whitelist = list(
 		/datum/job/security_officer,
@@ -77,11 +74,7 @@
 	base_owner_string = "%TARGET% was promoted instead of me, despite my far superior skills!"
 	base_target_string = "I was promoted instead of %OWNER%, they might be pissed."
 
-/datum/requital/basic/rival/filter_target_jobs(list/minds)
+/datum/requital/basic/rival/get_valid_targets(datum/requital_data/data, list/override_list)
 	// Limits the target pool to just people in our faction.
-	var/our_faction = owners[1].assigned_role.departments_list[1]
-	for(var/datum/mind/M as anything in minds)
-		if(!(our_faction in M.assigned_role.departments_list))
-			minds -= M
-	. = ..()
+	. = ..(data, data.minds_by_faction[owners[1].assigned_role.departments_list[1]])
 

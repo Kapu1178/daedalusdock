@@ -757,9 +757,11 @@
 /proc/flatten_list(list/key_list)
 	if(!islist(key_list))
 		return null
+
 	. = list()
-	for(var/key in key_list)
-		. |= key_list[key]
+
+	for(var/key, value in key_list)
+		. |= value
 
 ///Make a normal list an associative one
 /proc/make_associative(list/flat_list)

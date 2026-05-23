@@ -25,10 +25,11 @@
 	/// Minimum number of owners.
 	var/max_targets = 1
 
-	/// The chance for this requital to roll.
-	var/appearance_chance = 20
+	/// The weight for this requital to roll relative to the others. Default 100.
+	var/weight = 100
+
 	/// The maximum number of times this requital can roll.
-	var/appearance_max = 1
+	var/max_instances = 1
 
 	/// List of minds that own this.
 	var/list/datum/mind/owners = list()
@@ -47,30 +48,31 @@
 	. = ..()
 
 /// Setup the requital. Returns FALSE if it is unable to find owners or targets that meet it's criteria.
-/datum/requital/proc/setup(list/minds)
-	if(!select_owners(minds))
+/datum/requital/proc/setup(datum/requital_data/data, datum/mind/initial_owner)
+	if(!select_owners(data, initial_owner))
 		return FALSE
 
-	if(!select_targets(minds - owners))
+	if(!select_targets(data))
 		return FALSE
 
-	finalize()
+	finalize(data)
 	return TRUE
 
 /// Selects owner(s), returns FALSE on failure.
-/datum/requital/proc/select_owners(list/minds)
+/datum/requital/proc/select_owners(datum/requital_data/data, datum/mind/initial_owner)
 	PROTECTED_PROC(TRUE)
 
+	owners += initial_owner
 	var/owner_goal = rand(min_owners, max_owners)
-	filter_owning_jobs(minds)
 
-	for(var/datum/mind/M in minds)
-		if(length(M.owned_requitals))
-			continue
+	if(length(owners) == owner_goal)
+		return TRUE
 
+	var/list/potential_owners = get_valid_owners(data) - initial_owner
+	for(var/datum/mind/M in potential_owners)
 		owners += M
 
-		if(length(owners) == owner_goal || length(owners) == max_owners)
+		if(length(owners) == owner_goal)
 			break
 
 	if(length(owners) < min_owners)
@@ -78,78 +80,63 @@
 
 	return TRUE
 
-/// Given a list of minds, trims it down based on the job filters.
-/datum/requital/proc/filter_owning_jobs(list/minds)
-	for(var/datum/mind/M in minds)
-		if(length(owning_job_whitelist) && !(M.assigned_role.type in owning_job_whitelist))
-			minds -= M
-			continue
+/// Returns a list of valid owners.
+/datum/requital/proc/get_valid_owners(datum/requital_data/data, list/override_list) as /list
+	if(length(owning_job_whitelist))
+		var/real_list = override_list || data.minds_by_job
+		. = flatten_list(real_list & owning_job_whitelist)
 
-		if(length(owning_job_blacklist) && (M.assigned_role.type in owning_job_blacklist))
-			minds -= M
-			continue
+	else if (length(owning_job_blacklist))
+		var/real_list = override_list || data.minds_by_job
+		. = flatten_list(real_list - owning_job_blacklist)
 
-	return minds
+	else
+		. = override_list?.Copy() || data.all_minds.Copy()
 
-/// Given a list of minds, trims it down based on the job filters.
-/datum/requital/proc/filter_target_jobs(list/minds)
-	for(var/datum/mind/M in minds)
-		if(length(target_job_whitelist) && !(M.assigned_role.type in target_job_whitelist))
-			minds -= M
-			continue
+	. -= data.is_owner
 
-		if(length(target_job_blacklist) && (M.assigned_role.type in target_job_blacklist))
-			minds -= M
-			continue
-
-	return minds
-
-/datum/requital/proc/select_owners_from_faction(list/minds, datum/job_department/faction_type)
-	PROTECTED_PROC(TRUE)
-
-	if(!faction_type)
+/// Should we even bother trying...
+/datum/requital/proc/is_valid_initial_owner(datum/mind/M)
+	if(length(owning_job_whitelist) && (!(M.assigned_role.type in owning_job_whitelist)))
 		return FALSE
 
-	filter_owning_jobs(minds)
+	else if(length(owning_job_whitelist) && (M.assigned_role.type in owning_job_blacklist))
+		return FALSE
 
-	for(var/datum/mind/other_mind as anything in minds)
-		if(!(faction_type in other_mind.assigned_role.departments_list))
-			continue
+	return TRUE
 
-		owners += other_mind
+/// Returns all valid targets in a list. The list is a copy and mutable.
+/datum/requital/proc/get_valid_targets(datum/requital_data/data, list/override_list)
+	if(length(target_job_whitelist))
+		var/real_list = override_list || data.minds_by_job
+		. = flatten_list(real_list & target_job_whitelist)
 
-	return length(owners)
+	else if (length(target_job_blacklist))
+		var/real_list = override_list || data.minds_by_job
+		. = flatten_list(real_list - target_job_blacklist)
+
+	else
+		. = override_list?.Copy() || data.all_minds.Copy()
+
+	. -= data.is_target
+
+	for(var/datum/mind/M in .)
+		for(var/datum/requital/owned_requital as anything in M.owned_requitals)
+			// Check to see if we are creating a reciprocal requital (ie, oweing eachother a debt)
+			if(owned_requital.type == type && (owners & owned_requital.targets)) // They have a requital of this type targeting one of our owners.
+				. -= M
 
 /// Selects target(s), returns FALSE on failure.
-/datum/requital/proc/select_targets(list/minds)
+/datum/requital/proc/select_targets(datum/requital_data/data)
 	PROTECTED_PROC(TRUE)
 
 	var/target_goal = rand(min_targets, max_targets)
-	filter_target_jobs(minds)
 
-	for(var/datum/mind/M in minds)
-		var/mind_has_conflicts = FALSE
-		// Check to see if we are creating a reciprocal requital (ie, oweing eachother a debt)
-		for(var/datum/requital/owned_requital as anything in M.owned_requitals)
-			if(owned_requital.type == type)
-				if(owners & owned_requital.targets) // They have a requital of this type targeting one of our owners.
-					mind_has_conflicts = TRUE
-				break
-
-		if(mind_has_conflicts)
-			continue
-
-		// Check to see if they are already being targetted by a similar requital.
-		for(var/datum/requital/other_requital as anything in M.targeted_requitals)
-			if(other_requital.conflict_flags & conflict_flags)
-				mind_has_conflicts = TRUE
-				break
-
-		if(mind_has_conflicts)
-			continue
-
+	var/list/potential_targets = get_valid_targets(data)
+	for(var/datum/mind/M in potential_targets)
 		targets += M
-		if(length(targets) == target_goal || length(targets) == max_targets)
+
+		if(length(targets) == target_goal)
 			break
 
 	if(length(targets) < min_targets)
@@ -158,13 +145,15 @@
 	return TRUE
 
 /// This requital is ready to go.
-/datum/requital/proc/finalize()
+/datum/requital/proc/finalize(datum/requital_data/data)
 	SHOULD_CALL_PARENT(TRUE)
 	for(var/datum/mind/M in owners)
 		LAZYADD(M.owned_requitals, src)
+		data.is_owner[M] = src
 
 	for(var/datum/mind/M in targets)
 		LAZYADD(M.targeted_requitals, src)
+		data.is_target[M] = src
 
 	message_admins("[english_list(owners)] [length(owners) > 1 ? "were" : "was"] granted [type] targeting [english_list(targets)]")
 
@@ -193,3 +182,30 @@
 /// Returns the string to display to a target.
 /datum/requital/proc/get_target_text(datum/mind/target)
 	return ""
+
+
+/datum/requital_data
+	var/list/all_minds
+
+	/// Minds by department type
+	var/list/minds_by_faction = list()
+	/// Minds by job type
+	var/list/minds_by_job = list()
+
+	/// LUT of minds that own a requital already, to that requital.
+	var/list/is_owner = list()
+
+	/// LUT of minds that are already a target, to that requital.
+	var/list/is_target = list()
+
+/datum/requital_data/New(list/minds)
+	all_minds = shuffle(minds)
+
+	minds_by_faction = list()
+	minds_by_job = list()
+
+	for(var/datum/mind/M as anything in all_minds)
+		LAZYADD(minds_by_job[M.assigned_role.type], M)
+
+		var/faction = length(M.assigned_role.departments_list) && M.assigned_role.departments_list[1]
+		LAZYADD(minds_by_faction[faction], M)
