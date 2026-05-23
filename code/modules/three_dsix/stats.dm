@@ -461,7 +461,7 @@
 		text = result.create_tooltip(failure_text, is_examine)
 	else if(result.outcome == CRIT_SUCCESS && crit_success_text)
 		text = result.create_tooltip(crit_success_text, is_examine)
-	else if(success_text)
+	else if(result.outcome >= SUCCESS && success_text)
 		text = result.create_tooltip(success_text, is_examine)
 
 	if(text)
