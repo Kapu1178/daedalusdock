@@ -910,6 +910,7 @@
 /// Getter for the memories list
 /datum/mind/proc/get_notes()
 	. = notes
+	notes[NOTES_ANTAG] = ""
 
 	if(length(antag_datums))
 		for(var/datum/antagonist/antag_datum as anything in antag_datums)
