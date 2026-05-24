@@ -70,6 +70,6 @@
 		return TRUE
 
 	var/datum/reagent/consumable/ethanol/alcohol = tool.reagents.has_reagent(/datum/reagent/consumable/ethanol)
-	if(alcohol?.boozepwr >= 80)
+	if(alcohol && alcohol?.boozepwr >= 80)
 		return TRUE
 	return FALSE
