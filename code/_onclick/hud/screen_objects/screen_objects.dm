@@ -510,6 +510,9 @@ INITIALIZE_IMMEDIATE(/atom/movable/screen)
 	. = ..()
 	update_appearance(UPDATE_ICON_STATE)
 
+/atom/movable/screen/pull/human
+	screen_loc = ui_above_intent
+
 /atom/movable/screen/pull/Click()
 	. = ..()
 	if(.)

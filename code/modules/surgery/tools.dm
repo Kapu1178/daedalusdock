@@ -109,7 +109,7 @@ TYPEINFO_DEF(/obj/item/cautery/advanced)
 
 /obj/item/cautery/advanced/examine()
 	. = ..()
-	. += span_notice("It's set to [tool_behaviour == TOOL_CAUTERY ? "mending" : "drilling"] mode.")
+	. += span_info("It's set to [tool_behaviour == TOOL_CAUTERY ? "mending" : "drilling"] mode.")
 
 TYPEINFO_DEF(/obj/item/surgicaldrill)
 	default_materials = list(/datum/material/iron=10000, /datum/material/glass=6000)
@@ -281,7 +281,7 @@ TYPEINFO_DEF(/obj/item/scalpel/advanced)
 
 /obj/item/scalpel/advanced/examine()
 	. = ..()
-	. += span_notice("It's set to [tool_behaviour == TOOL_SCALPEL ? "scalpel" : "saw"] mode.")
+	. += span_info("It's set to [tool_behaviour == TOOL_SCALPEL ? "scalpel" : "saw"] mode.")
 
 TYPEINFO_DEF(/obj/item/retractor/advanced)
 	default_materials = list(/datum/material/iron = 12000, /datum/material/glass = 4000, /datum/material/silver = 4000, /datum/material/titanium = 5000)
@@ -318,7 +318,7 @@ TYPEINFO_DEF(/obj/item/retractor/advanced)
 
 /obj/item/retractor/advanced/examine()
 	. = ..()
-	. += span_notice("It resembles a [tool_behaviour == TOOL_RETRACTOR ? "retractor" : "hemostat"].")
+	. += span_info("It resembles a [tool_behaviour == TOOL_RETRACTOR ? "retractor" : "hemostat"].")
 
 TYPEINFO_DEF(/obj/item/shears)
 	default_materials = list(/datum/material/iron=8000, /datum/material/titanium=6000)

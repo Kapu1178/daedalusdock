@@ -175,9 +175,9 @@
 /obj/item/reagent_containers/hypospray/medipen/examine()
 	. = ..()
 	if(reagents?.reagent_list.len)
-		. += span_notice("It is currently loaded.")
+		. += span_info("It is currently loaded.")
 	else
-		. += span_notice("It is spent.")
+		. += span_info("It is spent.")
 
 /obj/item/reagent_containers/hypospray/medipen/stimpack //goliath kiting
 	name = "stimpack autoinjector"

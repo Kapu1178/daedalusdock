@@ -668,8 +668,7 @@
 		return FALSE
 
 	visible_message(
-		span_notice("[src] starts to put on [I]..."),
-		span_notice("You start to put on [I]...")
+		span_subtle("[src] starts to put on [I]..."),
 	)
 
 	. = I.do_equip_wait(src)
@@ -677,7 +676,6 @@
 	if(.)
 		visible_message(
 			span_notice("[src] puts on [I]."),
-			span_notice("You put on [I].")
 		)
 
 /mob/living/carbon/human/unequip_delay_self_check(obj/item/I)

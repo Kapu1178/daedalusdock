@@ -195,17 +195,17 @@ DEFINE_INTERACTABLE(/obj/machinery/vitals_monitor)
 /obj/machinery/vitals_monitor/examine(mob/user)
 	. = ..()
 	if(machine_stat & NOPOWER)
-		. += span_notice("It's unpowered.")
+		. += span_info("It's unpowered.")
 		return
 	if(!connected_optable?.patient)
 		return
 	var/mob/living/carbon/victim = connected_optable.patient
 
-	. += span_notice("Vitals of [victim]:")
-	. += span_notice("Pulse: [victim.get_pulse(GETPULSE_TOOL)]")
-	. += span_notice("Blood pressure: [victim.get_blood_pressure()]")
-	. += span_notice("Blood oxygenation: [victim.get_blood_oxygenation()]%")
-	. += span_notice("Body temperature: [victim.bodytemperature-T0C]&deg;C ([victim.bodytemperature*1.8-459.67]&deg;F)")
+	. += span_info("Vitals of [victim]:")
+	. += span_info("Pulse: [victim.get_pulse(GETPULSE_TOOL)]")
+	. += span_info("Blood pressure: [victim.get_blood_pressure()]")
+	. += span_info("Blood oxygenation: [victim.get_blood_oxygenation()]%")
+	. += span_info("Body temperature: [victim.bodytemperature-T0C]&deg;C ([victim.bodytemperature*1.8-459.67]&deg;F)")
 
 	var/brain_activity = "none"
 	var/obj/item/organ/brain/brain = victim.getorganslot(ORGAN_SLOT_BRAIN)
@@ -227,9 +227,9 @@ DEFINE_INTERACTABLE(/obj/machinery/vitals_monitor)
 				danger = TRUE
 
 	if (!danger)
-		. += span_notice("Brain activity: [brain_activity]")
+		. += span_info("Brain activity: [brain_activity]")
 	else
-		. += span_warning("Brain activity: [brain_activity]")
+		. += span_alert("Brain activity: [brain_activity]")
 
 	var/breathing = "normal"
 	var/obj/item/organ/lungs/lungs = victim.getorganslot(ORGAN_SLOT_LUNGS)
@@ -241,7 +241,7 @@ DEFINE_INTERACTABLE(/obj/machinery/vitals_monitor)
 	else
 		breathing = "none"
 
-	. += span_notice("Breathing: [breathing]")
+	. += span_info("Breathing: [breathing]")
 
 /obj/machinery/vitals_monitor/verb/toggle_beep()
 	set name = "Toggle Monitor Beeping"

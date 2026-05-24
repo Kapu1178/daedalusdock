@@ -277,6 +277,7 @@ SUBSYSTEM_DEF(ticker)
 	SSdatacore.generate_manifest()
 
 	transfer_characters() //transfer keys to the new mobs
+	divide_requitals()
 
 	for(var/I in round_start_events)
 		var/datum/callback/cb = I
@@ -290,14 +291,12 @@ SUBSYSTEM_DEF(ticker)
 	round_start_timeofday = REALTIMEOFDAY
 	INVOKE_ASYNC(SSdbcore, TYPE_PROC_REF(/datum/controller/subsystem/dbcore,SetRoundStart))
 
-	to_chat(world, span_notice("<B>Welcome to [station_name()], enjoy your stay!</B>"))
 	SEND_SOUND(world, sound(SSstation.announcer.get_rand_welcome_sound()))
 
 	current_state = GAME_STATE_PLAYING
 	Master.SetRunLevel(RUNLEVEL_GAME)
 
 	if(SSevents.holidays)
-		to_chat(world, span_notice("and..."))
 		for(var/holidayname in SSevents.holidays)
 			var/datum/holiday/holiday = SSevents.holidays[holidayname]
 			to_chat(world, "<h4>[holiday.greet()]</h4>")
@@ -305,6 +304,7 @@ SUBSYSTEM_DEF(ticker)
 	//Setup the antags AFTTTTER theyve gotten their jobs
 	mode.setup_antags()
 	PostSetup()
+
 	SSticker.ready_players = null
 	SSlobby.game_status?.alpha = 0
 	return TRUE
@@ -477,14 +477,15 @@ SUBSYSTEM_DEF(ticker)
 			continue
 
 		var/mob/pawn = player.new_character
+		pawns += pawn
 		pawn.mind.assigned_role?.before_roundstart_possess(pawn)
 
 		player.transfer_character()
+		pawn.mind_initialize()
 
 		pawn.mind.assigned_role?.after_roundstart_possess(pawn)
 		pawn.notransform = TRUE
 		pawn.client?.init_verbs()
-		pawns += pawn
 
 	if(pawns.len)
 		addtimer(CALLBACK(src, PROC_REF(release_characters), pawns), 3 SECONDS, TIMER_CLIENT_TIME)
@@ -857,3 +858,57 @@ SUBSYSTEM_DEF(ticker)
 
 	log_game("Gamemode successfully initialized, chose: [mode.name]")
 	return TRUE
+
+/datum/controller/subsystem/ticker/proc/divide_requitals()
+	// Do common filtering before hand.
+	var/list/prefiltered_minds = shuffle(minds)
+
+	for(var/datum/mind/M as anything in prefiltered_minds)
+		if(!(M.assigned_role?.job_flags & JOB_CREW_MEMBER))
+			prefiltered_minds -= M
+
+	// Do non-faction ones first.
+	generate_requitals(prefiltered_minds, subtypesof(/datum/requital) - typesof(/datum/requital/faction))
+	// Then faction ones.
+	generate_requitals(prefiltered_minds, subtypesof(/datum/requital/faction))
+
+	for(var/datum/mind/mind in minds)
+		for(var/datum/requital/owned as anything in mind.owned_requitals)
+			var/text = owned.get_owner_text(mind)
+			mind.append_note(NOTES_REQUITALS, "[text]<br>")
+			mind.roundstart_messages[ROUNDSTART_INFOKEY_REQUITALS] += span_statsgood(text)
+
+		for(var/datum/requital/target_of as anything in mind.targeted_requitals)
+			var/text = target_of.get_target_text(mind)
+			mind.append_note(NOTES_REQUITALS, "[text]<br>")
+			mind.roundstart_messages[ROUNDSTART_INFOKEY_REQUITALS] += span_statsbad(text)
+
+/datum/controller/subsystem/ticker/proc/generate_requitals(list/filtered_minds, list/types)
+	var/datum/requital_data/data = new(filtered_minds)
+	// instance -> weight (int)
+	var/list/datum/requital/templates = list()
+	// type -> used (int)
+	var/list/used_templates = list()
+
+	for(var/datum/requital/path as anything in types)
+		if(!isabstract(path))
+			templates[new path] = path.weight
+
+	for(var/datum/mind/M in filtered_minds)
+		var/list/available_templates = templates.Copy()
+		while(length(available_templates))
+			var/datum/requital/template = pick_n_take(available_templates)
+			var/template_type = template.type
+			if(used_templates[template_type] == template.max_instances)
+				continue
+
+			if(!template.is_valid_initial_owner(M))
+				continue
+
+			var/datum/requital/instance = new template_type()
+			if(!instance.setup(data, M))
+				qdel(instance)
+				continue
+
+			used_templates[template_type]++
+			break

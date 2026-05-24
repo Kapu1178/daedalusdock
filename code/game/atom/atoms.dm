@@ -751,13 +751,13 @@ TYPEINFO_DEF(/atom)
 
 	if(z && user.z && user.z != z)
 		var/diff = abs(user.z - z)
-		. += span_notice("<b>[p_theyre(TRUE)] [diff] level\s below you.</b>")
+		. += span_info("<b>[p_theyre(TRUE)] [diff] level\s below you.</b>")
 
 	if(custom_materials)
 		var/list/materials_list = list()
 		for(var/datum/material/current_material as anything in custom_materials)
 			materials_list += "[current_material.name]"
-		. += span_notice("It is made out of [english_list(materials_list)].")
+		. += span_info("It is made out of [english_list(materials_list)].")
 
 	if(reagents)
 		if(reagents.flags & TRANSPARENT)
@@ -765,21 +765,21 @@ TYPEINFO_DEF(/atom)
 				. += span_alert("It looks empty.")
 			else
 				if(user.can_see_reagents()) //Show each individual reagent
-					. += span_notice("You see the following reagents:")
+					. += span_info("You see the following reagents:")
 					for(var/datum/reagent/current_reagent as anything in reagents.reagent_list)
-						. += span_notice("* [round(current_reagent.volume, CHEMICAL_VOLUME_ROUNDING)] units of [current_reagent.name].")
+						. += span_info("* [round(current_reagent.volume, CHEMICAL_VOLUME_ROUNDING)] units of [current_reagent.name].")
 
 					if(reagents.is_reacting)
 						. += span_alert("A chemical reaction is taking place.")
 
-					. += span_notice("The solution's temperature is [reagents.chem_temp]K.")
+					. += span_info("The solution's temperature is [reagents.chem_temp]K.")
 
 				else //Otherwise, just show the total volume
-					. += span_notice("It looks about [reagents.total_volume / reagents.maximum_volume * 100]% full.")
+					. += span_info("It looks about [reagents.total_volume / reagents.maximum_volume * 100]% full.")
 
 		else if(reagents.flags & AMOUNT_VISIBLE)
 			if(reagents.total_volume)
-				. += span_notice("It looks about [reagents.total_volume / reagents.maximum_volume * 100]% full.")
+				. += span_info("It looks about [reagents.total_volume / reagents.maximum_volume * 100]% full.")
 			else
 				. += span_alert("It looks empty.")
 

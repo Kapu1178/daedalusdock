@@ -6,7 +6,7 @@
 
 import { Theme } from './settings/constants';
 
-const COLOR_DARK_BG = '#222020';
+const COLOR_DARK_BG = '#1a1a1b';
 const COLOR_DARK_BG_DARKER = '#171717';
 const COLOR_DARK_TEXT = '#ABC7A2';
 
@@ -38,8 +38,8 @@ export const setClientTheme = (name) => {
       'infobuttons.text-color': '#000000',
       'infowindow.background-color': 'none',
       'infowindow.text-color': '#000000',
-      'info.background-color': 'none',
-      'info.text-color': '#000000',
+      'statpane_and_output.background-color': 'none',
+      'statpane_and_output.text-color': '#000000',
       'browseroutput.background-color': 'none',
       'browseroutput.text-color': '#000000',
       'outputwindow.background-color': 'none',
@@ -90,8 +90,8 @@ export const setClientTheme = (name) => {
       'infobuttons.text-color': COLOR_DARK_TEXT,
       'infowindow.background-color': COLOR_DARK_BG,
       'infowindow.text-color': COLOR_DARK_TEXT,
-      'info.background-color': COLOR_DARK_BG,
-      'info.text-color': COLOR_DARK_TEXT,
+      'statpane_and_output.background-color': COLOR_DARK_BG,
+      'statpane_and_output.text-color': COLOR_DARK_TEXT,
       'info_and_buttons.background-color': COLOR_DARK_BG,
       'browseroutput.background-color': COLOR_DARK_BG,
       'browseroutput.text-color': COLOR_DARK_TEXT,

@@ -1,5 +1,5 @@
 /obj/item/diagnosis_book
-	name = "Codex Infirmitas"
+	name = "FCodex Infirmitas (Fifth Edition)"
 	desc = "A book containing information on diseases and disabilities."
 	icon = 'icons/obj/library.dmi'
 	icon_state ="bookdiagnosis"
@@ -76,6 +76,10 @@
 /obj/item/diagnosis_book/Destroy(force)
 	QDEL_NULL(byondui_screen)
 	return ..()
+
+/obj/item/diagnosis_book/examine(mob/user)
+	. = ..()
+	user.disco_made_easy(15, /datum/rpg_skill/anatomy, success_text = "An extensive knowledge pool of all manner of illness and ailment. Each edition was authored by a single man, the late Arthur Spleensplode.", trait_succeed = TRAIT_AETHERITE, is_examine = TRUE)
 
 /obj/item/diagnosis_book/add_item_context(obj/item/source, list/context, atom/target, mob/living/user)
 	if(pages_remaining && ishuman(target))

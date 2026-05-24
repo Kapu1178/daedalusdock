@@ -55,17 +55,17 @@
 	. = ..()
 
 	if(!in_range(user, src) && !issilicon(user) && !isobserver(user))
-		. += span_warning("You're too far away to examine [src]'s contents and display!")
+		. += span_alert("You're too far away to examine [src]'s contents and display!")
 		return
 	if(operating)
-		. += span_notice("\The [src] is operating.")
+		. += span_info("\The [src] is operating.")
 		return
 
 	if(length(ingredients))
 		if(issilicon(user))
-			. += span_notice("\The [src] camera shows:")
+			. += span_info("\The [src] camera shows:")
 		else
-			. += span_notice("\The [src] contains:")
+			. += span_info("\The [src] contains:")
 		var/list/items_counts = new
 		for(var/i in ingredients)
 			if(istype(i, /obj/item/stack))
@@ -75,9 +75,9 @@
 				var/atom/movable/AM = i
 				items_counts[AM.name]++
 		for(var/O in items_counts)
-			. += span_notice("- [items_counts[O]]x [O].")
+			. += span_info("- [items_counts[O]]x [O].")
 	else
-		. += span_notice("\The [src] is empty.")
+		. += span_info("\The [src] is empty.")
 
 	if(!(machine_stat & (NOPOWER|BROKEN)))
 		. += "[span_notice("The status display reads:")]\n"+\

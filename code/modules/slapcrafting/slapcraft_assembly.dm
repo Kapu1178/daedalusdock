@@ -21,7 +21,7 @@
 	for(var/step_path in recipe.steps)
 		if(step_states[step_path])
 			var/datum/slapcraft_step/done_step = SLAPCRAFT_STEP(step_path)
-			. += span_notice(done_step.finished_desc)
+			. += span_info(done_step.finished_desc)
 	// Describe how the next steps could be performed
 	var/list/next_steps = recipe.get_possible_next_steps(step_states)
 	for(var/step_type in next_steps)

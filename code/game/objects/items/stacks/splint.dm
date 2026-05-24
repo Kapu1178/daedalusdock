@@ -45,7 +45,7 @@
 		return ITEM_INTERACT_BLOCKING
 
 	if(H != user)
-		user.visible_message(span_notice("[user] starts to apply [src] to [H]'s [BP.plaintext_zone]."), blind_message = span_hear("You hear something being wrapped."))
+		user.visible_message(span_subtle("[user] begins to apply [src] to [H]'s [BP.plaintext_zone]."), blind_message = span_hear("You hear something being wrapped."))
 	else
 		switch(user.get_active_hand())
 			if(BODY_ZONE_PRECISE_R_HAND)
@@ -57,7 +57,7 @@
 					to_chat(user, span_warning("You cannot apply a splint to the arm you are using."))
 					return ITEM_INTERACT_BLOCKING
 
-		user.visible_message(span_notice("[user] starts to apply [src] to [user.p_their()] [BP.plaintext_zone]."), blind_message = span_hear("You hear something being wrapped."))
+		user.visible_message(span_subtle("[user] begins to apply [src] to [user.p_their()] [BP.plaintext_zone]."), blind_message = span_hear("You hear something being wrapped."))
 
 	var/datum/roll_result/result = user.stat_roll(7, /datum/rpg_skill/anatomy)
 	if(result.outcome <= FAILURE)

@@ -69,7 +69,7 @@
 
 /obj/item/clothing/neck/cloak/skill_reward/examine(mob/user)
 	. = ..()
-	. += span_notice("You notice a powerful aura about this cloak, suggesting that only the truly experienced may wield it.")
+	. += span_info("You notice a powerful aura about this cloak, suggesting that only the truly experienced may wield it.")
 
 /obj/item/clothing/neck/cloak/skill_reward/proc/check_wearable(mob/user)
 	return user.mind?.get_skill_level(associated_skill_path) < SKILL_LEVEL_LEGENDARY

@@ -45,7 +45,7 @@
 /obj/item/stack/tile/examine(mob/user)
 	. = ..()
 	if(tile_reskin_types || tile_rotate_dirs)
-		. += span_notice("Use while in your hand to change what type of [src] you want.")
+		. += span_info("Use while in your hand to change what type of [src] you want.")
 	if(throwforce && !is_cyborg) //do not want to divide by zero or show the message to borgs who can't throw
 		var/verb
 		switch(CEILING(MAX_LIVING_HEALTH / throwforce, 1)) //throws to crit a human
@@ -61,7 +61,7 @@
 				verb = "mediocre"
 		if(!verb)
 			return
-		. += span_notice("Those could work as a [verb] throwing weapon.")
+		. += span_info("Those could work as a [verb] throwing weapon.")
 
 /**
  * Place our tile on a plating, or replace it.

@@ -35,7 +35,7 @@
 
 /obj/item/seeds/examine(mob/user)
 	. = ..()
-	. += span_notice("Use a pen on it to rename it or change its description.")
+	. += span_info("Use a pen on it to rename it or change its description.")
 
 /**
  * Override for seeds with unique text for their analyzer. (No newlines at the start or end of unique text!)

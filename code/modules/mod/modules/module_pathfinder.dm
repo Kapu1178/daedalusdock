@@ -38,9 +38,9 @@
 /obj/item/mod/module/pathfinder/examine(mob/user)
 	. = ..()
 	if(implant)
-		. += span_notice("Use it on a human to implant them.")
+		. += span_info("Use it on a human to implant them.")
 	else
-		. += span_warning("The implant is missing.")
+		. += span_alert("The implant is missing.")
 
 /obj/item/mod/module/pathfinder/attack(mob/living/target, mob/living/user, params)
 	if(!ishuman(target) || !implant)

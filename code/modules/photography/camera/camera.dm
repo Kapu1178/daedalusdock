@@ -57,7 +57,7 @@ TYPEINFO_DEF(/obj/item/camera)
 
 /obj/item/camera/examine(mob/user)
 	. = ..()
-	. += span_notice("Alt-click to change its focusing, allowing you to set how big of an area it will capture.")
+	. += span_info("Alt-click to change its focusing, allowing you to set how big of an area it will capture.")
 
 /obj/item/camera/proc/adjust_zoom(mob/user)
 	if(loc != user)

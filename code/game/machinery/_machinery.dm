@@ -1011,9 +1011,9 @@
 
 /obj/machinery/proc/display_parts(mob/user)
 	. = list()
-	. += span_notice("It contains the following parts:")
+	. += span_info("It contains the following parts:")
 	for(var/obj/item/C in component_parts)
-		. += span_notice("[icon2html(C, user)] \A [C].")
+		. += span_info("[icon2html(C, user)] \A [C].")
 	. = jointext(., "")
 
 /obj/machinery/examine(mob/user)
@@ -1028,7 +1028,7 @@
 		var/healthpercent = (atom_integrity/max_integrity) * 100
 		switch(healthpercent)
 			if(50 to 99)
-				. += span_notice("It looks slightly damaged.")
+				. += span_info("It looks slightly damaged.")
 			if(25 to 50)
 				. += span_alert("It appears heavily damaged.")
 			if(0 to 25)

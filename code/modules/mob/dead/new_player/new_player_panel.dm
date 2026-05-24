@@ -49,6 +49,11 @@
 		view_primer()
 		return TRUE
 
+	if(href_list["change_character"])
+		var/datum/preferences/preferences = parent.client.prefs
+		preferences.change_character(usr)
+		return TRUE
+
 	if(href_list["character_setup"])
 		var/datum/preferences/preferences = parent.client.prefs
 		preferences.html_show(usr)
@@ -271,6 +276,9 @@
 					>[LINKIFY_CONSOLE_OPTION("Modify [name].txt", "character_setup=1")]
 				</div>
 				<div>
+					>[LINKIFY_CONSOLE_OPTION("Change Character.ps1", "change_character=1")]
+				</div>
+				<div>
 					>[CONSOLE_BACK]
 				</div>
 				<br>
@@ -299,7 +307,7 @@
 				<div class='flexItem'>[LINKIFY_READY("Observe", PLAYER_READY_TO_OBSERVE)]</div>
 			</div>
 		"}
-		output += "<div class='flexItem' style='margin-top: 8px'>[button_element(src, "View Station Manifests", "manifest=1")]</div>"
+		output += "<div class='flexItem' style='margin-top: 8px'>[button_element(src, "View Colony Census", "manifest=1")]</div>"
 	else
 		switch(parent.ready)
 			if(PLAYER_NOT_READY)
@@ -372,12 +380,12 @@
 
 /datum/new_player_panel/proc/view_primer()
 	var/content = {"
-	<div class='newspaper' style='height: 600px'>
+	<div class='newspaper' style='height: 650px'>
 		<div class='newspaper_header'>
 			The Colony Echo
 		</div>
 		<div class='newspaper_headline'>
-			FEDERATION SIEZES CONTROL OF [uppertext(station_name())]
+			FEDERATION REMNANT SIEZES CONTROL OF [uppertext(station_name())]
 		</div>
 		<div class='content'>
 			<div class='columns'>
@@ -388,9 +396,19 @@
 					<div class='headline subhead'>
 						An ill omen of what is to come?
 					</div>
-					The Minervan Federation has come aboard our humble remote colony and declared a state of emergency. They brought with them
+					The Federation Remnant has come aboard our humble remote colony and declared a state of emergency. They brought with them
 					a <u>praetorian guard</u> in the form of mercenaries from the Mars People's Coalition. Their "Superintendent" proclaims himself the representative of the Federation's will.
 					Not more than 72 hours ago were we enjoying peace on our station, what does this mean for our people?
+				</div>
+				<div class='column'>
+					<div class='headline'>
+						200 Years Later
+					</div>
+					<div class='headline subhead'>
+						A Brief History
+					</div>
+					Two-hundred years ago an event known as the Little Bang occured which our connection to the rest of the Pool, along with the Federation's hold on the sector. The Federation Remnant has been aggressively
+					expanding it's territory as of late, spelling trouble for minor colonies in the region.
 				</div>
 				<div class='column'>
 					<div class='headline'>
@@ -407,7 +425,7 @@
 	</div>
 	"}
 
-	var/datum/browser/popup = new(parent, "primer", "", 900, 600)
+	var/datum/browser/popup = new(parent, "primer", "", 900, 650)
 	popup.set_content(content)
 	popup.add_stylesheet("roundend", 'html/browser/primer.css')
 

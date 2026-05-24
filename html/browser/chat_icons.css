@@ -1,7 +1,7 @@
 img.chat_tag {
 	width: 32px;
 	height: 10px;
-	min-height:10px;
+	min-height: 10px;
 }
 
 img.radio_tag {
@@ -10,5 +10,5 @@ img.radio_tag {
 	min-height: 16px;
 	position: relative;
 	left: -1px;
-	bottom: -4px;
+	bottom: -3px;
 }

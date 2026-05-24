@@ -64,11 +64,11 @@
 /obj/machinery/chem_dispenser/examine(mob/user)
 	. = ..()
 	if(panel_open)
-		. += span_notice("[src]'s maintenance hatch is open!")
+		. += span_info("[src]'s maintenance hatch is open!")
 	if(in_range(user, src) || isobserver(user))
 		if(length(cartridges))
 			. += "It has [length(cartridges)] cartridges installed, and has space for [maximum_cartridges - length(cartridges)] more."
-			. += span_notice("It looks like you can <b>pry</b> out one of the cartridges.")
+			. += span_info("It looks like you can <b>pry</b> out one of the cartridges.")
 		else
 			. += "It has space for [maximum_cartridges] cartridges."
 

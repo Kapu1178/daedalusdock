@@ -33,9 +33,9 @@
 
 /turf/open/floor/light/examine(mob/user)
 	. = ..()
-	. += span_notice("It looks like you could <b>pry</b> it up.")
-	. += span_notice("Use a multitool on it to change colors.")
-	. += span_notice("Use a screwdriver to turn it off or on.")
+	. += span_info("It looks like you could <b>pry</b> it up.")
+	. += span_info("Use a multitool on it to change colors.")
+	. += span_info("Use a screwdriver to turn it off or on.")
 	if(state) ///check if broken
 		. += span_danger("The light bulb seems fried!")
 

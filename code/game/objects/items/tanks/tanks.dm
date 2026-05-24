@@ -91,10 +91,10 @@ TYPEINFO_DEF(/obj/item/tank)
 		icon = src.loc
 	if(!in_range(src, user) && !isobserver(user))
 		if(icon == src)
-			. += span_notice("If you want any more information you'll need to get closer.")
+			. += span_info("If you want any more information you'll need to get closer.")
 		return
 
-	. += span_notice("The pressure gauge reads [round(src.air_contents.returnPressure(),0.01)] kPa.")
+	. += span_info("The pressure gauge reads [round(src.air_contents.returnPressure(),0.01)] kPa.")
 
 	var/celsius_temperature = air_contents.temperature-T0C
 	var/descriptive
@@ -112,7 +112,7 @@ TYPEINFO_DEF(/obj/item/tank)
 	else
 		descriptive = "furiously hot"
 
-	. += span_notice("It feels [descriptive].")
+	. += span_info("It feels [descriptive].")
 
 /obj/item/tank/deconstruct(disassembled = TRUE)
 	var/atom/location = loc

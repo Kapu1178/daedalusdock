@@ -37,7 +37,7 @@ TYPEINFO_DEF(/obj/item/clothing/glasses)
 /obj/item/clothing/glasses/examine(mob/user)
 	. = ..()
 	if(glass_colour_type && !forced_glass_color && ishuman(user))
-		. += span_notice("Alt-click to toggle [p_their()] colors.")
+		. += span_info("Alt-click to toggle [p_their()] colors.")
 
 /obj/item/clothing/glasses/visor_toggling()
 	..()

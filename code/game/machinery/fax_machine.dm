@@ -296,8 +296,8 @@ GLOBAL_LIST_EMPTY(fax_machines)
 /obj/machinery/fax_machine/examine(mob/user)
 	. = ..()
 	if(stored_paper)
-		. += span_notice("Right click to remove the stored fax.")
-	. += span_notice("The maintenance panel is [locked ? "locked" : "unlocked"]. Swipe your ID card to [locked ? "unlock" : "lock"] it.")
+		. += span_info("Right click to remove the stored fax.")
+	. += span_info("The maintenance panel is [locked ? "locked" : "unlocked"]. Swipe your ID card to [locked ? "unlock" : "lock"] it.")
 
 /*
  * Set this fax machine's [room_tag] to the current room or null.

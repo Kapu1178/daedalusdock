@@ -14,7 +14,7 @@
 
 /obj/item/disk/data/floppy/examine(mob/user)
 	. = ..()
-	. += span_notice("The write-protect tab is set to [read_only ? "protected" : "unprotected"].")
+	. += span_info("The write-protect tab is set to [read_only ? "protected" : "unprotected"].")
 
 /// Comes loaded with ThinkDOS
 /obj/item/disk/data/floppy/thinkdos

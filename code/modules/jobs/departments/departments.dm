@@ -22,6 +22,8 @@
 	var/manifest_key = null
 	/// Account ID for the budget
 	var/budget_id = null
+	/// The associated employer type, if any.
+	var/datum/employer/employer_type
 
 	var/exclude_from_latejoin = FALSE
 	var/is_not_real_department = FALSE
@@ -55,6 +57,7 @@
 	display_order = 1
 	label_class = "command"
 	latejoin_color = "#ccccff"
+	employer_type = /datum/employer/government
 
 /datum/job_department/security
 	department_name = DEPARTMENT_SECURITY
@@ -67,6 +70,7 @@
 	manifest_key = DATACORE_RECORDS_MARS
 	nation_prefixes = list("Securi", "Beepski", "Shitcuri", "Red", "Stunba", "Flashbango", "Flasha", "Stanfordi")
 	budget_id = ACCOUNT_SEC
+	employer_type = /datum/employer/mars_exec
 
 /datum/job_department/engineering
 	department_name = DEPARTMENT_ENGINEERING
@@ -79,6 +83,7 @@
 	nation_prefixes = list("Atomo", "Engino", "Power", "Teleco")
 	manifest_key = DATACORE_RECORDS_DAEDALUS
 	budget_id = ACCOUNT_ENG
+	employer_type = /datum/employer/daedalus
 
 /datum/job_department/medical
 	department_name = DEPARTMENT_MEDICAL
@@ -91,6 +96,7 @@
 	nation_prefixes = list("Mede", "Healtha", "Recova", "Chemi", "Viro", "Psych")
 	manifest_key = DATACORE_RECORDS_AETHER
 	budget_id = ACCOUNT_MED
+	employer_type = /datum/employer/aether
 
 /datum/job_department/cargo
 	department_name = DEPARTMENT_CARGO
@@ -103,6 +109,7 @@
 	nation_prefixes = list("Cargo", "Guna", "Suppli", "Mule", "Crate", "Ore", "Mini", "Shaf")
 	manifest_key = DATACORE_RECORDS_HERMES
 	budget_id = ACCOUNT_CAR
+	employer_type = /datum/employer/hermes
 
 /datum/job_department/silicon
 	department_name = DEPARTMENT_SILICON

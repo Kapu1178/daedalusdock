@@ -25,7 +25,7 @@
 
 /obj/machinery/ntnet_relay/examine(mob/user)
 	. = ..()
-	. += span_notice("The front panel ID display reads: [uid]")
+	. += span_info("The front panel ID display reads: [uid]")
 
 ///Proc called to change the value of the `relay_enabled` variable and append behavior related to its change.
 /obj/machinery/ntnet_relay/proc/set_relay_enabled(new_value)

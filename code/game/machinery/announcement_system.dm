@@ -23,7 +23,7 @@ GLOBAL_LIST_EMPTY(announcement_systems)
 	var/obj/item/radio/headset/radio
 	var/arrival = "%PERSON, %RANK has boarded the station."
 	var/arrivalToggle = 1
-	var/newhead = "%PERSON, %RANK, is the department head."
+	var/newhead = "%PERSON, %RANK, is the faction leader."
 	var/newheadToggle = 1
 
 	var/greenlight = "Light_Green"

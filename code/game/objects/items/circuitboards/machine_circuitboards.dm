@@ -230,7 +230,7 @@
 
 /obj/item/circuitboard/machine/thermomachine/examine()
 	. = ..()
-	. += span_notice("It is set to layer [pipe_layer].")
+	. += span_info("It is set to layer [pipe_layer].")
 
 //FIXME: HYPERGARBAGE DONUT CREATION CODE
 // /obj/item/circuitboard/machine/HFR_fuel_input
@@ -942,8 +942,8 @@
 
 /obj/item/circuitboard/machine/dish_drive/examine(mob/user)
 	. = ..()
-	. += span_notice("Its suction function is [suction ? "enabled" : "disabled"]. Use it in-hand to switch.")
-	. += span_notice("Its disposal auto-transmit function is [transmit ? "enabled" : "disabled"]. Alt-click it to switch.")
+	. += span_info("Its suction function is [suction ? "enabled" : "disabled"]. Use it in-hand to switch.")
+	. += span_info("Its disposal auto-transmit function is [transmit ? "enabled" : "disabled"]. Alt-click it to switch.")
 
 /obj/item/circuitboard/machine/dish_drive/attack_self(mob/living/user)
 	suction = !suction

@@ -13,7 +13,7 @@
 	if(!IS_HERETIC(user))
 		return
 
-	. += span_notice("Allows you to cast heretic spells while the hood is up.")
+	. += span_info("Allows you to cast heretic spells while the hood is up.")
 
 TYPEINFO_DEF(/obj/item/clothing/suit/hooded/cultrobes/eldritch)
 	default_armor = list(BLUNT = 50, PUNCTURE = 50, SLASH = 0, LASER = 50, ENERGY = 50, BOMB = 35, BIO = 20, FIRE = 20, ACID = 20)
@@ -34,7 +34,7 @@ TYPEINFO_DEF(/obj/item/clothing/suit/hooded/cultrobes/eldritch)
 	if(!IS_HERETIC(user))
 		return
 
-	. += span_notice("Allows you to cast heretic spells while the hood is up.")
+	. += span_info("Allows you to cast heretic spells while the hood is up.")
 
 // Void cloak. Turns invisible with the hood up, lets you hide stuff.
 TYPEINFO_DEF(/obj/item/clothing/head/hooded/cult_hoodie/void)

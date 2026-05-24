@@ -45,7 +45,7 @@
 /obj/machinery/power/smes/examine(user)
 	. = ..()
 	if(!terminal)
-		. += span_warning("This SMES has no power terminal!")
+		. += span_alert("This SMES has no power terminal!")
 
 /obj/machinery/power/smes/Initialize(mapload)
 	. = ..()

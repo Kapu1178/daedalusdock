@@ -4,9 +4,7 @@
 ///displays the current time into the round, with a lot of extra code just there for ensuring it looks okay after an entire day passes
 #define ROUND_TIME ( "[world.time - SSticker.round_start_time > MIDNIGHT_ROLLOVER ? "[round((world.time - SSticker.round_start_time)/MIDNIGHT_ROLLOVER)]:[worldtime2text()]" : worldtime2text()]" )
 
-///How many years into the future (or past, if you're into that) the server is
-#define STATION_YEAR_OFFSET 805
-
+#define CURRENT_STATION_YEAR 200
 
 #define JANUARY 1
 #define FEBRUARY 2

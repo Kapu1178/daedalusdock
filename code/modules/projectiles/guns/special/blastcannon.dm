@@ -75,7 +75,7 @@
 /obj/item/gun/blastcannon/examine(mob/user)
 	. = ..()
 	if(bomb)
-		. += span_notice("A bomb is loaded inside.")
+		. += span_info("A bomb is loaded inside.")
 
 /obj/item/gun/blastcannon/attack_self(mob/user)
 	if(bomb)

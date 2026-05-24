@@ -63,10 +63,10 @@
 
 	post_change_callbacks += CALLBACK(src, PROC_REF(deconstruct), FALSE)
 
-/obj/structure/overfloor_catwalk/examine(mob/user)
+/obj/structure/overfloor_catwalk/disco_flavor(mob/living/carbon/human/user, nearby, is_station_level)
 	. = ..()
-	. += span_notice("The mesh comes out with a few simple <b>screws</b>.")
-	. += span_notice("The frame can be popped out with some <b>leverage</b>.")
+	if(locate(/obj/structure/cable, loc))
+		user.disco_made_easy("catwalk_veins", 14, /datum/rpg_skill/electric_body, success_text = "Bulbous veins run beneath the skin of the station, delivering life from its beating heart.")
 
 /obj/structure/overfloor_catwalk/update_overlays()
 	. = ..()

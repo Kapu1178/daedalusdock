@@ -31,12 +31,12 @@
 
 
 	. += {"
-	<fieldset class='computerPaneNested' style='display: inline-block;min-width:40%;max-width:40%;margin-left: auto;margin-right: auto'>
+	<fieldset class='computerPaneNested nppLanguageListContainer'>
 		<legend class='computerLegend tooltip'>
 			<b>All Languages</b>
 			<span class='tooltiptext'>I'm gettin' quirked up tonight.</span>
 		</legend>
-	<div class='zebraTable' style='display: flex; flex-direction: column; height: 560px;display: block;overflow-y: scroll'>
+	<div class='nppLanguageList zebraTable'>
 	"}
 
 
@@ -56,12 +56,12 @@
 	. += "</div></fieldset>"
 
 	. += {"
-	<fieldset class='computerPaneNested' style='display: inline-block;min-width:40%;max-width:40%;margin-left: auto;margin-right: auto'>
+	<fieldset class='computerPaneNested nppLanguageListContainer' style='display: inline-block;min-width:40%;max-width:40%;margin-left: auto;margin-right: auto'>
 		<legend class='computerLegend tooltip'>
 			<b>Known Languages</b>
 			<span class='tooltiptext'>I'm gettin' quirked up tonight.</span>
 		</legend>
-	<div class='zebraTable' style='display: flex; flex-direction: column; height: 560px;display: block;overflow-y: scroll'>
+	<div class='zebraTable nppLanguageList'>
 	"}
 
 	for(var/datum/language/innate_language as anything in innate_languages)

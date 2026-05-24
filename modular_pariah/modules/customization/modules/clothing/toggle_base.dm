@@ -16,7 +16,7 @@
 
 /datum/component/toggle_clothes/proc/handle_examine(datum/source, mob/user, list/examine_text)
 	SIGNAL_HANDLER
-	examine_text += span_notice("This item is toggleable! Alt Click to toggle!")
+	examine_text += span_info("This item is toggleable! Alt Click to toggle!")
 
 /datum/component/toggle_clothes/proc/clothing_toggle(obj/item/clothing/source, mob/living/clicker)
 	SIGNAL_HANDLER

@@ -1,7 +1,7 @@
 /datum/job/ai
 	title = JOB_AI
-	description = "Assist the crew, follow your laws, coordinate your cyborgs."
-	radio_help_message = "<b>Prefix your message with :b to speak with cyborgs and other AIs.</b>"
+	description = "One of the last Integrated Intelligences left in the Shrouded Sector, an impartial assistant to all of the colony's inhabitants.."
+	radio_help_message = "Prefix your message with :b to speak with cyborgs and other AIs."
 	auto_deadmin_role_flags = DEADMIN_POSITION_SILICON
 	faction = FACTION_STATION
 
@@ -90,8 +90,7 @@
 /datum/job/ai/announce_job(mob/living/joining_mob)
 	. = ..()
 	if(SSticker.HasRoundStarted())
-		minor_announce("[joining_mob] has been downloaded to an empty bluespace-networked AI core at [AREACOORD(joining_mob)].")
-
+		priority_announce("Central Intelligence [joining_mob] initialized at [AREACOORD(joining_mob)].")
 
 /datum/job/ai/config_check()
 	return CONFIG_GET(flag/allow_ai)

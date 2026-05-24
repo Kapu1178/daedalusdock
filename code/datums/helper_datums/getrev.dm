@@ -23,7 +23,7 @@
 
 /datum/getrev/proc/get_log_message()
 	var/list/msg = list()
-	msg += "Running Daedalus Dock revision: [date]"
+	msg += "Running Daedalus revision: [date]"
 	if(originmastercommit)
 		msg += "origin/master: [originmastercommit]"
 
@@ -83,8 +83,8 @@
 
 	// Game mode odds
 	msg += "<br><b>Current Informational Settings:</b>"
-	msg += "Protect Authority Roles From Traitor: [CONFIG_GET(flag/protect_roles_from_antagonist)]"
-	msg += "Protect Assistant Role From Traitor: [CONFIG_GET(flag/protect_assistant_from_antagonist)]"
+	msg += "Protect Authority Roles From Wildcard: [CONFIG_GET(flag/protect_roles_from_antagonist)]"
+	msg += "Protect Assistant Role From Wildcard: [CONFIG_GET(flag/protect_assistant_from_antagonist)]"
 	msg += "Enforce Minervan Authority: [CONFIG_GET(flag/enforce_human_authority)]"
-	msg += "Allow Latejoin Antagonists: [CONFIG_GET(flag/allow_latejoin_antagonists)]"
+	msg += "Allow Latejoin Wildcards: [CONFIG_GET(flag/allow_latejoin_antagonists)]"
 	to_chat(src, "<span class='infoplain'>[msg.Join("<br>")]</span>")

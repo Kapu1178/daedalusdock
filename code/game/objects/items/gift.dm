@@ -35,7 +35,7 @@ GLOBAL_LIST_EMPTY(possible_gifts)
 /obj/item/a_gift/examine(mob/M)
 	. = ..()
 	if((M.mind && HAS_TRAIT(M.mind, TRAIT_PRESENT_VISION)) || isobserver(M))
-		. += span_notice("It contains \a [initial(contains_type.name)].")
+		. += span_info("It contains \a [initial(contains_type.name)].")
 
 /obj/item/a_gift/attack_self(mob/M)
 	if(M.mind && HAS_TRAIT(M.mind, TRAIT_CANNOT_OPEN_PRESENTS))

@@ -131,7 +131,7 @@ TYPEINFO_DEF(/obj/item/extinguisher/crafted)
 
 /obj/item/extinguisher/examine(mob/user)
 	. = ..()
-	. += span_notice("The safety is [safety ? "on" : "off"].")
+	. += span_info("The safety is [safety ? "on" : "off"].")
 
 /obj/item/extinguisher/proc/AttemptRefill(atom/target, mob/user)
 	if(istype(target, tanktype) && target.Adjacent(user))

@@ -262,7 +262,7 @@
 
 /obj/item/storage/bag/plants/portaseeder/examine(mob/user)
 	. = ..()
-	. += span_notice("Ctrl-click to activate seed extraction.")
+	. += span_info("Ctrl-click to activate seed extraction.")
 
 /obj/item/storage/bag/plants/portaseeder/CtrlClick(mob/user, list/params)
 	if(user.incapacitated())

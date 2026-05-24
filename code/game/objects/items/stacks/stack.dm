@@ -272,23 +272,23 @@
 	var/plural = get_amount()>1
 	if(is_cyborg)
 		if(singular_name)
-			. += span_notice("There is enough energy for [get_amount()] [singular_name]\s.")
+			. += span_info("There is enough energy for [get_amount()] [singular_name]\s.")
 		else
-			. += span_notice("There is enough energy for [get_amount()].")
+			. += span_info("There is enough energy for [get_amount()].")
 		return
 
 	if(singular_name)
 		if(plural)
-			. += span_notice("There are [get_amount()] [singular_name]\s in the [stack_name].")
+			. += span_info("There are [get_amount()] [singular_name]\s in the [stack_name].")
 
 	else if(plural)
-		. += span_notice("There are [get_amount()] in the [stack_name].")
+		. += span_info("There are [get_amount()] in the [stack_name].")
 
 	if(absorption_capacity < initial(absorption_capacity))
 		if(absorption_capacity == 0)
 			. += span_alert("[plural ? "They are" : "It is"] drenched in blood, this won't be a suitable bandage.")
 		else
-			. += span_notice("[plural ? "They are" : "It is"] covered in blood.")
+			. += span_info("[plural ? "They are" : "It is"] covered in blood.")
 
 /obj/item/stack/proc/get_amount()
 	if(is_cyborg)

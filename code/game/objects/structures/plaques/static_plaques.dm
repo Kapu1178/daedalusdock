@@ -102,6 +102,13 @@
 /obj/structure/plaque/static_plaque/golden/commission/uterus
 	desc = "Spinward Sector Station SS-01\n'Uterus' Class Outpost\nCommissioned 03/09/2551\nDecommissioned 21/06/2552\n'Minervanity's Vanguard'"
 
+/obj/structure/plaque/static_plaque/golden/commission/daedalus
+	desc = "The surface is faded and illegible."
+
+/obj/structure/plaque/static_plaque/golden/commission/daedalus/disco_flavor(mob/living/carbon/human/user, nearby, is_station_level)
+	. = ..()
+	user.disco_made_easy("commission_plaque", 16, success_text = "No, no that can't be right. This station cannot be old enough for engravings to fade, can it?")
+
 // Other Stations
 
 // Space Station 13, Developer Class Outpost, Station Commissioned 30.12.2322, For the Glory of the Workers of the Third Soviet Union

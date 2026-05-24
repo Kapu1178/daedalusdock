@@ -1,6 +1,6 @@
 /datum/job/clown
 	title = JOB_CLOWN
-	description = "Entertain the crew, make bad jokes, go on a holy quest to find bananium, HONK!"
+	description = "Entertain the crew, make horrible jokes, get beat up."
 	faction = FACTION_STATION
 
 	pinpad_key = "pantomime"

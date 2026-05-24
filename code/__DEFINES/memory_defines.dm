@@ -3,6 +3,7 @@
 #define NOTES_ANTAG "Antag"
 #define NOTES_TRAITS "Traits"
 #define NOTES_DOOR_CODES "Door Codes"
+#define NOTES_REQUITALS "Requitals"
 
 ///name of the file that has all the saved engravings
 #define ENGRAVING_SAVE_FILE "data/engravings/[SSmapping.config.map_name]_engravings.json"

@@ -170,7 +170,7 @@
 
 	if(!. && !docked && !damaged)
 		if(console)
-			console.say("Welcome to [station_name()], have a safe and productive day!")
+			console.say(uppertext("Welcome to [station_name()], ESTABLISHED '21."))
 			playsound(console, 'sound/voice/ApproachingDaedalus.ogg', 50, FALSE, extrarange = 4)
 
 		for(var/datum/callback/C in on_arrival_callbacks)

@@ -73,11 +73,11 @@
 	if(cards.len > 0)
 		var/obj/item/toy/singlecard/card = cards[1]
 		if(HAS_TRAIT(user, TRAIT_XRAY_VISION))
-			. += span_notice("You scan the deck with your x-ray vision and the top card reads: [card.cardname].")
+			. += span_info("You scan the deck with your x-ray vision and the top card reads: [card.cardname].")
 		var/marked_color = card.getMarkedColor(user)
 		if(marked_color)
-			. += span_notice("The top card of the deck has a [marked_color] mark on the corner!")
-	. += span_notice("Click and drag the deck to yourself to pickup.") // This should be a context screentip
+			. += span_info("The top card of the deck has a [marked_color] mark on the corner!")
+	. += span_info("Click and drag the deck to yourself to pickup.") // This should be a context screentip
 
 /obj/item/toy/cards/deck/add_context(atom/source, list/context, obj/item/held_item, mob/living/user)
 	if(src == held_item)

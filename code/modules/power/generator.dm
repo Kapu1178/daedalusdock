@@ -263,4 +263,4 @@
 
 /obj/machinery/power/generator/examine(mob/user)
 	. = ..()
-	. += span_notice("Use a wrench with left-click to rotate it and right-click to unanchor it.")
+	. += span_info("Use a wrench with left-click to rotate it and right-click to unanchor it.")

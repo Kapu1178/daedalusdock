@@ -203,12 +203,31 @@ GLOBAL_LIST_EMPTY(freq2icon)
 	LAZYADD(passed_bridges, refid)
 	return FALSE
 
+/// Returns a radio channel singleton for a given frequency or name.
+/proc/get_radio_channel(freq_or_name) as /datum/radio_channel
+	if(isnum(freq_or_name))
+		freq_or_name = GLOB.radio_frequency_to_channel[num2text(freq_or_name)]
+
+	return GLOB.radio_channel_templates_by_key[freq_or_name]
+
 // YES THIS IS STUPID I KNOW.
-/// Structs to contain radio channel information. Not instanced.
+/// Structs to contain radio channel information.
 /datum/radio_channel
 	var/frequency
 	var/key
-	var/icon // optional, see chat_icons.dm
+	var/icon = "unknown.png" // see chat_icons.dm
+	var/span = "radio"
+
+	/// Created in new(), this is what prepends speech when a radio is used.
+	var/speech_prefix
+
+/datum/radio_channel/New()
+	. = ..()
+	speech_prefix = init_speech_prefix()
+
+/// Returns the text to attach to the front of speech, should end in a space.
+/datum/radio_channel/proc/init_speech_prefix()
+	return "[RADIO_TAG(icon)]\[[key]\] "
 
 /datum/radio_channel/common
 	key = RADIO_CHANNEL_COMMON
@@ -218,62 +237,76 @@ GLOBAL_LIST_EMPTY(freq2icon)
 /datum/radio_channel/science
 	key = RADIO_CHANNEL_SCIENCE
 	frequency = FREQ_SCIENCE
+	span = "sciradio"
 
 /datum/radio_channel/federation
 	key = RADIO_CHANNEL_FEDERATION
 	frequency = FREQ_COMMAND
 	icon = "ntboss.png"
+	span = "comradio"
 
 /datum/radio_channel/medical
 	key = RADIO_CHANNEL_MEDICAL
 	frequency = FREQ_MEDICAL
 	icon = "med.png"
+	span = "medradio"
 
 /datum/radio_channel/engineering
 	key = RADIO_CHANNEL_ENGINEERING
 	frequency = FREQ_ENGINEERING
 	icon = "eng.png"
+	span = "engradio"
 
 /datum/radio_channel/security
 	key = RADIO_CHANNEL_SECURITY
 	frequency = FREQ_SECURITY
 	icon = "sec.png"
+	span = "secradio"
 
 /datum/radio_channel/centcom
 	key = RADIO_CHANNEL_CENTCOM
 	frequency = FREQ_CENTCOM
+	span = "centcomradio"
 
 /datum/radio_channel/syndicate
 	key = RADIO_CHANNEL_SYNDICATE
 	frequency = FREQ_SYNDICATE
 	icon = "syndieboss.png"
+	span = "syndradio"
 
 /datum/radio_channel/supply
 	key = RADIO_CHANNEL_SUPPLY
 	frequency = FREQ_SUPPLY
 	icon = "mail.png"
+	span = "suppradio"
 
 /datum/radio_channel/service
 	key = RADIO_CHANNEL_SERVICE
 	frequency = FREQ_SERVICE
+	span = "servradio"
 
 /datum/radio_channel/ai_private
 	key = RADIO_CHANNEL_AI_PRIVATE
 	frequency = FREQ_AI_PRIVATE
 	icon = "ai.png"
+	span = "aiprivradio"
 
 /datum/radio_channel/ctf_red
 	key = RADIO_CHANNEL_CTF_RED
 	frequency = FREQ_CTF_RED
+	span = "redteamradio"
 
 /datum/radio_channel/ctf_blue
 	key = RADIO_CHANNEL_CTF_BLUE
 	frequency = FREQ_CTF_BLUE
+	span = "blueteamradio"
 
 /datum/radio_channel/ctf_green
 	key = RADIO_CHANNEL_CTF_GREEN
 	frequency = FREQ_CTF_GREEN
+	span = "greenteamradio"
 
 /datum/radio_channel/ctf_yellow
 	key = RADIO_CHANNEL_CTF_YELLOW
 	frequency = FREQ_CTF_YELLOW
+	span = "yellowteamradio"

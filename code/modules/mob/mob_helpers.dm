@@ -486,7 +486,7 @@ GLOBAL_LIST_INIT(bodyzone_gurps_mods, list(
  */
 /mob/proc/common_trait_examine()
 	if(HAS_TRAIT(src,TRAIT_HUSK))
-		. += span_warning("This body has been reduced to a grotesque husk.")
+		. += span_alert("This body has been reduced to a grotesque husk.")
 
 /**
  * Get the list of keywords for policy config

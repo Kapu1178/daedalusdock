@@ -102,7 +102,7 @@ TYPEINFO_DEF(/obj/structure/marker_beacon)
 
 /obj/structure/marker_beacon/examine(mob/user)
 	. = ..()
-	. += span_notice("Alt-click to select a color. Current color is [picked_color].")
+	. += span_info("Alt-click to select a color. Current color is [picked_color].")
 
 /obj/structure/marker_beacon/update_appearance(updates)
 	while(!picked_color || !GLOB.marker_beacon_colors[picked_color])

@@ -229,7 +229,7 @@
 		if(isopenturf(loc) && prob(15)) // Wets floors and spawns foam randomly
 			UnarmedAttack(src)
 	else if(prob(5))
-		audible_message("[src] makes an excited beeping booping sound!")
+		audible_message(span_hear("[src] makes an excited beeping booping sound."))
 
 	if(ismob(target) && isnull(process_scan(target)))
 		target = null
@@ -329,9 +329,12 @@
 		set_mode(BOT_CLEANING)
 		update_icon_state()
 		var/turf/T = get_turf(attack_target)
-		if(do_after(src, T, 1 SECOND))
+		var/image/clean_overlay = image('icons/effects/effects.dmi', "bubbles")
+		attack_target.add_overlay(clean_overlay)
+		if(do_after(src, T, 3 SECONDS))
 			T.wash(CLEAN_SCRUB|CLEAN_TYPE_HIDDEN_BLOOD) // I thought it'd be funny if cleanbots could clean hidden blood.
-			visible_message(span_notice("[src] cleans [T]."))
+			visible_message(span_subtle("[src] cleans [T]."))
+		attack_target.cut_overlay(clean_overlay)
 		target = null
 		set_mode(BOT_IDLE)
 		update_icon_state()

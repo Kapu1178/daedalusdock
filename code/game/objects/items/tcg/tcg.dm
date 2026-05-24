@@ -204,7 +204,7 @@ GLOBAL_LIST_EMPTY(tcgcard_radial_choices)
 
 /obj/item/tcgcard_deck/examine(mob/user)
 	. = ..()
-	. += span_notice("\The [src] has [contents.len] cards inside.")
+	. += span_info("\The [src] has [contents.len] cards inside.")
 
 /obj/item/tcgcard_deck/attack_hand(mob/user, list/modifiers)
 	var/list/choices = list(

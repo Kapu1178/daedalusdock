@@ -41,7 +41,7 @@ To add a crossbreed:
 /obj/item/slimecross/examine(mob/user)
 	. = ..()
 	if(effect_desc)
-		. += span_notice("[effect_desc]")
+		. += span_info("[effect_desc]")
 
 /obj/item/slimecross/Initialize(mapload)
 	. = ..()

@@ -47,7 +47,7 @@ GLOBAL_LIST_INIT(job_display_order, list(
 	var/description
 
 	/// A string added to the on-join block to tell you how to use your radio.
-	var/radio_help_message = "<b>Prefix your message with :h to speak on your faction's radio. To see other prefixes, look closely at your headset.</b>"
+	var/radio_help_message = ""
 
 	/// Innate skill levels unlocked at roundstart. Based on config.jobs_have_minimal_access config setting, for example with a skeleton crew. Format is list(/datum/skill/foo = SKILL_EXP_NOVICE) with exp as an integer or as per code/_DEFINES/skills.dm
 	var/list/skills
@@ -240,11 +240,6 @@ GLOBAL_LIST_INIT(job_display_order, list(
 		var/mob/living/carbon/human/experiencer = spawned
 		for(var/i in roundstart_experience)
 			experiencer.mind.adjust_experience(i, roundstart_experience[i], TRUE)
-
-	if(pinpad_key)
-		var/pin = SSid_access.get_static_pincode(pinpad_key)
-		spawned.mind.set_note(NOTES_DOOR_CODES, "The pin to your doors is [pin]")
-		to_chat(player_client, span_obviousnotice("You remember the pin to your doors: <b>[pin]</b>"))
 
 /datum/job/proc/announce_job(mob/living/joining_mob)
 	if(head_announce)
@@ -610,7 +605,7 @@ GLOBAL_LIST_INIT(job_display_order, list(
 	SEND_GLOBAL_SIGNAL(COMSIG_GLOB_JOB_AFTER_LATEJOIN_SPAWN, src, spawning)
 
 /// Called by SSjob when a player joins the round as this job.
-/datum/job/proc/on_join_message(client/C, job_title_pref)
+/datum/job/proc/get_join_message(client/C, job_title_pref) as text
 	var/completed_title = "<span style='color:[selection_color]'>[job_title_pref]</span>"
 	var/prefix
 	if(spawn_positions == 1)
@@ -625,9 +620,7 @@ GLOBAL_LIST_INIT(job_display_order, list(
 		job_info += "<br><br>As the <span style='color:[selection_color]'>[job_title_pref == title ? job_title_pref : "[job_title_pref] ([title])"]</span> \
 		you answer directly to [supervisors]. Special circumstances may change this."
 
-	job_info += "<br><br>[radio_help_message]"
-
-	to_chat(C, examine_block("[job_header][jointext(job_info, "")]"))
+	return "[job_header][jointext(job_info, "")]"
 
 /// Called by SSjob when a player joins the round as this job.
 /datum/job/proc/on_join_popup(client/C, job_title_pref)

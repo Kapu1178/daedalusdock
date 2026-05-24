@@ -41,9 +41,9 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/machinery/defibrillator_mount/loaded, 28)
 	. = ..()
 	if(defib)
 		if(SSsecurity_level.current_level >= SEC_LEVEL_RED)
-			. += span_notice("Due to a security situation, its locking clamps can be toggled by swiping any ID.")
+			. += span_info("Due to a security situation, its locking clamps can be toggled by swiping any ID.")
 		else
-			. += span_notice("Its locking clamps can be [clamps_locked ? "dis" : ""]engaged by swiping an ID with access.")
+			. += span_info("Its locking clamps can be [clamps_locked ? "dis" : ""]engaged by swiping an ID with access.")
 
 /obj/machinery/defibrillator_mount/update_overlays()
 	. = ..()

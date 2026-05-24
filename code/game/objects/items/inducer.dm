@@ -156,11 +156,11 @@
 /obj/item/inducer/examine(mob/living/M)
 	. = ..()
 	if(cell)
-		. += span_notice("Its display shows: [display_energy(cell.charge)].")
+		. += span_info("Its display shows: [display_energy(cell.charge)].")
 	else
-		. += span_notice("Its display is dark.")
+		. += span_info("Its display is dark.")
 	if(opened)
-		. += span_notice("Its battery compartment is open.")
+		. += span_info("Its battery compartment is open.")
 
 /obj/item/inducer/update_overlays()
 	. = ..()

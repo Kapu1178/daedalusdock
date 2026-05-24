@@ -56,5 +56,5 @@
 		if(possibly_blocking.body_parts_covered & tatted_limb.body_part) //check to see if something is obscuring their tattoo.
 			return
 
-	examine_list += span_notice("[tatted_limb] of [bodypart_owner] has a tattoo!")
+	examine_list += span_info("[tatted_limb] of [bodypart_owner] has a tattoo!")
 	examine_list += span_boldnotice(tattoo_description)

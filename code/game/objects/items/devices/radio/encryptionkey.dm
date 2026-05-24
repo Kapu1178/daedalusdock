@@ -24,7 +24,7 @@
 		if(translate_binary)
 			examine_text_list += "[GLOB.channel_tokens[MODE_BINARY]] - [MODE_BINARY]"
 
-		. += span_notice("It can access the following channels; [jointext(examine_text_list, ", ")].")
+		. += span_info("It can access the following channels; [jointext(examine_text_list, ", ")].")
 
 /obj/item/encryptionkey/syndicate
 	name = "syndicate encryption key"

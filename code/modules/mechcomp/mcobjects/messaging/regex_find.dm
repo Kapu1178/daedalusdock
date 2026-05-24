@@ -19,8 +19,8 @@
 
 /obj/item/mcobject/messaging/regfind/examine(mob/user)
 	. = ..()
-	. += span_notice("Current Expression: [strip_html(expressionTT)]")
-	. += span_notice("Replace Signal is [replace_message ? "on.":"off."]")
+	. += span_info("Current Expression: [strip_html(expressionTT)]")
+	. += span_info("Replace Signal is [replace_message ? "on.":"off."]")
 
 /obj/item/mcobject/messaging/regfind/proc/set_regex(datum/mcmessage/input)
 	expressionpatt = input.cmd

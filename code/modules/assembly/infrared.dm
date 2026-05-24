@@ -36,7 +36,7 @@ TYPEINFO_DEF(/obj/item/assembly/infra)
 
 /obj/item/assembly/infra/examine(mob/user)
 	. = ..()
-	. += span_notice("The infrared trigger is [on?"on":"off"].")
+	. += span_info("The infrared trigger is [on?"on":"off"].")
 
 /obj/item/assembly/infra/activate()
 	if(!..())

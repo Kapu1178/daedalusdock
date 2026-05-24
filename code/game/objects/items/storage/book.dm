@@ -45,9 +45,9 @@ GLOBAL_LIST_INIT(bibleitemstates, list("bible", "koran", "scrapbook", "burning",
 	. = ..()
 	if(user?.mind?.holy_role)
 		if(GLOB.chaplain_altars.len)
-			. += span_notice("[src] has an expansion pack to replace any broken Altar.")
+			. += span_info("[src] has an expansion pack to replace any broken Altar.")
 		else
-			. += span_notice("[src] can be unpacked by hitting the floor of a holy area with it.")
+			. += span_info("[src] can be unpacked by hitting the floor of a holy area with it.")
 
 /obj/item/storage/book/bible/Initialize(mapload)
 	. = ..()

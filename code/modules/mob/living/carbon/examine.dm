@@ -10,7 +10,7 @@
 	var/obscured = check_obscured_slots()
 
 	if (handcuffed)
-		. += span_warning("[t_He] [t_is] handcuffed with [icon2html(handcuffed, user)] [handcuffed]!")
+		. += span_alert("[t_He] [t_is] handcuffed with [icon2html(handcuffed, user)] [handcuffed]!")
 	if (head)
 		. += "[t_He] [t_is] wearing [head.get_examine_string(user)] on [t_his] head. "
 	if(wear_mask && !(obscured & ITEM_SLOT_MASK))
@@ -116,7 +116,7 @@
 
 /mob/living/carbon/examine_more(mob/user)
 	. = ..()
-	. += span_notice("<i>You examine [src] closer, and note the following...</i>")
+	. += span_info("<i>You examine [src] closer, and note the following...</i>")
 
 	//On closer inspection, this man isnt a man at all!
 	var/list/covered_zones = get_covered_body_zones()

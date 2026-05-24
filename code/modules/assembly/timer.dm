@@ -36,7 +36,7 @@ TYPEINFO_DEF(/obj/item/assembly/timer)
 
 /obj/item/assembly/timer/examine(mob/user)
 	. = ..()
-	. += span_notice("The timer is [timing ? "counting down from [time]":"set for [time] seconds"].")
+	. += span_info("The timer is [timing ? "counting down from [time]":"set for [time] seconds"].")
 
 /obj/item/assembly/timer/activate()
 	if(!..())

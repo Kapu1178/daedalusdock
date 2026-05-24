@@ -14,7 +14,9 @@
 
 /datum/preference_group/category/general/get_content(datum/preferences/prefs)
 	. = ..()
+	. += "<div class='nppCategoryGeneral'>"
 	for(var/datum/preference_group/module as anything in modules)
 		if(module.should_display(prefs))
 			. += module.get_content(prefs)
 
+	. += "</div>"

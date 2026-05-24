@@ -153,7 +153,7 @@ TYPEINFO_DEF(/obj/machinery/door/puzzle)
 /obj/item/pressure_plate/hologrid/examine(mob/user)
 	. = ..()
 	if(claimed)
-		. += span_notice("This one appears to be spent already.")
+		. += span_info("This one appears to be spent already.")
 
 /obj/item/pressure_plate/hologrid/trigger()
 	if(!claimed)

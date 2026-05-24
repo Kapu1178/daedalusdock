@@ -46,6 +46,11 @@ TYPEINFO_DEF(/obj/item/crowbar)
 	icon_state = "crowbar_red"
 	force = 8
 
+/obj/item/crowbar/red/disco_flavor(mob/living/carbon/human/user, nearby, is_station_level)
+	. = ..()
+	user.disco_made_easy("crowbar_hl", 7, /datum/rpg_skill/electric_body, failure_text = "You feel an indescribable urge to assault the nearest peacekeeper.")
+	user.disco_made_easy("crowbar_beer", 16, /datum/rpg_skill/theatre, success_text = "Did you owe somebody a beer? You did, you definitely did!")
+
 /obj/item/crowbar/red/suicide_act(mob/user)
 	user.visible_message(span_suicide("[user]'s body turns limp and collapses to the ground as [user.p_they()] smashes [user.p_their()] head in with [src]! It looks like [user.p_theyre()] trying to commit suicide!"))
 	playsound(loc, 'sound/health/flatline.ogg', 50, FALSE, -1)

@@ -29,7 +29,7 @@
 /obj/structure/bed/examine(mob/user)
 	. = ..()
 	if(bolts)
-		. += span_notice("It's held together by a couple of <b>bolts</b>.")
+		. += span_info("It's held together by a couple of <b>bolts</b>.")
 
 /obj/structure/bed/deconstruct(disassembled = TRUE)
 	if(!(flags_1 & NODECONSTRUCT_1))
@@ -73,7 +73,7 @@
 
 /obj/structure/bed/roller/examine(mob/user)
 	. = ..()
-	. += span_notice("You can fold it up by <b>dragging</b> it onto you.")
+	. += span_info("You can fold it up by <b>dragging</b> it onto you.")
 
 /obj/structure/bed/roller/attackby(obj/item/W, mob/user, params)
 	if(istype(W, /obj/item/roller/robo))

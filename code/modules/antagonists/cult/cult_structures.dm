@@ -14,7 +14,7 @@
 
 /obj/structure/destructible/cult/examine(mob/user)
 	. = ..()
-	. += span_notice("[src] is [anchored ? "secured to":"unsecured from"] the floor.")
+	. += span_info("[src] is [anchored ? "secured to":"unsecured from"] the floor.")
 
 /obj/structure/destructible/cult/set_anchored(anchorvalue)
 	. = ..()

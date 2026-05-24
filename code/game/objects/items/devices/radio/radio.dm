@@ -491,10 +491,10 @@ TYPEINFO_DEF(/obj/item/radio)
 /obj/item/radio/examine(mob/user)
 	. = ..()
 	if (frequency && (in_range(src, user) || isobserver(user)))
-		. += span_notice("It is set to broadcast over the [frequency/10] frequency.")
+		. += span_info("It is set to broadcast over the [frequency/10] frequency.")
 
 	if (unscrewed)
-		. += span_notice("It can be attached to assemblies and modified.")
+		. += span_info("It can be attached to assemblies and modified.")
 
 /obj/item/radio/screwdriver_act(mob/living/user, obj/item/tool)
 	add_fingerprint(user)

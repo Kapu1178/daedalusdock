@@ -80,13 +80,13 @@
 
 	if(!current_bake_time) //Not baked yet
 		if(positive_result)
-			examine_list += span_notice("[parent] can be <b>baked</b> into \a [initial(bake_result.name)].")
+			examine_list += span_info("[parent] can be <b>baked</b> into \a [initial(bake_result.name)].")
 		return
 
 	if(positive_result)
 		if(current_bake_time <= required_bake_time * 0.75)
-			examine_list += span_notice("[parent] probably needs to be baked a bit longer!")
+			examine_list += span_info("[parent] probably needs to be baked a bit longer!")
 		else if(current_bake_time <= required_bake_time)
-			examine_list += span_notice("[parent] seems to be almost finished baking!")
+			examine_list += span_info("[parent] seems to be almost finished baking!")
 	else
 		examine_list += span_danger("[parent] should probably not be baked for much longer!")

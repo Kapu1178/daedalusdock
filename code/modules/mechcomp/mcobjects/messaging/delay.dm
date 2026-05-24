@@ -19,8 +19,8 @@
 
 /obj/item/mcobject/messaging/delay/examine(mob/user)
 	. = ..()
-	. += span_notice("Delay: [delay] tenths of a second.")
-	. += span_notice("Message Replacement is [replace_message ? "on" : "off"].")
+	. += span_info("Delay: [delay] tenths of a second.")
+	. += span_info("Message Replacement is [replace_message ? "on" : "off"].")
 
 /obj/item/mcobject/messaging/delay/proc/set_delay(mob/user, obj/item/tool)
 	var/time = input(user, "Enter delay in tenths of a second", "Configure Component", delay) as null|num

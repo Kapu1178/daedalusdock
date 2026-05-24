@@ -712,7 +712,7 @@ TYPEINFO_DEF(/obj/item/disk/nuclear)
 		return
 
 	if(isobserver(user) || HAS_TRAIT(user, TRAIT_DISK_VERIFIER) || (user.mind && HAS_TRAIT(user.mind, TRAIT_DISK_VERIFIER)))
-		. += span_warning("The serial numbers on [src] are incorrect.")
+		. += span_alert("The serial numbers on [src] are incorrect.")
 
 /*
  * You can't accidentally eat the nuke disk, bro

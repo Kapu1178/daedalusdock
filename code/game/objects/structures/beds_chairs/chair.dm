@@ -23,7 +23,7 @@ TYPEINFO_DEF(/obj/structure/chair)
 
 /obj/structure/chair/examine(mob/user)
 	. = ..()
-	. += span_notice("It's held together by a handful of <b>bolts</b>.")
+	. += span_info("It's held together by a handful of <b>bolts</b>.")
 
 /obj/structure/chair/Initialize(mapload)
 	. = ..()

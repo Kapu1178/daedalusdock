@@ -27,7 +27,7 @@
 
 /obj/item/sample/examine(mob/user)
 	. = ..()
-	. += span_notice("It is labelled: <b>[label]</b>.")
+	. += span_info("It is labelled: <b>[label]</b>.")
 
 /obj/item/sample/item_interaction(mob/living/user, obj/item/tool, list/modifiers)
 	if(tool.type != type)

@@ -269,12 +269,12 @@
 
 	//Hacked
 	if(hacked)
-		. += span_warning("Its display is glowing red!")
+		. += span_alert("Its display is glowing red!")
 
 	//Damaged
 	if(health != maxHealth)
 		if(health > maxHealth * 0.33) //Between maxHealth and about a third of maxHealth, between 30 and 10 for normal drones
-			. += span_warning("Its screws are slightly loose.")
+			. += span_alert("Its screws are slightly loose.")
 		else //otherwise, below about 33%
 			. += span_boldwarning("Its screws are very loose!")
 

@@ -386,7 +386,7 @@ TYPEINFO_DEF(/obj/item/assembly/flash)
 
 /obj/item/assembly/flash/camera/examine(mob/user)
 	. = ..()
-	. += span_notice("It has [current_charges] charge\s remaining.")
+	. += span_info("It has [current_charges] charge\s remaining.")
 	if (length(charge_timers))
 		. += span_boldnotice("A small display on the screen reads:")
 	for (var/i in 1 to length(charge_timers))

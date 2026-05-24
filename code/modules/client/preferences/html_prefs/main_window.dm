@@ -73,14 +73,14 @@
 
 /datum/preferences/proc/html_create_window()
 	. = list()
-	. += "<fieldset class='computerPane' style='min-height:900px'>"
-	. += "<legend class='computerLegend' style='margin: 0 auto'>[button_element(src, read_preference(/datum/preference/name/real_name), "change_slot=1")]</legend>"
+	. += "<fieldset class='computerPane flexColumn nppMaster'>"
+	. += "<legend class='computerLegend centerLegend'>[button_element(src, read_preference(/datum/preference/name/real_name), "change_slot=1")]</legend>"
 	. += html_create_subheader()
 	. += html_create_categories()
 	var/header = selected_category.get_header(src)
 	if(header)
 		. += header
-	. += "<div style='display:flex;flex-wrap:wrap'>"
+	. += "<div class='nppCategoryContent'>"
 	. += selected_category.get_content(src)
 	. += "</div>"
 	. += "</fieldset>"
@@ -114,23 +114,23 @@
 
 /datum/preferences/proc/html_create_categories()
 	. = list()
-	. += "<div style='text-align: center'>"
+	. += "<div class='nppCategorySelector'>"
 	for(var/datum/preference_group/category/P in GLOB.all_pref_groups)
 		if(selected_category == P)
 			. += "<span class='linkOn'>[P.name]</span>"
 		else
 			. += button_element(src, P.name, "select_category=\ref[P]")
-	. += "</div><HR style='background-color: #202020'>"
+	. += "</div><HR>"
 
 	return jointext(., "")
 
 /datum/preferences/proc/html_create_subheader()
 	. = list()
-	. += "<div style='text-align: center'><b><span class='computerText'>Character Preview</span></b><br>"
+	. += "<div class='nppSubHeader'><b><span class='computerText'>Character Preview</span></b><br>"
 	for(var/option in list(PREVIEW_PREF_JOB, PREVIEW_PREF_LOADOUT, PREVIEW_PREF_UNDERWEAR))
 		if(preview_pref == option)
 			. += "<span class='linkOn'>[option]</span>"
 		else
 			. += button_element(src, option, "select_preview=[option]")
-	. += "</div><HR style='background-color: #202020'>"
+	. += "</div><HR>"
 	return jointext(., "")

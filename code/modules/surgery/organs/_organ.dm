@@ -358,19 +358,19 @@ INITIALIZE_IMMEDIATE(/obj/item/organ)
 /obj/item/organ/examine(mob/user)
 	. = ..()
 
-	. += span_notice("It should be inserted in the [parse_zone(zone)].")
+	. += span_info("It should be inserted in the [parse_zone(zone)].")
 
 	if(organ_flags & ORGAN_DEAD)
 		if(organ_flags & ORGAN_SYNTHETIC)
-			. += span_warning("\The [src] looks completely spent.")
+			. += span_alert("\The [src] looks completely spent.")
 		else
 			if(can_recover())
-				. += span_warning("It has begun to decay.")
+				. += span_alert("It has begun to decay.")
 			else
-				. += span_warning("The decay has set into [src].")
+				. += span_alert("The decay has set into [src].")
 
 	else if(damage > high_threshold * maxHealth)
-		. += span_warning("[src] is starting to look discolored.")
+		. += span_alert("[src] is starting to look discolored.")
 
 /obj/item/organ/proc/get_visible_state()
 	if(damage > maxHealth)

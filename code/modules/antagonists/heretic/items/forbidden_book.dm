@@ -20,8 +20,8 @@
 	if(!IS_HERETIC(user))
 		return
 
-	. += span_notice("Can be used to tap influences for additional knowledge points.")
-	. += span_notice("Can also be used to draw or remove transmutation runes with ease.")
+	. += span_info("Can be used to tap influences for additional knowledge points.")
+	. += span_info("Can also be used to draw or remove transmutation runes with ease.")
 
 /obj/item/codex_cicatrix/attack_self(mob/user, modifiers)
 	. = ..()

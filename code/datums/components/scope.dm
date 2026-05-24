@@ -66,7 +66,7 @@
 /datum/component/scope/proc/on_examine(datum/source, mob/user, list/examine_list)
 	SIGNAL_HANDLER
 
-	examine_list += span_notice("You can scope in with <b>right-click</b>.")
+	examine_list += span_info("You can scope in with <b>right-click</b>.")
 
 /**
  * We find and return the best target to hit on a given turf.

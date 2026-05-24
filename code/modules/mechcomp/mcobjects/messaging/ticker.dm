@@ -17,9 +17,9 @@
 
 /obj/item/mcobject/messaging/ticker/examine(mob/user)
 	. = ..()
-	. += span_notice("It is currently [on ? "on" : "off"].")
-	. += span_notice("Interval time: [interval] second(s).")
-	. += span_notice("Total loops: [total_loops == -1 ? "infinite" : total_loops].")
+	. += span_info("It is currently [on ? "on" : "off"].")
+	. += span_info("Interval time: [interval] second(s).")
+	. += span_info("Total loops: [total_loops == -1 ? "infinite" : total_loops].")
 
 /obj/item/mcobject/messaging/ticker/proc/set_interval(mob/user, obj/item/tool)
 	var/num = input(user, "Set interval in seconds (0.5 - 60)", "Configure Component", interval) as null|num

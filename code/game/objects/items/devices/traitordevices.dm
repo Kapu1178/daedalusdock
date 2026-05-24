@@ -322,8 +322,8 @@ effective or pretty fucking useless.
 /obj/machinery/porta_turret/syndicate/toolbox/examine(mob/user)
 	. = ..()
 	if(faction_check(faction, user.faction))
-		. += span_notice("You can repair it by <b>left-clicking</b> with a combat wrench.")
-		. += span_notice("You can fold it by <b>right-clicking</b> with a combat wrench.")
+		. += span_info("You can repair it by <b>left-clicking</b> with a combat wrench.")
+		. += span_info("You can fold it by <b>right-clicking</b> with a combat wrench.")
 
 /obj/machinery/porta_turret/syndicate/toolbox/target(atom/movable/target)
 	if(!target)

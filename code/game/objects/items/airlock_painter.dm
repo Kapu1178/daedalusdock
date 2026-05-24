@@ -115,7 +115,7 @@ TYPEINFO_DEF(/obj/item/airlock_painter)
 /obj/item/airlock_painter/examine(mob/user)
 	. = ..()
 	if(!ink)
-		. += span_notice("It doesn't have a toner cartridge installed.")
+		. += span_info("It doesn't have a toner cartridge installed.")
 		return
 	var/ink_level = "high"
 	if(ink.charges < 1)
@@ -124,7 +124,7 @@ TYPEINFO_DEF(/obj/item/airlock_painter)
 		ink_level = "low"
 	else if((ink.charges/ink.max_charges) > 1) //Over 100% (admin var edit)
 		ink_level = "dangerously high"
-	. += span_notice("Its ink levels look [ink_level].")
+	. += span_info("Its ink levels look [ink_level].")
 
 
 /obj/item/airlock_painter/attackby(obj/item/W, mob/user, params)

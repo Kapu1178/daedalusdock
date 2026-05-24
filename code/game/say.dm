@@ -3,23 +3,6 @@ Miauw's big Say() rewrite.
 This file has the basic atom/movable level speech procs.
 And the base of the send_speech() proc, which is the core of saycode.
 */
-GLOBAL_LIST_INIT(freqtospan, list(
-	"[FREQ_SCIENCE]" = "sciradio",
-	"[FREQ_MEDICAL]" = "medradio",
-	"[FREQ_ENGINEERING]" = "engradio",
-	"[FREQ_SUPPLY]" = "suppradio",
-	"[FREQ_SERVICE]" = "servradio",
-	"[FREQ_SECURITY]" = "secradio",
-	"[FREQ_COMMAND]" = "comradio",
-	"[FREQ_AI_PRIVATE]" = "aiprivradio",
-	"[FREQ_SYNDICATE]" = "syndradio",
-	"[FREQ_CENTCOM]" = "centcomradio",
-	"[FREQ_CTF_RED]" = "redteamradio",
-	"[FREQ_CTF_BLUE]" = "blueteamradio",
-	"[FREQ_CTF_GREEN]" = "greenteamradio",
-	"[FREQ_CTF_YELLOW]" = "yellowteamradio"
-	))
-
 /atom/movable/proc/say(message, bubble_type, list/spans = list(), sanitize = TRUE, datum/language/language = null, ignore_spam = FALSE, forced = null, filterproof = null, range = 7)
 	if(!can_speak())
 		return
@@ -79,10 +62,23 @@ GLOBAL_LIST_INIT(freqtospan, list(
 	var/voice = "[speaker.GetVoice()]"
 	var/alt_name = speaker.get_alt_name()
 
+	// Even if there's a valid radio channel, it may not have a template, since it may be in the free range.
+	var/datum/radio_channel/channel_template
+
 	//Basic span
 	var/wrapper_span = "<span class = 'game say'>"
 	if(radio_freq)
-		wrapper_span = "<span class = '[get_radio_span(radio_freq)]'>"
+		channel_template = get_radio_channel(radio_freq)
+
+		var/radio_span = "radio"
+		if(channel_template)
+			radio_span = channel_template.span
+		//HACK: Presently used so that phones (manually call compose_message()) render chat as a faux radio.
+		else if(islist(radio_freq))
+			radio_span = radio_freq["span"]
+
+		if(radio_span)
+			wrapper_span = "<span class = 'game [radio_span]'>"
 
 	else if(message_mods[MODE_CUSTOM_SAY_ERASE_INPUT] || isnull(message_language))
 		wrapper_span = "<span class = 'emote'>"
@@ -90,7 +86,13 @@ GLOBAL_LIST_INIT(freqtospan, list(
 	//Radio freq/name display
 	var/freqpart = ""
 	if(radio_freq)
-		freqpart = "[RADIO_TAG(get_radio_icon(radio_freq))]\[[get_radio_name(radio_freq)]\] "
+		if(channel_template)
+			freqpart = channel_template.speech_prefix
+		//HACK: Presently used so that phones (manually call compose_message()) render chat as a faux radio.
+		else if(islist(radio_freq))
+			freqpart = radio_freq["name"]
+		else
+			freqpart = "[RADIO_TAG("unknown")]\[[get_radio_name(radio_freq)]\] "
 
 	//Speaker name
 	var/namepart = "[voice][alt_name]"
@@ -209,26 +211,12 @@ GLOBAL_LIST_INIT(freqtospan, list(
 		if(quote)
 			. = source.say_quote(.)
 
-/proc/get_radio_span(freq)
-	if(islist(freq)) //Heehoo hijack bullshit
-		return freq["span"]
-	var/returntext = GLOB.freqtospan["[freq]"]
-	if(returntext)
-		return returntext
-	return "radio"
-
+/// Returns the name of a radio channel. If it's in the free range, the name is the frequency with a period inserted.
 /proc/get_radio_name(freq)
-	if(islist(freq)) //Heehoo hijack bullshit
-		return freq["name"]
 	var/returntext = GLOB.radio_frequency_to_channel["[freq]"]
 	if(returntext)
 		return returntext
 	return "[copytext_char("[freq]", 1, 4)].[copytext_char("[freq]", 4, 5)]"
-
-/// Pass in a frequency, get a file name. See chat_icons.dm
-/proc/get_radio_icon(freq)
-	. = GLOB.freq2icon["[freq]"]
-	. ||= "unknown.png"
 
 /proc/attach_spans(input, list/spans)
 	return "[message_spans_start(spans)][input]</span>"

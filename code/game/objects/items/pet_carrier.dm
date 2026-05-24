@@ -51,13 +51,13 @@ TYPEINFO_DEF(/obj/item/pet_carrier)
 	if(occupants.len)
 		for(var/V in occupants)
 			var/mob/living/L = V
-			. += span_notice("It has [L] inside.")
+			. += span_info("It has [L] inside.")
 	else
-		. += span_notice("It has nothing inside.")
+		. += span_info("It has nothing inside.")
 	if(user.canUseTopic(src))
-		. += span_notice("Activate it in your hand to [open ? "close" : "open"] its door.")
+		. += span_info("Activate it in your hand to [open ? "close" : "open"] its door.")
 		if(!open)
-			. += span_notice("Alt-click to [locked ? "unlock" : "lock"] its door.")
+			. += span_info("Alt-click to [locked ? "unlock" : "lock"] its door.")
 
 /obj/item/pet_carrier/attack_self(mob/living/user)
 	if(open)

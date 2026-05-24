@@ -26,7 +26,7 @@
 
 	departments_list = list(
 		/datum/job_department/medical,
-		)
+	)
 
 	family_heirlooms = list(/obj/item/storage/medkit/ancient/heirloom)
 

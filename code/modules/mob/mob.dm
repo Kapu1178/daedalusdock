@@ -361,7 +361,8 @@
 
 	var/raw_msg = message
 	if(audible_message_flags & EMOTE_MESSAGE)
-		message = "<span class='emote'><b>[src]</b>[separation][message]</span>" //PARIAH EDIT - Better emotes
+		message = "<span class='emote'><b>[src]</b>[separation][message]</span>"
+
 	for(var/atom/movable/AM as anything in hearers)
 		if(istype(AM, /obj))
 			continue
@@ -604,7 +605,7 @@
 		if(examine_time && (world.time - examine_time < EXAMINE_MORE_WINDOW))
 			result = examinify.examine_more(src)
 			if(!length(result))
-				result += span_notice("<i>You examine [examinify] closer, but find nothing of interest...</i>")
+				result += span_notice("You examine [examinify] closer, but find nothing of interest.")
 		else
 			result = examinify.examine(src)
 			client.recent_examines[ref_to_atom] = world.time // set to when we last normal examine'd them
@@ -615,6 +616,7 @@
 	else
 		result = examinify.examine(src) // if a tree is examined but no client is there to see it, did the tree ever really exist?
 
+	list_clear_nulls(result)
 
 	if(result[length(result)] == "") // Pop off a trailing space
 		result.len -= 1
@@ -622,6 +624,9 @@
 	for(var/i in 1 to length(result) - 1)
 		if(!findtext(result[i], "<hr>"))
 			result[i] += "\n"
+
+	if(result[length(result)] == "<hr>")
+		result.len--
 
 	to_chat(src, "<div class='examine_block'><span class='infoplain'>[result.Join()]</span></div>") //PARIAH EDIT CHANGE
 	SEND_SIGNAL(src, COMSIG_MOB_EXAMINATE, examinify)

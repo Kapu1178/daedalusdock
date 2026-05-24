@@ -18,12 +18,12 @@
 
 	. += {"
 	</script>
-	<fieldset class='computerPaneNested' style='display: inline-block;min-width:40%;max-width:40%;margin-left: auto;margin-right: auto'>
+	<fieldset class='computerPaneNested nppQuirkListContainer'>
 		<legend class='computerLegend tooltip'>
 			<b>All Traits</b>
 			<span class='tooltiptext'>I'm gettin' quirked up tonight.</span>
 		</legend>
-	<div class='zebraTable' style='display: flex; flex-direction: column; height: 560px;display: block;overflow-y: scroll'>
+	<div class='zebraTable nppQuirkList'>
 	"}
 
 	for(var/quirk in all_quirks)
@@ -45,12 +45,12 @@
 	. += "</div></fieldset>"
 
 	. += {"
-	<fieldset class='computerPaneNested' style='display: inline-block;min-width:40%;max-width:40%;margin-left: auto;margin-right: auto'>
+	<fieldset class='computerPaneNested nppQuirkListContainer'>
 		<legend class='computerLegend tooltip'>
 			<b>My Traits</b>
 			<span class='tooltiptext'>I'm gettin' quirked up tonight.</span>
 		</legend>
-	<div class='zebraTable' style='display: flex; flex-direction: column; height: 560px;display: block;overflow-y: scroll'>
+	<div class='zebraTable nppQuirkList'>
 	"}
 
 	for(var/quirk in user_quirks)

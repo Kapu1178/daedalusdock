@@ -420,10 +420,10 @@
 				. += "It is glowing gently with moderate levels of electrical activity."
 
 			if(6 to 9)
-				. += span_warning("It is glowing brightly with high levels of electrical activity.")
+				. += span_alert("It is glowing brightly with high levels of electrical activity.")
 
 			if(10)
-				. += span_warning("<B>It is radiating with massive levels of electrical activity!</B>")
+				. += span_alert("<B>It is radiating with massive levels of electrical activity!</B>")
 
 	//. += "*---------*</span>" PARIAH EDIT REMOVAL
 

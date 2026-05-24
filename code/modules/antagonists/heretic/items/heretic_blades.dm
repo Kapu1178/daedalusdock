@@ -56,7 +56,7 @@
 	if(!IS_HERETIC_OR_MONSTER(user))
 		return
 
-	. += span_notice("You can shatter the blade to teleport to a random, (mostly) safe location by <b>activating it in-hand</b>.")
+	. += span_info("You can shatter the blade to teleport to a random, (mostly) safe location by <b>activating it in-hand</b>.")
 
 // Path of Rust's blade
 /obj/item/melee/sickly_blade/rust

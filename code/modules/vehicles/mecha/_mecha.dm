@@ -422,7 +422,7 @@ TYPEINFO_DEF(/obj/vehicle/sealed/mecha)
 			for(var/held_item in H.held_items)
 				if(!isgun(held_item))
 					continue
-				. += span_warning("It looks like you can hit the pilot directly if you target the center or above.")
+				. += span_alert("It looks like you can hit the pilot directly if you target the center or above.")
 				break //in case user is holding two guns
 
 //processing internal damage, temperature, air regulation, alert updates, lights power use.

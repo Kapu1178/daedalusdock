@@ -111,7 +111,7 @@
 
 /mob/living/simple_animal/hostile/retaliate/goose/vomit/examine(user)
 	. = ..()
-	. += span_notice("Somehow, it still looks hungry.")
+	. += span_info("Somehow, it still looks hungry.")
 
 /mob/living/simple_animal/hostile/retaliate/goose/attackby(obj/item/O, mob/user)
 	. = ..()

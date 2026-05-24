@@ -51,9 +51,9 @@ TYPEINFO_DEF(/obj/item/storage/fancy)
 	if(!is_open)
 		return
 	if(length(contents) == 1)
-		. += span_notice("There is one [contents_tag] left.")
+		. += span_info("There is one [contents_tag] left.")
 	else
-		. += span_notice("There are [contents.len <= 0 ? "no" : "[contents.len]"] [contents_tag]s left.")
+		. += span_info("There are [contents.len <= 0 ? "no" : "[contents.len]"] [contents_tag]s left.")
 
 /obj/item/storage/fancy/attack_self(mob/user)
 	is_open = !is_open

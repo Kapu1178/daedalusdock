@@ -52,13 +52,14 @@
 		loadout_items_in_page = GLOB.loadout_category_to_subcategory_to_items[prefs.loadout_category]?[prefs.loadout_subcategory]
 
 	. += {"
-	<table class='zebraTable' align='center'; width='100%'; height='100%'; style='background-color:#13171C'>
-		<tr style='vertical-align:top'>
-			<td width=28%><font size=2><b>Name</b></font></td>
-			<td width=20%><font size=2><b>Customization</b></font></td>
-			<td width=47%><font size=2><b>Description</b></font></td>
-			<td width=5%><font size=2><center><b>Cost</b></center></font></td>
-		</tr>
+	<div class='nppCategoryLoadout'>
+		<table class='nppLoadoutTable zebraTable' align:'center'>
+			<tr style='vertical-align:top'>
+				<td width=28%><font size=2><b>Name</b></font></td>
+				<td width=20%><font size=2><b>Customization</b></font></td>
+				<td width=47%><font size=2><b>Description</b></font></td>
+				<td width=5%><font size=2><center><b>Cost</b></center></font></td>
+			</tr>
 	"}
 
 	var/even = FALSE
@@ -143,4 +144,4 @@
 			</tr>
 		"}
 
-	. += "</table>"
+	. += "</table></div>"

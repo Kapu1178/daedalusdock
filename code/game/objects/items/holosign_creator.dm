@@ -29,7 +29,7 @@
 	. = ..()
 	if(!signs)
 		return
-	. += span_notice("It is currently maintaining <b>[signs.len]/[max_signs]</b> projections.")
+	. += span_info("It is currently maintaining <b>[signs.len]/[max_signs]</b> projections.")
 
 /obj/item/holosign_creator/interact_with_atom(atom/interacting_with, mob/living/user, list/modifiers)
 	var/atom/target = interacting_with // Yes i am supremely lazy

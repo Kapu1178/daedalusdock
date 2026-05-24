@@ -279,7 +279,7 @@ GLOBAL_LIST_EMPTY(antagonists)
 	if(length(greeting) > 1)
 		greeting.Insert(2, "<hr>")
 
-	to_chat(owner.current, examine_block(jointext(greeting, "")))
+	to_chat(owner.current, examine_block_centered(jointext(greeting, "")))
 
 /datum/antagonist/proc/greeting_header()
 	var/list/out = list()

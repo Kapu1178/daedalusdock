@@ -192,7 +192,7 @@ GLOBAL_DATUM(main_supermatter_engine, /obj/machinery/power/supermatter)
 		H.stats.set_cooldown("supermatter_fuckywucky", INFINITY)
 
 		var/datum/roll_result/result = H.stat_roll(16, /datum/rpg_skill/fourteen_eyes)
-		if(result.outcome >= SUCCESS)
+		if(result.outcome < SUCCESS)
 			continue
 
 		result.do_skill_sound(H)
@@ -305,9 +305,9 @@ GLOBAL_DATUM(main_supermatter_engine, /obj/machinery/power/supermatter)
 		if(0 to 30)
 			. += span_danger("It looks highly unstable!")
 		if(31 to 70)
-			. += span_warning("It appears to be losing cohesion!")
+			. += span_alert("It appears to be losing cohesion!")
 		else
-			. += span_notice("At a glance, it seems to be in sound shape.")
+			. += span_info("At a glance, it seems to be in sound shape.")
 
 	var/immune = HAS_TRAIT(user, TRAIT_SUPERMATTER_MADNESS_IMMUNE) || (user.mind && HAS_TRAIT(user.mind, TRAIT_SUPERMATTER_MADNESS_IMMUNE))
 	if(isliving(user) && !immune && (get_dist(user, src) < HALLUCINATION_RANGE(power)))

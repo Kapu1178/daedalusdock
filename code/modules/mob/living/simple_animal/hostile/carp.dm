@@ -151,7 +151,7 @@
 /mob/living/simple_animal/hostile/carp/examine(mob/user)
 	. = ..()
 	if(random_color)
-		. += span_notice("Oh, [p_their()] scales are [our_color][shiny ? "!" : "."]")
+		. += span_info("Oh, [p_their()] scales are [our_color][shiny ? "!" : "."]")
 
 /mob/living/simple_animal/hostile/carp/proc/chomp_plastic()
 	var/obj/item/storage/cans/tasty_plastic = locate(/obj/item/storage/cans) in view(1, src)
@@ -297,7 +297,7 @@
 /mob/living/simple_animal/hostile/carp/cayenne/examine(mob/user)
 	. = ..()
 	if(disky)
-		. += span_notice("Wait... is that [disky] in [p_their()] mouth?")
+		. += span_info("Wait... is that [disky] in [p_their()] mouth?")
 
 /mob/living/simple_animal/hostile/carp/cayenne/AttackingTarget(atom/attacked_target)
 	if(istype(attacked_target, /obj/item/disk/nuclear))
