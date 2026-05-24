@@ -53,9 +53,9 @@
 		var/oldloc = get_turf(new_organ)
 		var/obj/item/organ/old_organ = target_mob.getorganslot(new_organ.slot)
 
-		old_organ.Remove(target_mob, TRUE)
+		old_organ?.Remove(target_mob, TRUE)
 		new_organ.Insert(target_mob, TRUE)
-		old_organ.forceMove(oldloc)
+		old_organ?.forceMove(oldloc)
 
 	return ..()
 
