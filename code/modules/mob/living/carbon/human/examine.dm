@@ -358,6 +358,17 @@
 	else if(isobserver(user))
 		post_hands_examines += span_info("<b>Traits:</b> [get_quirk_string(FALSE, CAT_QUIRK_ALL)]")
 
+	if(!obscure_name && ishuman(user) && user.mind)
+		for(var/datum/requital/requital as anything in user.mind.owned_requitals)
+			for(var/datum/mind/target as anything in requital.targets)
+				if(target.name == name)
+					post_hands_examines += span_statsgood(requital.get_owner_text(user.mind))
+
+		for(var/datum/requital/requital as anything in user.mind.targeted_requitals)
+			for(var/datum/mind/owner as anything in requital.owners)
+				if(owner.name == name)
+					post_hands_examines += span_statsbad(requital.get_target_text(user.mind))
+
 	var/list/return_strings = list(name_examine)
 	if(length(header_examines))
 		return_strings += jointext(header_examines, "<br>")
