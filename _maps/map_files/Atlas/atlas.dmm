@@ -7654,6 +7654,17 @@
 	},
 /turf/open/floor/plating,
 /area/station/maintenance/port/aft)
+"hPo" = (
+/obj/docking_port/stationary{
+	name = "SS13: Auxiliary Dock, Station-Port";
+	dir = 2;
+	width = 35;
+	height = 22;
+	id = "whiteship_home";
+	dwidth = 11
+	},
+/turf/open/space/basic,
+/area/space)
 "hPr" = (
 /turf/open/floor/iron/white,
 /area/station/medical/treatment_center)
@@ -13781,6 +13792,9 @@
 /obj/effect/turf_decal/tile/bar,
 /obj/machinery/light/directional/north,
 /obj/structure/tank_holder/extinguisher,
+/obj/structure/sink/kitchen{
+	pixel_y = 19
+	},
 /turf/open/floor/iron/white/white_edge{
 	dir = 1
 	},
@@ -19916,6 +19930,9 @@
 	dir = 8
 	},
 /obj/machinery/light/cold/directional/south,
+/obj/structure/filingcabinet/chestdrawer/wheeled,
+/obj/item/folder/blue,
+/obj/item/folder/blue,
 /turf/open/floor/iron/white,
 /area/station/medical/medbay)
 "ucD" = (
@@ -48290,7 +48307,7 @@ gDJ
 vOe
 vOe
 vOe
-vOe
+hPo
 vOe
 vOe
 vOe

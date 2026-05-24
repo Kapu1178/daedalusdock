@@ -1758,12 +1758,10 @@
 /turf/open/floor/iron,
 /area/station/maintenance/starboard/greater)
 "aDW" = (
-/obj/machinery/computer/security/mining{
-	dir = 1
-	},
 /obj/effect/turf_decal/tile/brown/half/contrasted{
 	dir = 1
 	},
+/obj/structure/table,
 /turf/open/floor/iron,
 /area/station/cargo/miningoffice)
 "aDY" = (
@@ -2971,6 +2969,7 @@
 	dir = 8
 	},
 /obj/effect/turf_decal/trimline/brown/filled/corner,
+/obj/machinery/atm/directional/south,
 /turf/open/floor/iron,
 /area/station/construction/storage_wing)
 "bbc" = (
@@ -7558,7 +7557,6 @@
 /obj/machinery/door/airlock/security/glass{
 	name = "Genpop Brig"
 	},
-/obj/effect/mapping_helpers/access/all/security/general/airlock,
 /turf/open/floor/iron/dark,
 /area/station/security/brig)
 "cGu" = (
@@ -8416,7 +8414,6 @@
 	name = "Genpop Shutter";
 	id = "cell1genpop"
 	},
-/obj/effect/mapping_helpers/access/all/security/general/airlock,
 /turf/open/floor/iron/dark,
 /area/station/security/brig)
 "cWz" = (
@@ -8572,7 +8569,6 @@
 /obj/structure/chair/plastic{
 	dir = 1
 	},
-/obj/machinery/atm/directional/north,
 /turf/open/floor/iron,
 /area/station/hallway/primary/port)
 "cZg" = (
@@ -15370,7 +15366,7 @@
 "fuv" = (
 /obj/machinery/vending/clothing,
 /obj/effect/turf_decal/tile/neutral/fourcorners,
-/obj/machinery/atm/directional/north,
+/obj/machinery/atm/directional/east,
 /turf/open/floor/iron,
 /area/station/commons/locker)
 "fuD" = (
@@ -20708,14 +20704,12 @@
 /turf/open/floor/plating,
 /area/station/commons/locker)
 "htC" = (
-/obj/machinery/computer/shuttle/mining{
-	dir = 1;
-	req_access = null
-	},
 /obj/effect/turf_decal/tile/brown/half/contrasted{
 	dir = 1
 	},
 /obj/machinery/light/directional/south,
+/obj/structure/table,
+/obj/machinery/cell_charger,
 /turf/open/floor/iron,
 /area/station/cargo/miningoffice)
 "htH" = (
@@ -23052,6 +23046,7 @@
 	dir = 8
 	},
 /obj/machinery/door/firedoor,
+/obj/machinery/atm/directional/south,
 /turf/open/floor/iron,
 /area/station/hallway/primary/port)
 "inI" = (
@@ -45728,7 +45723,6 @@
 /obj/machinery/door/airlock/security/glass{
 	name = "Genpop Brig"
 	},
-/obj/effect/mapping_helpers/access/all/security/general/airlock,
 /turf/open/floor/iron/dark,
 /area/station/security/brig)
 "qmo" = (
@@ -52532,10 +52526,10 @@
 /obj/effect/turf_decal/tile/neutral/half/contrasted{
 	dir = 8
 	},
-/obj/machinery/atm/directional/north,
 /obj/machinery/camera/directional/west{
 	c_tag = "Dormitories - Recreation Area 1#"
 	},
+/obj/machinery/atm/directional/west,
 /turf/open/floor/iron,
 /area/station/commons/fitness/recreation)
 "sCW" = (
@@ -53362,7 +53356,7 @@
 	icon_state = "3"
 	},
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
-/obj/machinery/atm/directional/north,
+/obj/machinery/atm/directional/east,
 /turf/open/floor/iron,
 /area/station/service/library)
 "sRo" = (
