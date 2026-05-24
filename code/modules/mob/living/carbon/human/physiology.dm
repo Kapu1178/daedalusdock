@@ -44,6 +44,10 @@
 	if(istype(armor, /datum/armor))
 		return armor
 
-	if(islist(armor) || isnull(armor))
-		armor = getArmor(armor)
+	if(isnull(armor))
+		armor = getArmor()
+		return armor
+
+	if(islist(armor))
+		armor = getArmor(arglist(armor))
 		return armor

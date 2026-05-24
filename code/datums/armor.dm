@@ -1,6 +1,12 @@
 #define ARMORID "armor-[blunt]-[puncture]-[slash]-[laser]-[energy]-[bomb]-[bio]-[fire]-[acid]"
 
 /proc/getArmor(blunt = 0, puncture = 0, slash = 0, laser = 0, energy = 0, bomb = 0, bio = 0, fire = 0, acid = 0)
+	#ifdef UNIT_TESTS
+	for(var/arg in args)
+		if(!isnum(arg))
+			stack_trace("[type] has a non-number armor value!")
+	#endif
+
 	. = locate(ARMORID)
 	if (!.)
 		. = new /datum/armor(blunt, puncture, slash, laser, energy, bomb, bio, fire, acid)
