@@ -1,14 +1,13 @@
 #define ARMORID "armor-[blunt]-[puncture]-[slash]-[laser]-[energy]-[bomb]-[bio]-[fire]-[acid]"
 
 /proc/getArmor(blunt = 0, puncture = 0, slash = 0, laser = 0, energy = 0, bomb = 0, bio = 0, fire = 0, acid = 0)
-	#ifdef UNIT_TESTS
-	for(var/arg in args)
-		if(!isnum(arg))
-			stack_trace("getArmor was given a non-number armor value: [arg]!")
-	#endif
-
 	. = locate(ARMORID)
 	if (!.)
+		#ifdef UNIT_TESTS
+		for(var/arg in args)
+			if(!isnum(arg))
+				stack_trace("getArmor was given a non-number armor value: [arg]!")
+		#endif
 		. = new /datum/armor(blunt, puncture, slash, laser, energy, bomb, bio, fire, acid)
 
 ///Retreive an atom's armor, creating it if it doesn't exist
