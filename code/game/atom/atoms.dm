@@ -288,6 +288,9 @@ TYPEINFO_DEF(/atom)
 	if(length(typeinfo.default_materials) && isnull(custom_materials))
 		set_custom_materials(typeinfo.default_materials)
 
+	#ifdef UNIT_TESTS
+	returnArmor()
+	#endif
 	return INITIALIZE_HINT_NORMAL
 
 /**

@@ -62,7 +62,7 @@
 /atom/proc/do_alert_animation()
 	var/image/alert_image = image('icons/obj/closet.dmi', src, "cardboard_special", layer+1)
 	alert_image.plane = ABOVE_LIGHTING_PLANE
-	flick_overlay_view(alert_image, src, 8)
+	flick_overlay_view(alert_image, 8)
 	alert_image.alpha = 0
 	animate(alert_image, pixel_z = 32, alpha = 255, time = 5, easing = ELASTIC_EASING)
 

@@ -139,10 +139,6 @@ TYPEINFO_DEF(/obj/machinery/vending)
 	var/extended_inventory = 0
 	///Are we checking the users ID
 	var/scan_id = 1
-	///Coins that we accept?
-	var/obj/item/coin/coin
-	///Bills we accept?
-	var/obj/item/stack/spacecash/bill
 	///Default price of items if not overridden
 	var/default_price = PAYCHECK_ASSISTANT * 0.4
 	/// Default price ADDED to the default price of premium items if they don't have one set.
@@ -223,8 +219,6 @@ TYPEINFO_DEF(/obj/machinery/vending)
 /obj/machinery/vending/Destroy()
 	UNSET_TRACKING(__TYPE__)
 	QDEL_NULL(wires)
-	QDEL_NULL(coin)
-	QDEL_NULL(bill)
 	QDEL_NULL(contained_cash)
 	return ..()
 
@@ -471,7 +465,7 @@ GLOBAL_LIST_EMPTY(vending_products)
 
 		if(!contained_cash)
 			user.transferItemToLoc(user_money, src)
-			contained_cash = user_money
+			set_contained_cash(user_money)
 		else
 			var/space_remaining = initial(user_money.max_amount) - contained_cash.amount
 			var/insert_amount = min(space_remaining, user_money.amount)
@@ -758,7 +752,6 @@ GLOBAL_LIST_EMPTY(vending_products)
 /obj/machinery/vending/on_deconstruction()
 	update_canister()
 	contained_cash.forceMove(drop_location())
-	contained_cash = null
 	. = ..()
 
 /obj/machinery/vending/emag_act(mob/user)
@@ -892,8 +885,18 @@ GLOBAL_LIST_EMPTY(vending_products)
 	else
 		contained_cash.forceMove(drop_location())
 
-	contained_cash = null
+	set_contained_cash(null)
 	return TRUE
+
+/obj/machinery/vending/proc/set_contained_cash(obj/item/stack/spacecash/cash)
+	if(contained_cash)
+		UnregisterSignal(contained_cash, list(COMSIG_MOVABLE_MOVED, COMSIG_PARENT_QDELETING))
+
+	contained_cash = cash
+
+	if(cash)
+		contained_cash = cash
+		RegisterSignal(contained_cash, list(COMSIG_MOVABLE_MOVED, COMSIG_PARENT_QDELETING), PROC_REF(on_cash_moved))
 
 /// Checks if the user can purchase an item from this machine.
 /obj/machinery/vending/proc/can_user_vend(user, silent=FALSE)
@@ -1292,6 +1295,13 @@ GLOBAL_LIST_EMPTY(vending_products)
 		return
 
 	tilt(L)
+
+
+/// Called when contained_cash moves.
+/obj/machinery/vending/proc/on_cash_moved(datum/source)
+	SIGNAL_HANDLER
+
+	set_contained_cash(null)
 
 /obj/machinery/vending/attack_tk_grab(mob/user)
 	to_chat(user, span_warning("[src] seems to resist your mental grasp!"))

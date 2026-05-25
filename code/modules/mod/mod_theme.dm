@@ -167,7 +167,7 @@
 	for(var/obj/item/part as anything in parts)
 		part.name = "[name] [part.name]"
 		part.desc = "[part.desc] [desc]"
-		part.setArmor(getArmor(armor))
+		part.setArmor(getArmor(arglist(armor)))
 		part.resistance_flags = resistance_flags
 		part.flags_1 |= atom_flags //flags like initialization or admin spawning are here, so we cant set, have to add
 		part.heat_protection = NONE

@@ -141,6 +141,9 @@
 	if(mob_target)
 		unregister_target_mob(mob_target)
 
+	for(var/mob/helper as anything in touching_rune)
+		remove_helper(touching_rune)
+
 	// Remove blood container signals.
 	unregister_item(blackboard[RUNE_BB_BLOOD_CONTAINER])
 
