@@ -1,3 +1,4 @@
+import { BooleanLike } from 'common/react';
 import { toTitleCase } from 'common/string';
 
 import { useBackend, useLocalState } from '../backend';
@@ -11,8 +12,35 @@ import {
 } from '../components';
 import { Window } from '../layouts';
 
+type ORMData = {
+  alloys: Alloy[];
+  disconnected: string;
+  diskDesigns: Design[];
+  hasDisk: BooleanLike;
+  materials: Material[];
+  unclaimedPoints: number;
+};
+
+type Design = {
+  canupload: BooleanLike;
+  index: number;
+  name: string;
+};
+type Alloy = {
+  amount: number;
+  id: string;
+  name: string;
+};
+
+type Material = {
+  amount: number;
+  id: string;
+  name: string;
+  value: number;
+};
+
 export const OreRedemptionMachine = (props) => {
-  const { act, data } = useBackend();
+  const { act, data } = useBackend<ORMData>();
   const { unclaimedPoints, materials, alloys, diskDesigns, hasDisk } = data;
   return (
     <Window title="Ore Redemption Machine" width={440} height={550}>
@@ -21,7 +49,7 @@ export const OreRedemptionMachine = (props) => {
           <BlockQuote mb={1}>
             This machine only accepts ore.
             <br />
-            Gibtonite and Slag are not accepted.
+            Slag is not accepted.
           </BlockQuote>
           <Box>
             <Box inline color="label" mr={1}>
@@ -139,7 +167,7 @@ const MaterialRow = (props) => {
           minValue={1}
           maxValue={50}
           value={amount}
-          onChange={(e, value) => setAmount(value)}
+          onChange={(value) => setAmount(value)}
         />
         <Button
           disabled={amountAvailable < 1}

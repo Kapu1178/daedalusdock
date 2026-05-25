@@ -219,12 +219,25 @@
 			var/amount = mat_container.materials[M]
 			var/sheet_amount = amount / MINERAL_MATERIAL_AMOUNT
 			var/ref = REF(M)
-			data["materials"] += list(list("name" = M.name, "id" = ref, "amount" = sheet_amount, "value" = ore_values[M.type]))
+			data["materials"] += list(
+				list(
+					"name" = M.name,
+					"id" = ref,
+					"amount" = sheet_amount,
+					"value" = ore_values[M.type]
+				)
+			)
 
 		data["alloys"] = list()
 		for(var/datum/design/D as anything in subtypesof(/datum/design/alloy))
 			D = SStech.designs_by_type[D]
-			data["alloys"] += list(list("name" = D.name, "id" = D.id, "amount" = can_smelt_alloy(D)))
+			data["alloys"] += list(
+				list(
+					"name" = D.name,
+					"id" = D.id,
+					"amount" = can_smelt_alloy(D)
+				)
+			)
 
 	if (!mat_container)
 		data["disconnected"] = "local mineral storage is unavailable"
@@ -239,7 +252,13 @@
 		data["hasDisk"] = TRUE
 		var/index = 1
 		for (var/datum/design/thisdesign in disk_get_designs(FABRICATOR_FILE_NAME, inserted_disk))
-			data["diskDesigns"] += list(list("name" = thisdesign.name, "index" = index, "canupload" = thisdesign.build_type&SMELTER))
+			data["diskDesigns"] += list(
+				list(
+					"name" = thisdesign.name,
+					"index" = index,
+					"canupload" = thisdesign.build_type & SMELTER
+				)
+			)
 			index++
 	return data
 
