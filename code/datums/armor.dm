@@ -4,7 +4,7 @@
 	#ifdef UNIT_TESTS
 	for(var/arg in args)
 		if(!isnum(arg))
-			stack_trace("getArmor was given a non-number armor value!")
+			stack_trace("getArmor was given a non-number armor value: [arg]!")
 	#endif
 
 	. = locate(ARMORID)
