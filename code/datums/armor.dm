@@ -17,7 +17,6 @@
 		return armor
 
 	if(islist(armor))
-		stack_trace("Legacy armor definition")
 		return setArmor(getArmor(arglist(armor)))
 
 	var/datum/typeinfo/atom/typeinfo = typeinfo(type)
