@@ -21,3 +21,15 @@
   - bugfix: Internal radios no longer act as wire taps.
   - bugfix: Monkeys are less hungry.
   - bugfix: Runtimes.
+2026-05-25:
+  Doctor-Derp:
+  - rscadd: Added a filing cabinet to Atlas' Medical Bay.
+  - rscadd: Added a sink to Atlas' Kitchen.
+  - rscadd: Added a whiteship dock marker south of Atlas' Asteroid Magnet.
+  - rscadd: Added an ATM to Theseus' Cargo Bay Lobby.
+  - bugfix: Fixed ATM placements in Theseus' Psychology Office and Dormitories.
+  - rscdel: Removed security access from Theseus' interior Genpop airlocks.
+  - rscdel: Replaced mining shuttle & outpost camera consoles in Theseus' Mining Bay
+      with a cell recharger.
+  Kapu1178:
+  - rscadd: Overhauls TGchat
