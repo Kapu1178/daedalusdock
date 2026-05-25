@@ -72,6 +72,7 @@ TYPEINFO_DEF(/obj/item/clothing/under/aether_robes)
 	worn_icon = 'icons/mob/clothing/under/medical.dmi'
 	icon_state = "aetherrobe"
 
+	can_adjust = FALSE
 	supports_variations_flags = NONE
 
 	permeability_coefficient = 0.5
