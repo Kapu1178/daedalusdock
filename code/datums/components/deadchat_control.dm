@@ -220,20 +220,3 @@
 	inputs["down"] = CALLBACK(GLOBAL_PROC, GLOBAL_PROC_REF(_step), parent, SOUTH)
 	inputs["left"] = CALLBACK(GLOBAL_PROC, GLOBAL_PROC_REF(_step), parent, WEST)
 	inputs["right"] = CALLBACK(GLOBAL_PROC, GLOBAL_PROC_REF(_step), parent, EAST)
-
-/**
- * Deadchat Moves Things
- *
- * A special variant of the deadchat_control component that comes pre-baked with all the hottest inputs for spicy
- * immovable rod.
- */
-/datum/component/deadchat_control/immovable_rod/Initialize(_deadchat_mode, _inputs, _input_cooldown, _on_removal)
-	if(!istype(parent, /obj/effect/immovablerod))
-		return COMPONENT_INCOMPATIBLE
-
-	. = ..()
-
-	inputs["up"] = CALLBACK(parent, TYPE_PROC_REF(/obj/effect/immovablerod, walk_in_direction), NORTH)
-	inputs["down"] = CALLBACK(parent, TYPE_PROC_REF(/obj/effect/immovablerod, walk_in_direction), SOUTH)
-	inputs["left"] = CALLBACK(parent, TYPE_PROC_REF(/obj/effect/immovablerod, walk_in_direction), WEST)
-	inputs["right"] = CALLBACK(parent, TYPE_PROC_REF(/obj/effect/immovablerod, walk_in_direction), EAST)

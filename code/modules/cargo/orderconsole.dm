@@ -136,8 +136,6 @@
 	data["away"] = SSshuttle.supply.getDockedId() == docking_away
 	data["self_paid"] = self_paid
 	data["docked"] = SSshuttle.supply.mode == SHUTTLE_IDLE
-	data["loan"] = !!SSshuttle.shuttle_loan
-	data["loan_dispatched"] = SSshuttle.shuttle_loan && SSshuttle.shuttle_loan.dispatched
 	data["can_send"] = can_send
 	data["can_approve_requests"] = can_approve_requests
 
@@ -227,26 +225,6 @@
 				SSshuttle.moveShuttle(cargo_shuttle, docking_home, TRUE)
 
 			. = TRUE
-
-		if("loan")
-			if(!SSshuttle.shuttle_loan)
-				return
-
-			if(SSshuttle.supply_blocked)
-				say(blockade_warning)
-				return
-			else if(SSshuttle.supply.mode != SHUTTLE_IDLE)
-				return
-			else if(SSshuttle.supply.getDockedId() != docking_away)
-				return
-			else if(stationcargo != TRUE)
-				return
-			else
-				SSshuttle.shuttle_loan.loan_shuttle()
-				say("The supply shuttle has been loaned to CentCom.")
-				investigate_log("[key_name(usr)] accepted a shuttle loan event.", INVESTIGATE_CARGO)
-				log_game("[key_name(usr)] accepted a shuttle loan event.")
-				. = TRUE
 
 		if("add")
 			if(is_express)

@@ -40,12 +40,14 @@
 	impact_area = findEventArea()
 	if(!impact_area)
 		CRASH("No valid areas for a solar flare found.")
+
 	possible_turfs = get_area_turfs(impact_area)
+
 	if(!possible_turfs)
 		CRASH("Solar flare : No valid turfs found for [impact_area] - [impact_area.type]")
 
 /datum/round_event/solar_flare/announce(fake)
-	priority_announce("An unexpected solar flare has been detected near the station and is predicted to hit [impact_area.name]. Evacuate the location immediately and remove any flammable material.", "Celestial Sensor Array", "SOLAR FLARE IMMINENT")
+	priority_announce("An unexpected solar flare has been detected near the station and is predicted to hit [impact_area.name]. Evacuate the location immediately and remove any flammable material.", "Automated Sensor Announcement", "SOLAR FLARE IMMINENT")
 
 /datum/round_event/solar_flare/start()
 	var/spots_left = number_of_fires

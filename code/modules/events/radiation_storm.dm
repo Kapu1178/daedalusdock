@@ -1,7 +1,7 @@
 /datum/round_event_control/radiation_storm
 	name = "Radiation Storm"
 	typepath = /datum/round_event/radiation_storm
-	max_occurrences = 2
+	max_occurrences = 0
 
 /datum/round_event/radiation_storm
 
@@ -12,8 +12,7 @@
 	announceWhen = 1
 
 /datum/round_event/radiation_storm/announce(fake)
-	priority_announce("High levels of radiation detected near the station. Maintenance is best shielded from radiation.", sound_type = ANNOUNCER_RADIATION)
-	//sound not longer matches the text, but an audible warning is probably good
+	priority_announce("High levels of radiation have been detected. Please report to the medical bay if any strange symptoms occur.", sound_type = ANNOUNCER_RADIATION)
 
 /datum/round_event/radiation_storm/start()
 	SSweather.run_weather(/datum/weather/rad_storm)

@@ -60,6 +60,7 @@ SUBSYSTEM_DEF(events)
 //selects a random event based on whether it can occur and it's 'weight'(probability)
 /datum/controller/subsystem/events/proc/spawnEvent()
 	set waitfor = FALSE //for the admin prompt
+
 	if(!CONFIG_GET(flag/allow_random_events))
 		return
 
@@ -70,12 +71,14 @@ SUBSYSTEM_DEF(events)
 	for(var/datum/round_event_control/E as anything in control)
 		if(!E.canSpawnEvent(players_amt))
 			continue
+
 		if(E.weight < 0) //for round-start events etc.
 			var/res = TriggerEvent(E)
 			if(res == EVENT_INTERRUPTED)
 				continue //like it never happened
 			if(res == EVENT_CANT_RUN)
 				return
+
 		sum_of_weights += E.weight
 
 	sum_of_weights = rand(0,sum_of_weights) //reusing this variable. It now represents the 'weight' we want to select
