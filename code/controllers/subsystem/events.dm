@@ -10,9 +10,9 @@ SUBSYSTEM_DEF(events)
 
 	var/scheduled = 0 //The next world.time that a naturally occuring random event can be selected.
 	///The minimum time between random events
-	var/frequency_lower = 3 MINUTES
+	var/frequency_lower = 5 MINUTES
 	///The maximum time between random events
-	var/frequency_upper = 10 MINUTES
+	var/frequency_upper = 15 MINUTES
 
 	var/list/holidays //List of all holidays occuring today or null if no holidays
 	var/wizardmode = FALSE
