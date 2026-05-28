@@ -1,6 +1,0 @@
-author: Doctor-Derp
-delete-after: true
-changes:
-  - rscadd: Replaced the standard EVA and emergency suit sprites with ones ported
-      from Baystation.
-  - rscadd: Standard EVA suits now include a headlamp and welding visor toggle.
