@@ -83,7 +83,7 @@
 
 /obj/item/station_charter/proc/rename_station(designation, uname, ureal_name, ukey)
 	set_station_name(designation)
-	priority_announce("[ureal_name] has designated your station as [html_decode(station_name())]", "[JOB_CAPTAIN]'s Charter", use_announcer_sound = FALSE) //decode station_name to avoid double encode
+	priority_announce("[ureal_name] has designated your station as [html_decode(station_name())]", "[JOB_CAPTAIN]'s Charter") //decode station_name to avoid double encode
 	log_game("[ukey] has renamed the station as [station_name()].")
 
 	name = "station charter for [station_name()]"
@@ -112,7 +112,7 @@
 
 /obj/item/station_charter/banner/rename_station(designation, uname, ureal_name, ukey)
 	set_station_name(designation)
-	priority_announce("[ureal_name] has designated the [name_type] as [html_decode(station_name())]", sub_title = "[JOB_CAPTAIN]'s Banner", use_announcer_sound = FALSE) //decode station_name to avoid minor_announce double encode
+	priority_announce("[ureal_name] has designated the [name_type] as [html_decode(station_name())]", sub_title = "[JOB_CAPTAIN]'s Banner") //decode station_name to avoid minor_announce double encode
 	log_game("[ukey] has renamed the [name_type] as [station_name()].")
 	name = "banner of [station_name()]"
 	desc = "The banner bears the official coat of arms of the Federation, signifying that [station_name()] has been claimed by [JOB_CAPTAIN] [uname] in their name."
@@ -148,7 +148,7 @@
 
 /obj/item/station_charter/revolution/rename_station(designation, uname, ureal_name, ukey)
 	set_station_name(designation)
-	priority_announce("Head Revolutionary [ureal_name] has declared the station's new name as [html_decode(station_name())]!", sub_title = "Revolution Banner", use_announcer_sound = FALSE) //decode station_name to avoid minor_announce double encode
+	priority_announce("Head Revolutionary [ureal_name] has declared the station's new name as [html_decode(station_name())]!", sub_title = "Revolution Banner") //decode station_name to avoid minor_announce double encode
 	log_game("[ukey] has renamed the station as [station_name()].")
 	name = "banner of [station_name()]"
 	desc = "A banner symbolizing a bloody victory over treacherous tyrants. The revolutionary leader [uname] has named the station [station_name()] to make clear that this station shall never be shackled by oppressors again."
