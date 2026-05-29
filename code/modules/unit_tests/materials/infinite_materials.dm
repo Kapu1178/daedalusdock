@@ -10,7 +10,8 @@
 
 		var/object_path = design.build_path
 		if(isnull(object_path))
-			TEST_FAIL("Non-abstract design [design.type] has no build path.")
+			if(!length(design.make_reagents))
+				TEST_FAIL("Non-abstract design [design.type] does not create an item or reagent.")
 			continue
 
 		var/obj/item/built = new object_path(run_loc_floor_bottom_left)
@@ -19,7 +20,7 @@
 		for(var/material_or_text, cost in design.materials)
 			if(!istext(material_or_text))
 				var/datum/material/material = material_or_text
-				if(item_materials[material_or_text] > cost)
-					TEST_FAIL("Design [design.type]'s product has more [material.id] than it costs.")
+				if(item_materials[material] > cost)
+					TEST_FAIL("Design [design.type]'s product has more [material.id] than it costs. (Cost: [cost] | Produces: [item_materials[material]])")
 
 		qdel(built)

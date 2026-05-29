@@ -166,7 +166,7 @@
 	name = "Battery Module"
 	id = "bat_normal"
 	build_type = FABRICATOR
-	materials = list(/datum/material/iron = 400)
+	materials = list(/datum/material/iron=700, /datum/material/glass = 50)
 	build_path = /obj/item/stock_parts/cell/computer
 	category = list(DCAT_COMPUTER_PART)
 	mapload_design_flags = DESIGN_FAB_OMNI
@@ -175,7 +175,7 @@
 	name = "Advanced Battery Module"
 	id = "bat_advanced"
 	build_type = FABRICATOR
-	materials = list(/datum/material/iron = 800)
+	materials = list(/datum/material/iron = 800, /datum/material/glass = 50)
 	build_path = /obj/item/stock_parts/cell/computer/advanced
 	category = list(DCAT_COMPUTER_PART)
 	mapload_design_flags = DESIGN_FAB_OMNI
@@ -184,7 +184,7 @@
 	name = "Super Battery Module"
 	id = "bat_super"
 	build_type = FABRICATOR
-	materials = list(/datum/material/iron = 1600)
+	materials = list(/datum/material/iron = 1600, /datum/material/glass = 50)
 	build_path = /obj/item/stock_parts/cell/computer/super
 	category = list(DCAT_COMPUTER_PART)
 	mapload_design_flags = DESIGN_FAB_OMNI
@@ -193,7 +193,7 @@
 	name = "Nano Battery Module"
 	id = "bat_nano"
 	build_type = FABRICATOR
-	materials = list(/datum/material/iron = 200)
+	materials = list(/datum/material/iron = 200, /datum/material/glass = 50)
 	build_path = /obj/item/stock_parts/cell/computer/nano
 	category = list(DCAT_COMPUTER_PART)
 	mapload_design_flags = DESIGN_FAB_OMNI
@@ -202,7 +202,7 @@
 	name = "Micro Battery Module"
 	id = "bat_micro"
 	build_type = FABRICATOR
-	materials = list(/datum/material/iron = 400)
+	materials = list(/datum/material/iron = 400, /datum/material/glass = 50)
 	build_path = /obj/item/stock_parts/cell/computer/micro
 	category = list(DCAT_COMPUTER_PART)
 	mapload_design_flags = DESIGN_FAB_OMNI
