@@ -1,6 +1,6 @@
 /obj/structure/ai_fluff
-	name = "BRAD-II Computer Mainframe"
-	desc = "The logical core of a BRAD-II unit."
+	name = "BRAD-II Computer Databank"
+	desc = "A databank that stores all of the information accessible by a BRAD-II unit."
 
 	icon = 'goon/icons/obj/96x96.dmi'
 	icon_state = "oldai-t2"
