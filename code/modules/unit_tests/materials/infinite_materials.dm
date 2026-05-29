@@ -8,7 +8,7 @@
 		if(isabstract(design))
 			continue
 
-		var/object_path = design.build_type
+		var/object_path = design.build_path
 		if(isnull(object_path))
 			TEST_FAIL("Non-abstract design [design.type] has no build path.")
 			continue
