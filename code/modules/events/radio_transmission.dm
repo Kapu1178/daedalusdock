@@ -17,5 +17,5 @@
 		"VECTOR 431415 281044 1050284 LIGHTYEARS MAYDAY MAYDAY"
 	)
 
-	var/sound/sound = sound('goon/sounds/sleeper_agent_hello.ogg', volume = 20)
+	var/sound/sound = sound('goon/sounds/sleeper_agent_hello.ogg', volume = 10)
 	priority_announce(Gibberish(pick(announcements), TRUE, rand(20, 50), decode = FALSE, encode = FALSE), "Long Range Sensor Array", override_sound = sound)
