@@ -28,7 +28,7 @@
 	desc = "A power cell that holds 20 MJ of energy."
 	id = "super_cell"
 	build_type = FABRICATOR | MECHFAB
-	materials = list(/datum/material/iron = 700, /datum/material/glass = 70)
+	materials = list(/datum/material/iron = 700, /datum/material/glass = 300)
 	construction_time=100
 	build_path = /obj/item/stock_parts/cell/super/empty
 	category = list(DCAT_POWER, DCAT_STOCK_PART)

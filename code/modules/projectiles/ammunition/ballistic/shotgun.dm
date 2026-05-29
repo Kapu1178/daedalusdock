@@ -84,7 +84,7 @@ TYPEINFO_DEF(/obj/item/ammo_casing/shotgun/stunslug)
 	variance = 25
 
 TYPEINFO_DEF(/obj/item/ammo_casing/shotgun/rubbershot)
-	default_materials = list(/datum/material/iron=4000)
+	default_materials = list(/datum/material/iron=200)
 
 /obj/item/ammo_casing/shotgun/rubbershot
 	name = "rubber shot"
@@ -95,7 +95,7 @@ TYPEINFO_DEF(/obj/item/ammo_casing/shotgun/rubbershot)
 	variance = 20
 
 TYPEINFO_DEF(/obj/item/ammo_casing/shotgun/incapacitate)
-	default_materials = list(/datum/material/iron=4000)
+	default_materials = list(/datum/material/iron=200)
 
 /obj/item/ammo_casing/shotgun/incapacitate
 	name = "custom incapacitating shot"

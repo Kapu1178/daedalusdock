@@ -93,9 +93,10 @@
 #include "atmospherics\__include.dm"
 #include "combat\__include.dm"
 #include "mapping_standards\__include.dm"
+#include "materials\__include.dm"
+#include "miracles\__include.dm"
 #include "reagents\__include.dm"
 #include "screenshots\__include.dm"
-#include "miracles\__include.dm"
 
 // Single File Includes
 #include "achievements.dm"
