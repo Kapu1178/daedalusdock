@@ -40,7 +40,8 @@ TYPEINFO_DEF(/obj/machinery/ai_slipper)
 		to_chat(user, span_warning("[src] cannot be activated for <b>[DisplayTimeText(world.time - cooldown_time)]</b>!"))
 		return
 
-	var/datum/effect_system/fluid_spread/foam/foam = new(loc, 4, holder = src)
+	var/datum/effect_system/fluid_spread/foam/foam = new
+	foam.set_up(4, holder = src, location = loc)
 	foam.start()
 	uses--
 	to_chat(user, span_notice("You activate [src]. It now has <b>[uses]</b> uses of foam remaining."))
