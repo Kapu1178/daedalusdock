@@ -1,6 +1,0 @@
-author: Kapu1178
-delete-after: true
-changes:
-  - rscadd: A new random event.
-  - rscdel: Bad random events.
-  - bugfix: Hardsuit sound bug.
