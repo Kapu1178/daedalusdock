@@ -14,7 +14,7 @@
 /datum/design/beanbag_slug/sec
 	name = ".12ga Beanbag Slug"
 	id = "sec_beanbag_slug"
-	materials = list(/datum/material/iron = 200)
+	materials = list(/datum/material/iron = 250)
 	build_path = /obj/item/ammo_casing/shotgun/beanbag
 	build_type = FABRICATOR
 	category = list(DCAT_AMMO)

@@ -141,7 +141,7 @@
 	name = "Cable Coil"
 	id = "cable_coil"
 	build_type = AUTOLATHE | FABRICATOR
-	materials = list(/datum/material/iron = 10, /datum/material/glass = 5)
+	materials = list(/datum/material/iron = 10 * MAXCOIL, /datum/material/glass = 5 * MAXCOIL)
 	build_path = /obj/item/stack/cable_coil
 	category = list(DCAT_BASIC_TOOL)
 	maxstack = MAXCOIL
