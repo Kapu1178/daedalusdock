@@ -27,7 +27,7 @@ TYPEINFO_DEF(/obj/item/usb_cable)
 	. = ..()
 
 	if (!isnull(attached_circuit))
-		. += span_notice("It is attached to [attached_circuit.shell || attached_circuit].")
+		. += span_info("It is attached to [attached_circuit.shell || attached_circuit].")
 
 // Look, I'm not happy about this either, but moving an object doesn't call Moved if it's inside something else.
 // There's good reason for this, but there's no element or similar yet to track it as far as I know.

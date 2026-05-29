@@ -25,9 +25,9 @@ TYPEINFO_DEF(/obj/structure/plasticflaps)
 /obj/structure/plasticflaps/examine(mob/user)
 	. = ..()
 	if(anchored)
-		. += span_notice("[src] are <b>screwed</b> to the floor.")
+		. += span_info("[src] are <b>screwed</b> to the floor.")
 	else
-		. += span_notice("[src] are no longer <i>screwed</i> to the floor, and the flaps can be <b>cut</b> apart.")
+		. += span_info("[src] are no longer <i>screwed</i> to the floor, and the flaps can be <b>cut</b> apart.")
 
 /obj/structure/plasticflaps/screwdriver_act(mob/living/user, obj/item/W)
 	if(..())
@@ -67,7 +67,7 @@ TYPEINFO_DEF(/obj/structure/plasticflaps)
 		return FALSE
 	return TRUE
 
-/obj/structure/plasticflaps/CanAStarPass(to_dir, datum/can_pass_info/pass_info)
+/obj/structure/plasticflaps/CanAStarPass(to_dir, datum/can_pass_info/pass_info, leaving)
 	if(pass_info.is_living)
 		if(pass_info.is_bot)
 			return TRUE

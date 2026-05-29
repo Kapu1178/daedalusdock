@@ -23,7 +23,7 @@ GLOBAL_LIST_EMPTY(announcement_systems)
 	var/obj/item/radio/headset/radio
 	var/arrival = "%PERSON, %RANK has boarded the station."
 	var/arrivalToggle = 1
-	var/newhead = "%PERSON, %RANK, is the department head."
+	var/newhead = "%PERSON, %RANK, is the faction leader."
 	var/newheadToggle = 1
 
 	var/greenlight = "Light_Green"
@@ -34,7 +34,7 @@ GLOBAL_LIST_EMPTY(announcement_systems)
 	. = ..()
 	GLOB.announcement_systems |= src
 	// Voice Radio makes me cry.
-	radio = new /obj/item/radio/headset/silicon/ai(src)
+	radio = new /obj/item/radio/internal(src)
 	// We don't need to be *present* on the frequency, just be able to send packets on it.
 	common_freq = SSpackets.return_frequency(FREQ_COMMON)
 	update_appearance()

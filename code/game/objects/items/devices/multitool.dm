@@ -30,7 +30,7 @@ TYPEINFO_DEF(/obj/item/multitool)
 
 	drop_sound = 'sound/items/handling/multitool_drop.ogg'
 	pickup_sound = 'sound/items/handling/multitool_pickup.ogg'
-	custom_premium_price = PAYCHECK_HARD * 3
+	custom_premium_price = PAYCHECK_ASSISTANT * 3.7
 	toolspeed = 1
 	usesound = 'sound/weapons/empty.ogg'
 	var/obj/machinery/buffer // simple machine buffer for device linkage
@@ -38,7 +38,7 @@ TYPEINFO_DEF(/obj/item/multitool)
 
 /obj/item/multitool/examine(mob/user)
 	. = ..()
-	. += span_notice("Its buffer [buffer ? "contains [buffer]." : "is empty."]")
+	. += span_info("Its buffer [buffer ? "contains [buffer]." : "is empty."]")
 
 /obj/item/multitool/suicide_act(mob/living/carbon/user)
 	user.visible_message(span_suicide("[user] puts the [src] to [user.p_their()] chest. It looks like [user.p_theyre()] trying to pulse [user.p_their()] heart off!"))

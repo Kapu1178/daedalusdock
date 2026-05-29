@@ -1,7 +1,6 @@
 /datum/job/security_officer
 	title = JOB_SECURITY_OFFICER
-	description = "Protect company assets, follow the Standard Operating \
-		Procedure, eat donuts."
+	description = "Assist the Federation in maintaining order to get your bonus check."
 	auto_deadmin_role_flags = DEADMIN_POSITION_SECURITY
 	department_head = list(JOB_SECURITY_MARSHAL)
 	faction = FACTION_STATION
@@ -24,7 +23,7 @@
 		),
 	)
 
-	paycheck = PAYCHECK_HARD
+	paycheck = PAYCHECK_ASSISTANT * 7
 	paycheck_department = ACCOUNT_SEC
 
 	mind_traits = list(TRAIT_DONUT_LOVER)
@@ -46,6 +45,10 @@
 	rpg_title = "Guard"
 	job_flags = JOB_ANNOUNCE_ARRIVAL | JOB_CREW_MANIFEST | JOB_EQUIP_RANK | JOB_CREW_MEMBER | JOB_NEW_PLAYER_JOINABLE | JOB_REOPEN_ON_ROUNDSTART_LOSS | JOB_ASSIGN_QUIRKS | JOB_CAN_BE_INTERN
 
+/datum/job/security_officer/after_spawn(mob/living/spawned, client/player_client)
+	. = ..()
+	spawned.apply_status_effect(/datum/status_effect/skill_mod/security)
+
 /datum/outfit/job/security
 	name = "Security Officer"
 	jobtype = /datum/job/security_officer
@@ -53,7 +56,7 @@
 	id_template = /datum/access_template/job/security_officer
 	uniform = /obj/item/clothing/under/rank/security/officer
 	suit = /obj/item/clothing/suit/armor/vest/sec
-	suit_store = /obj/item/gun/energy/disabler
+	suit_store = /obj/item/gun/ballistic/revolver/single_action/juno
 	backpack_contents = list(
 		/obj/item/storage/evidencebag = 1,
 		)
@@ -71,8 +74,8 @@
 	chameleon_extras = list(
 		/obj/item/clothing/glasses/hud/security/sunglasses,
 		/obj/item/clothing/head/helmet,
-		/obj/item/gun/energy/disabler,
-		)
+		/obj/item/gun/ballistic/revolver/single_action/juno,
+	)
 		//The helmet is necessary because /obj/item/clothing/head/helmet/sec is overwritten in the chameleon list by the standard helmet, which has the same name and icon state
 	implants = list(/obj/item/implant/mindshield)
 
@@ -87,12 +90,6 @@
 	internals_slot = ITEM_SLOT_SUITSTORE
 	backpack_contents = null
 	box = null
-
-/obj/item/radio/headset/headset_sec/alt/department/Initialize(mapload)
-	. = ..()
-	wires = new/datum/wires/radio(src)
-	secure_radio_connections = list()
-	recalculateChannels()
 
 /obj/item/radio/headset/headset_sec/alt/department/engi
 	keyslot = new /obj/item/encryptionkey/headset_sec

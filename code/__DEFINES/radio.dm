@@ -13,9 +13,9 @@
 #define RADIO_KEY_ENGINEERING "e"
 #define RADIO_TOKEN_ENGINEERING ":e"
 
-#define RADIO_CHANNEL_COMMAND "Management"
-#define RADIO_KEY_COMMAND "c"
-#define RADIO_TOKEN_COMMAND ":c"
+#define RADIO_CHANNEL_FEDERATION "Federation"
+#define RADIO_KEY_FEDERATION "c"
+#define RADIO_TOKEN_FEDERATION ":c"
 
 #define RADIO_CHANNEL_SCIENCE "Science"
 #define RADIO_KEY_SCIENCE "n"
@@ -51,6 +51,8 @@
 #define RADIO_CHANNEL_CTF_GREEN "Green Team"
 #define RADIO_CHANNEL_CTF_YELLOW "Yellow Team"
 
+/// Used by radios to track how they're interacting with a channel.
+#define CHANNEL_STATUS_LISTENING (1<<0)
 
 #define MIN_FREE_FREQ 1201 // -------------------------------------------------
 // Frequencies are always odd numbers and range from 1201 to 1599.

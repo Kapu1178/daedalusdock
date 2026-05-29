@@ -25,8 +25,8 @@ SUBSYSTEM_DEF(id_access)
 	/// Helper list containing all station groups.
 	var/list/station_groups = list()
 
-	/// The roundstart generated code for the spare ID safe. This is given to the Captain on shift start. If there's no Captain, it's given to the HoP. If there's no HoP
-	var/spare_id_safe_code = ""
+	/// Database of referenceable pincodes (Usually door codes.)
+	var/list/static_pincodes = list()
 
 /datum/controller/subsystem/id_access/Initialize(timeofday)
 	setup_access_groups()
@@ -34,8 +34,6 @@ SUBSYSTEM_DEF(id_access)
 	setup_template_singletons()
 	setup_access_descriptions()
 	setup_tgui_lists()
-
-	spare_id_safe_code = "[rand(0,9)][rand(0,9)][rand(0,9)][rand(0,9)][rand(0,9)]"
 
 	return ..()
 
@@ -66,7 +64,7 @@ SUBSYSTEM_DEF(id_access)
 
 	station_groups = list(
 		/datum/access_group/station/security,
-		/datum/access_group/station/management,
+		/datum/access_group/station/federation,
 		/datum/access_group/station/engineering,
 		/datum/access_group/station/independent_areas,
 		/datum/access_group/station/cargo,
@@ -181,7 +179,7 @@ SUBSYSTEM_DEF(id_access)
 	desc_by_access["[ACCESS_TELEPORTER]"] = "Teleporter"
 	desc_by_access["[ACCESS_EVA]"] = "EVA"
 	desc_by_access["[ACCESS_FACTION_LEADER]"] = "Faction Leader"
-	desc_by_access["[ACCESS_MANAGEMENT]"] = "Management"
+	desc_by_access["[ACCESS_FEDERATION]"] = "Federation"
 	desc_by_access["[ACCESS_CAPTAIN]"] = "Captain"
 	desc_by_access["[ACCESS_ALL_PERSONAL_LOCKERS]"] = "Personal Lockers"
 	desc_by_access["[ACCESS_CHAPEL_OFFICE]"] = "Chapel Office"
@@ -358,3 +356,16 @@ SUBSYSTEM_DEF(id_access)
 			tally++
 
 	return tally
+
+/// Get a global pin code, generates it if it doesn't already exist.
+/// Uses the passed length only if generating.
+/datum/controller/subsystem/id_access/proc/get_static_pincode(pincode_id, code_len = 5)
+	if(!pincode_id)
+		CRASH("Tried to retrieve static pincode with no pin ID")
+
+	var/code = static_pincodes[pincode_id]
+	if(!code)
+		while(length(code) < code_len)
+			code += "[rand(0,9)]"
+		static_pincodes[pincode_id] = code
+	return code

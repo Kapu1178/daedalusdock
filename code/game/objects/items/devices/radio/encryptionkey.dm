@@ -24,7 +24,7 @@
 		if(translate_binary)
 			examine_text_list += "[GLOB.channel_tokens[MODE_BINARY]] - [MODE_BINARY]"
 
-		. += span_notice("It can access the following channels; [jointext(examine_text_list, ", ")].")
+		. += span_info("It can access the following channels; [jointext(examine_text_list, ", ")].")
 
 /obj/item/encryptionkey/syndicate
 	name = "syndicate encryption key"
@@ -53,14 +53,14 @@
 	channels = list(RADIO_CHANNEL_MEDICAL = 1)
 
 /obj/item/encryptionkey/headset_com
-	name = "\improper Management radio encryption key"
+	name = "\improper Federation radio encryption key"
 	icon_state = "com_cypherkey"
-	channels = list(RADIO_CHANNEL_COMMAND = 1)
+	channels = list(RADIO_CHANNEL_FEDERATION = 1)
 
 /obj/item/encryptionkey/heads/captain
 	name = "\proper the superintendent's encryption key"
 	icon_state = "cap_cypherkey"
-	channels = list(RADIO_CHANNEL_COMMAND = 1, RADIO_CHANNEL_SECURITY = 1)
+	channels = list(RADIO_CHANNEL_FEDERATION = 1, RADIO_CHANNEL_SECURITY = 1)
 
 /obj/item/encryptionkey/heads/hos
 	name = "security marshal's encryption key"
@@ -109,7 +109,28 @@
 	channels = list(RADIO_CHANNEL_CENTCOM = 1)
 
 /obj/item/encryptionkey/ai //ported from NT, this goes 'inside' the AI.
-	channels = list(RADIO_CHANNEL_COMMAND = 1, RADIO_CHANNEL_SECURITY = 1, RADIO_CHANNEL_ENGINEERING = 1, RADIO_CHANNEL_SCIENCE = 1, RADIO_CHANNEL_MEDICAL = 1, RADIO_CHANNEL_SUPPLY = 1, RADIO_CHANNEL_SERVICE = 1, RADIO_CHANNEL_AI_PRIVATE = 1)
+	channels = list(
+		RADIO_CHANNEL_FEDERATION = 1,
+		RADIO_CHANNEL_SECURITY = 1,
+		RADIO_CHANNEL_ENGINEERING = 1,
+		RADIO_CHANNEL_SCIENCE = 1,
+		RADIO_CHANNEL_MEDICAL = 1,
+		RADIO_CHANNEL_SUPPLY = 1,
+		RADIO_CHANNEL_SERVICE = 1,
+		RADIO_CHANNEL_AI_PRIVATE = 1
+	)
+
+/obj/item/encryptionkey/all_station
+	channels = list(
+		RADIO_CHANNEL_FEDERATION = 1,
+		RADIO_CHANNEL_SECURITY = 1,
+		RADIO_CHANNEL_ENGINEERING = 1,
+		RADIO_CHANNEL_SCIENCE = 1,
+		RADIO_CHANNEL_MEDICAL = 1,
+		RADIO_CHANNEL_SUPPLY = 1,
+		RADIO_CHANNEL_SERVICE = 1,
+		RADIO_CHANNEL_AI_PRIVATE = 1
+	)
 
 /obj/item/encryptionkey/secbot
 	channels = list(RADIO_CHANNEL_AI_PRIVATE = 1, RADIO_CHANNEL_SECURITY = 1)

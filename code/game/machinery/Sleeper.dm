@@ -54,6 +54,14 @@
 	update_appearance()
 	reset_chem_buttons()
 
+/obj/machinery/sleeper/Initialize(mapload)
+	. = ..()
+	register_context()
+
+/obj/machinery/sleeper/add_context(atom/source, list/context, obj/item/held_item, mob/user)
+	. = ..()
+	context[SCREENTIP_CONTEXT_ALT_LMB] = state_open ? "Close" : "Open"
+
 /obj/machinery/sleeper/RefreshParts()
 	. = ..()
 	var/E
@@ -182,10 +190,6 @@
 		close_machine()
 	else
 		open_machine()
-
-/obj/machinery/sleeper/examine(mob/user)
-	. = ..()
-	. += span_notice("Alt-click [src] to [state_open ? "close" : "open"] it.")
 
 /obj/machinery/sleeper/ui_data()
 	var/list/data = list()

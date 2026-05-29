@@ -630,9 +630,9 @@
 /obj/item/toy/plush/goatplushie/examine()
 	. = ..()
 	if(splat)
-		. += span_notice("[src] might need medical attention.")
+		. += span_info("[src] might need medical attention.")
 	if(going_hard)
-		. += span_notice("[src] is going so hard, feel free to take a picture.")
+		. += span_info("[src] is going so hard, feel free to take a picture.")
 
 /obj/item/toy/plush/goatplushie/update_overlays()
 	. = ..()

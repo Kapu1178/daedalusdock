@@ -93,8 +93,8 @@
 
 /obj/item/bodypart/arm/update_limb(dropping_limb, is_creating)
 	. = ..()
-	if(is_creating && owner?.has_dna())
-		fingerprints = md5(owner.dna.unique_identity)
+	if(is_creating)
+		inherit_fingerprints()
 
 /obj/item/bodypart/arm/on_life(delta_time, times_fired, stam_heal)
 	. = ..()
@@ -131,6 +131,11 @@
 		if(owner.dropItemToGround(target_item))
 			owner.visible_message(span_alert("<b>[owner]</b>'s [zone_name] malfunctions, dropping what [owner.p_they()] [p_are()] holding.."))
 		return
+
+/// Inherit fingerprint from the parent's DNA.
+/obj/item/bodypart/arm/proc/inherit_fingerprints()
+	if(owner.has_dna())
+		fingerprints = md5(owner.dna.unique_identity)
 
 /obj/item/bodypart/arm/left
 	name = "left arm"

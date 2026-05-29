@@ -60,11 +60,11 @@
 /obj/item/swapper/examine(mob/user)
 	. = ..()
 	if(world.time < next_use)
-		. += span_warning("Time left to recharge: [DisplayTimeText(next_use - world.time)].")
+		. += span_alert("Time left to recharge: [DisplayTimeText(next_use - world.time)].")
 	if(linked_swapper)
-		. += span_notice("<b>Linked.</b> Alt-Click to break the quantum link.")
+		. += span_info("<b>Linked.</b> Alt-Click to break the quantum link.")
 	else
-		. += span_notice("<b>Not Linked.</b> Use on another quantum spin inverter to establish a quantum link.")
+		. += span_info("<b>Not Linked.</b> Use on another quantum spin inverter to establish a quantum link.")
 
 /obj/item/swapper/AltClick(mob/living/user)
 	if(!user.canUseTopic(src, USE_CLOSE|USE_DEXTERITY))

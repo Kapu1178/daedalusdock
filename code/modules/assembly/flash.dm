@@ -15,13 +15,18 @@ TYPEINFO_DEF(/obj/item/assembly/flash)
 	inhand_icon_state = "flashtool"
 	lefthand_file = 'icons/mob/inhands/equipment/security_lefthand.dmi'
 	righthand_file = 'icons/mob/inhands/equipment/security_righthand.dmi'
-	throwforce = 0
+
+	throwforce = 2
+
 	w_class = WEIGHT_CLASS_TINY
 	light_system = OVERLAY_LIGHT //Used as a flash here.
 	light_outer_range = FLASH_LIGHT_RANGE
 	light_color = COLOR_WHITE
 	light_power = FLASH_LIGHT_POWER
 	light_on = FALSE
+
+	has_combat_mode_interaction = TRUE
+
 	/// Whether we currently have the flashing overlay.
 	var/flashing = FALSE
 	/// The overlay we use for flashing.
@@ -42,7 +47,7 @@ TYPEINFO_DEF(/obj/item/assembly/flash)
 		user.visible_message(span_suicide("[user] raises \the [src] up to [user.p_their()] eyes and activates it ... but [user.p_theyre()] blind!"))
 		return SHAME
 	user.visible_message(span_suicide("[user] raises \the [src] up to [user.p_their()] eyes and activates it! It looks like [user.p_theyre()] trying to commit suicide!"))
-	attack(user,user)
+	interact_with_atom(user,user)
 	return FIRELOSS
 
 /obj/item/assembly/flash/update_icon(updates=ALL, flash = FALSE)
@@ -233,26 +238,36 @@ TYPEINFO_DEF(/obj/item/assembly/flash)
 	// Attacker lateral to the victim.
 	return DEVIATION_PARTIAL
 
-/obj/item/assembly/flash/attack(mob/living/M, mob/user)
-	if(!try_use_flash(user))
-		return FALSE
+/obj/item/assembly/flash/interact_with_atom(atom/interacting_with, mob/living/user, list/modifiers)
+	if(!ismob(interacting_with))
+		return NONE
 
-	. = TRUE
+	if(!try_use_flash(user))
+		return NONE
+
+	user.changeNext_move(CLICK_CD_MELEE)
+
+	var/mob/living/M = interacting_with
+	M.do_attack_animation(interacting_with, do_hurt = FALSE)
+
 	if(iscarbon(M))
 		flash_carbon(M, user, confusion_duration = 5 SECONDS, targeted = TRUE)
-		return
+		return ITEM_INTERACT_SUCCESS
+
 	if(issilicon(M))
 		var/mob/living/silicon/robot/flashed_borgo = M
 		log_combat(user, flashed_borgo, "flashed", src)
 		update_icon(ALL, TRUE)
 		if(!flashed_borgo.flash_act(affect_silicon = TRUE))
 			user.visible_message(span_warning("[user] fails to blind [flashed_borgo] with the flash!"), span_warning("You fail to blind [flashed_borgo] with the flash!"))
-			return
+			return ITEM_INTERACT_SUCCESS
+
 		flashed_borgo.Disorient(70, paralyze = rand(80, 120), stack_status = FALSE)
 		user.visible_message(span_warning("[user] overloads [flashed_borgo]'s sensors with the flash!"), span_danger("You overload [flashed_borgo]'s sensors with the flash!"))
-		return
+		return ITEM_INTERACT_SUCCESS
 
 	user.visible_message(span_warning("[user] fails to blind [M] with the flash!"), span_warning("You fail to blind [M] with the flash!"))
+	return ITEM_INTERACT_SUCCESS
 
 /obj/item/assembly/flash/attack_self(mob/living/carbon/user, flag = 0, emp = 0)
 	if(holder)
@@ -307,9 +322,10 @@ TYPEINFO_DEF(/obj/item/assembly/flash)
 
 /obj/item/assembly/flash/cyborg
 
-/obj/item/assembly/flash/cyborg/attack(mob/living/M, mob/user)
-	..()
-	new /obj/effect/temp_visual/borgflash(get_turf(src))
+/obj/item/assembly/flash/cyborg/interact_with_atom(atom/interacting_with, mob/living/user, list/modifiers)
+	. = ..()
+	if(. & ITEM_INTERACT_ANY_BLOCKER)
+		new /obj/effect/temp_visual/borgflash(get_turf(src))
 
 /obj/item/assembly/flash/cyborg/attack_self(mob/user)
 	..()
@@ -346,9 +362,14 @@ TYPEINFO_DEF(/obj/item/assembly/flash)
 	if(use_charge(user))
 		. = ..()
 
-/obj/item/assembly/flash/camera/attack(mob/living/M, mob/user)
-	if(use_charge(user))
-		. = ..()
+/obj/item/assembly/flash/camera/interact_with_atom(atom/interacting_with, mob/living/user, list/modifiers)
+	if(!isliving(interacting_with))
+		return NONE
+
+	if(!use_charge(user))
+		return NONE
+
+	return ..()
 
 /obj/item/assembly/flash/camera/proc/use_charge(mob/user)
 	if(current_charges)
@@ -365,7 +386,7 @@ TYPEINFO_DEF(/obj/item/assembly/flash)
 
 /obj/item/assembly/flash/camera/examine(mob/user)
 	. = ..()
-	. += span_notice("It has [current_charges] charge\s remaining.")
+	. += span_info("It has [current_charges] charge\s remaining.")
 	if (length(charge_timers))
 		. += span_boldnotice("A small display on the screen reads:")
 	for (var/i in 1 to length(charge_timers))

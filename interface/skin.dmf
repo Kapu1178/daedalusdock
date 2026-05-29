@@ -114,7 +114,7 @@ window "mapwindow"
 		is-default = true
 		right-click = true
 		saved-params = "zoom;letterbox;zoom-mode"
-		style = ".center { text-align: center; } .maptext { font-family: 'Small Fonts'; font-size: 7px; -dm-text-outline: 1px black; color: white; } .vga { font-family: 'PxPlus IBM VGA9'; font-size: 12px; } .command_headset { font-weight: bold;\tfont-size: 8px; } .small { font-size: 6px; } .big { font-size: 8px; } .reallybig { font-size: 8px; } .extremelybig { font-size: 8px; } .greentext { color: #00FF00; font-size: 7px; } .redtext { color: #FF0000; font-size: 7px; } .clown { color: #FF69Bf; font-size: 7px;  font-weight: bold; } .his_grace { color: #15D512; } .hypnophrase { color: #0d0d0d; font-weight: bold; } .yell { font-weight: bold; } .italics { font-size: 6px; } .outline { -dm-text-outline: 1px black; } .align-top {vertical-align: top}"
+		style = "img.icon {width: auto; height: auto} .center { text-align: center; } .maptext { font-family: 'Small Fonts'; font-size: 7px; -dm-text-outline: 1px black; color: white; } .vga { font-family: 'PxPlus IBM VGA9'; font-size: 12px; } .command_headset { font-weight: bold;\tfont-size: 8px; } .small { font-size: 6px; } .big { font-size: 8px; } .reallybig { font-size: 8px; } .extremelybig { font-size: 8px; } .greentext { color: #00FF00; font-size: 7px; } .redtext { color: #FF0000; font-size: 7px; } .clown { color: #FF69Bf; font-size: 7px;  font-weight: bold; } .his_grace { color: #15D512; } .hypnophrase { color: #0d0d0d; font-weight: bold; } .yell { font-weight: bold; } .bigyell { font-weight: bold; font-size: 16px } .italics { font-size: 6px; } .outline { -dm-text-outline: 1px black; } .align-top {vertical-align: top}"
 	elem "status_bar"
 		type = LABEL
 		pos = 0,464
@@ -266,7 +266,7 @@ window "infowindow"
 		anchor2 = -1,-1
 		saved-params = "pos;size;is-minimized;is-maximized"
 		is-pane = true
-	elem "info"
+	elem "statpane_and_output"
 		type = CHILD
 		pos = 0,5
 		size = 640x475
@@ -276,6 +276,7 @@ window "infowindow"
 		left = "statwindow"
 		right = "outputwindow"
 		is-vert = false
+		splitter = 32
 
 window "outputwindow"
 	elem "outputwindow"
@@ -286,7 +287,7 @@ window "outputwindow"
 		anchor2 = -1,-1
 		saved-params = "pos;size;is-minimized;is-maximized"
 		is-pane = true
-	elem "output_input_child"
+	elem "output_and_verb_bar"
 		type = CHILD
 		pos = 0,0
 		size = 640x475
@@ -297,7 +298,7 @@ window "outputwindow"
 		left = "output_selector"
 		right = "input_and_buttons"
 		is-vert = false
-		splitter = 94.9
+		splitter = 96.3
 		show-splitter = false
 
 window "output_selector"

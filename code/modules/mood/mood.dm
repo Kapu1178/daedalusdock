@@ -265,8 +265,7 @@
 	SIGNAL_HANDLER
 
 	var/datum/hud/hud = mob_parent.hud_used
-	mood_screen_object = new(null, hud)
-	hud.infodisplay += mood_screen_object
+	mood_screen_object = hud.add_screen_object(new /atom/movable/screen/mood(null, hud), HUDKEY_MOB_MOOD, HUDGROUP_INFO_DISPLAY, update_screen = TRUE)
 	RegisterSignal(hud, COMSIG_PARENT_QDELETING, PROC_REF(unmodify_hud))
 	RegisterSignal(mood_screen_object, COMSIG_CLICK, PROC_REF(hud_click))
 
@@ -276,9 +275,9 @@
 
 	if(!mood_screen_object)
 		return
+
 	var/datum/hud/hud = mob_parent.hud_used
-	if(hud?.infodisplay)
-		hud.infodisplay -= mood_screen_object
+	hud.remove_screen_object(HUDKEY_MOB_MOOD, update_screen = TRUE)
 	QDEL_NULL(mood_screen_object)
 
 /// Handles clicking on the mood HUD object
@@ -302,7 +301,7 @@
 		if(MOOD_LEVEL_SAD4)
 			msg += span_alert("<b>You wish you were dead.</b>")
 		if(MOOD_LEVEL_SAD2, MOOD_LEVEL_SAD3)
-			msg += span_alert("You am stressed out.")
+			msg += span_alert("You are stressed out.")
 		if(MOOD_LEVEL_NEUTRAL)
 			msg += span_grey("You feel indifferent.")
 		if(MOOD_LEVEL_HAPPY2, MOOD_LEVEL_HAPPY3)

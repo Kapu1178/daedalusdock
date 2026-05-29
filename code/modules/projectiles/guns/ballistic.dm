@@ -89,7 +89,7 @@
 	///Phrasing of the magazine in examine and notification messages; ex: magazine, box, etx
 	var/magazine_wording = "magazine"
 	///Phrasing of the cartridge in examine and notification messages; ex: bullet, shell, dart, etc.
-	var/cartridge_wording = "bullet"
+	var/cartridge_wording = "cartridge"
 	/// If TRUE, will show the caliber name on examine. Set to false for things with fake calibers like bows and the tentacle "gun".
 	var/show_caliber_on_examine = TRUE
 
@@ -155,11 +155,30 @@
 
 	update_appearance()
 	RegisterSignal(src, COMSIG_ITEM_RECHARGED, PROC_REF(instant_reload))
+	register_context()
 
 /obj/item/gun/ballistic/Destroy()
 	QDEL_NULL(magazine)
 	QDEL_NULL(bolt)
 	return ..()
+
+/obj/item/gun/ballistic/add_context(atom/source, list/context, obj/item/held_item, mob/user)
+	. = ..()
+	if(istype(bolt,  /datum/gun_bolt/no_bolt))
+		context[SCREENTIP_CONTEXT_ALT_LMB] = "Empty rounds"
+
+	else if(!internal_magazine)
+		context[SCREENTIP_CONTEXT_ALT_LMB] = "Remove [magazine_wording]"
+
+	return CONTEXTUAL_SCREENTIP_SET
+
+/obj/item/gun/ballistic/get_controls_info()
+	. = ..()
+	if(istype(bolt,  /datum/gun_bolt/no_bolt))
+		. += "Control Click - Empty rounds."
+
+	else if(!internal_magazine)
+		. += "Alt Click - Remove [magazine_wording]."
 
 /obj/item/gun/ballistic/vv_edit_var(vname, vval)
 	. = ..()
@@ -167,7 +186,8 @@
 		update_appearance()
 
 /obj/item/gun/ballistic/update_icon_state()
-	icon_state = "[base_icon_state || initial(icon_state)][sawn_off ? "_sawn" : ""]"
+	if(can_be_sawn_off)
+		icon_state = "[base_icon_state || initial(icon_state)][sawn_off ? "_sawn" : ""]"
 	return ..()
 
 /obj/item/gun/ballistic/update_overlays()
@@ -272,7 +292,7 @@
 
 ///Drops the bolt from a locked position
 /obj/item/gun/ballistic/proc/drop_bolt(mob/user = null)
-	playsound(src, bolt_drop_sound, bolt_drop_sound_volume, FALSE)
+	playsound(src, bolt_drop_sound, bolt_drop_sound_volume, FALSE, SHORT_RANGE_SOUND_EXTRARANGE)
 	if (user)
 		to_chat(user, span_notice("You drop the [bolt_wording] of [src]."))
 
@@ -292,9 +312,9 @@
 			to_chat(user, span_notice("You load [AM] into [src]."))
 
 		if (magazine.ammo_count())
-			playsound(src, load_sound, load_sound_volume, load_sound_vary)
+			playsound(src, load_sound, load_sound_volume, load_sound_vary, SHORT_RANGE_SOUND_EXTRARANGE)
 		else
-			playsound(src, load_empty_sound, load_sound_volume, load_sound_vary)
+			playsound(src, load_empty_sound, load_sound_volume, load_sound_vary, SHORT_RANGE_SOUND_EXTRARANGE)
 
 		bolt.magazine_inserted()
 		update_appearance()
@@ -312,9 +332,9 @@
 	bolt.magazine_ejected()
 
 	if (magazine.ammo_count())
-		playsound(src, eject_sound, eject_sound_volume, eject_sound_vary)
+		playsound(src, eject_sound, eject_sound_volume, eject_sound_vary, SHORT_RANGE_SOUND_EXTRARANGE)
 	else
-		playsound(src, eject_empty_sound, eject_sound_volume, eject_sound_vary)
+		playsound(src, eject_empty_sound, eject_sound_volume, eject_sound_vary, SHORT_RANGE_SOUND_EXTRARANGE)
 
 	var/obj/item/ammo_box/old_mag = magazine
 	magazine = null
@@ -344,7 +364,11 @@
 	unwield(user)
 	eject_magazine(user, TRUE)
 
-/obj/item/gun/ballistic/can_fire()
+/obj/item/gun/ballistic/can_fire(check_lockout = FALSE)
+	. = ..()
+	if(!.)
+		return
+
 	return chambered?.loaded_projectile
 
 /obj/item/gun/ballistic/attackby(obj/item/A, mob/user, params)
@@ -369,7 +393,7 @@
 			var/num_loaded = magazine?.attempt_load_round(A, user, params, TRUE)
 			if (num_loaded)
 				to_chat(user, span_notice("You load [num_loaded] [cartridge_wording]\s into [src]."))
-				playsound(src, load_sound, load_sound_volume, load_sound_vary)
+				playsound(src, load_sound, load_sound_volume, load_sound_vary, SHORT_RANGE_SOUND_EXTRARANGE)
 
 				bolt.loaded_ammo()
 
@@ -442,7 +466,7 @@
 		misfire_probability += misfire_percentage_increment
 		misfire_probability = clamp(misfire_probability, 0, misfire_probability_cap)
 
-	AddComponent(/datum/component/smell, INTENSITY_NORMAL, SCENT_ODOR, "gunpowder", 3, 15 MINUTES)
+	AddComponent(/datum/component/smell, INTENSITY_NORMAL, SCENT_ODOR, "gunpowder", 3, 10 MINUTES)
 
 /obj/item/gun/ballistic/after_chambering(from_firing)
 	. = ..()
@@ -451,30 +475,22 @@
 
 	if (!chambered && !get_ammo())
 		if (empty_alarm)
-			playsound(src, empty_alarm_sound, empty_alarm_volume, empty_alarm_vary)
+			playsound(src, empty_alarm_sound, empty_alarm_volume, empty_alarm_vary, SHORT_RANGE_SOUND_EXTRARANGE)
 			update_appearance()
 
 	bolt.after_chambering()
-
-/obj/item/gun/ballistic/attack_hand_secondary(mob/user, list/modifiers)
-	. = ..()
-	if(. == SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN)
-		return
-
-	if(modifiers?[RIGHT_CLICK] && !internal_magazine && magazine && user.is_holding(src))
-		unload(user)
-		return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
 
 /obj/item/gun/ballistic/AltClick(mob/user)
 	if(!isliving(user) || !user.canUseTopic(src, USE_CLOSE|USE_NEED_HANDS|USE_DEXTERITY))
 		return
 
-	unload(user)
+	if(user.is_holding(src))
+		unload(user)
 
 /obj/item/gun/ballistic/attack_self(mob/living/user)
 	// They need two hands on the gun, or a free hand in general.
 	if(!one_hand_rack && !(wielded || user.get_empty_held_index()))
-		to_chat(user, span_warning("You need a free hand to do that!"))
+		to_chat(user, span_warning("You need a free hand to do that."))
 		return
 
 	if(bolt.attack_self(user))
@@ -487,34 +503,24 @@
 	rack(user)
 	return
 
-/obj/item/gun/ballistic/attack_self_secondary(mob/user, modifiers)
-	. = ..()
-	if(.)
-		return
-
-	unload(user)
-	return TRUE
-
 /obj/item/gun/ballistic/examine(mob/user)
 	. = ..()
 
 	if(show_caliber_on_examine)
-		. += "It is chambered in [initial_caliber]."
-
-	if(chambered && !hidden_chambered)
-		. += "It has a round in the chamber."
-
-	if (bolt.is_locked)
-		. += "The [bolt_wording] is locked."
+		. += span_info("It is chambered in [initial_caliber].")
 
 	if (suppressed)
-		. += "It has a suppressor attached."
+		. += span_info("It has a suppressor attached.")
 
-	if(magazine && internal_magazine)
-		. += span_notice(magazine.get_ammo_desc())
+	if(user == get(loc, /mob))
+		if(chambered && !hidden_chambered)
+			. += span_info("It has a round in the chamber.")
 
-	if(can_misfire)
-		. += span_danger("You get the feeling this might explode if you fire it....")
+		if (bolt.is_locked)
+			. += span_info("The [bolt_wording] is locked.")
+
+		if(magazine && internal_magazine)
+			. += span_info((magazine.get_ammo_desc()))
 
 ///Gets the number of bullets in the gun
 /obj/item/gun/ballistic/proc/get_ammo(countchambered = TRUE)
@@ -529,11 +535,12 @@
 /obj/item/gun/ballistic/proc/get_ammo_list(countchambered = TRUE, drop_all = FALSE)
 	var/list/rounds = list()
 	if(chambered && countchambered)
-		rounds.Add(chambered)
+		rounds += chambered
 		if(drop_all)
 			chambered = null
+
 	if(magazine)
-		rounds.Add(magazine.ammo_list(drop_all))
+		rounds += magazine.ammo_list(drop_all)
 	return rounds
 
 #define BRAINS_BLOWN_THROW_RANGE 3
@@ -559,7 +566,7 @@
 			return OXYLOSS
 	else
 		user.visible_message(span_suicide("[user] is pretending to blow [user.p_their()] brain[user.p_s()] out with [src]! It looks like [user.p_theyre()] trying to commit suicide!</b>"))
-		playsound(src, dry_fire_sound, 30, TRUE)
+		playsound(src, dry_fire_sound, 30, TRUE, SHORT_RANGE_SOUND_EXTRARANGE)
 		return OXYLOSS
 
 #undef BRAINS_BLOWN_THROW_SPEED

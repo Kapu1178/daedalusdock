@@ -135,18 +135,14 @@
 		return TRUE
 	recharging = FALSE
 
-
-/obj/item/inducer/attack(mob/M, mob/living/user)
-	if(user.combat_mode)
-		return ..()
-
+/obj/item/inducer/interact_with_atom(atom/interacting_with, mob/living/user, list/modifiers)
 	if(cantbeused(user))
-		return
+		return ITEM_INTERACT_BLOCKING
 
-	if(recharge(M, user))
-		return
-	return ..()
+	if(recharge(interacting_with, user))
+		return ITEM_INTERACT_SUCCESS
 
+	return NONE
 
 /obj/item/inducer/attack_self(mob/user)
 	if(opened && cell)
@@ -160,11 +156,11 @@
 /obj/item/inducer/examine(mob/living/M)
 	. = ..()
 	if(cell)
-		. += span_notice("Its display shows: [display_energy(cell.charge)].")
+		. += span_info("Its display shows: [display_energy(cell.charge)].")
 	else
-		. += span_notice("Its display is dark.")
+		. += span_info("Its display is dark.")
 	if(opened)
-		. += span_notice("Its battery compartment is open.")
+		. += span_info("Its battery compartment is open.")
 
 /obj/item/inducer/update_overlays()
 	. = ..()

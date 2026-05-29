@@ -35,7 +35,11 @@
  */
 /datum/chatmessage
 	/// The visual element of the chat messsage
-	var/image/message
+	var/image/message_image
+	/// Vis contents hack to get around a byond bug with animate() and images.
+	// When using just an image, the first frame of the maptext would appear as though the animate() had concluded, then start from the beginning again.
+	var/atom/movable/message_content
+
 	/// The location in which the message is appearing
 	var/atom/message_loc
 	/// The client who heard this message
@@ -82,10 +86,12 @@
 	if (owned_by)
 		if (owned_by.seen_messages)
 			LAZYREMOVEASSOC(owned_by.seen_messages, message_loc, src)
-		owned_by.images.Remove(message)
+		owned_by.images.Remove(message_image)
+
 	owned_by = null
 	message_loc = null
-	message = null
+	message_image = null
+	message_content = null
 	return ..()
 
 /**
@@ -112,6 +118,10 @@
 
 	// Register client who owns this message
 	owned_by = owner.client
+	if(isnull(owned_by))
+		qdel(src)
+		return
+
 	RegisterSignal(owned_by, COMSIG_PARENT_QDELETING, PROC_REF(on_parent_qdel))
 
 	// Remove spans in the message from things like the recorder
@@ -161,29 +171,27 @@
 	// We dim italicized text to make it more distinguishable from regular text
 	var/tgt_color = extra_classes.Find("italics") ? target.chat_color_darkened : target.chat_color
 
+	if(isnull(owned_by))
+		qdel(src)
+		return
+
 	// Approximate text height
 	var/complete_text = "<span class='center [extra_classes.Join(" ")]' style='color: [tgt_color]'>[owner.say_emphasis(text)]</span>"
 	var/mheight = WXH_TO_HEIGHT(owned_by.MeasureText(complete_text, null, 160))
 
 
 	message_loc = isturf(target) ? target : get_atom_on_turf(target)
+	if(isnull(message_loc))
+		qdel(src)
+		return
 
 	// Build message image
-	message = new /image{
-		plane = RUNECHAT_PLANE;
-		appearance_flags = APPEARANCE_UI_IGNORE_ALPHA | KEEP_APART;
-		alpha = 0;
-		maptext_width = 160;
-		maptext_height = 48;
-		maptext_x = -64;
-		maptext_y = 28
-	}
+	message_image = new /image
+	message_content = new /atom/movable/runechat
+	message_content.layer = CHAT_LAYER + CHAT_LAYER_Z_STEP * current_z_idx++
+	message_content.maptext = MAPTEXT(complete_text)
 
-
-	message.layer = CHAT_LAYER + CHAT_LAYER_Z_STEP * current_z_idx++
-	message.maptext = MAPTEXT(complete_text)
-
-	animate(message, maptext_y = 28, time = 0.01)
+	message_image.vis_contents += message_content
 
 	//var/mheight = (1 + round(length(message.maptext_width) / 32))
 	approx_lines = max(1, mheight / CHAT_MESSAGE_APPROX_LHEIGHT)
@@ -193,12 +201,13 @@
 		var/idx = 1
 		var/combined_height = approx_lines
 		var/datum/chatmessage/old_message = owned_by.seen_messages?[message_loc]?[length(owned_by.seen_messages?[message_loc])]
-		if(old_message?.message.maptext == message.maptext)
-			old_message.message.transform *= 1.1
+		if(old_message?.message_content.maptext == message_content.maptext)
+			old_message.message_content.transform *= 1.1
+			qdel(src)
 			return
 
 		for(var/datum/chatmessage/m as anything in owned_by.seen_messages[message_loc])
-			animate(m.message, maptext_y = m.message.maptext_y + mheight, time = CHAT_MESSAGE_BUMP_TIME)
+			animate(m.message_content, maptext_y = m.message_content.maptext_y + mheight, time = CHAT_MESSAGE_BUMP_TIME)
 
 			combined_height += m.approx_lines
 
@@ -215,12 +224,13 @@
 
 		//if(ismob(message_loc)) // If this proc starts getting $$$, re-add this check
 		var/turf/message_turf = get_turf(message_loc)
-		var/list/turfs2check = block(locate(max(message_turf.x-4, 1), message_turf.y, message_turf.z), locate(min(message_turf.x+4, world.maxx), message_turf.y, message_turf.z)) - message_turf
+		var/list/turfs2check = block(message_turf.x - 4, message_turf.y, message_turf.z, message_turf.x+4, message_turf.y, message_turf.z) - message_turf
+
 		for(var/turf/T as anything in turfs2check)
 			var/mob/living/L = locate() in T
 			if(!isnull(L))
 				for(var/datum/chatmessage/m as anything in owned_by.seen_messages[L])
-					animate(m.message, maptext_y = m.message.maptext_y + mheight, time = CHAT_MESSAGE_BUMP_TIME)
+					animate(m.message_content, maptext_y = m.message_content.maptext_y + mheight, time = CHAT_MESSAGE_BUMP_TIME)
 
 	// Reset z index if relevant
 	if (current_z_idx >= CHAT_LAYER_MAX_Z)
@@ -228,10 +238,10 @@
 
 	// View the message
 	LAZYADDASSOCLIST(owned_by.seen_messages, message_loc, src)
-	owned_by.images |= message
+	owned_by.images |= message_image
 
-	message.loc = message_loc
-	animate(message, alpha = 255, maptext_y = 34, time = CHAT_MESSAGE_SPAWN_TIME, ANIMATION_END_NOW)
+	message_image.loc = message_loc
+	animate(message_content, alpha = 255, maptext_y = 34, time = CHAT_MESSAGE_SPAWN_TIME)
 
 	// Register with the runechat SS to handle EOL and destruction
 	var/duration = lifespan - CHAT_MESSAGE_EOL_FADE
@@ -246,8 +256,19 @@
  */
 /datum/chatmessage/proc/end_of_life(fadetime = CHAT_MESSAGE_EOL_FADE)
 	isFading = TRUE
-	animate(message, alpha = 0, maptext_y = message.maptext_y + (8 * (1 + round(length(message.maptext_width) / 32))), time = fadetime)
+	animate(message_content, alpha = 0, maptext_y = message_content.maptext_y + (8 * (1 + round(length(message_content.maptext_width) / 32))), time = fadetime)
 	addtimer(CALLBACK(GLOBAL_PROC, GLOBAL_PROC_REF(qdel), src), fadetime, TIMER_DELETE_ME, SSrunechat)
+
+/atom/movable/runechat
+	plane = RUNECHAT_PLANE
+	appearance_flags = APPEARANCE_UI_IGNORE_ALPHA | KEEP_APART
+	alpha = 0
+	maptext_width = 160
+	maptext_height = 48
+	maptext_x = -64
+	maptext_y = 28
+
+	mouse_opacity = MOUSE_OPACITY_TRANSPARENT
 
 /*
 /mob/living/carbon/human/talker

@@ -49,6 +49,11 @@
 		view_primer()
 		return TRUE
 
+	if(href_list["change_character"])
+		var/datum/preferences/preferences = parent.client.prefs
+		preferences.change_character(usr)
+		return TRUE
+
 	if(href_list["character_setup"])
 		var/datum/preferences/preferences = parent.client.prefs
 		preferences.html_show(usr)
@@ -121,7 +126,7 @@
 		return
 
 	else if(!href_list["late_join"])
-		open()
+		update()
 
 	if(href_list["showpoll"])
 		parent.handle_player_polling()
@@ -218,7 +223,7 @@
 					>[LINKIFY_CONSOLE_OPTION("options.cfg", "npp_options=1")]
 				</div>
 				<div>
-					>[LINKIFY_CONSOLE_OPTION("lore_primer.txt", "view_primer=1")]
+					>[LINKIFY_CONSOLE_OPTION("where_am_i.txt", "view_primer=1")]
 				</div>
 				<div>
 					>[LINKIFY_CONSOLE_OPTION("discord_link.lnk", "verify=1")]
@@ -271,6 +276,9 @@
 					>[LINKIFY_CONSOLE_OPTION("Modify [name].txt", "character_setup=1")]
 				</div>
 				<div>
+					>[LINKIFY_CONSOLE_OPTION("Change Character.ps1", "change_character=1")]
+				</div>
+				<div>
 					>[CONSOLE_BACK]
 				</div>
 				<br>
@@ -299,7 +307,7 @@
 				<div class='flexItem'>[LINKIFY_READY("Observe", PLAYER_READY_TO_OBSERVE)]</div>
 			</div>
 		"}
-		output += "<div class='flexItem' style='margin-top: 8px'>[button_element(src, "View Station Manifests", "manifest=1")]</div>"
+		output += "<div class='flexItem' style='margin-top: 8px'>[button_element(src, "View Colony Census", "manifest=1")]</div>"
 	else
 		switch(parent.ready)
 			if(PLAYER_NOT_READY)
@@ -372,21 +380,61 @@
 
 /datum/new_player_panel/proc/view_primer()
 	var/content = {"
-		<div style='width:100%; text-align:center; font-size: 16px'>
-			Welcome, space-farer, to the Great Pool. A large sea of a substance known as Aether, speckled with stars, planets, and other stellar bodies.
+	<div class='newspaper' style='height: 650px'>
+		<div class='newspaper_header'>
+			The Colony Echo
 		</div>
-		<br><br>
-		<div style='width:100%; text-align:center'>
-			You are an inhabitant of a residential space station tucked in a little-explored region of the Pool. Perhaps you were born here, or are a Hermes merchanter lying low after a smuggling bust. Some weeks ago, a group from the Federation Galaxias arrived and announced the station was commandeered for emergency
-			resource production amidst the Resonance Crisis. They brought with them a small group of enforcers from the Mars People's Coalition to ensure a 'smooth transition'.
+		<div class='newspaper_headline'>
+			FEDERATION REMNANT SIEZES CONTROL OF [uppertext(station_name())]
 		</div>
-		<br><br>
-		<div style='width:100%; text-align:center'>
-		Earn the respect of your superiors. Scam your fellow citizens out of their precious coin. Wash your sorrows down your throat with a chaser of brandy. No matter which you choose, make the most of your time on Olympus Outpost.
+		<div class='content'>
+			<div class='columns'>
+				<div class='column'>
+					<div class='headline'>
+						The Federation Menace
+					</div>
+					<div class='headline subhead'>
+						An ill omen of what is to come?
+					</div>
+					The Federation Remnant has come aboard our humble remote colony and declared a state of emergency. They brought with them
+					a <u>praetorian guard</u> in the form of mercenaries from the Mars People's Coalition. Their "Superintendent" proclaims himself the representative of the Federation's will.
+					Not more than 72 hours ago were we enjoying peace on our station, what does this mean for our people?
+				</div>
+				<div class='column'>
+					<div class='headline'>
+						200 Years Later
+					</div>
+					<div class='headline subhead'>
+						A Brief History
+					</div>
+					Two-hundred years ago an event known as the Little Bang occured which our connection to the rest of the Pool, along with the Federation's hold on the sector. The Federation Remnant has been aggressively
+					expanding it's territory as of late, spelling trouble for minor colonies in the region.
+				</div>
+				<div class='column'>
+					<div class='headline'>
+						Our Humble Colony
+					</div>
+					<div class='headline subhead'>
+						By Stage Hand
+					</div>
+					Many years have passed since the old company pulled out of the colony, such that not one soul remembers their name nor iconography.
+					Now we may enjoy our seclusion and the privacy it bestows, fresh faces only arriving on trade shuttles that venture out to the pool's edge.
+				</div>
+			</div>
 		</div>
+	</div>
 	"}
-	var/datum/browser/popup = new(parent, "primer", "<center><div>New Player Primer</div></center>", 660, 350)
+
+	var/datum/browser/popup = new(parent, "primer", "", 900, 650)
 	popup.set_content(content)
+	popup.add_stylesheet("roundend", 'html/browser/primer.css')
+
+	var/google_font_shim = {"
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Notable&family=Pirata+One&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Quantico:ital,wght@0,400;0,700;1,400;1,700&family=Special+Elite&display=swap" rel="stylesheet">
+	"}
+	popup.add_head_content(google_font_shim)
 	popup.open()
 
 /datum/new_player_panel/proc/playerpolls()

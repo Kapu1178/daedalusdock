@@ -203,9 +203,9 @@ TYPEINFO_DEF(/obj/machinery/airalarm)
 
 	if(my_area)
 		LAZYREMOVE(my_area.airalarms, src)
-	if(!new_area)
-		return
+
 	my_area = new_area
+
 	if(my_area)
 		LAZYADD(my_area.airalarms, src)
 
@@ -213,9 +213,9 @@ TYPEINFO_DEF(/obj/machinery/airalarm)
 	. = ..()
 	switch(buildstage)
 		if(AIRALARM_BUILD_NO_CIRCUIT)
-			. += span_notice("It is missing air alarm electronics.")
+			. += span_info("It is missing air alarm electronics.")
 		if(AIRALARM_BUILD_NO_WIRES)
-			. += span_notice("It is missing wiring.")
+			. += span_info("It is missing wiring.")
 
 /obj/machinery/airalarm/ui_status(mob/user)
 	if(user.has_unlimited_silicon_privilege && aidisabled)
@@ -1129,8 +1129,6 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/machinery/airalarm, 21)
 		soundloop.stop()
 
 	alert_type = code
-
-
 
 #undef AALARM_MODE_SCRUBBING
 #undef AALARM_MODE_VENTING

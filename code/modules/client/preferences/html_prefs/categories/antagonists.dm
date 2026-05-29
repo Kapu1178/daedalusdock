@@ -1,5 +1,5 @@
 /datum/preference_group/category/antagonists
-	name = "Antagonists"
+	name = "Wildcard Roles"
 	priority = 30
 
 	modules = list(
@@ -16,16 +16,16 @@
 /datum/preference_group/antagonists/get_content(datum/preferences/prefs)
 	. = ..()
 	. += {"
-	<fieldset class='computerPaneNested' style='display: inline-block;min-width:50%;max-width:50%;margin-left: auto;margin-right: auto'>
+	<fieldset class='computerPaneNested nppCategoryAntagonists'>
 		<legend class='computerLegend tooltip'>
-			<b>Antagonists</b>
+			<b>Wildcard Roles</b>
 			<span class='tooltiptext'>Trouble lurks in the tunnels... you.</span>
 		</legend>
 		<div style='text-align: center'>
 			[button_element(prefs, "Select All", "pref_act=[/datum/preference/blob/antagonists];select_all=1")]
 			[button_element(prefs, "Deselect All", "pref_act=[/datum/preference/blob/antagonists];deselect_all=1")]
 		</div>
-	<div class='flexColumn' style='height: 560px;display: block;overflow-y: scroll'>
+	<div class='flexColumn'>
 	"}
 	var/list/client_antags = sort_list(prefs.read_preference(/datum/preference/blob/antagonists))
 

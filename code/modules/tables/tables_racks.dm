@@ -1012,7 +1012,7 @@ TYPEINFO_DEF(/obj/structure/table/optable)
 
 /obj/structure/rack/examine(mob/user)
 	. = ..()
-	. += span_notice("It's held together by a couple of <b>bolts</b>.")
+	. += span_info("It's held together by a couple of <b>bolts</b>.")
 
 /obj/structure/rack/CanAllowThrough(atom/movable/mover, border_dir)
 	. = ..()

@@ -47,7 +47,7 @@
 	if(!awakened)
 		return //we should not reveal we are cursed until equipped
 	if(poison_food_tolerance != FULL_HEALTH)
-		examine_list += span_notice("[parent] looks sick from something it ate.")
+		examine_list += span_info("[parent] looks sick from something it ate.")
 	if(hunger > HUNGER_THRESHOLD_WARNING)
 		examine_list += span_danger("[parent] hungers for something to eat...")
 

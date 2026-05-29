@@ -1,8 +1,6 @@
 /datum/job/warden
 	title = JOB_WARDEN
-	description = "Watch over the Brig and Prison Wing, manage prisoners, \
-		issue equipment to security, work with the Security Marshal \
-		to organize security."
+	description = "Keep a close eye on any \"criminals\" the boys bring in and manage the armaments of the force."
 	auto_deadmin_role_flags = DEADMIN_POSITION_SECURITY
 	department_head = list(JOB_SECURITY_MARSHAL)
 	faction = FACTION_STATION
@@ -25,7 +23,7 @@
 		),
 	)
 
-	paycheck = PAYCHECK_HARD
+	paycheck = /datum/job/security_officer::paycheck
 	paycheck_department = ACCOUNT_SEC
 
 	mind_traits = list(TRAIT_DONUT_LOVER)
@@ -47,7 +45,6 @@
 	)
 	rpg_title = "Jailor"
 	job_flags = JOB_ANNOUNCE_ARRIVAL | JOB_CREW_MANIFEST | JOB_EQUIP_RANK | JOB_CREW_MEMBER | JOB_NEW_PLAYER_JOINABLE | JOB_REOPEN_ON_ROUNDSTART_LOSS | JOB_ASSIGN_QUIRKS | JOB_CAN_BE_INTERN
-
 
 /datum/outfit/job/warden
 	name = "Brig Lieutenant"

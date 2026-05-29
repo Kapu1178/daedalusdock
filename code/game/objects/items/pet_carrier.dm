@@ -51,13 +51,13 @@ TYPEINFO_DEF(/obj/item/pet_carrier)
 	if(occupants.len)
 		for(var/V in occupants)
 			var/mob/living/L = V
-			. += span_notice("It has [L] inside.")
+			. += span_info("It has [L] inside.")
 	else
-		. += span_notice("It has nothing inside.")
+		. += span_info("It has nothing inside.")
 	if(user.canUseTopic(src))
-		. += span_notice("Activate it in your hand to [open ? "close" : "open"] its door.")
+		. += span_info("Activate it in your hand to [open ? "close" : "open"] its door.")
 		if(!open)
-			. += span_notice("Alt-click to [locked ? "unlock" : "lock"] its door.")
+			. += span_info("Alt-click to [locked ? "unlock" : "lock"] its door.")
 
 /obj/item/pet_carrier/attack_self(mob/living/user)
 	if(open)
@@ -84,25 +84,29 @@ TYPEINFO_DEF(/obj/item/pet_carrier)
 		playsound(user, 'sound/machines/boltsup.ogg', 30, TRUE)
 	update_appearance()
 
-/obj/item/pet_carrier/attack(mob/living/target, mob/living/user)
-	if(user.combat_mode)
-		return ..()
+/obj/item/pet_carrier/interact_with_atom(atom/interacting_with, mob/living/user, list/modifiers)
+	if(!isliving(interacting_with))
+		return NONE
+
+	var/mob/living/target = interacting_with
+
 	if(!open)
-		to_chat(user, span_warning("You need to open [src]'s door!"))
-		return
+		to_chat(user, span_warning("You need to open [src]'s door."))
+		return ITEM_INTERACT_BLOCKING
 
 	if(target.mob_size > max_occupant_weight)
 		if(ishuman(target))
 			to_chat(user, span_warning("Humans, generally, do not fit into pet carriers."))
 		else
 			to_chat(user, span_warning("You get the feeling [target] isn't meant for a [name]."))
-		return
+		return ITEM_INTERACT_BLOCKING
 
 	if(user == target)
 		to_chat(user, span_warning("Why would you ever do that?"))
-		return
+		return ITEM_INTERACT_BLOCKING
 
 	load_occupant(user, target)
+	return ITEM_INTERACT_SUCCESS
 
 /obj/item/pet_carrier/relaymove(mob/living/user, direction)
 	if(open)

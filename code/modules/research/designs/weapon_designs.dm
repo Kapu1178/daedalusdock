@@ -3,15 +3,19 @@
 /////////////////////////////////////////
 
 /datum/design/rubbershot/sec
-	name = "Rubber Slug"
+	name = ".12ga Rubber"
 	id = "sec_rshot"
+	materials = list(/datum/material/iron = 200)
+	build_path = /obj/item/ammo_casing/shotgun/rubbershot
 	build_type = FABRICATOR
 	category = list(DCAT_AMMO)
 	mapload_design_flags = DESIGN_FAB_SECURITY
 
 /datum/design/beanbag_slug/sec
-	name = "Beanbag Slug"
+	name = ".12ga Beanbag Slug"
 	id = "sec_beanbag_slug"
+	materials = list(/datum/material/iron = 250)
+	build_path = /obj/item/ammo_casing/shotgun/beanbag
 	build_type = FABRICATOR
 	category = list(DCAT_AMMO)
 	mapload_design_flags = DESIGN_FAB_SECURITY
@@ -91,7 +95,7 @@
 	desc = "A stunning shell for a shotgun."
 	id = "stunshell"
 	build_type = FABRICATOR
-	materials = list(/datum/material/iron = 200)
+	materials = list(/datum/material/iron = 250)
 	build_path = /obj/item/ammo_casing/shotgun/stunslug
 	category = list(DCAT_AMMO)
 	mapload_design_flags = DESIGN_FAB_SECURITY

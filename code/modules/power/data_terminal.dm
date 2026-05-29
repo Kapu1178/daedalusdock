@@ -50,7 +50,7 @@
 	if(signal.transmission_method != TRANSMISSION_WIRE)
 		CRASH("Data terminal received a non-wire data packet")
 	if(connected_machine)
-		connected_machine.receive_signal(signal)
+		connected_machine.receive_wireline_signal(signal, src)
 
 /obj/machinery/power/data_terminal/post_signal(datum/signal/signal)
 	SHOULD_CALL_PARENT(FALSE) //We *ARE* the signal poster.
@@ -105,7 +105,7 @@
 
 /obj/item/data_terminal_construct/examine(mob/user)
 	. = ..()
-	. += span_notice("You can [span_bold("screw")] it to the floor to install it.")
+	. += span_info("You can [span_bold("screw")] it to the floor to install it.")
 
 /obj/item/data_terminal_construct/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ..()

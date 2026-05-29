@@ -103,7 +103,7 @@ TYPEINFO_DEF(/obj/item/clothing/head/helmet/marine)
 	desc = "A reliable, blue tinted helmet reminding you that you <i>still</i> owe that engineer a beer."
 	icon_state = "blueshift"
 	inhand_icon_state = "blueshift"
-	custom_premium_price = PAYCHECK_HARD
+	custom_premium_price = PAYCHECK_ASSISTANT * 9.2
 
 TYPEINFO_DEF(/obj/item/clothing/head/helmet/riot)
 	default_armor = list(BLUNT = 60, PUNCTURE = 10, SLASH = 60, LASER = 10, ENERGY = 10, BOMB = 0, BIO = 0, FIRE = 80, ACID = 80)
@@ -449,10 +449,10 @@ TYPEINFO_DEF(/obj/item/clothing/head/helmet/elder_atmosian)
 /obj/item/clothing/head/helmet/monkey_sentience/examine(mob/user)
 	. = ..()
 	. += span_boldwarning("---WARNING: REMOVAL OF HELMET ON SUBJECT MAY LEAD TO:---")
-	. += span_warning("BLOOD RAGE")
-	. += span_warning("BRAIN DEATH")
-	. += span_warning("PRIMAL GENE ACTIVATION")
-	. += span_warning("GENETIC MAKEUP MASS SUSCEPTIBILITY")
+	. += span_alert("BLOOD RAGE")
+	. += span_alert("BRAIN DEATH")
+	. += span_alert("PRIMAL GENE ACTIVATION")
+	. += span_alert("GENETIC MAKEUP MASS SUSCEPTIBILITY")
 	. += span_boldnotice("Ask your CMO if mind magnification is right for you.")
 
 /obj/item/clothing/head/helmet/monkey_sentience/update_icon_state()

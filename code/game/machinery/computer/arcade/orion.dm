@@ -511,9 +511,9 @@ GLOBAL_LIST_INIT(orion_events, generate_orion_events())
 	if(!(in_range(user, src)))
 		return
 	if(!active)
-		. += span_notice("There's a little switch on the bottom. It's flipped down.")
+		. += span_info("There's a little switch on the bottom. It's flipped down.")
 	else
-		. += span_notice("There's a little switch on the bottom. It's flipped up.")
+		. += span_info("There's a little switch on the bottom. It's flipped up.")
 
 /obj/item/orion_ship/attack_self(mob/user) //Minibomb-level explosion. Should probably be more because of how hard it is to survive the machine! Also, just over a 5-second fuse
 	if(active)

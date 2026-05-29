@@ -111,16 +111,21 @@
 	var/list/tc = allowed_item_typecache
 	if(!(mat_container_flags & MATCONTAINER_ANY_INTENT) && user.combat_mode)
 		return
+
 	if(I.item_flags & ABSTRACT)
 		return
+
 	if((I.flags_1 & HOLOGRAM_1) || (I.item_flags & NO_MAT_REDEMPTION) || (tc && !is_type_in_typecache(I, tc)))
 		if(!(mat_container_flags & MATCONTAINER_SILENT))
 			to_chat(user, span_warning("[parent] won't accept [I]!"))
 		return
+
 	. = COMPONENT_NO_AFTERATTACK
+
 	var/datum/callback/pc = precondition
 	if(pc && !pc.Invoke(user))
 		return
+
 	var/material_amount = get_item_material_amount(I, mat_container_flags)
 	if(!material_amount)
 		to_chat(user, span_warning("[I] does not contain sufficient materials to be accepted by [parent]."))

@@ -84,7 +84,7 @@ TYPEINFO_DEF(/obj/item/forcefield_projector)
 
 /obj/item/forcefield_projector/examine(mob/user)
 	. = ..()
-	. += span_notice("It is currently sustaining [LAZYLEN(current_fields)]/[max_fields] fields, and it's [round((shield_integrity/max_shield_integrity)*100)]% charged.")
+	. += span_info("It is currently sustaining [LAZYLEN(current_fields)]/[max_fields] fields, and it's [round((shield_integrity/max_shield_integrity)*100)]% charged.")
 
 /obj/item/forcefield_projector/Initialize(mapload)
 	. = ..()
@@ -136,7 +136,7 @@ TYPEINFO_DEF(/obj/structure/projected_forcefield)
 /obj/structure/projected_forcefield/play_attack_sound(damage_amount, damage_type = BRUTE, damage_flag = 0)
 	playsound(loc, 'sound/weapons/egloves.ogg', 80, TRUE)
 
-/obj/structure/projected_forcefield/take_damage(damage_amount, damage_type = BRUTE, damage_flag = 0, sound_effect = 1, attack_dir)
+/obj/structure/projected_forcefield/take_damage(damage_amount, damage_type = BRUTE, damage_flag = 0, sound_effect = 1, attack_dir, armor_penetration = 0, allow_break = TRUE)
 	if(sound_effect)
 		play_attack_sound(damage_amount, damage_type, damage_flag)
 	if(generator)

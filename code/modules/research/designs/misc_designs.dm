@@ -5,7 +5,7 @@
 
 /datum/design/health_hud
 	name = "Health Scanner HUD"
-	desc = "A heads-up display that scans the humans in view and provides accurate data about their health status."
+	desc = "A heads-up display that scans people in view and provides accurate data about their health status."
 	id = "health_hud"
 	build_type = FABRICATOR
 	materials = list(/datum/material/iron = 500, /datum/material/glass = 500)
@@ -15,7 +15,7 @@
 
 /datum/design/security_hud
 	name = "Security HUD"
-	desc = "A heads-up display that scans the humans in view and provides accurate data about their ID status."
+	desc = "A heads-up display that scans people in view and provides accurate data about their ID status."
 	id = "security_hud"
 	build_type = FABRICATOR
 	materials = list(/datum/material/iron = 500, /datum/material/glass = 500)
@@ -52,7 +52,7 @@
 	desc = "A gas mask with built in welding goggles and face shield. Looks like a skull, clearly designed by a nerd."
 	id = "weldingmask"
 	build_type = FABRICATOR
-	materials = list(/datum/material/iron = 3000, /datum/material/glass = 1000)
+	materials = list(/datum/material/iron=4000, /datum/material/glass=2000)
 	build_path = /obj/item/clothing/mask/gas/welding
 	category = list(DCAT_WEARABLE, DCAT_ATMOS)
 	mapload_design_flags = DESIGN_FAB_OMNI | DESIGN_FAB_ENGINEERING

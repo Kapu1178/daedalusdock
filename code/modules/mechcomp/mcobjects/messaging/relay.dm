@@ -21,7 +21,7 @@
 
 /obj/item/mcobject/messaging/relay/examine(mob/user)
 	. = ..()
-	. += span_notice("Message Replacement is [replace_message ? "on" : "off"].")
+	. += span_info("Message Replacement is [replace_message ? "on" : "off"].")
 
 /obj/item/mcobject/messaging/relay/proc/relay(datum/mcmessage/input)
 	z_flick("[anchored ? "u":""]comp_relay1", src)

@@ -77,7 +77,7 @@ TYPEINFO_DEF(/obj/item/shield/riot)
 		if(25 to 50)
 			. += span_info("It appears heavily damaged.")
 		if(0 to 25)
-			. += span_warning("It's falling apart!")
+			. += span_alert("It's falling apart!")
 
 /obj/item/shield/riot/proc/shatter(mob/living/carbon/human/owner)
 	playsound(owner, 'sound/effects/glassbr3.ogg', 100)
@@ -131,7 +131,7 @@ TYPEINFO_DEF(/obj/item/shield/riot/buckler)
 	resistance_flags = FLAMMABLE
 	block_chance = 30
 	transparent = FALSE
-	max_integrity = 55
+	max_integrity = 50
 	w_class = WEIGHT_CLASS_NORMAL
 
 /obj/item/shield/riot/buckler/shatter(mob/living/carbon/human/owner)
@@ -150,8 +150,8 @@ TYPEINFO_DEF(/obj/item/shield/riot/buckler)
 	embedded_flash = new(src)
 	AddElement(/datum/element/update_icon_updates_onmob, ITEM_SLOT_HANDS)
 
-/obj/item/shield/riot/flash/attack(mob/living/M, mob/user)
-	. = embedded_flash.attack(M, user)
+/obj/item/shield/riot/flash/interact_with_atom(atom/interacting_with, mob/living/user, list/modifiers)
+	. = embedded_flash.interact_with_atom(interacting_with, user)
 	update_appearance()
 
 /obj/item/shield/riot/flash/attack_self(mob/living/carbon/user)

@@ -104,12 +104,11 @@
 	combat_mode = new_mode
 
 	if(combat_mode)
-		stats?.set_skill_modifier(4, /datum/rpg_skill/skirmish, SKILL_SOURCE_COMBAT_MODE)
+		stats?.set_skill_modifier(4, /datum/rpg_skill/bloodsport, SKILL_SOURCE_COMBAT_MODE)
 	else
-		stats?.remove_skill_modifier(/datum/rpg_skill/skirmish, SKILL_SOURCE_COMBAT_MODE)
+		stats?.remove_skill_modifier(/datum/rpg_skill/bloodsport, SKILL_SOURCE_COMBAT_MODE)
 
-	if(hud_used?.action_intent)
-		hud_used.action_intent.update_appearance()
+	hud_used?.screen_objects[HUDKEY_MOB_INTENTS].update_appearance()
 
 	if(silent || !(client?.prefs.toggles & SOUND_COMBATMODE))
 		return
@@ -497,7 +496,7 @@
 	return
 
 
-/mob/living/do_attack_animation(atom/A, visual_effect_icon, obj/item/used_item, no_effect)
+/mob/living/do_attack_animation(atom/A, visual_effect_icon, obj/item/used_item, no_effect, fov_effect = TRUE, do_hurt = TRUE)
 	if(!used_item)
 		used_item = get_active_held_item()
 	..()
@@ -541,7 +540,7 @@
 	var/touch_protection = (methods & VAPOR) ? get_permeability_protection() : 0
 	SEND_SIGNAL(source, COMSIG_REAGENTS_EXPOSE_MOB, src, reagents, methods, volume_modifier, show_message, touch_protection)
 	for(var/datum/reagent/R as anything in reagents)
-		. |= R.expose_mob(src, reagents[R], exposed_temperature, source, methods, show_message, touch_protection, source)
+		. |= R.expose_mob(src, reagents[R], exposed_temperature, source, methods, show_message, touch_protection)
 
 /// See if an attack is blocked by an item or effect. Returns TRUE if it is.
 /mob/living/proc/check_block(atom/hit_by, damage, attack_text = "the attack", attack_type = MELEE_ATTACK, armor_penetration = 0, damage_type = BRUTE)

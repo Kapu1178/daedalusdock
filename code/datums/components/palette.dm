@@ -49,8 +49,8 @@
 /datum/component/palette/proc/on_examine(datum/source, mob/user, list/examine_list)
 	SIGNAL_HANDLER
 
-	examine_list += span_notice("<b>Right-Click</b> this item while it's in your active hand to open/close its color picker menu.")
-	examine_list += span_notice("In the color picker, <b>Left-Click</b> a color button to pick it or <b>Right-Click</b> to edit it.")
+	examine_list += span_info("<b>Right-Click</b> this item while it's in your active hand to open/close its color picker menu.")
+	examine_list += span_info("In the color picker, <b>Left-Click</b> a color button to pick it or <b>Right-Click</b> to edit it.")
 
 /datum/component/palette/proc/on_attack_self_secondary(datum/source, mob/user)
 	SIGNAL_HANDLER

@@ -21,7 +21,7 @@ TYPEINFO_DEF(/obj/item/clothing/mask/utopia)
 
 /obj/item/clothing/mask/utopia/disco_flavor(mob/living/carbon/human/user, nearby, is_station_level)
 	. = ..()
-	var/datum/roll_result/result = user.get_examine_result("acolyte_mask_flavor", 13, /datum/rpg_skill/extrasensory, trait_succeed = TRAIT_AETHERITE, only_once = TRUE)
+	var/datum/roll_result/result = user.get_examine_result("acolyte_mask_flavor", 13, /datum/rpg_skill/fourteen_eyes, trait_succeed = TRAIT_AETHERITE, only_once = TRUE)
 	if(result?.outcome >= SUCCESS)
 		result.do_skill_sound(user)
 		to_chat(
@@ -36,6 +36,11 @@ TYPEINFO_DEF(/obj/item/clothing/mask/utopia)
 
 	permeability_coefficient = 0.01
 	clothing_flags = parent_type::clothing_flags | MASKINTERNALS
+
+/obj/item/clothing/mask/utopia/augur/Initialize(mapload)
+	. = ..()
+	AddComponent(/datum/component/disco_clothing, "augur_mask_lore", 8, success_text = "A high-ranking member of the Aether Society. They lead the local medical ward, ensuring service with a smile.")
+	AddComponent(/datum/component/disco_clothing, "augur_mask_unsettling", 12, /datum/rpg_skill/electric_body, failure_text = "A chill runs down your spine. That awful smile...")
 
 /obj/item/clothing/mask/utopia/augur/disco_flavor(mob/living/carbon/human/user, nearby, is_station_level)
 	. = ..()
@@ -67,6 +72,7 @@ TYPEINFO_DEF(/obj/item/clothing/under/aether_robes)
 	worn_icon = 'icons/mob/clothing/under/medical.dmi'
 	icon_state = "aetherrobe"
 
+	can_adjust = FALSE
 	supports_variations_flags = NONE
 
 	permeability_coefficient = 0.5
@@ -74,6 +80,7 @@ TYPEINFO_DEF(/obj/item/clothing/under/aether_robes)
 /obj/item/clothing/under/aether_robes/Initialize(mapload)
 	. = ..()
 	AddComponent(/datum/component/hooded, /obj/item/clothing/head/aether_hood)
+	AddComponent(/datum/component/disco_clothing, "aether_robe_wearer", 8, success_text = "They're here to help, even if they don't look the part.")
 
 /obj/item/clothing/under/aether_robes/examine(mob/user)
 	. = ..()

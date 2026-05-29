@@ -110,7 +110,7 @@ In my current plan for it, 'solid' will be defined as anything with density == 1
 		return
 
 	if(!num_mobs_hit)
-		. += span_notice("So far, this rod has not hit any mobs.")
+		. += span_info("So far, this rod has not hit any mobs.")
 		return
 
 	. += "\t<span class='notice'>So far, this rod has hit: \n\

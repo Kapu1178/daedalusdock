@@ -27,6 +27,8 @@
 	/// If TRUE, this action button will be shown to observers / other mobs who view from this action's owner's eyes.
 	/// Used in [/mob/proc/show_other_mob_action_buttons]
 	var/show_to_observers = TRUE
+	/// Should the action be rendered as a button.
+	var/render_button = TRUE
 
 	/// The style the button's tooltips appear to be
 	var/buttontooltipstyle = ""
@@ -53,7 +55,7 @@
 /// Links the passed target to our action, registering any relevant signals
 /datum/action/proc/link_to(Target)
 	target = Target
-	RegisterSignal(target, COMSIG_PARENT_QDELETING, PROC_REF(clear_ref), override = TRUE)
+	RegisterSignal(target, COMSIG_PARENT_QDELETING, PROC_REF(on_owner_or_target_delete), override = TRUE)
 
 	if(isatom(target))
 		RegisterSignal(target, COMSIG_ATOM_UPDATED_ICON, PROC_REF(on_target_icon_update))
@@ -70,8 +72,9 @@
 
 /// Signal proc that clears any references based on the owner or target deleting
 /// If the owner's deleted, we will simply remove from them, but if the target's deleted, we will self-delete
-/datum/action/proc/clear_ref(datum/ref)
+/datum/action/proc/on_owner_or_target_delete(datum/ref)
 	SIGNAL_HANDLER
+
 	if(ref == owner)
 		Remove(owner)
 	if(ref == target)
@@ -89,7 +92,7 @@
 	SEND_SIGNAL(src, COMSIG_ACTION_GRANTED, grant_to)
 	SEND_SIGNAL(grant_to, COMSIG_MOB_GRANTED_ACTION, src)
 	owner = grant_to
-	RegisterSignal(owner, COMSIG_PARENT_QDELETING, PROC_REF(clear_ref), override = TRUE)
+	RegisterSignal(owner, COMSIG_PARENT_QDELETING, PROC_REF(on_owner_or_target_delete), override = TRUE)
 
 	// Register some signals based on our check_flags
 	// so that our button icon updates when relevant
@@ -130,7 +133,7 @@
 		))
 
 		if(target == owner)
-			RegisterSignal(target, COMSIG_PARENT_QDELETING, PROC_REF(clear_ref))
+			RegisterSignal(target, COMSIG_PARENT_QDELETING, PROC_REF(on_owner_or_target_delete))
 		owner = null
 
 /// Actually triggers the effects of the action.
@@ -300,7 +303,8 @@
 		return
 
 	LAZYOR(viewer.actions, src) // Move this in
-	ShowTo(viewer)
+	if(render_button)
+		ShowTo(viewer)
 
 /// Adds our action button to the screen of the passed viewer.
 /datum/action/proc/ShowTo(mob/viewer)
@@ -308,7 +312,7 @@
 	if(!our_hud || viewers[our_hud]) // There's no point in this if you have no hud in the first place
 		return
 
-	var/atom/movable/screen/movable/action_button/button = create_button()
+	var/atom/movable/screen/movable/action_button/button = create_button(viewer)
 	SetId(button, viewer)
 
 	button.hud = our_hud
@@ -328,8 +332,8 @@
 		qdel(button)
 
 /// Creates an action button movable for the passed mob, and returns it.
-/datum/action/proc/create_button()
-	var/atom/movable/screen/movable/action_button/button = new()
+/datum/action/proc/create_button(mob/viewer)
+	var/atom/movable/screen/movable/action_button/button = viewer.hud_used.add_screen_object(__IMPLIED_TYPE__)
 	button.linked_action = src
 	build_button_icon(button, ALL, TRUE)
 	return button

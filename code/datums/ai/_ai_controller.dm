@@ -183,11 +183,11 @@ multiple modular subtrees with behaviors
 			if(behavior_cooldowns[current_behavior] > world.time) //Still on cooldown
 				continue
 			ProcessBehavior(action_seconds_per_tick, current_behavior)
-			return
+			continue
 
 		if(isnull(current_movement_target))
 			fail_behavior(current_behavior)
-			return
+			continue
 
 		///Stops pawns from performing such actions that should require the target to be adjacent.
 		var/atom/movable/moving_pawn = pawn
@@ -199,7 +199,7 @@ multiple modular subtrees with behaviors
 			if(behavior_cooldowns[current_behavior] > world.time) //Still on cooldown
 				continue
 			ProcessBehavior(action_seconds_per_tick, current_behavior)
-			return
+			continue
 
 		if(ai_movement.moving_controllers[src] != current_movement_target) //We're too far, if we're not already moving start doing it.
 			ai_movement.start_moving_towards(src, current_movement_target, current_behavior.required_distance) //Then start moving
@@ -208,7 +208,7 @@ multiple modular subtrees with behaviors
 			if(behavior_cooldowns[current_behavior] > world.time) //Still on cooldown
 				continue
 			ProcessBehavior(action_seconds_per_tick, current_behavior)
-			return
+			continue
 
 ///This is where you decide what actions are taken by the AI.
 /datum/ai_controller/proc/ProcessBehaviorSelection(delta_time)
@@ -263,9 +263,23 @@ multiple modular subtrees with behaviors
 /datum/ai_controller/proc/PauseAi(time)
 	paused_until = world.time + time
 
-/datum/ai_controller/proc/set_move_target(atom/thing)
-	DEBUG_AI_LOG(src, isnull(thing) ? "Cancelled movement plan" : "Moving towards [COORD(thing)]")
-	current_movement_target = thing
+/// Sets the AI to move towards the passed atom.
+/datum/ai_controller/proc/set_move_target(atom/target)
+	DEBUG_AI_LOG(src, isnull(target) ? "Cancelled movement plan" : "Moving towards [COORD(target)]")
+
+	if(current_movement_target)
+		UnregisterSignal(current_movement_target, list(COMSIG_MOVABLE_MOVED, COMSIG_PARENT_PREQDELETED))
+
+	if(!isnull(target) && !isatom(target))
+		stack_trace("[pawn]'s current movement target is not an atom, rather a [target.type]! Did you accidentally set it to a weakref?")
+		CancelActions()
+		return
+
+	current_movement_target = target
+
+	if(!isnull(current_movement_target))
+		RegisterSignal(current_movement_target, COMSIG_MOVABLE_MOVED, PROC_REF(on_movement_target_move))
+		RegisterSignal(current_movement_target, COMSIG_PARENT_PREQDELETED, PROC_REF(on_movement_target_delete))
 
 ///Call this to add a behavior to the stack.
 /datum/ai_controller/proc/queue_behavior(behavior_type, ...)
@@ -276,7 +290,7 @@ multiple modular subtrees with behaviors
 	var/list/arguments = args.Copy()
 	arguments[1] = src
 	if(!behavior.setup(arglist(arguments)))
-		return
+		return FALSE
 
 	LAZYADD(current_behaviors, behavior)
 	arguments.Cut(1, 2)
@@ -293,6 +307,8 @@ multiple modular subtrees with behaviors
 			var/list/sub_args = args.Copy()
 			sub_args[1] = sub_behavior_type
 			queue_behavior(arglist(sub_args))
+
+	return TRUE
 
 /datum/ai_controller/proc/ProcessBehavior(delta_time, datum/ai_behavior/behavior)
 	DEBUG_AI_LOG(src, "Running [behavior]")
@@ -406,6 +422,18 @@ multiple modular subtrees with behaviors
 		else
 			ADD_TRAIT(pawn, TRAIT_AI_PAUSED, STAT_TRAIT)
 			ADD_TRAIT(pawn, TRAIT_AI_DISABLE_PLANNING, STAT_TRAIT)
+
+/datum/ai_controller/proc/on_movement_target_move(atom/source)
+	SIGNAL_HANDLER
+	check_target_max_distance()
+
+/datum/ai_controller/proc/on_movement_target_delete(atom/source)
+	SIGNAL_HANDLER
+	set_move_target(null)
+
+/datum/ai_controller/proc/check_target_max_distance()
+	if(get_dist(current_movement_target, pawn) > max_target_distance)
+		CancelActions()
 
 /// Use this proc to define how your controller defines what access the pawn has for the sake of pathfinding, likely pointing to whatever ID slot is relevant
 /datum/ai_controller/proc/get_access()

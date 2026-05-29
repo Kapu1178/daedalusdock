@@ -557,52 +557,52 @@
 /obj/machinery/door/airlock/examine(mob/user)
 	. = ..()
 	if(closeOtherId)
-		. += span_warning("This airlock cycles on ID: [sanitize(closeOtherId)].")
+		. += span_alert("This airlock cycles on ID: [sanitize(closeOtherId)].")
 
 	if(obj_flags & EMAGGED)
-		. += span_warning("Its access panel is smoking slightly.")
+		. += span_alert("Its access panel is smoking slightly.")
 
 	if(note)
 		if(!in_range(user, src) && !isobserver(user))
-			. += span_notice("There's a [note.name] pinned to the front. You can't read it from here.")
+			. += span_info("There's a [note.name] pinned to the front. You can't read it from here.")
 		else
-			. += span_notice("There's a [note.name] pinned to the front...")
+			. += span_info("There's a [note.name] pinned to the front...")
 			. += note.examine(user)
 	if(seal)
-		. += span_notice("It's been braced with \a [seal].")
+		. += span_info("It's been braced with \a [seal].")
 
 	if(panel_open)
 		switch(security_level)
 			if(AIRLOCK_SECURITY_NONE)
-				. += span_notice("Its wires are exposed.")
+				. += span_info("Its wires are exposed.")
 			if(AIRLOCK_SECURITY_IRON)
-				. += span_notice("Its wires are hidden behind a welded iron cover.")
+				. += span_info("Its wires are hidden behind a welded iron cover.")
 			if(AIRLOCK_SECURITY_PLASTEEL_I_S)
-				. += span_notice("There is some shredded plasteel inside.")
+				. += span_info("There is some shredded plasteel inside.")
 			if(AIRLOCK_SECURITY_PLASTEEL_I)
-				. += span_notice("Its wires are behind an inner layer of plasteel.")
+				. += span_info("Its wires are behind an inner layer of plasteel.")
 			if(AIRLOCK_SECURITY_PLASTEEL_O_S)
-				. += span_notice("There is some shredded plasteel inside.")
+				. += span_info("There is some shredded plasteel inside.")
 			if(AIRLOCK_SECURITY_PLASTEEL_O)
-				. += span_notice("There is a welded plasteel cover hiding its wires.")
+				. += span_info("There is a welded plasteel cover hiding its wires.")
 			if(AIRLOCK_SECURITY_PLASTEEL)
-				. += span_notice("There is a protective grille over its panel.")
+				. += span_info("There is a protective grille over its panel.")
 
 	else if(security_level)
 		if(security_level == AIRLOCK_SECURITY_IRON)
-			. += span_notice("There is a sheet of iron <b>welded</b> over the access panel.")
+			. += span_info("There is a sheet of iron <b>welded</b> over the access panel.")
 
 	if(issilicon(user) && !(machine_stat & BROKEN))
-		. += span_notice("Shift-click [src] to [ density ? "open" : "close"] it.")
-		. += span_notice("Ctrl-click [src] to [ locked ? "raise" : "drop"] its bolts.")
-		. += span_notice("Alt-click [src] to [ secondsElectrified ? "un-electrify" : "permanently electrify"] it.")
-		. += span_notice("Ctrl-Shift-click [src] to [ emergency ? "disable" : "enable"] emergency access.")
+		. += span_info("Shift-click [src] to [ density ? "open" : "close"] it.")
+		. += span_info("Ctrl-click [src] to [ locked ? "raise" : "drop"] its bolts.")
+		. += span_info("Alt-click [src] to [ secondsElectrified ? "un-electrify" : "permanently electrify"] it.")
+		. += span_info("Ctrl-Shift-click [src] to [ emergency ? "disable" : "enable"] emergency access.")
 
 	if(is_station_level(z))
 		var/datum/roll_result/result = user.get_examine_result("airlock", 12)
 		if(result?.outcome >= SUCCESS)
 			result.do_skill_sound(user)
-			. += result.create_tooltip("Nearly two thousand kilograms of cold steel, and a time-tested design.", body_only = TRUE)
+			. += result.create_tooltip("Nearly two thousand kilograms of cold steel, and a time-tested Saxon design.", body_only = TRUE)
 
 /obj/machinery/door/airlock/disco_flavor(mob/living/carbon/human/user, nearby, is_station_level)
 	. = ..()
@@ -629,9 +629,6 @@
 			. = CONTEXTUAL_SCREENTIP_SET
 
 	if(!isliving(user))
-		return .
-
-	if(!Adjacent(user))
 		return .
 
 	switch (held_item?.tool_behaviour)
@@ -1311,7 +1308,7 @@
 	assemblytype = initial(airlock.assemblytype)
 	update_appearance()
 
-/obj/machinery/door/airlock/CanAStarPass(to_dir, datum/can_pass_info/pass_info)
+/obj/machinery/door/airlock/CanAStarPass(to_dir, datum/can_pass_info/pass_info, leaving)
 	//Airlock is passable if it is open (!density), bot has access, and is not bolted shut or powered off)
 	return !density || (!locked && !pass_info.no_id && check_access_list(pass_info.access) && hasPower())
 
@@ -1405,7 +1402,7 @@
 		log_combat(user, src, message)
 		log_touch(user)
 
-/obj/machinery/door/airlock/take_damage(damage_amount, damage_type = BRUTE, damage_flag = 0, sound_effect = 1, attack_dir)
+/obj/machinery/door/airlock/take_damage(damage_amount, damage_type = BRUTE, damage_flag = 0, sound_effect = 1, attack_dir, armor_penetration = 0, allow_break = TRUE)
 	if((damage_amount >= atom_integrity) && (damage_flag == BOMB))
 		flags_1 |= NODECONSTRUCT_1  //If an explosive took us out, don't drop the assembly
 

@@ -157,29 +157,29 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/machinery/camera/xray, 0)
 /obj/machinery/camera/examine(mob/user)
 	. = ..()
 	if(isEmpProof(TRUE)) //don't reveal it's upgraded if was done via MALF AI Upgrade Camera Network ability
-		. += span_notice("It has electromagnetic interference shielding installed.")
+		. += span_info("It has electromagnetic interference shielding installed.")
 	else
-		. += span_notice("It can be shielded against electromagnetic interference with some <b>plasma</b>.")
+		. += span_info("It can be shielded against electromagnetic interference with some <b>plasma</b>.")
 
 	if(isXRay(TRUE)) //don't reveal it's upgraded if was done via MALF AI Upgrade Camera Network ability
-		. += span_notice("It has an X-ray photodiode installed.")
+		. += span_info("It has an X-ray photodiode installed.")
 	else
-		. += span_notice("It can be upgraded with an X-ray photodiode with an <b>analyzer</b>.")
+		. += span_info("It can be upgraded with an X-ray photodiode with an <b>analyzer</b>.")
 
 	if(isMotion())
-		. += span_notice("It has a proximity sensor installed.")
+		. += span_info("It has a proximity sensor installed.")
 	else
-		. += span_notice("It can be upgraded with a <b>proximity sensor</b>.")
+		. += span_info("It can be upgraded with a <b>proximity sensor</b>.")
 
 	if(!status)
-		. += span_notice("It's currently deactivated.")
+		. += span_info("It's currently deactivated.")
 		if(!panel_open && powered())
-			. += span_notice("You'll need to open its maintenance panel with a <b>screwdriver</b> to turn it back on.")
+			. += span_info("You'll need to open its maintenance panel with a <b>screwdriver</b> to turn it back on.")
 
 	if(panel_open)
-		. += span_notice("Its maintenance panel is currently open.")
+		. += span_info("Its maintenance panel is currently open.")
 		if(!status && powered())
-			. += span_notice("It can reactivated with <b>wirecutters</b>.")
+			. += span_info("It can reactivated with <b>wirecutters</b>.")
 
 /obj/machinery/camera/emp_act(severity)
 	. = ..()
@@ -528,7 +528,6 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/machinery/camera/xray, 0)
 			return
 
 	set_light(l_on = !!on)
-	visible_message(span_subtle("[src]'s light flicks [on ? "on" : "off"]."), vision_distance = COMBAT_MESSAGE_RANGE)
 
 /obj/machinery/camera/get_remote_view_fullscreens(mob/user)
 	if(view_range == short_range) //unfocused

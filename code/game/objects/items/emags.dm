@@ -111,13 +111,13 @@
 
 /obj/item/card/emag/doorjack/examine(mob/user)
 	. = ..()
-	. += span_notice("It has [charges] charges remaining.")
+	. += span_info("It has [charges] charges remaining.")
 	if (length(charge_timers))
 		. += "[span_notice("<b>A small display on the back reads:")]</b>"
 	for (var/i in 1 to length(charge_timers))
 		var/timeleft = timeleft(charge_timers[i])
 		var/loadingbar = num2loadingbar(timeleft/charge_time)
-		. += span_notice("<b>CHARGE #[i]: [loadingbar] ([timeleft*0.1]s)</b>")
+		. += span_info("<b>CHARGE #[i]: [loadingbar] ([timeleft*0.1]s)</b>")
 
 /obj/item/card/emag/doorjack/can_emag(atom/target, mob/user)
 	if (charges <= 0)
@@ -149,7 +149,7 @@
 
 /obj/item/card/emag/battlecruiser/examine(mob/user)
 	. = ..()
-	. += span_notice("It can only be used on the communications console.")
+	. += span_info("It can only be used on the communications console.")
 
 /obj/item/card/emag/battlecruiser/can_emag(atom/target, mob/user)
 	if(used)

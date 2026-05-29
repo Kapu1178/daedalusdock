@@ -70,6 +70,6 @@
 	laser_location.pixel_x = clamp(target.pixel_x + image_pixel_x.value,-15,15)
 	laser_location.pixel_y = clamp(target.pixel_y + image_pixel_y.value,-15,15)
 
-	flick_overlay_view(laser_location, targloc, 10)
+	targloc.flick_overlay_view(laser_location, 10)
 
 

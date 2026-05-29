@@ -399,7 +399,7 @@
 	holomap_color = HOLOMAP_AREACOLOR_ENGINEERING
 
 /area/station/command/heads_quarters/cmo
-	name = "\improper Medical Director's Office"
+	name = "\improper Augur's Sanctum"
 	icon_state = "cmo_office"
 	holomap_color = HOLOMAP_AREACOLOR_MEDICAL
 
@@ -680,6 +680,11 @@
 /area/station/service/chapel/funeral
 	name = "\improper Chapel Funeral Room"
 	icon_state = "chapelfuneral"
+
+/area/station/service/psychology
+	name = "\improper Psychology Office"
+	icon_state = "psychology"
+	ambientsounds = list('sound/ambience/aurora_caelus_short.ogg')
 
 /area/station/service/lawoffice
 	name = "\improper Law Office"
@@ -975,6 +980,10 @@
 	name = "\improper Ward (Aft)"
 	icon_state = "med_aft"
 
+/area/station/medical/medbay/aft
+	name = "\improper Ward (Fore)"
+	icon_state = "med_fore"
+
 /area/station/medical/storage
 	name = "\improper Ward Storage"
 	icon_state = "med_storage"
@@ -1033,7 +1042,7 @@
 	spook_level = SPOOK_AMT_CORPSE * -10 // The morgue lays spirits to rest or something
 
 /area/station/medical/chemistry
-	name = "Chemistry"
+	name = "Apothecary"
 	icon_state = "chem"
 
 /area/station/medical/pharmacy
@@ -1081,10 +1090,9 @@
 	name = "\improper Ward (Treatment Center)"
 	icon_state = "exam_room"
 
-/area/station/medical/psychology
-	name = "\improper Psychology Office"
-	icon_state = "psychology"
-	ambientsounds = list('sound/ambience/aurora_caelus_short.ogg')
+/area/station/medical/disposal
+	name = "\improper Biohazardous Waste Disposal"
+	icon_state = "medical_disposal"
 
 //Security
 

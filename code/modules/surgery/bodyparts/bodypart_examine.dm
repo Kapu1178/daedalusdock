@@ -19,10 +19,10 @@
 				. += "<a href='?src=[REF(src)];embedded_object=[REF(I)]' class='danger'>There is \a [I] embedded in [owner.p_their()] [plaintext_zone]!</a>"
 
 		if(splint)
-			. += span_notice("\t <a href='?src=[REF(src)];splint_remove=1' class='notice'>[owner.p_their(TRUE)] [plaintext_zone] is splinted with [splint].</a>")
+			. += span_info("\t <a href='?src=[REF(src)];splint_remove=1' class='notice'>[owner.p_their(TRUE)] [plaintext_zone] is splinted with [splint].</a>")
 
 		if(bandage)
-			. += span_notice("\t <a href='?src=[REF(src)];bandage_remove=1' class='[bandage.absorption_capacity ? "notice" : "warning"]'>[owner.p_their(TRUE)] [plaintext_zone] is bandaged with [bandage][bandage.absorption_capacity ? "." : ", blood is trickling out."]</a>")
+			. += span_info("\t <a href='?src=[REF(src)];bandage_remove=1' class='[bandage.absorption_capacity ? "notice" : "warning"]'>[owner.p_their(TRUE)] [plaintext_zone] is bandaged with [bandage][bandage.absorption_capacity ? "." : ", blood is trickling out."]</a>")
 		return
 
 	. += get_wound_descriptions(hallucinating)
@@ -41,9 +41,9 @@
 			. += "\t <a href='?src=[REF(src)];embedded_object=[REF(I)]' class='warning'>There is \a [I] embedded in [owner.p_their()] [plaintext_zone]!</a>"
 
 	if(splint)
-		. += span_notice("\t <a href='?src=[REF(src)];splint_remove=1' class='warning'>[owner.p_their(TRUE)] [plaintext_zone] is splinted with [splint].</a>")
+		. += span_info("\t <a href='?src=[REF(src)];splint_remove=1' class='warning'>[owner.p_their(TRUE)] [plaintext_zone] is splinted with [splint].</a>")
 	if(bandage)
-		. += span_notice("\n\t <a href='?src=[REF(src)];bandage_remove=1' class='notice'>[owner.p_their(TRUE)] [plaintext_zone] is bandaged with [bandage][bandage.absorption_capacity ? "." : ", <span class='warning'>it is no longer absorbing blood</span>."]</a>")
+		. += span_info("\n\t <a href='?src=[REF(src)];bandage_remove=1' class='notice'>[owner.p_their(TRUE)] [plaintext_zone] is bandaged with [bandage][bandage.absorption_capacity ? "." : ", <span class='warning'>it is no longer absorbing blood</span>."]</a>")
 
 	if((bodypart_flags & BP_HAS_BLOOD) && (owner.undergoing_jaundice() == JAUNDICE_SKIN))
 		. += span_alert("The skin of [owner.p_their()] [plaintext_zone] is a faint yellow.")
@@ -221,7 +221,7 @@
 		if(owner.undergoing_jaundice())
 			to_chat(user, span_alert("The skin is yellowed."))
 
-		if(owner.shock_stage >= SHOCK_TIER_2)
+		if(owner.traumatic_shock_stage >= SHOCK_TIER_2)
 			to_chat(user, span_alert("The skin is clammy and cool to the touch."))
 
 	if(IS_ORGANIC_LIMB(src) && (bodypart_flags & BP_NECROTIC))

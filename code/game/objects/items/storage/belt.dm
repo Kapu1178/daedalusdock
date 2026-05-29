@@ -14,7 +14,7 @@
 	slot_flags = ITEM_SLOT_BELT
 	attack_verb_continuous = list("whips", "lashes", "disciplines")
 	attack_verb_simple = list("whip", "lash", "discipline")
-	max_integrity = 300
+	max_integrity = 10
 
 	equip_sound = 'sound/items/equip/toolbelt_equip.ogg'
 	equip_delay_self = EQUIP_DELAY_BELT
@@ -45,7 +45,7 @@
 	inhand_icon_state = "utility"
 	worn_icon_state = "utility"
 	content_overlays = TRUE
-	custom_premium_price = PAYCHECK_MEDIUM * 2
+	custom_premium_price = PAYCHECK_ASSISTANT * 5
 	drop_sound = 'sound/items/handling/toolbelt_drop.ogg'
 	pickup_sound = 'sound/items/handling/toolbelt_pickup.ogg'
 	supports_variations_flags = CLOTHING_TESHARI_VARIATION
@@ -359,11 +359,11 @@
 		))
 
 /obj/item/storage/belt/security/full/PopulateContents()
-	new /obj/item/reagent_containers/spray/pepper(src)
-	new /obj/item/restraints/handcuffs(src)
-	new /obj/item/grenade/flashbang(src)
-	new /obj/item/assembly/flash/handheld(src)
 	new /obj/item/melee/baton/security/loaded(src)
+	new /obj/item/restraints/handcuffs(src)
+	new /obj/item/assembly/flash/handheld(src)
+	new /obj/item/ammo_box/c38(src)
+	new /obj/item/ammo_box/c38/prostrator(src)
 	update_appearance()
 
 /obj/item/storage/belt/security/webbing
@@ -373,7 +373,7 @@
 	inhand_icon_state = "securitywebbing"
 	worn_icon_state = "securitywebbing"
 	content_overlays = FALSE
-	custom_premium_price = PAYCHECK_HARD * 3
+	custom_premium_price = PAYCHECK_ASSISTANT * 6.2
 
 /obj/item/storage/belt/security/webbing/Initialize()
 	. = ..()
@@ -685,26 +685,23 @@ TYPEINFO_DEF(/obj/item/storage/belt/champion)
 /obj/item/storage/belt/janitor/Initialize()
 	. = ..()
 	atom_storage.max_slots = 6
-	atom_storage.max_specific_storage = WEIGHT_CLASS_NORMAL // Set to this so the  light replacer can fit.
 	atom_storage.set_holdable(list(
 		/obj/item/assembly/mousetrap,
-		/obj/item/clothing/gloves,
 		/obj/item/flashlight,
 		/obj/item/forcefield_projector,
 		/obj/item/grenade/chem_grenade,
 		/obj/item/lightreplacer,
-		/obj/item/flashlight,
 		/obj/item/reagent_containers/spray,
 		/obj/item/soap,
 		/obj/item/holosign_creator,
-		/obj/item/forcefield_projector,
 		/obj/item/key/janitor,
 		/obj/item/clothing/gloves,
 		/obj/item/melee/flyswatter,
 		/obj/item/assembly/mousetrap,
 		/obj/item/paint_remover,
-		/obj/item/pushbroom
-		))
+		/obj/item/pushbroom,
+		/obj/item/taperecorder,
+	))
 
 /obj/item/storage/belt/janitor/full/PopulateContents()
 	new /obj/item/lightreplacer(src)
@@ -831,7 +828,7 @@ TYPEINFO_DEF(/obj/item/storage/belt/champion)
 /obj/item/storage/belt/sabre/examine(mob/user)
 	. = ..()
 	if(length(contents))
-		. += span_notice("Alt-click it to quickly draw the blade.")
+		. += span_info("Alt-click it to quickly draw the blade.")
 
 /obj/item/storage/belt/sabre/AltClick(mob/user)
 	if(!user.canUseTopic(src, USE_CLOSE|USE_DEXTERITY|USE_NEED_HANDS))

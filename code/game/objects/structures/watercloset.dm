@@ -2,9 +2,10 @@
 	name = "toilet"
 	desc = "The HT-451, a torque rotation-based, waste disposal unit for small matter. This one seems remarkably clean."
 	icon = 'icons/obj/watercloset.dmi'
-	icon_state = "toilet00"
+	icon_state = "toilet"
 	density = FALSE
 	anchored = TRUE
+
 	var/open = FALSE //if the lid is up
 	var/cistern = 0 //if the cistern bit is open
 	var/w_items = 0 //the combined w_class of all the items in the cistern
@@ -16,7 +17,6 @@
 	. = ..()
 	open = round(rand(0, 1))
 	update_appearance()
-
 
 /obj/structure/toilet/attack_hand(mob/living/user, list/modifiers)
 	. = ..()
@@ -82,9 +82,11 @@
 	else
 		to_chat(user, span_warning("You need a tighter grip!"))
 
-/obj/structure/toilet/update_icon_state()
-	icon_state = "toilet[open][cistern]"
-	return ..()
+/obj/structure/toilet/update_overlays()
+	. = ..()
+	. += image(icon, open ? "lid-up" : "lid-down")
+	if(cistern)
+		. += image(icon, "cisternlid")
 
 /obj/structure/toilet/deconstruct()
 	if(!(flags_1 & NODECONSTRUCT_1))
@@ -291,7 +293,7 @@ TYPEINFO_DEF(/obj/item/bikehorn/rubberducky/plasticducky)
 
 /obj/structure/sink/examine(mob/user)
 	. = ..()
-	. += span_notice("[reagents.total_volume]/[reagents.maximum_volume] liquids remaining.")
+	. += span_info("[reagents.total_volume]/[reagents.maximum_volume] liquids remaining.")
 
 /obj/structure/sink/attack_hand(mob/living/user, list/modifiers)
 	. = ..()
@@ -654,16 +656,25 @@ TYPEINFO_DEF(/obj/item/bikehorn/rubberducky/plasticducky)
 	desc = "Contains less than 1% mercury."
 	icon = 'icons/obj/watercloset.dmi'
 	icon_state = "bathroom-open"
-	var/icon_type = "bathroom"//used in making the icon state
+	base_icon_state = "bathroom"
+
 	color = "#ACD1E9" //Default color, didn't bother hardcoding other colors, mappers can and should easily change it.
 	alpha = 200 //Mappers can also just set this to 255 if they want curtains that can't be seen through
 	layer = SIGN_LAYER
 	anchored = TRUE
 	opacity = FALSE
 	density = FALSE
-	var/open = TRUE
+
+	var/tmp/open = TRUE
 	/// if it can be seen through when closed
 	var/opaque_closed = FALSE
+
+	var/start_open = TRUE
+
+/obj/structure/curtain/Initialize(mapload)
+	. = ..()
+	if(!start_open)
+		toggle()
 
 /obj/structure/curtain/proc/toggle()
 	open = !open
@@ -680,7 +691,7 @@ TYPEINFO_DEF(/obj/item/bikehorn/rubberducky/plasticducky)
 	update_appearance()
 
 /obj/structure/curtain/update_icon_state()
-	icon_state = "[icon_type]-[open ? "open" : "closed"]"
+	icon_state = "[base_icon_state]-[open ? "open" : "closed"]"
 	return ..()
 
 /obj/structure/curtain/attackby(obj/item/W, mob/user)
@@ -731,8 +742,12 @@ TYPEINFO_DEF(/obj/item/bikehorn/rubberducky/plasticducky)
 		if(BURN)
 			playsound(loc, 'sound/items/welder.ogg', 80, TRUE)
 
+/obj/structure/curtain/closed
+	icon_state = "bathroom-closed"
+	start_open = FALSE
+
 /obj/structure/curtain/bounty
-	icon_type = "bounty"
+	base_icon_state = "bounty"
 	icon_state = "bounty-open"
 	color = null
 	alpha = 255
@@ -749,8 +764,12 @@ TYPEINFO_DEF(/obj/item/bikehorn/rubberducky/plasticducky)
 	qdel(src)
 
 /obj/structure/curtain/cloth/fancy
-	icon_type = "cur_fancy"
+	base_icon_state = "cur_fancy"
 	icon_state = "cur_fancy-open"
+
+/obj/structure/curtain/cloth/fancy/closed
+	icon_state = "cur_fancy-closed"
+	start_open = FALSE
 
 /obj/structure/curtain/cloth/fancy/mechanical
 	var/id = null
@@ -766,15 +785,21 @@ TYPEINFO_DEF(/obj/item/bikehorn/rubberducky/plasticducky)
 /obj/structure/curtain/cloth/fancy/mechanical/connect_to_shuttle(obj/docking_port/mobile/port, obj/docking_port/stationary/dock)
 	id = "[port.id]_[id]"
 
+/obj/structure/curtain/cloth/fancy/mechanical/toggle()
+	if(open)
+		close()
+	else
+		open()
+
 /obj/structure/curtain/cloth/fancy/mechanical/proc/open()
-	icon_state = "[icon_type]-open"
+	icon_state = "[base_icon_state]-open"
 	layer = SIGN_LAYER
 	set_density(FALSE)
 	open = TRUE
 	set_opacity(FALSE)
 
 /obj/structure/curtain/cloth/fancy/mechanical/proc/close()
-	icon_state = "[icon_type]-closed"
+	icon_state = "[base_icon_state]-closed"
 	layer = WALL_OBJ_LAYER
 	set_density(TRUE)
 	open = FALSE

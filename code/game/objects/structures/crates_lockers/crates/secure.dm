@@ -12,7 +12,7 @@ TYPEINFO_DEF(/obj/structure/closet/crate/secure)
 
 	damage_deflection = 18
 
-/obj/structure/closet/crate/secure/take_damage(damage_amount, damage_type = BRUTE, damage_flag = 0, sound_effect = 1)
+/obj/structure/closet/crate/secure/take_damage(damage_amount, damage_type = BRUTE, damage_flag = 0, sound_effect = 1, armor_penetration = 0, allow_break = TRUE)
 	if(prob(tamperproof) && damage_amount >= DAMAGE_PRECISION)
 		boom()
 	else
@@ -86,7 +86,7 @@ TYPEINFO_DEF(/obj/structure/closet/crate/secure)
 
 /obj/structure/closet/crate/secure/owned/examine(mob/user)
 	. = ..()
-	. += span_notice("It's locked with a privacy lock, and can only be unlocked by the buyer's ID.")
+	. += span_info("It's locked with a privacy lock, and can only be unlocked by the buyer's ID.")
 
 /obj/structure/closet/crate/secure/owned/Initialize(mapload, datum/bank_account/_buyer_account)
 	. = ..()

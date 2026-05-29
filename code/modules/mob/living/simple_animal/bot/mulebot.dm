@@ -98,12 +98,12 @@
 	. = ..()
 	if(bot_cover_flags & BOT_COVER_OPEN)
 		if(cell)
-			. += span_notice("It has \a [cell] installed.")
+			. += span_info("It has \a [cell] installed.")
 			. += span_info("You can use a <b>crowbar</b> to remove it.")
 		else
-			. += span_notice("It has an empty compartment where a <b>power cell</b> can be installed.")
+			. += span_info("It has an empty compartment where a <b>power cell</b> can be installed.")
 	if(load) //observer check is so we don't show the name of the ghost that's sitting on it to prevent metagaming who's ded.
-		. += span_notice("\A [isobserver(load) ? "ghostly figure" : load] is on its load platform.")
+		. += span_info("\A [isobserver(load) ? "ghostly figure" : load] is on its load platform.")
 
 
 /mob/living/simple_animal/bot/mulebot/Destroy()
@@ -582,7 +582,7 @@
 // calculates a path to the current destination
 // given an optional turf to avoid
 /mob/living/simple_animal/bot/mulebot/calc_path(turf/avoid = null)
-	path = jps_path_to(src, target, max_distance=250, access = access_card?.GetAccess(), exclude=avoid, diagonal_handling=DIAGONAL_REMOVE_ALL)
+	path = jps_path_to(src, target, max_steps=250, access = access_card?.GetAccess(), exclude=avoid, diagonal_handling=DIAGONAL_REMOVE_ALL)
 
 // sets the current destination
 // signals all beacons matching the delivery code

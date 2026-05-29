@@ -4,7 +4,7 @@
 	name = "method patch test"
 	description = "Exposure Method Test Reagent"
 
-/datum/reagent/method_patch_test/expose_mob(mob/living/exposed_mob, reac_volume, exposed_temperature, datum/reagents/source, methods, show_message, touch_protection)
+/datum/reagent/method_patch_test/expose_mob(mob/living/exposed_mob, reac_volume, exposed_temperature = T20C, datum/reagents/source, methods=TOUCH, show_message = TRUE, touch_protection = 0)
 	. = ..()
 	if(methods == TOUCH)
 		exposed_mob.health = 90
@@ -46,7 +46,7 @@
 	TEST_ASSERT_EQUAL(human.health, 100, "Human health did not set properly")
 	patch.reagents.add_reagent(/datum/reagent/method_patch_test, 1)
 	patch.self_delay = 0
-	patch.attack(human, human)
+	patch.interact_with_atom(human, human)
 	TEST_ASSERT_EQUAL(human.health, 90, "Human health did not update after patch was applied")
 
 	// INJECT

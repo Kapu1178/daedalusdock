@@ -72,6 +72,9 @@
 	return TRUE
 
 /obj/item/organ/heart/proc/Stop()
+	if(pulse == PULSE_NONE)
+		return
+
 	pulse = PULSE_NONE
 	update_appearance(UPDATE_ICON_STATE)
 	update_movespeed()
@@ -79,7 +82,8 @@
 
 	if(owner)
 		owner.med_hud_set_health()
-		SSblackbox.record_feedback("amount", "heartattacks", 1)
+		if(owner.ckey)
+			SSblackbox.record_feedback("amount", "heartattacks", 1)
 
 /obj/item/organ/heart/proc/update_movespeed()
 	if(isnull(owner))
@@ -153,9 +157,9 @@
 			. = TRUE
 
 	// Now pulse mod is impacted by shock stage and other things too
-	if(owner.shock_stage > SHOCK_TIER_2)
+	if(owner.traumatic_shock_stage > SHOCK_TIER_2)
 		pulse_mod++
-	if(owner.shock_stage > SHOCK_TIER_5)
+	if(owner.traumatic_shock_stage > SHOCK_TIER_5)
 		pulse_mod++
 
 	var/blood_oxygenation = owner.get_blood_oxygenation()
@@ -203,7 +207,7 @@
 		pulse = clamp(PULSE_NORM + pulse_mod, PULSE_SLOW, PULSE_THREADY)
 
 	// If fibrillation, then it can be PULSE_THREADY
-	var/fibrillation = blood_oxygenation <= BLOOD_CIRC_SURVIVE || (prob(30) && owner.shock_stage > SHOCK_AMT_FOR_FIBRILLATION)
+	var/fibrillation = blood_oxygenation <= BLOOD_CIRC_SURVIVE || (prob(30) && owner.traumatic_shock_stage > SHOCK_AMT_FOR_FIBRILLATION)
 
 	if(pulse && fibrillation) //I SAID MOAR OXYGEN
 		pulse = PULSE_THREADY
@@ -219,7 +223,7 @@
 		owner.med_hud_set_health()
 
 /obj/item/organ/heart/proc/handle_heartbeat()
-	var/can_hear_heart = owner.shock_stage >= SHOCK_TIER_3 || get_step(owner, 0)?.is_below_sound_pressure() || owner.has_status_effect(owner.has_status_effect(/datum/status_effect/jitter))
+	var/can_hear_heart = owner.traumatic_shock_stage >= SHOCK_TIER_3 || get_step(owner, 0)?.is_below_sound_pressure() || owner.has_status_effect(owner.has_status_effect(/datum/status_effect/jitter))
 
 	var/static/sound/slowbeat = sound('sound/health/slowbeat.ogg', repeat = TRUE)
 	var/static/sound/fastbeat = sound('sound/health/fastbeat.ogg', repeat = TRUE)
@@ -273,7 +277,7 @@
 
 /obj/item/organ/heart/cybernetic
 	name = "basic cybernetic heart"
-	desc = "A basic electronic device designed to mimic the functions of an organic human heart."
+	desc = "A basic electronic device designed to mimic the functions of an organic minervan heart."
 	base_icon_state = "heart-c"
 	icon_state = "heart-c-on"
 	organ_flags = ORGAN_SYNTHETIC
@@ -285,7 +289,7 @@
 
 /obj/item/organ/heart/cybernetic/tier2
 	name = "cybernetic heart"
-	desc = "An electronic device designed to mimic the functions of an organic human heart. Also holds an emergency dose of epinephrine, used automatically after facing severe trauma."
+	desc = "An electronic device designed to mimic the functions of an organic minervan heart. Also holds an emergency dose of epinephrine, used automatically after facing severe trauma."
 	icon_state = "heart-c-u-on"
 	base_icon_state = "heart-c-u"
 	maxHealth = 60
@@ -294,7 +298,7 @@
 
 /obj/item/organ/heart/cybernetic/tier3
 	name = "upgraded cybernetic heart"
-	desc = "An electronic device designed to mimic the functions of an organic human heart. Also holds an emergency dose of epinephrine, used automatically after facing severe trauma. This upgraded model can regenerate its dose after use."
+	desc = "An electronic device designed to mimic the functions of an organic minervan heart. Also holds an emergency dose of epinephrine, used automatically after facing severe trauma. This upgraded model can regenerate its dose after use."
 	icon_state = "heart-c-u2-on"
 	base_icon_state = "heart-c-u2"
 	maxHealth = 90
@@ -408,11 +412,11 @@
 
 	switch(timeleft(crystalize_timer_id))
 		if(0 to CRYSTALIZE_STAGE_ENGULFING)
-			examine_list += span_warning("Crystals are almost engulfing [examined_human]! ")
+			examine_list += span_alert("Crystals are almost engulfing [examined_human]! ")
 		if(CRYSTALIZE_STAGE_ENGULFING to CRYSTALIZE_STAGE_ENCROACHING)
-			examine_list += span_notice("Crystals are starting to cover [examined_human]. ")
+			examine_list += span_info("Crystals are starting to cover [examined_human]. ")
 		if(CRYSTALIZE_STAGE_SMALL to INFINITY)
-			examine_list += span_notice("Some crystals are coming out of [examined_human]. ")
+			examine_list += span_info("Some crystals are coming out of [examined_human]. ")
 
 ///On stat changes, if the victim is no longer dead but they're crystalizing, cancel it, if they become dead, start the crystalizing process if possible
 /obj/item/organ/heart/ethereal/proc/on_stat_change(mob/living/victim, new_stat)
@@ -515,7 +519,7 @@
 	stop_crystalization_process(ethereal)
 
 /obj/item/organ/heart/vox
-	name = "vox heart"
+	name = "voks heart"
 	icon_state = "vox-heart-on"
 	base_icon_state = "vox-heart"
 

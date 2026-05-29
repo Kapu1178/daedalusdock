@@ -34,7 +34,7 @@ TYPEINFO_DEF(/obj/item/clothing/suit/space/eva)
 
 /obj/item/clothing/suit/space/eva
 	name = "EVA suit"
-	icon_state = "space"
+	icon_state = "spacemodern"
 	inhand_icon_state = "s_suit"
 	desc = "A lightweight space suit with the basic ability to protect the wearer from the vacuum of space during emergencies."
 
@@ -43,14 +43,58 @@ TYPEINFO_DEF(/obj/item/clothing/head/helmet/space/eva)
 
 /obj/item/clothing/head/helmet/space/eva
 	name = "EVA helmet"
-	icon_state = "space"
-	inhand_icon_state = "space"
+	icon_state = "spacebowl00"
+	inhand_icon_state = "s_helmet"
 	desc = "A lightweight space helmet with the basic ability to protect the wearer from the vacuum of space during emergencies."
-	flash_protect = FLASH_PROTECTION_NONE
+	flash_protect = FLASH_PROTECTION_WELDER
+	tint = 2
+	visor_vars_to_toggle = VISOR_FLASHPROTECT | VISOR_TINT
+	visor_flags_inv = HIDEEYES | HIDEFACE | HIDESNOUT
+	up = TRUE
+	light_system = OVERLAY_LIGHT_DIRECTIONAL
+	light_outer_range = 4
+	light_power = 1
+	light_on = FALSE
+	actions_types = list(/datum/action/item_action/toggle_helmet_light, /datum/action/item_action/toggle_welding_screen)
+
+	base_icon_state = "spacebowl"
+	var/lamp_state = FALSE //Whether the headlamp is on or off.
+
+/obj/item/clothing/head/helmet/space/eva/Initialize(mapload)
+	. = ..()
+	visor_toggling()
+
+/obj/item/clothing/head/helmet/space/eva/update_icon_state()
+	. = ..()
+	icon_state = "[base_icon_state][lamp_state][up]" //Updates icon based on the current conditions, such as if the light is on or if the visor is down.
+
+/obj/item/clothing/head/helmet/space/eva/ui_action_click(mob/user, actiontype)
+	if(istype(actiontype, /datum/action/item_action/toggle_helmet_light))
+		lamp_state = !lamp_state
+		update_appearance(UPDATE_ICON_STATE)
+		set_light_on(lamp_state)
+		update_action_buttons()
+	return ..()
+
+/obj/item/clothing/head/helmet/space/eva/AltClick(mob/user)
+	if(equipped_to == user && user.canUseTopic(src, USE_CLOSE))
+		toggle_welding_screen(user)
+
+/obj/item/clothing/head/helmet/space/eva/ui_action_click(mob/user, actiontype)
+	if(istype(actiontype, /datum/action/item_action/toggle_welding_screen))
+		toggle_welding_screen(user)
+		return
+
+	return ..()
+
+/obj/item/clothing/head/helmet/space/eva/proc/toggle_welding_screen(mob/living/user)
+	if(weldingvisortoggle(user))
+		playsound(src, 'sound/items/sheath.ogg', 50, TRUE)
+	update_appearance()
 
 /obj/item/clothing/head/helmet/space/eva/examine(mob/user)
 	. = ..()
-	. += span_notice("You can start constructing a critter sized mecha with a [span_bold("cyborg leg")].")
+	. += span_info("You can start constructing a critter sized mecha with a [span_bold("cyborg leg")].")
 
 /obj/item/clothing/head/helmet/space/eva/attackby(obj/item/attacked_with, mob/user, params)
 	. = ..()
@@ -72,8 +116,8 @@ TYPEINFO_DEF(/obj/item/clothing/head/helmet/space/fragile)
 
 /obj/item/clothing/head/helmet/space/fragile
 	name = "emergency space helmet"
-	desc = "A bulky, air-tight helmet meant to protect the user during emergency situations. It doesn't look very durable."
-	icon_state = "syndicate-helm-orange"
+	desc = "A bulky, air-tight helmet meant to protect the user during emergency situations. It doesn't look very durable, and the headlamp mount is empty."
+	icon_state = "spacebowl00"
 	inhand_icon_state = "syndicate-helm-orange"
 	strip_delay = 65
 
@@ -84,11 +128,10 @@ TYPEINFO_DEF(/obj/item/clothing/suit/space/fragile)
 	name = "emergency space suit"
 	desc = "A bulky, air-tight suit meant to protect the user during emergency situations. It doesn't look very durable."
 	var/torn = FALSE
-	icon_state = "syndicate-orange"
+	icon_state = "spacemodern_emergency"
 	inhand_icon_state = "syndicate-orange"
 	slowdown = 2
 	strip_delay = 65
-	supports_variations_flags = CLOTHING_DIGITIGRADE_VARIATION | CLOTHING_TESHARI_VARIATION | CLOTHING_VOX_VARIATION
 
 /obj/item/clothing/suit/space/fragile/hit_reaction(mob/living/carbon/human/owner, atom/movable/hitby, attack_text = "the attack", damage = 0, attack_type = MELEE_ATTACK)
 	. = ..()

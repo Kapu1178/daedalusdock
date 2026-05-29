@@ -20,12 +20,12 @@
 
 /obj/item/mcobject/messaging/regreplace/examine(mob/user)
 	. = ..()
-	. += span_notice("Current Pattern: [html_encode(expressionpatt)]")
-	. += span_notice("Current Replacement: [html_encode(expressionrepl)]")
-	. += span_notice("Current Flags: [html_encode(expressionflag)]")
-	. += span_notice("Your replacement string can contain $0-$9 to insert that matched group(things between parenthesis)")
-	. += span_notice("$` will be replaced with the text that came before the match, and $' will be replaced by the text after the match.")
-	. += span_notice("$0 or $& will be the entire matched string.")
+	. += span_info("Current Pattern: [html_encode(expressionpatt)]")
+	. += span_info("Current Replacement: [html_encode(expressionrepl)]")
+	. += span_info("Current Flags: [html_encode(expressionflag)]")
+	. += span_info("Your replacement string can contain $0-$9 to insert that matched group(things between parenthesis)")
+	. += span_info("$` will be replaced with the text that came before the match, and $' will be replaced by the text after the match.")
+	. += span_info("$0 or $& will be the entire matched string.")
 
 /obj/item/mcobject/messaging/regreplace/proc/set_pattern(datum/mcmessage/input)
 	expressionpatt = input.cmd

@@ -422,7 +422,7 @@
 
 /obj/item/food/lollipop
 	name = "lollipop"
-	desc = "A delicious lollipop. Makes for a great Valentine's present."
+	desc = "Doc Iron's POP-EM'S! WARNING: May cause spontaneous detonation, ingest with caution"
 	icon = 'icons/obj/lollipop.dmi'
 	icon_state = "lollipop_stick"
 	inhand_icon_state = "lollipop_stick"
@@ -513,21 +513,8 @@
 	if(iscarbon(loc))
 		hallucinate(loc)
 
-/obj/item/food/bubblegum/bubblegum/MakeEdible()
-	AddComponent(/datum/component/edible,\
-				initial_reagents = food_reagents,\
-				food_flags = food_flags,\
-				foodtypes = foodtypes,\
-				volume = max_volume,\
-				eat_time = eat_time,\
-				tastes = tastes,\
-				eatverbs = eatverbs,\
-				bite_consumption = bite_consumption,\
-				microwaved_type = microwaved_type,\
-				junkiness = junkiness,\
-				on_consume = CALLBACK(src, PROC_REF(OnConsume)))
-
-/obj/item/food/bubblegum/bubblegum/proc/OnConsume(mob/living/eater, mob/living/feeder)
+/obj/item/food/bubblegum/bubblegum/on_consume(mob/living/eater, mob/living/feeder)
+	. = ..()
 	if(iscarbon(eater))
 		hallucinate(eater)
 
@@ -584,7 +571,7 @@
 
 /obj/item/food/butter/examine(mob/user)
 	. = ..()
-	. += span_notice("If you had a rod you could make <b>butter on a stick</b>.")
+	. += span_info("If you had a rod you could make <b>butter on a stick</b>.")
 
 /obj/item/food/butter/attackby(obj/item/item, mob/user, params)
 	if(istype(item, /obj/item/stack/rods))
@@ -663,12 +650,6 @@
 		icon_state = "[icon_state]_open"
 	return ..()
 
-/obj/item/food/canned/attack(mob/living/target, mob/user, def_zone)
-	if (!is_drainable())
-		to_chat(user, span_warning("[src]'s lid hasn't been opened!"))
-		return FALSE
-	return ..()
-
 /obj/item/food/canned/beans
 	name = "tin of beans"
 	desc = "Musical fruit in a slightly less musical container."
@@ -735,22 +716,7 @@
 	foodtypes = null //Don't ask what went into them. You're better off not knowing.
 	food_reagents = list(/datum/reagent/consumable/nutriment/stabilized = 10, /datum/reagent/consumable/nutriment = 2) //Won't make you fat. Will make you question your sanity.
 
-///Override for checkliked callback
-/obj/item/food/rationpack/MakeEdible()
-	AddComponent(/datum/component/edible,\
-				initial_reagents = food_reagents,\
-				food_flags = food_flags,\
-				foodtypes = foodtypes,\
-				volume = max_volume,\
-				eat_time = eat_time,\
-				tastes = tastes,\
-				eatverbs = eatverbs,\
-				bite_consumption = bite_consumption,\
-				microwaved_type = microwaved_type,\
-				junkiness = junkiness,\
-				check_liked = CALLBACK(src, PROC_REF(check_liked)))
-
-/obj/item/food/rationpack/proc/check_liked(fraction, mob/mob) //Nobody likes rationpacks. Nobody.
+/obj/item/food/rationpack/check_liked(fraction, mob/mob) //Nobody likes rationpacks. Nobody.
 	return FOOD_DISLIKED
 
 /obj/item/food/ant_candy
@@ -930,7 +896,7 @@
 
 /obj/item/food/ready_donk/examine_more(mob/user)
 	. = ..()
-	. += span_notice("<i>You browse the back of the box...</i>")
+	. += span_info("<i>You browse the back of the box...</i>")
 	. += "\t[span_info("Ready-Donk: a product of Donk Co.")]"
 	. += "\t[span_info("Heating instructions: open box and pierce film, heat in microwave on high for 2 minutes. Allow to stand for 60 seconds prior to eating. Product will be hot.")]"
 	. += "\t[span_info("Per 200g serving contains: 8g Sodium; 25g Fat, of which 22g are saturated; 2g Sugar.")]"

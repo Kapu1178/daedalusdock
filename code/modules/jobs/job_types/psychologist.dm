@@ -1,13 +1,14 @@
 /datum/job/psychologist
 	title = JOB_PSYCHOLOGIST
-	description = "Advocate sanity, self-esteem, and teamwork in a station \
-		staffed with headcases."
+	description = "Advocate sanity, self-esteem, and teamwork in a colony full of headcases."
 	department_head = list(JOB_HEAD_OF_PERSONNEL)
 	faction = FACTION_STATION
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the medical director"
 	selection_color = "#013d3b"
+
+	pinpad_key = "FEELSGOODMAN"
 	exp_granted_type = EXP_TYPE_CREW
 
 	employers = list(
@@ -21,7 +22,7 @@
 		),
 	)
 
-	paycheck = PAYCHECK_MEDIUM
+	paycheck = /datum/job/acolyte::paycheck
 	paycheck_department = ACCOUNT_MED
 
 	liver_traits = list(TRAIT_MEDICAL_METABOLISM)

@@ -16,16 +16,16 @@ $include pariah/pariah_config.txt
 # There are various options which are hard-locked for security reasons.
 
 ## Server name: This appears at the top of the screen in-game and in the BYOND hub. Uncomment and replace 'tgstation' with the name of your choice.
-SERVERNAME Daedalus Dock
+SERVERNAME Daedalus
 
 ## Server SQL name: This is the name used to identify the server to the SQL DB, distinct from SERVERNAME as it must be at most 32 characters.
 SERVERSQLNAME daedalusdock
 
 ## Station name: The name of the station as it is referred to in-game. If commented out, the game will generate a random name instead.
-STATIONNAME Daedalus Outpost
+STATIONNAME Outpost Antelope
 
 ## Community slug for AffectedArc's Web Map
-#WEBMAP_COMMUNITY DaedalusDock
+#WEBMAP_COMMUNITY daedalus
 
 ## Hub subtitle: A line of text inserted under the server name. Should be no greater than 40 characters.
 HUB_SUBTITLE Now with custom lighting!
@@ -229,9 +229,6 @@ NORESPAWN
 
 ## Uncomment this to stop people connecting to your server without a registered ckey. (i.e. guest-* are all blocked from connecting)
 GUEST_BAN
-
-## Comment this out to disable checking for the cid randomizer dll. (disabled if database isn't enabled or connected)
-CHECK_RANDOMIZER
 
 ## IPINTEL:
 ## This allows you to detect likely proxies by checking ips against getipintel.net
@@ -555,6 +552,12 @@ DEFAULT_VIEW_SQUARE 15x15
 
 ## Enable automatic profiling - Byond 513.1506 and newer only.
 AUTO_PROFILE
+
+## Threshold (in deciseconds) for real time between ticks before we start dumping profiles
+DRIFT_DUMP_THRESHOLD 40
+
+## How long to wait (in deciseconds) after a profile dump before logging another tickdrift sourced one
+DRIFT_PROFILE_DELAY 150
 
 ## Uncomment to enable global ban DB using the provided URL. The API should expect to receive a ckey at the end of the URL.
 ## More API details can be found here: https://centcom.melonmesa.com

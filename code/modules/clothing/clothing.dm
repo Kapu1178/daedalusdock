@@ -3,7 +3,7 @@
 /obj/item/clothing
 	name = "clothing"
 	resistance_flags = FLAMMABLE
-	max_integrity = 200
+	max_integrity = 20
 	integrity_failure = 0.4
 
 	stamina_damage = 0
@@ -91,35 +91,24 @@
 	/// A weak reference to the clothing that created us
 	var/datum/weakref/clothing
 
-/obj/item/food/clothing/MakeEdible()
-	AddComponent(/datum/component/edible,\
-		initial_reagents = food_reagents,\
-		food_flags = food_flags,\
-		foodtypes = foodtypes,\
-		volume = max_volume,\
-		eat_time = eat_time,\
-		tastes = tastes,\
-		eatverbs = eatverbs,\
-		bite_consumption = bite_consumption,\
-		microwaved_type = microwaved_type,\
-		junkiness = junkiness,\
-		after_eat = CALLBACK(src, PROC_REF(after_eat)))
-
-/obj/item/food/clothing/proc/after_eat(mob/eater)
+/obj/item/food/clothing/post_bite(mob/living/eater, mob/living/feeder, bitecount)
+	. = ..()
 	var/obj/item/clothing/resolved_clothing = clothing.resolve()
 	if (resolved_clothing)
 		resolved_clothing.take_damage(MOTH_EATING_CLOTHING_DAMAGE, sound_effect = FALSE, damage_flag = BOMB, armor_penetration = 100) //This leaves clothing shreds.
 	else
 		qdel(src)
 
-/obj/item/clothing/attack(mob/living/M, mob/living/user, params)
-	if(user.combat_mode || !ismoth(M))
-		return ..()
+/obj/item/clothing/interact_with_atom(atom/interacting_with, mob/living/user, list/modifiers)
+	if(!ishuman(interacting_with) || !ismoth(interacting_with))
+		return NONE
+
 	if(isnull(moth_snack))
 		moth_snack = new
 		moth_snack.name = name
 		moth_snack.clothing = WEAKREF(src)
-	moth_snack.attack(M, user, params)
+
+	return interacting_with.base_item_interaction(user, moth_snack, modifiers)
 
 /obj/item/clothing/attackby(obj/item/W, mob/user, params)
 	if(!istype(W, repairable_by))
@@ -159,6 +148,7 @@
 		ENERGY = "energy",
 		BOMB = "explosions",
 		BIO = "biohazards",
+		FIRE = "fire",
 	)
 
 	var/list/armor_info = list()
@@ -169,36 +159,36 @@
 
 		switch(armor_value)
 			if(1 to 20)
-				. += "[FOURSPACES]- [pronoun] barely protect[pronoun_s] against [armor_to_descriptive_term[armor_type]]."
+				armor_info += "[FOURSPACES]- [pronoun] barely protect[pronoun_s] against [armor_to_descriptive_term[armor_type]]."
 			if(21 to 30)
-				. += "[FOURSPACES]- [pronoun] provide[pronoun_s] a very small defense against [armor_to_descriptive_term[armor_type]]."
+				armor_info += "[FOURSPACES]- [pronoun] provide[pronoun_s] a very small defense against [armor_to_descriptive_term[armor_type]]."
 			if(31 to 40)
-				. += "[FOURSPACES]- [pronoun] offers a small amount of protection against [armor_to_descriptive_term[armor_type]]."
+				armor_info += "[FOURSPACES]- [pronoun] offers a small amount of protection against [armor_to_descriptive_term[armor_type]]."
 			if(41 to 50)
-				. += "[FOURSPACES]- [pronoun] offers a moderate defense against [armor_to_descriptive_term[armor_type]]."
+				armor_info += "[FOURSPACES]- [pronoun] offers a moderate defense against [armor_to_descriptive_term[armor_type]]."
 			if(51 to 60)
-				. += "[FOURSPACES]- [pronoun] provide[pronoun_s] a strong defense against [armor_to_descriptive_term[armor_type]]."
+				armor_info += "[FOURSPACES]- [pronoun] provide[pronoun_s] a strong defense against [armor_to_descriptive_term[armor_type]]."
 			if(61 to 70)
-				. += "[FOURSPACES]- [pronoun] is very strong against [armor_to_descriptive_term[armor_type]]."
+				armor_info += "[FOURSPACES]- [pronoun] is very strong against [armor_to_descriptive_term[armor_type]]."
 			if(71 to 80)
-				. += "[FOURSPACES]- [gender == PLURAL ? "These provide" : "It provides"] a very robust defense against [armor_to_descriptive_term[armor_type]]."
+				armor_info += "[FOURSPACES]- [gender == PLURAL ? "These provide" : "It provides"] a very robust defense against [armor_to_descriptive_term[armor_type]]."
 			if(81 to 100)
-				. += "[FOURSPACES]- Wearing [gender == PLURAL ? "these" : "it"] would make you nigh-invulerable against [armor_to_descriptive_term[armor_type]]."
+				armor_info += "[FOURSPACES]- Wearing [gender == PLURAL ? "these" : "it"] would make you nigh-invulerable against [armor_to_descriptive_term[armor_type]]."
 
 	if(length(armor_info))
-		(.):Insert(1, "Armor Information")
-		(.):Insert(2, jointext(armor_info, ""))
+		(.):Insert(1, "Protection Information")
+		(.):Insert(2, jointext(armor_info, "<br>"))
 
 	if(!isnull(min_cold_protection_temperature) && min_cold_protection_temperature >= SPACE_SUIT_MIN_TEMP_PROTECT)
 		. += "- [pronoun] provide[pronoun_s] very good protection against very cold temperatures."
 
 	switch (max_heat_protection_temperature)
 		if (400 to 1000)
-			. += "- [pronoun] offer[pronoun_s] the wearer limited protection from fire."
+			. += "- [pronoun] offer[pronoun_s] the wearer limited protection from heat."
 		if (1001 to 1600)
-			. += "- [pronoun] offer[pronoun_s] the wearer some protection from fire."
+			. += "- [pronoun] offer[pronoun_s] the wearer some protection from heat."
 		if (1601 to 35000)
-			. += "- [pronoun] offer[pronoun_s] the wearer robust protection from fire."
+			. += "- [pronoun] offer[pronoun_s] the wearer robust protection from heat."
 
 /// Set the clothing's integrity back to 100%, remove all damage to bodyparts, and generally fix it up
 /obj/item/clothing/proc/repair(mob/user, params)
@@ -324,7 +314,7 @@
 /obj/item/clothing/examine(mob/user)
 	. = ..()
 	if(damaged_clothes == CLOTHING_SHREDDED)
-		. += span_warning("<b>[p_theyre(TRUE)] completely shredded and require[p_s()] mending before [p_they()] can be worn again!</b>")
+		. += span_alert("<b>[p_theyre(TRUE)] completely shredded and require[p_s()] mending before [p_they()] can be worn again!</b>")
 		return
 
 	for(var/zone in damage_by_parts)
@@ -332,9 +322,9 @@
 		var/zone_name = parse_zone(zone)
 		switch(pct_damage_part)
 			if(100 to INFINITY)
-				. += span_warning("<b>The [zone_name] is useless and requires mending!</b>")
+				. += span_alert("<b>The [zone_name] is useless and requires mending!</b>")
 			if(60 to 99)
-				. += span_warning("The [zone_name] is heavily shredded!")
+				. += span_alert("The [zone_name] is heavily shredded!")
 			if(30 to 59)
 				. += span_danger("The [zone_name] is partially shredded.")
 

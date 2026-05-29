@@ -40,7 +40,7 @@
 
 /obj/item/pager/examine(mob/user)
 	. = ..()
-	. += span_notice("The receiver is switched [receiving ? "on" : "off"].")
+	. += span_info("The receiver is switched [receiving ? "on" : "off"].")
 
 /obj/item/pager/update_overlays()
 	. = ..()

@@ -45,7 +45,7 @@
 	lose_atmos_sensitivity()
 	return ..()
 
-/obj/item/clothing/mask/facehugger/take_damage(damage_amount, damage_type = BRUTE, damage_flag = 0, sound_effect = 1, attack_dir)
+/obj/item/clothing/mask/facehugger/take_damage(damage_amount, damage_type = BRUTE, damage_flag = 0, sound_effect = 1, attack_dir, armor_penetration = 0, allow_break = TRUE)
 	..()
 	if(atom_integrity < 90)
 		Die()
@@ -60,10 +60,15 @@
 			return
 	. = ..()
 
-/obj/item/clothing/mask/facehugger/attack(mob/living/M, mob/user)
-	..()
-	if(user.transferItemToLoc(src, get_turf(M)))
-		Leap(M)
+/obj/item/clothing/mask/facehugger/interact_with_atom(atom/interacting_with, mob/living/user, list/modifiers)
+	if(!ishuman(interacting_with))
+		return NONE
+
+	if(user.transferItemToLoc(src, get_turf(interacting_with)))
+		Leap(interacting_with)
+		return ITEM_INTERACT_SUCCESS
+
+	return ITEM_INTERACT_BLOCKING
 
 /obj/item/clothing/mask/facehugger/examine(mob/user)
 	. = ..()

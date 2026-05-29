@@ -325,12 +325,12 @@
 
 /obj/structure/inflatable/shelter/examine(mob/user)
 	. = ..()
-	. += span_notice("Click to enter. Use grab on shelter to force target inside. Use resist to exit. Right click to deflate.")
+	. += span_info("Click to enter. Use grab on shelter to force target inside. Use resist to exit. Right click to deflate.")
 	var/list/living_contents = list()
 	for(var/mob/living/L in contents)
 		living_contents += L.name
 	if(length(living_contents))
-		. += span_notice("You can see [english_list(living_contents)] inside.")
+		. += span_info("You can see [english_list(living_contents)] inside.")
 
 /obj/structure/inflatable/shelter/attack_hand(mob/user)
 	if(!isturf(user.loc))

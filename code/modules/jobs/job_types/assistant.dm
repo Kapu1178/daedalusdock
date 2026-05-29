@@ -5,7 +5,7 @@ Assistant
 */
 /datum/job/assistant
 	title = JOB_ASSISTANT
-	description = "The everyman, an essential component to station life."
+	description = "The everyman, an essential component to colony life."
 	faction = FACTION_STATION
 	total_positions = 5
 	spawn_positions = 5

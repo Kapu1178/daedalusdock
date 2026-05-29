@@ -61,6 +61,7 @@ TYPEINFO_DEF(/atom)
 	var/tmp/datum/component/orbiter/orbiters
 
 	///The custom materials this atom is made of, used by a lot of things like furniture, walls, and floors (if I finish the functionality, that is.)
+	///This is ONLY to be set by set_custom_materials(), if you want to set an initial value, use Typeinfo.
 	///The list referenced by this var can be shared by multiple objects and should not be directly modified. Instead, use [set_custom_materials][/atom/proc/set_custom_materials].
 	var/tmp/list/datum/material/custom_materials
 
@@ -280,13 +281,16 @@ TYPEINFO_DEF(/atom)
 	// Not typeinfo() for speed reasons. Hot ass code!
 	var/datum/typeinfo/atom/typeinfo = __typeinfo_cache[type] ||= new __typeinfo_path
 
-	// apply materials properly from the default custom_materials value
+	// apply materials properly from the default_materials value in typeinfo
 	// This MUST come after atom_integrity is set above, as if old materials get removed,
 	// atom_integrity is checked against max_integrity and can BREAK the atom.
 	// The integrity to max_integrity ratio is still preserved.
-	if(length(typeinfo.default_materials) || islist(custom_materials))
+	if(length(typeinfo.default_materials) && isnull(custom_materials))
 		set_custom_materials(typeinfo.default_materials)
 
+	#ifdef UNIT_TESTS
+	returnArmor()
+	#endif
 	return INITIALIZE_HINT_NORMAL
 
 /**
@@ -736,12 +740,13 @@ TYPEINFO_DEF(/atom)
 	var/place_linebreak = FALSE
 	var/datum/codex_entry/entry = SScodex.get_codex_entry(get_codex_value(user))
 	if(entry)
-		var/information_type = length(entry.controls_text) ? "controls" : "relevant information"
+		var/information_type = (length(entry.mechanics_text) || length(entry.lore_text) || length(entry.antag_text)) && "relevant information"
+		information_type ||= "controls"
 		. += "<span class='obviousnotice'>The codex has <b><a href='?src=\ref[SScodex];show_examined_info=\ref[src];show_to=\ref[user]'>[information_type]</a></b> available.</span>"
 		place_linebreak = TRUE
 
 	if(isitem(src) && length(slapcraft_examine_hints_for_type(type)))
-		. += "<span class='obviousnotice'><b><a href='?src=\ref[user.client];show_slapcraft_hints=[type];'>You could craft [(length(slapcraft_examine_hints_for_type(type)) > 1) ? "several things" : "something"] with it.</a><b></span>"
+		. += "<span class='obviousnotice'>You could craft <a href='?src=\ref[user.client];show_slapcraft_hints=[type];'>[(length(slapcraft_examine_hints_for_type(type)) > 1) ? "multiple things" : "something"]</a> with [p_them(FALSE)].<b></span>"
 		place_linebreak = TRUE
 
 	if(place_linebreak)
@@ -749,13 +754,13 @@ TYPEINFO_DEF(/atom)
 
 	if(z && user.z && user.z != z)
 		var/diff = abs(user.z - z)
-		. += span_notice("<b>[p_theyre(TRUE)] [diff] level\s below you.</b>")
+		. += span_info("<b>[p_theyre(TRUE)] [diff] level\s below you.</b>")
 
 	if(custom_materials)
 		var/list/materials_list = list()
 		for(var/datum/material/current_material as anything in custom_materials)
 			materials_list += "[current_material.name]"
-		. += span_notice("It is made out of [english_list(materials_list)].")
+		. += span_info("It is made out of [english_list(materials_list)].")
 
 	if(reagents)
 		if(reagents.flags & TRANSPARENT)
@@ -763,21 +768,21 @@ TYPEINFO_DEF(/atom)
 				. += span_alert("It looks empty.")
 			else
 				if(user.can_see_reagents()) //Show each individual reagent
-					. += span_notice("You see the following reagents:")
+					. += span_info("You see the following reagents:")
 					for(var/datum/reagent/current_reagent as anything in reagents.reagent_list)
-						. += span_notice("* [round(current_reagent.volume, CHEMICAL_VOLUME_ROUNDING)] units of [current_reagent.name].")
+						. += span_info("* [round(current_reagent.volume, CHEMICAL_VOLUME_ROUNDING)] units of [current_reagent.name].")
 
 					if(reagents.is_reacting)
 						. += span_alert("A chemical reaction is taking place.")
 
-					. += span_notice("The solution's temperature is [reagents.chem_temp]K.")
+					. += span_info("The solution's temperature is [reagents.chem_temp]K.")
 
 				else //Otherwise, just show the total volume
-					. += span_notice("It looks about [reagents.total_volume / reagents.maximum_volume * 100]% full.")
+					. += span_info("It looks about [reagents.total_volume / reagents.maximum_volume * 100]% full.")
 
 		else if(reagents.flags & AMOUNT_VISIBLE)
 			if(reagents.total_volume)
-				. += span_notice("It looks about [reagents.total_volume / reagents.maximum_volume * 100]% full.")
+				. += span_info("It looks about [reagents.total_volume / reagents.maximum_volume * 100]% full.")
 			else
 				. += span_alert("It looks empty.")
 
@@ -937,7 +942,7 @@ TYPEINFO_DEF(/atom)
 		return
 	if(buckle_message_cooldown <= world.time)
 		buckle_message_cooldown = world.time + 50
-		to_chat(user, span_warning("You can't move while buckled to [src]!"))
+		to_chat(user, span_warning("You are unable to move while buckled to [src]."))
 	return
 
 /**
@@ -2099,6 +2104,8 @@ TYPEINFO_DEF(/atom)
 	SHOULD_CALL_PARENT(TRUE)
 	. = !(1 || ..())
 	SSmouse_entered.sustained_hovers[usr.client] = null
+	if(is_mouseover_interactable)
+		usr.update_mouse_pointer()
 
 /// Fired whenever this atom is the most recent to be hovered over in the tick.
 /// Preferred over MouseEntered if you do not need information such as the position of the mouse.
@@ -2113,77 +2120,110 @@ TYPEINFO_DEF(/atom)
 	if(is_mouseover_interactable)
 		user.update_mouse_pointer()
 
-	// Screentips
+	set_screentip(client)
+
+/// Sets the screentip in on_mouse_enter()
+/atom/proc/set_screentip(client/client)
+	PRIVATE_PROC(TRUE)
+
+	// Setup a text cache
+	var/static/list/screentip_text
+	var/static/list/screentip_images
+	if(isnull(screentip_images))
+		screentip_text = list()
+		screentip_images = list()
+		screentip_images["LMB"] = image('icons/ui_icons/screentips/cursor_hints.dmi', "LMB")
+		screentip_images["RMB"] = image('icons/ui_icons/screentips/cursor_hints.dmi', "RMB")
+
+		screentip_text[SCREENTIP_CONTEXT_LMB] = "\icon[screentip_images["LMB"]]"
+		screentip_text[SCREENTIP_CONTEXT_ALT_LMB] = "ALT \icon[screentip_images["LMB"]]"
+		screentip_text[SCREENTIP_CONTEXT_CTRL_LMB] = "CTRL \icon[screentip_images["LMB"]]"
+		screentip_text[SCREENTIP_CONTEXT_CTRL_SHIFT_LMB] = "CTRL SHIFT \icon[screentip_images["LMB"]]"
+		screentip_text[SCREENTIP_CONTEXT_SHIFT_LMB] = "SHIFT \icon[screentip_images["LMB"]]"
+		screentip_text[SCREENTIP_CONTEXT_RMB] = "\icon[screentip_images["RMB"]]"
+
+	var/mob/user = client?.mob
+	if (isnull(user))
+		return
+
 	var/datum/hud/active_hud = user.hud_used
-	if(active_hud)
-		var/screentips_enabled = active_hud.screentips_enabled
-		if(screentips_enabled == SCREENTIP_PREFERENCE_DISABLED || (flags_1 & NO_SCREENTIPS_1))
-			active_hud.screentip_text.maptext = ""
-		else
-			active_hud.screentip_text.maptext_y = 0
-			var/lmb_rmb_line = ""
-			var/ctrl_lmb_alt_lmb_line = ""
-			var/shift_lmb_ctrl_shift_lmb_line = ""
-			var/extra_lines = 0
-			var/extra_context = ""
+	if(!active_hud)
+		return
 
-			if (isliving(user) || isovermind(user) || isaicamera(user))
-				var/obj/item/held_item = user.get_active_held_item()
+	var/screentips_enabled = active_hud.screentips_enabled
+	if(screentips_enabled == SCREENTIP_PREFERENCE_DISABLED || (flags_1 & NO_SCREENTIPS_1))
+		active_hud.screentip_text.maptext = ""
+		return
 
-				if ((flags_1 & HAS_CONTEXTUAL_SCREENTIPS_1) || (held_item?.item_flags & ITEM_HAS_CONTEXTUAL_SCREENTIPS))
-					var/list/context = list()
+	active_hud.screentip_text.maptext_y = 0
+	var/lmb_rmb_line = ""
+	var/ctrl_lmb_alt_lmb_line = ""
+	var/shift_lmb_ctrl_shift_lmb_line = ""
+	var/extra_lines = 0
+	var/extra_context = ""
 
-					var/contextual_screentip_returns = \
-						SEND_SIGNAL(src, COMSIG_ATOM_REQUESTING_CONTEXT_FROM_ITEM, context, held_item, user) \
-						| (held_item && SEND_SIGNAL(held_item, COMSIG_ITEM_REQUESTING_CONTEXT_FOR_TARGET, context, src, user))
+	if (isliving(user) || isovermind(user) || isaicamera(user))
+		var/obj/item/held_item = user.get_active_held_item()
 
-					if (contextual_screentip_returns & CONTEXTUAL_SCREENTIP_SET)
-						// LMB and RMB on one line...
-						var/lmb_text = (SCREENTIP_CONTEXT_LMB in context) ? "[SCREENTIP_CONTEXT_LMB]: [context[SCREENTIP_CONTEXT_LMB]]" : ""
-						var/rmb_text = (SCREENTIP_CONTEXT_RMB in context) ? "[SCREENTIP_CONTEXT_RMB]: [context[SCREENTIP_CONTEXT_RMB]]" : ""
+		if ((flags_1 & HAS_CONTEXTUAL_SCREENTIPS_1) || (held_item?.item_flags & ITEM_HAS_CONTEXTUAL_SCREENTIPS))
+			var/list/context = list()
 
-						if (lmb_text)
-							lmb_rmb_line = lmb_text
-							if (rmb_text)
-								lmb_rmb_line += " | [rmb_text]"
-						else if (rmb_text)
-							lmb_rmb_line = rmb_text
+			var/contextual_screentip_returns = \
+				SEND_SIGNAL(src, COMSIG_ATOM_REQUESTING_CONTEXT_FROM_ITEM, context, held_item, user) \
+				| (held_item && SEND_SIGNAL(held_item, COMSIG_ITEM_REQUESTING_CONTEXT_FOR_TARGET, context, src, user))
 
-						// Ctrl-LMB, Alt-LMB on one line...
-						if (lmb_rmb_line != "")
-							lmb_rmb_line += "<br>"
-							extra_lines++
-						if (SCREENTIP_CONTEXT_CTRL_LMB in context)
-							ctrl_lmb_alt_lmb_line += "[SCREENTIP_CONTEXT_CTRL_LMB]: [context[SCREENTIP_CONTEXT_CTRL_LMB]]"
-						if (SCREENTIP_CONTEXT_ALT_LMB in context)
-							if (ctrl_lmb_alt_lmb_line != "")
-								ctrl_lmb_alt_lmb_line += " | "
-							ctrl_lmb_alt_lmb_line += "[SCREENTIP_CONTEXT_ALT_LMB]: [context[SCREENTIP_CONTEXT_ALT_LMB]]"
+			if (contextual_screentip_returns & CONTEXTUAL_SCREENTIP_SET)
+				// LMB and RMB on one line...
+				var/lmb_text = (SCREENTIP_CONTEXT_LMB in context) ? "[screentip_text[SCREENTIP_CONTEXT_LMB]] [context[SCREENTIP_CONTEXT_LMB]]" : ""
+				var/rmb_text = (SCREENTIP_CONTEXT_RMB in context) ? "[screentip_text[SCREENTIP_CONTEXT_RMB]] [context[SCREENTIP_CONTEXT_RMB]]" : ""
 
-						// Shift-LMB, Ctrl-Shift-LMB on one line...
-						if (ctrl_lmb_alt_lmb_line != "")
-							ctrl_lmb_alt_lmb_line += "<br>"
-							extra_lines++
-						if (SCREENTIP_CONTEXT_SHIFT_LMB in context)
-							shift_lmb_ctrl_shift_lmb_line += "[SCREENTIP_CONTEXT_SHIFT_LMB]: [context[SCREENTIP_CONTEXT_SHIFT_LMB]]"
-						if (SCREENTIP_CONTEXT_CTRL_SHIFT_LMB in context)
-							if (shift_lmb_ctrl_shift_lmb_line != "")
-								shift_lmb_ctrl_shift_lmb_line += " | "
-							shift_lmb_ctrl_shift_lmb_line += "[SCREENTIP_CONTEXT_CTRL_SHIFT_LMB]: [context[SCREENTIP_CONTEXT_CTRL_SHIFT_LMB]]"
+				if (lmb_text)
+					lmb_rmb_line = lmb_text
+					if (rmb_text)
+						lmb_rmb_line = "[lmb_rmb_line] | [rmb_text]"
 
-						if (shift_lmb_ctrl_shift_lmb_line != "")
-							extra_lines++
+				else if (rmb_text)
+					lmb_rmb_line = rmb_text
 
-						if(extra_lines)
-							extra_context = "<br><span style='font-size: 7px'>[lmb_rmb_line][ctrl_lmb_alt_lmb_line][shift_lmb_ctrl_shift_lmb_line]</span>"
-							//first extra line pushes atom name line up 10px, subsequent lines push it up 9px, this offsets that and keeps the first line in the same place
-							active_hud.screentip_text.maptext_y = -10 + (extra_lines - 1) * -9
+				// Ctrl-LMB, Alt-LMB on one line...
+				if (length(lmb_rmb_line))
+					lmb_rmb_line = "[lmb_rmb_line]<br>"
+					extra_lines++
 
-			if (screentips_enabled == SCREENTIP_PREFERENCE_CONTEXT_ONLY && extra_context == "")
-				active_hud.screentip_text.maptext = ""
-			else
-				//We inline a MAPTEXT() here, because there's no good way to statically add to a string like this
-				active_hud.screentip_text.maptext = "<span class='maptext' style='text-align: center; font-size: 32px; color: [active_hud.screentip_color]'>[name][extra_context]</span>"
+				if (SCREENTIP_CONTEXT_CTRL_LMB in context)
+					ctrl_lmb_alt_lmb_line = "[ctrl_lmb_alt_lmb_line][screentip_text[SCREENTIP_CONTEXT_CTRL_LMB]] [context[SCREENTIP_CONTEXT_CTRL_LMB]]"
+
+				if (SCREENTIP_CONTEXT_ALT_LMB in context)
+					if (length(ctrl_lmb_alt_lmb_line))
+						ctrl_lmb_alt_lmb_line = "[ctrl_lmb_alt_lmb_line] | "
+					ctrl_lmb_alt_lmb_line = "[ctrl_lmb_alt_lmb_line][screentip_text[SCREENTIP_CONTEXT_ALT_LMB]] [context[SCREENTIP_CONTEXT_ALT_LMB]]"
+
+				// Shift-LMB, Ctrl-Shift-LMB on one line...
+				if (length(ctrl_lmb_alt_lmb_line))
+					ctrl_lmb_alt_lmb_line = "[ctrl_lmb_alt_lmb_line]<br>"
+					extra_lines++
+
+				if (SCREENTIP_CONTEXT_SHIFT_LMB in context)
+					shift_lmb_ctrl_shift_lmb_line = "[shift_lmb_ctrl_shift_lmb_line][screentip_text[SCREENTIP_CONTEXT_SHIFT_LMB]] [context[SCREENTIP_CONTEXT_SHIFT_LMB]]"
+
+				if (SCREENTIP_CONTEXT_CTRL_SHIFT_LMB in context)
+					if (length(shift_lmb_ctrl_shift_lmb_line))
+						shift_lmb_ctrl_shift_lmb_line = "[shift_lmb_ctrl_shift_lmb_line] | "
+					shift_lmb_ctrl_shift_lmb_line = "[shift_lmb_ctrl_shift_lmb_line][screentip_text[SCREENTIP_CONTEXT_CTRL_SHIFT_LMB]] [context[SCREENTIP_CONTEXT_CTRL_SHIFT_LMB]]"
+
+				if (length(shift_lmb_ctrl_shift_lmb_line))
+					extra_lines++
+
+				if(extra_lines)
+					extra_context = "<br><span style='font-size: 7px'>[lmb_rmb_line][ctrl_lmb_alt_lmb_line][shift_lmb_ctrl_shift_lmb_line]</span>"
+					//first extra line pushes atom name line up 10px, subsequent lines push it up 9px, this offsets that and keeps the first line in the same place
+					active_hud.screentip_text.maptext_y = -10 + (extra_lines - 1) * -9
+
+	if (screentips_enabled == SCREENTIP_PREFERENCE_CONTEXT_ONLY && !length(extra_context))
+		active_hud.screentip_text.maptext = ""
+	else
+		//We inline a MAPTEXT() here, because there's no good way to statically add to a string like this
+		active_hud.screentip_text.maptext = "<b><span class='maptext' style='text-align: center; font-size: 32px; color: [active_hud.screentip_color]'>[uppertext(name)][extra_context]</span></b>"
 
 /// Gets a merger datum representing the connected blob of objects in the allowed_types argument
 /atom/proc/GetMergeGroup(id, list/allowed_types)
@@ -2207,11 +2247,12 @@ TYPEINFO_DEF(/atom)
  * Arguments:
  * * to_dir - What direction we're trying to move in, relevant for things like directional windows that only block movement in certain directions
  * * pass_info - Datum that stores info about the thing that's trying to pass us
+ * * leaving - TRUE if the mob would be leaving the turf to go to another one. Used to make up for the lack of enter/exit.
  *
  * IMPORTANT NOTE: /turf/proc/LinkBlockedWithAccess assumes that overrides of CanAStarPass will always return true if density is FALSE
  * If this is NOT you, ensure you edit your can_astar_pass variable. Check __DEFINES/path.dm
  **/
-/atom/proc/CanAStarPass(to_dir, datum/can_pass_info/pass_info)
+/atom/proc/CanAStarPass(to_dir, datum/can_pass_info/pass_info, leaving)
 	if(pass_info && (pass_info.pass_flags & pass_flags_self))
 		return TRUE
 	. = !density

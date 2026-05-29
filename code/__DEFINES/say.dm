@@ -28,7 +28,7 @@
 #define WHISPER_MODE "the type of whisper"
 #define MODE_WHISPER "whisper"
 
-#define MODE_DEPARTMENT "department"
+#define MODE_DEPARTMENT "workplace"
 #define MODE_KEY_DEPARTMENT "h"
 #define MODE_TOKEN_DEPARTMENT ":h"
 
@@ -62,6 +62,7 @@
 //Spans. Robot speech, italics, etc. Applied in compose_message().
 #define SPAN_ROBOT "robot"
 #define SPAN_YELL "yell"
+#define SPAN_BIGYELL "bigyell"
 #define SPAN_ITALICS "italics"
 #define SPAN_SANS "sans"
 #define SPAN_PAPYRUS "papyrus"

@@ -4,7 +4,7 @@ TYPEINFO_DEF(/obj/item/flashlight)
 /obj/item/flashlight
 	name = "flashlight"
 	desc = "A hand-held emergency light."
-	custom_price = PAYCHECK_EASY
+	custom_price = PAYCHECK_ASSISTANT * 0.5
 	icon = 'icons/obj/lighting.dmi'
 	icon_state = "flashlight"
 	inhand_icon_state = "flashlight"
@@ -242,19 +242,24 @@ TYPEINFO_DEF(/obj/item/flashlight/lamp)
 	name = "flare"
 	desc = "A red Daedalus issued flare. There are instructions on the side, it reads 'pull cord, make light'."
 	w_class = WEIGHT_CLASS_SMALL
-	light_outer_range = 7 // Pretty bright.
 	icon_state = "flare"
 	inhand_icon_state = "flare"
 	worn_icon_state = "flare"
 	actions_types = list()
+
+
+	heat = 1000
+	light_power = 0.9
+	light_outer_range = 7 // Pretty bright.
+	light_color = LIGHT_COLOR_FLARE
+	light_system = OVERLAY_LIGHT
+
+	grind_results = list(/datum/reagent/sulfur = 15)
+
 	/// How many seconds of fuel we have left
 	var/fuel = 0
 	var/on_damage = 7
 	var/produce_heat = 1500
-	heat = 1000
-	light_color = LIGHT_COLOR_FLARE
-	light_system = OVERLAY_LIGHT
-	grind_results = list(/datum/reagent/sulfur = 15)
 
 /obj/item/flashlight/flare/Initialize(mapload)
 	. = ..()

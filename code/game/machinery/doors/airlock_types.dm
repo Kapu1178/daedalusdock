@@ -355,7 +355,7 @@ TYPEINFO_DEF(/obj/machinery/door/airlock/plasma)
 /obj/machinery/door/airlock/external/examine(mob/user)
 	. = ..()
 	if(space_dir)
-		. += span_notice("It has labels indicating that it has an emergency mechanism to open from the [dir2text(space_dir)] side with <b>just your hands</b> even if there's no power.")
+		. += span_info("It has labels indicating that it has an emergency mechanism to open from the [dir2text(space_dir)] side with <b>just your hands</b> even if there's no power.")
 
 /obj/machinery/door/airlock/external/cyclelinkairlock()
 	. = ..()
@@ -474,7 +474,7 @@ TYPEINFO_DEF(/obj/machinery/door/airlock/plasma)
 
 /obj/machinery/door/airlock/abductor
 	name = "alien airlock"
-	desc = "With humanity's current technological level, it could take years to hack this advanced airlock... or maybe we should give a screwdriver a try?"
+	desc = "With minervanity's current technological level, it could take years to hack this advanced airlock... or maybe we should give a screwdriver a try?"
 	assemblytype = /obj/structure/door_assembly/door_assembly_abductor
 	damage_deflection = 30
 	explosion_block = 3

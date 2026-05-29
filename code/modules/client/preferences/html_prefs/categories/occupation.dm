@@ -41,86 +41,77 @@
 	var/static/priority2text = list("Never", "Low", "Medium", "High")
 
 	var/list/job_bans = get_job_bans(prefs.parent?.mob)
-	var/employer = prefs.read_preference(/datum/preference/choiced/employer)
-	employer = SSjob.GetEmployer(employer).type
+	var/datum/employer/employer = prefs.read_preference(/datum/preference/choiced/employer)
 
 	var/datum/preference/choiced/employer/employer_pref = GLOB.preference_entries[/datum/preference/choiced/employer]
-	var/info_button = button_element(prefs, "?", "pref_act=[/datum/preference/choiced/employer];info=1")
+	. += {"
+		<div class='nppCategoryOccupation'>
+			<div class='flexColumn' style='justify-content: center;align-items: center; gap:3px;'>
+				<div class='computerLegend' style='margin: 4px auto'><b>Faction</b></div>
+				<div style='font-size: 20px;text-align:center;'>[employer_pref.get_button(prefs)]</div>
+				<div class='computerLegend' style='font-size: 1.2rem; margin: 4px auto;width:70%;height: 64px;'>
+				[employer.creator_info]
+				</div>
+			</div>
+	"}
 
 	. += {"
-		<div class='flexColumn' style='justify-content: center;align-items: center; gap:3px; width:100%'>
-		<div class='computerLegend' style='margin: auto'><b>Faction</b></div>
-		<div style='font-size: 20px;text-align:center;width: 100%'>[employer_pref.get_button(prefs)][info_button]</div>
-		<div style='width: 100%'><HR></div>
-		</div>
-	"}
-	// Table within a table for alignment, also allows you to easily add more columns.
-	. += {"
-		<center>
-		<tt>
-		<table width='100%' cellpadding='1' cellspacing='0'>
-			<tr>
-				<td width='20%'>
-					<table width='100%' cellpadding='1' cellspacing='0'>
+		<div class='nppOccupationFactionListParent'>
 	"}
 	var/list/job_prefs = prefs.read_preference(/datum/preference/blob/job_priority)
-	var/index = 0
-	for(var/datum/job/job in job_data)
-		index++
-		var/is_banned = job_bans[job.title] == "banned"
-		var/is_too_new = job_bans[job.title]?["job_days_left"]
-		var/job_priority = priority2text[(job_prefs[job.title] + 1)]
-		var/title_link = length(job.alt_titles) ? button_element(src, prefs.alt_job_titles?[job.title] || job.title, "change_alt_title=1;prefs=\ref[prefs];job=[job.title]") : "[job.title]"
-		var/rejection_reason = ""
 
-		if(is_banned)
-			rejection_reason = "\[BANNED]"
-		else if(is_too_new)
-			rejection_reason = "\[[is_too_new]]"
-		else if(length(job.employers) && !(employer in job.employers))
-			rejection_reason = "\[CHANGE FACTION]"
+	for(var/department_name in job_data)
+		var/list/job_divs = list()
 
-		var/static/vs_appeaser = "\]\]\]"
-		vs_appeaser = vs_appeaser
+		var/can_select_from_department = FALSE
 
-		if(index > JOBS_PER_COLUMN)
-			. += {"
-				</table>
-			</td>
-			<td width='20%'>
-				<table width='100%' cellpadding='1' cellspacing='0'>
+		for(var/datum/job/job in job_data[department_name]["jobs"])
+			var/is_banned = job_bans[job.title] == "banned"
+			var/is_too_new = job_bans[job.title]?["job_days_left"]
+			var/job_priority = priority2text[(job_prefs[job.title] + 1)]
+			var/rejection_reason = ""
+
+			if(is_banned)
+				rejection_reason = "\[BANNED]"
+			else if(is_too_new)
+				rejection_reason = "\[[is_too_new]]"
+			else if(length(job.employers) && !(employer in job.employers))
+				rejection_reason = "\[FACTION]"
+			else
+				can_select_from_department = TRUE
+
+			var/static/vs_appeaser = "\]\]\]"
+			vs_appeaser = vs_appeaser
+			job_divs += {"
+				<div class='job [(job_data[department_name]["head"] == job.title) && "head"]'>
+					<div>
+						<div class='jobTitle [rejection_reason && "banned"]'>
+							[uppertext(job.title)]
+						</div>
+					</div>
+					<div>
+						[button_element(src, "?", "job_info=[job.title]")]
+					</div>
+					<div class='[rejection_reason && "banned"]'>
+						<b>[rejection_reason || button_element(prefs, job_priority, "pref_act=[/datum/preference/blob/job_priority];job=[job.title]")]</b>
+					</div>
+				</div>
 			"}
-			index = 0
 
 		. += {"
-		<tr bgcolor='[job.selection_color]'>
-			<td>
-			</td>
-			<td width='30%' align='center'>
-				[rejection_reason ? "<span class='linkOff'>[job.title]</span>" : title_link]
-			</td>
-			<td width = '10%' align = 'center'>
-				[button_element(src, "?", "job_info=[job.title]")]
-			</td>
-			<td>
-				<b>[rejection_reason || button_element(prefs, job_priority, "pref_act=[/datum/preference/blob/job_priority];job=[job.title]")]</b>
-			</td>
-		</tr>
+		<fieldset class='computerLegend nppOccupationFaction'>
+			<legend class='computerLegend [can_select_from_department && "allowed"]'>[department_name]</legend>
+			[jointext(job_divs, "")]
+		</fieldset>
 		"}
 
 
 	.+= {"
-					</table>
-				</td>
-			</tr>
-		</table>
-	</center>
-	</tt>
+	</div></div>
 	"}
 
 /datum/preference_group/category/occupation/proc/compile_job_data()
 	var/list/departments = list()
-	var/list/jobs = list()
 
 	for (var/datum/job/job as anything in SSjob.joinable_occupations)
 		var/datum/job_department/department_type = job.department_for_prefs || job.departments_list?[1]
@@ -138,11 +129,12 @@
 
 			departments[department_name] = list(
 				"head" = department_head_type && initial(department_head_type.title),
+				"jobs" = list(),
 			)
+		departments[department_name]["jobs"] += job
 
-		jobs +=  job
 
-	return jobs
+	return departments
 
 /datum/preference_group/category/occupation/proc/get_job_bans(mob/user)
 	var/list/data = list()

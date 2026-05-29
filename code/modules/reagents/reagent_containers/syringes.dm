@@ -3,7 +3,7 @@ TYPEINFO_DEF(/obj/item/reagent_containers/syringe)
 
 /obj/item/reagent_containers/syringe
 	name = "syringe"
-	desc = "A syringe that can hold up to 15 units."
+	desc = "A syringe that can hold up to 15cc of fluid."
 	icon = 'icons/obj/syringe.dmi'
 	base_icon_state = "syringe"
 	lefthand_file = 'icons/mob/inhands/equipment/medical_lefthand.dmi'
@@ -14,7 +14,7 @@ TYPEINFO_DEF(/obj/item/reagent_containers/syringe)
 	possible_transfer_amounts = list(5, 10, 15)
 	volume = 15
 	reagent_flags = TRANSPARENT
-	custom_price = PAYCHECK_EASY * 0.5
+	custom_price = PAYCHECK_ASSISTANT * 0.5
 
 	hitsound = 'sound/weapons/attack/flesh_stab.ogg'
 	throwforce = 1
@@ -39,6 +39,11 @@ TYPEINFO_DEF(/obj/item/reagent_containers/syringe)
 	AddElement(/datum/element/eyestab)
 	AddComponent(/datum/component/caltrop, min_damage = force, probability = 10, flags = CALTROP_IGNORE_WALKERS, on_trigger = CALLBACK(src, PROC_REF(on_caltrop_trigger)))
 
+/obj/item/reagent_containers/syringe/disco_flavor(mob/living/carbon/human/user, nearby, is_station_level)
+	. = ..()
+	if(user.has_quirk(/datum/quirk/item_quirk/junkie))
+		user.disco_made_easy("syringe_junkie", 14, /datum/rpg_skill/electric_body, failure_text = "You can fix all of your woes with just one prick.")
+
 /obj/item/reagent_containers/syringe/attackby(obj/item/I, mob/user, params)
 	return
 
@@ -48,7 +53,7 @@ TYPEINFO_DEF(/obj/item/reagent_containers/syringe)
 		return
 
 	if(tool.use_tool(src, user, 5 SECONDS, amount = 5))
-		var/datum/roll_result/result = user.stat_roll(11, /datum/rpg_skill/anatomia)
+		var/datum/roll_result/result = user.stat_roll(11, /datum/rpg_skill/anatomy)
 		result.do_skill_sound(user)
 		switch(result.outcome)
 			if(SUCCESS, CRIT_SUCCESS)
@@ -141,6 +146,10 @@ TYPEINFO_DEF(/obj/item/reagent_containers/syringe)
 	if(reagents.trans_to(interacting_with, amount_per_transfer_from_this, transfered_by = user, methods = INJECT))
 		if(contains_morphine && (user == interacting_with))
 			user.client?.give_award(/datum/award/achievement/jobs/the_medicine_drug)
+
+		var/mob/living/living_target = astype(interacting_with, /mob/living)
+		if(living_target?.stat == CONSCIOUS && living_target.has_quirk(/datum/quirk/item_quirk/junkie))
+			living_target.disco_made_easy("syringe_junkie_injection", 15, /datum/rpg_skill/electric_body, failure_text = "Oh yeah, baby, that's the stuff! The sensation of fluid rushing into your veins!")
 
 		to_chat(user, span_obviousnotice("You inject [amount_per_transfer_from_this] units of the solution. \The [src] now contains [reagents.total_volume] units."))
 		return ITEM_INTERACT_SUCCESS

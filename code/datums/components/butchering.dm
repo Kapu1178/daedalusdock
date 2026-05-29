@@ -31,15 +31,20 @@
 		butcher_callback = _butcher_callback
 
 	if(isitem(parent))
-		RegisterSignal(parent, COMSIG_ITEM_ATTACK, PROC_REF(onItemAttack))
+		RegisterSignal(parent, COMSIG_ITEM_INTERACTING_WITH_ATOM, PROC_REF(onItemAttack))
 
-/datum/component/butchering/proc/onItemAttack(obj/item/source, mob/living/M, mob/living/user)
+/datum/component/butchering/proc/onItemAttack(obj/item/source, mob/living/user, atom/interacting_with, list/modifiers)
 	SIGNAL_HANDLER
 
-	if(M.stat == DEAD && (M.butcher_results || M.guaranteed_butcher_results)) //can we butcher it?
+	if(!isliving(interacting_with))
+		return NONE
+
+	var/mob/living/M = interacting_with
+
+	if(M.stat == DEAD && (M.butcher_results || M.guaranteed_butcher_results || HAS_TRAIT(M, TRAIT_ALWAYS_BUTCHERABLE))) //can we butcher it?
 		if(butchering_enabled && (can_be_blunt || (source.sharpness & SHARP_EDGED)))
 			INVOKE_ASYNC(src, PROC_REF(startButcher), source, M, user)
-			return COMPONENT_CANCEL_ATTACK_CHAIN
+			return ITEM_INTERACT_SUCCESS
 
 /datum/component/butchering/proc/startButcher(obj/item/source, mob/living/M, mob/living/user)
 	to_chat(user, span_notice("You begin to butcher [M]..."))
@@ -94,7 +99,8 @@
 								span_notice("You butcher [meat]."))
 	butcher_callback?.Invoke(butcher, meat)
 	meat.harvest(butcher)
-	meat.gib(FALSE, FALSE, TRUE)
+	if(!QDELING(meat))
+		meat.gib(FALSE, FALSE, TRUE)
 
 ///Special snowflake component only used for the recycler.
 /datum/component/butchering/recycler

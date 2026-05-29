@@ -98,7 +98,7 @@
 
 /obj/structure/aquarium/examine(mob/user)
 	. = ..()
-	. += span_notice("Alt-click to [panel_open ? "close" : "open"] the control panel.")
+	. += span_info("Alt-click to [panel_open ? "close" : "open"] the control panel.")
 
 /obj/structure/aquarium/AltClick(mob/user)
 	if(!user.canUseTopic(src, USE_CLOSE))

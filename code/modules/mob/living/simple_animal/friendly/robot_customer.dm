@@ -100,4 +100,4 @@
 			order = custom_order.get_order_line(attending_venue)
 		else
 			order = attending_venue.order_food_line(wanted_item)
-		. += span_notice("Their order was: \"[order].\"")
+		. += span_info("Their order was: \"[order].\"")

@@ -261,7 +261,7 @@
 	. = ..()
 	. += "<b>alt + click</b> to [cover_open ? "close" : "open"] the dust cover."
 	if(cover_open && magazine)
-		. += span_notice("It seems like you could use an <b>empty hand</b> to remove the magazine.")
+		. += span_info("It seems like you could use an <b>empty hand</b> to remove the magazine.")
 
 
 /obj/item/gun/ballistic/automatic/l6_saw/AltClick(mob/user)

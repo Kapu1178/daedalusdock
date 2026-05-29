@@ -734,15 +734,19 @@
 	//reset to baseline
 	idle_power_usage = initial(idle_power_usage)
 	active_power_usage = initial(active_power_usage)
-	if(!component_parts || !component_parts.len)
+	if(!length(component_parts))
 		return
+
 	var/parts_energy_rating = 0
+	var/parts_with_energy_rating = 0
 	for(var/obj/item/stock_parts/part in component_parts)
 		parts_energy_rating += part.energy_rating
+		parts_with_energy_rating++
 
-	idle_power_usage = initial(idle_power_usage) * (1 + parts_energy_rating)
-	active_power_usage = initial(active_power_usage) * (1 + parts_energy_rating)
-	update_current_power_usage()
+	if(parts_energy_rating)
+		idle_power_usage = floor(initial(idle_power_usage) * (parts_energy_rating / parts_with_energy_rating))
+		active_power_usage = floor(initial(active_power_usage) * (parts_energy_rating / parts_with_energy_rating))
+		update_current_power_usage()
 
 	internal_disk = locate() in component_parts
 	if(internal_disk)
@@ -1007,9 +1011,9 @@
 
 /obj/machinery/proc/display_parts(mob/user)
 	. = list()
-	. += span_notice("It contains the following parts:")
+	. += span_info("It contains the following parts:")
 	for(var/obj/item/C in component_parts)
-		. += span_notice("[icon2html(C, user)] \A [C].")
+		. += span_info("[icon2html(C, user)] \A [C].")
 	. = jointext(., "")
 
 /obj/machinery/examine(mob/user)
@@ -1024,7 +1028,7 @@
 		var/healthpercent = (atom_integrity/max_integrity) * 100
 		switch(healthpercent)
 			if(50 to 99)
-				. += span_notice("It looks slightly damaged.")
+				. += span_info("It looks slightly damaged.")
 			if(25 to 50)
 				. += span_alert("It appears heavily damaged.")
 			if(0 to 25)

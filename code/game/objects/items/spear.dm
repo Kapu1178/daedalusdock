@@ -18,6 +18,8 @@ TYPEINFO_DEF(/obj/item/spear)
 	throwforce = 15
 	throw_speed = 1.5
 
+	special_attack_type = /datum/special_attack/ranged_stab
+
 	embedding = list("impact_pain_mult" = 2, "remove_pain_mult" = 4, "jostle_chance" = 2.5)
 	armor_penetration = 10
 
@@ -25,7 +27,7 @@ TYPEINFO_DEF(/obj/item/spear)
 	attack_verb_continuous = list("attacks", "pokes", "jabs", "tears", "lacerates", "gores")
 	attack_verb_simple = list("attack", "poke", "jab", "tear", "lacerate", "gore")
 	sharpness = SHARP_EDGED // i know the whole point of spears is that they're pointy, but edged is more devastating at the moment so
-	max_integrity = 200
+	max_integrity = 30
 
 	var/war_cry = "AAAAARGH!!!"
 	var/icon_prefix = "spearglass"
@@ -125,7 +127,7 @@ TYPEINFO_DEF(/obj/item/spear)
 
 /obj/item/spear/explosive/examine(mob/user)
 	. = ..()
-	. += span_notice("Alt-click to set your war cry.")
+	. += span_info("Alt-click to set your war cry.")
 
 /obj/item/spear/explosive/AltClick(mob/user)
 	if(user.canUseTopic(src, USE_CLOSE))

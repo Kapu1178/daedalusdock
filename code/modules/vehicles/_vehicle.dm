@@ -32,7 +32,7 @@ TYPEINFO_DEF(/obj/vehicle)
 	var/canmove = TRUE
 	var/list/autogrant_actions_passenger //plain list of typepaths
 	var/list/autogrant_actions_controller //assoc list "[bitflag]" = list(typepaths)
-	var/list/mob/occupant_actions //assoc list mob = list(type = action datum assigned to mob)
+	var/list/list/mob/occupant_actions //assoc list mob = list(type = action datum assigned to mob)
 	///This vehicle will follow us when we move (like atrailer duh)
 	var/obj/vehicle/trailer
 	var/are_legs_exposed = FALSE
@@ -58,7 +58,7 @@ TYPEINFO_DEF(/obj/vehicle)
 /obj/vehicle/examine(mob/user)
 	. = ..()
 	if(resistance_flags & ON_FIRE)
-		. += span_warning("It's on fire!")
+		. += span_alert("It's on fire!")
 	var/healthpercent = atom_integrity/max_integrity * 100
 	switch(healthpercent)
 		if(50 to 99)
@@ -66,7 +66,7 @@ TYPEINFO_DEF(/obj/vehicle)
 		if(25 to 50)
 			. += "It appears heavily damaged."
 		if(0 to 25)
-			. += span_warning("It's falling apart!")
+			. += span_alert("It's falling apart!")
 
 /obj/vehicle/proc/is_key(obj/item/I)
 	return istype(I, key_type)

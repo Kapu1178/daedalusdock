@@ -209,15 +209,15 @@
 /obj/item/trapdoor_remote/examine(mob/user)
 	. = ..()
 	if(!internals)
-		. += span_warning("[src] has no internals! It needs a trapdoor controller to function.")
+		. += span_alert("[src] has no internals! It needs a trapdoor controller to function.")
 		return
-	. += span_notice("The internals can be removed with a screwdriver.")
+	. += span_info("The internals can be removed with a screwdriver.")
 	if(!internals.linked)
-		. += span_warning("[src] is not linked to a trapdoor.")
+		. += span_alert("[src] is not linked to a trapdoor.")
 		return
-	. += span_notice("[src] is linked to a trapdoor.")
+	. += span_info("[src] is linked to a trapdoor.")
 	if(!COOLDOWN_FINISHED(src, trapdoor_cooldown))
-		. += span_warning("It is on a short cooldown.")
+		. += span_alert("It is on a short cooldown.")
 
 /obj/item/trapdoor_remote/screwdriver_act(mob/living/user, obj/item/tool)
 	. = ..()

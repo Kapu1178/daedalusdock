@@ -30,4 +30,4 @@ TYPEINFO_DEF(/obj/item/pipe_painter)
 
 /obj/item/pipe_painter/examine(mob/user)
 	. = ..()
-	. += span_notice("It is set to [paint_color].")
+	. += span_info("It is set to [paint_color].")

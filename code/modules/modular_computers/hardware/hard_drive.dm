@@ -29,7 +29,7 @@
 
 /obj/item/computer_hardware/hard_drive/examine(user)
 	. = ..()
-	. += span_notice("It has [max_capacity] GQ of storage capacity.")
+	. += span_info("It has [max_capacity] GQ of storage capacity.")
 
 /obj/item/computer_hardware/hard_drive/diagnostics(mob/user)
 	..()
@@ -175,7 +175,7 @@
 	max_capacity = 64
 	icon_state = "ssd_mini"
 	w_class = WEIGHT_CLASS_TINY
-	custom_price = PAYCHECK_MEDIUM * 2
+	custom_price = PAYCHECK_ASSISTANT * 1.2
 
 /obj/item/computer_hardware/hard_drive/small/install_default_programs()
 	. = ..()

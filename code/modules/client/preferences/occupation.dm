@@ -1,6 +1,6 @@
 /// An associative list of job_name:employer_path
 /datum/preference/choiced/employer
-	explanation = "Employer"
+	explanation = "Faction"
 	savefile_identifier = PREFERENCE_CHARACTER
 	savefile_key = "employer"
 	cyclable = FALSE

@@ -1,38 +1,3 @@
-//Command
-
-/obj/item/circuitboard/machine/bsa/back
-	name = "Bluespace Artillery Generator (Machine Board)"
-	greyscale_colors = CIRCUIT_COLOR_COMMAND
-	build_path = /obj/machinery/bsa/back //No freebies!
-	req_components = list(
-		/obj/item/stock_parts/capacitor/quadratic = 5,
-		/obj/item/stack/cable_coil = 2)
-
-/obj/item/circuitboard/machine/bsa/front
-	name = "Bluespace Artillery Bore (Machine Board)"
-	greyscale_colors = CIRCUIT_COLOR_COMMAND
-	build_path = /obj/machinery/bsa/front
-	req_components = list(
-		/obj/item/stock_parts/manipulator/femto = 5,
-		/obj/item/stack/cable_coil = 2)
-
-/obj/item/circuitboard/machine/bsa/middle
-	name = "Bluespace Artillery Fusor (Machine Board)"
-	greyscale_colors = CIRCUIT_COLOR_COMMAND
-	build_path = /obj/machinery/bsa/middle
-	req_components = list(
-		/obj/item/stack/ore/bluespace_crystal = 20,
-		/obj/item/stack/cable_coil = 2)
-
-/obj/item/circuitboard/machine/dna_vault
-	name = "DNA Vault (Machine Board)"
-	greyscale_colors = CIRCUIT_COLOR_COMMAND
-	build_path = /obj/machinery/dna_vault //No freebies!
-	req_components = list(
-		/obj/item/stock_parts/capacitor/super = 5,
-		/obj/item/stock_parts/manipulator/pico = 5,
-		/obj/item/stack/cable_coil = 2)
-
 //Engineering
 
 /obj/item/circuitboard/machine/announcement_system
@@ -265,7 +230,7 @@
 
 /obj/item/circuitboard/machine/thermomachine/examine()
 	. = ..()
-	. += span_notice("It is set to layer [pipe_layer].")
+	. += span_info("It is set to layer [pipe_layer].")
 
 //FIXME: HYPERGARBAGE DONUT CREATION CODE
 // /obj/item/circuitboard/machine/HFR_fuel_input
@@ -977,8 +942,8 @@
 
 /obj/item/circuitboard/machine/dish_drive/examine(mob/user)
 	. = ..()
-	. += span_notice("Its suction function is [suction ? "enabled" : "disabled"]. Use it in-hand to switch.")
-	. += span_notice("Its disposal auto-transmit function is [transmit ? "enabled" : "disabled"]. Alt-click it to switch.")
+	. += span_info("Its suction function is [suction ? "enabled" : "disabled"]. Use it in-hand to switch.")
+	. += span_info("Its disposal auto-transmit function is [transmit ? "enabled" : "disabled"]. Alt-click it to switch.")
 
 /obj/item/circuitboard/machine/dish_drive/attack_self(mob/living/user)
 	suction = !suction

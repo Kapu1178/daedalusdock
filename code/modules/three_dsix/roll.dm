@@ -12,8 +12,14 @@ GLOBAL_DATUM_INIT(success_roll, /datum/roll_result/success, new)
 /mob/living/proc/stat_roll(requirement = STATS_BASELINE_VALUE, datum/rpg_skill/skill_path, modifier = 0, crit_fail_modifier = -10, mob/living/defender)
 	RETURN_TYPE(/datum/roll_result)
 
-	var/skill_mod = skill_path ? stats.get_skill_modifier(skill_path) : 0
-	var/stat_mod = skill_path ? stats.get_stat_modifier(initial(skill_path.parent_stat_type)) : 0
+	var/datum/rpg_skill/checked_skill_path = skill_path
+
+	/// The entertainer specifically always uses Sock and Buskin because that's funny.
+	if(skill_path && mind?.assigned_role?.title == JOB_CLOWN)
+		checked_skill_path = /datum/rpg_skill/theatre
+
+	var/skill_mod = checked_skill_path ? stats.get_skill_modifier(checked_skill_path) : 0
+	var/stat_mod = checked_skill_path ? stats.get_stat_modifier(initial(checked_skill_path.parent_stat_type)) : 0
 
 	if(defender && skill_path)
 		skill_mod -= defender.stats?.get_skill_modifier(skill_path) || 0
@@ -147,20 +153,20 @@ GLOBAL_DATUM_INIT(success_roll, /datum/roll_result/success, new)
 	var/finished_prob_string = "<span style='color: #bbbbad;font-style: italic'>\[[prob_string]: [success]\]</span>"
 	var/prefix
 	if(outcome >= SUCCESS)
-		prefix = "<span style='font-style: italic;color: #03fca1'>[uppertext(initial(skill_type_used.name))]</span> "
+		prefix = "<span class='statsGood' style='text-shadow: inherit;'>[uppertext(initial(skill_type_used.name))]</span> "
 		body = span_statsgood(body)
 	else
-		prefix = "<span style='font-style: italic;color: #fc4b32'>[uppertext(initial(skill_type_used.name))]</span> "
+		prefix = "<span class='statsBad' style='text-shadow: inherit;'>[uppertext(initial(skill_type_used.name))]</span> "
 		body = span_statsbad(body)
 
 	var/modifier_string = ""
 	if(modifier != 0)
 		var/modifier_string_inner = modifier > 0 ? "+[modifier]" : "[modifier]"
-		var/modifier_color = (modifier >= 0) ? "#03fca1" : "#fc4b32"
-		modifier_string = " (<span style='font-weight: bold;color: [modifier_color]'>[modifier_string_inner]</span>)"
+		var/modifier_class = (modifier >= 0) ? "statsGood" : "statsBad"
+		modifier_string = " (<span class='[modifier_class]' style='font-weight: bold;text-shadow: inherit;font-style: inherit'>[modifier_string_inner]</span>)"
 
-	var/result_color = (outcome >= SUCCESS) ? "#03fca1" : "#fc4b32"
-	var/result_string = "Result: <span style='font-weight: bold;color: [result_color]'><b>[roll]</b></span>[modifier_string]"
+	var/result_class = (outcome >= SUCCESS) ? "statsGood" : "statsBad"
+	var/result_string = "Result: <span class='[result_class]' style='font-weight: bold;text-shadow: inherit;font-style: inherit'><b>[roll]</b></span>[modifier_string]"
 	var/tooltip_html = "[success_prob]% | [result_string] | Check: <b>[requirement]</b>"
 	var/seperator = "<span style='color: #bbbbad;font-style: italic'>: </span>"
 

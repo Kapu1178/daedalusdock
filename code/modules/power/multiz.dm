@@ -34,5 +34,5 @@
 /obj/structure/cable/multiz/examine(mob/user)
 	. += ..()
 	var/turf/T = get_turf(src)
-	. += span_notice("[locate(/obj/structure/cable/multiz) in (GetBelow(T)) ? "Detected" : "Undetected"] hub UP.")
-	. += span_notice("[locate(/obj/structure/cable/multiz) in (GetAbove(T)) ? "Detected" : "Undetected"] hub DOWN.")
+	. += span_info("[locate(/obj/structure/cable/multiz) in (GetBelow(T)) ? "Detected" : "Undetected"] hub UP.")
+	. += span_info("[locate(/obj/structure/cable/multiz) in (GetAbove(T)) ? "Detected" : "Undetected"] hub DOWN.")

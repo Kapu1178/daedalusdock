@@ -31,6 +31,15 @@
 		MANCROWAVE_HOMEOSTATIS = 5 SECONDS,
 	)
 
+/obj/machinery/sleeper/examine(mob/user)
+	. = ..()
+	. += user.disco_made_easy("mancrowave_desc", 15, is_examine = TRUE, success_text = "Affectionately known as the \"Mancrowave\", it was originally invented as a torture device by a Horodian engineer.", trait_fail = TRAIT_AETHERITE)
+
+/obj/machinery/sleeper/mancrowave/disco_flavor(mob/living/carbon/human/user, nearby, is_station_level)
+	. = ..()
+	user.disco_made_easy("mancrowave_styropyro", 14, /datum/rpg_skill/theatre, success_text = "FUCK IT, MANCROWAVE <B>BWOOOOOOOOOOOM</B>", trait_fail = TRAIT_AETHERITE)
+	user.disco_made_easy("mancrowave_sleep", 7, /datum/rpg_skill/electric_body, success_text = "It looks quite comfortable inside, and you could really use a nap right now.")
+
 /obj/machinery/sleeper/mancrowave/update_icon_state()
 	. = ..()
 	if(state_open)

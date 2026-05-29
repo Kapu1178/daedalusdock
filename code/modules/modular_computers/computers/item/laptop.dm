@@ -27,7 +27,7 @@
 /obj/item/modular_computer/laptop/examine(mob/user)
 	. = ..()
 	if(screen_on)
-		. += span_notice("Alt-click to close it.")
+		. += span_info("Alt-click to close it.")
 
 /obj/item/modular_computer/laptop/Initialize(mapload)
 	. = ..()

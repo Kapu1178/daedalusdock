@@ -125,6 +125,6 @@
 	if (client)
 		client.move_delay = initial(client.move_delay)
 
-	if(!gibbed)
+	if(!gibbed && !QDELING(src))
 		AddComponent(/datum/component/spook_factor, SPOOK_AMT_CORPSE)
 	return TRUE

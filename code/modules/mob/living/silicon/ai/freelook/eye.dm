@@ -41,7 +41,7 @@
 	var/list/old_images = hud_list[AI_DETECT_HUD]
 	if(!ai_detector_visible)
 		hud.remove_atom_from_hud(src)
-		QDEL_LIST(old_images)
+		old_images.Cut()
 		return
 
 	if(!length(hud.hud_users))
@@ -204,7 +204,7 @@
 
 	eyeobj.mouse_opacity = state ? MOUSE_OPACITY_ICON : initial(eyeobj.mouse_opacity)
 	eyeobj.invisibility = state ? INVISIBILITY_OBSERVER : initial(eyeobj.invisibility)
-	sense_of_self?.invisibility = state ? INVISIBILITY_OBSERVER : INVISIBLITY_VISIBLE
+	sense_of_self?.invisibility = state ? INVISIBILITY_OBSERVER : INVISIBILITY_VISIBLE
 
 /mob/living/silicon/ai/verb/toggle_acceleration()
 	set category = "AI Commands"

@@ -181,6 +181,7 @@
 		human.metabolism_efficiency = 1
 
 	handle_hunger_slowdown(human)
+	handle_hunger_skill_mods(human)
 
 	if(show_feedback)
 		// If we did anything more then just set and throw alerts here I would add bracketing
@@ -214,6 +215,26 @@
 		human.add_or_update_variable_movespeed_modifier(/datum/movespeed_modifier/hunger, slowdown = (hungry / 50))
 	else
 		human.remove_movespeed_modifier(/datum/movespeed_modifier/hunger)
+
+/// Called by handle_hunger()
+/obj/item/organ/stomach/proc/handle_hunger_skill_mods(mob/living/carbon/human/human)
+	var/modifier = 0
+	switch(human.nutrition)
+		if(NUTRITION_LEVEL_STARVING to NUTRITION_LEVEL_HUNGRY)
+			modifier = -3
+		if(0 to NUTRITION_LEVEL_STARVING)
+			modifier = -5
+		else
+			modifier = 0
+
+	if(modifier)
+		human.stats.set_stat_modifier(modifier, /datum/rpg_stat/pneuma, "Hunger")
+		human.stats.set_stat_modifier(modifier, /datum/rpg_stat/psyche, "Hunger")
+		human.stats.set_stat_modifier(modifier, /datum/rpg_stat/soma, "Hunger")
+	else
+		human.stats.remove_stat_modifier(/datum/rpg_stat/pneuma, "Hunger")
+		human.stats.remove_stat_modifier(/datum/rpg_stat/psyche, "Hunger")
+		human.stats.remove_stat_modifier(/datum/rpg_stat/soma, "Hunger")
 
 /obj/item/organ/stomach/proc/handle_disgust(mob/living/carbon/human/disgusted, delta_time, times_fired)
 	var/old_disgust = disgusted.old_disgust
@@ -281,14 +302,14 @@
 /obj/item/organ/stomach/cybernetic
 	name = "basic cybernetic stomach"
 	icon_state = "stomach-c"
-	desc = "A basic device designed to mimic the functions of a human stomach"
+	desc = "A basic device designed to mimic the functions of a minervan stomach"
 	organ_flags = ORGAN_SYNTHETIC
 	var/emp_vulnerability = 80 //Chance of permanent effects if emp-ed.
 
 /obj/item/organ/stomach/cybernetic/tier2
 	name = "cybernetic stomach"
 	icon_state = "stomach-c-u"
-	desc = "An electronic device designed to mimic the functions of a human stomach. Handles disgusting food a bit better."
+	desc = "An electronic device designed to mimic the functions of a minervan stomach. Handles disgusting food a bit better."
 	maxHealth = 45
 	disgust_metabolism = 2
 	emp_vulnerability = 40

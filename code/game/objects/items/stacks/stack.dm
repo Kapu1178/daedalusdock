@@ -21,7 +21,7 @@
 	maptext_y = 2
 
 	material_modifier = 0.05 //5%, so that a 50 sheet stack has the effect of 5k materials instead of 100k.
-	max_integrity = 100
+	max_integrity = 10
 
 	var/list/datum/stack_recipe/recipes
 	/// The name of one piece of the stack.
@@ -88,12 +88,15 @@
 	if(absorption_capacity)
 		src.absorption_capacity = absorption_capacity
 
+	// Not typeinfo() for speed reasons. Hot ass code!
+	var/datum/typeinfo/atom/typeinfo = __typeinfo_cache[type] ||= new __typeinfo_path
+
 	if(LAZYLEN(mat_override))
 		set_mats_per_unit(mat_override, mat_amt)
 	else if(LAZYLEN(mats_per_unit))
 		set_mats_per_unit(mats_per_unit, 1)
-	else if(LAZYLEN(custom_materials))
-		set_mats_per_unit(custom_materials, amount ? 1/amount : 1)
+	else if(LAZYLEN(typeinfo.default_materials))
+		set_mats_per_unit(typeinfo.default_materials, amount ? 1/amount : 1)
 
 	. = ..()
 	// HELLO THIS IS KAPU. THIS IS BROKEN.
@@ -160,6 +163,10 @@
 /obj/item/stack/on_exit_storage(datum/storage/master_storage)
 	. = ..()
 	update_maptext()
+
+/obj/item/stack/get_controls_info()
+	. = ..()
+	. += "Right Click - Split stack."
 
 /// Set the maptext for the item that shows how much junk is inside the trunk.
 /obj/item/stack/proc/update_maptext()
@@ -265,23 +272,23 @@
 	var/plural = get_amount()>1
 	if(is_cyborg)
 		if(singular_name)
-			. += span_notice("There is enough energy for [get_amount()] [singular_name]\s.")
+			. += span_info("There is enough energy for [get_amount()] [singular_name]\s.")
 		else
-			. += span_notice("There is enough energy for [get_amount()].")
+			. += span_info("There is enough energy for [get_amount()].")
 		return
 
 	if(singular_name)
 		if(plural)
-			. += span_notice("There are [get_amount()] [singular_name]\s in the [stack_name].")
+			. += span_info("There are [get_amount()] [singular_name]\s in the [stack_name].")
 
 	else if(plural)
-		. += span_notice("There are [get_amount()] in the [stack_name].")
+		. += span_info("There are [get_amount()] in the [stack_name].")
 
 	if(absorption_capacity < initial(absorption_capacity))
 		if(absorption_capacity == 0)
 			. += span_alert("[plural ? "They are" : "It is"] drenched in blood, this won't be a suitable bandage.")
 		else
-			. += span_notice("[plural ? "They are" : "It is"] covered in blood.")
+			. += span_info("[plural ? "They are" : "It is"] covered in blood.")
 
 /obj/item/stack/proc/get_amount()
 	if(is_cyborg)
@@ -637,26 +644,31 @@
 		merge(hitting)
 	. = ..()
 
-/obj/item/stack/attack(mob/living/M, mob/living/user, params)
+/obj/item/stack/interact_with_atom(atom/interacting_with, mob/living/user, list/modifiers)
+	if(!isliving(interacting_with))
+		return NONE
+
 	if(splint_slowdown)
-		return try_splint(M, user)
+		return try_splint(interacting_with, user)
 
-	if(!user.combat_mode && absorption_capacity && ishuman(M))
-		var/obj/item/bodypart/BP = M.get_bodypart(user.zone_selected, TRUE)
-		if(BP.bandage)
-			to_chat(user, span_warning("[M]'s [BP.plaintext_zone] is already bandaged."))
-			return FALSE
+	if(!absorption_capacity || !ishuman(interacting_with))
+		return NONE
 
-		if(do_after(user, M, 5 SECONDS, DO_PUBLIC, display = src))
-			if(user == M)
-				user.visible_message(span_notice("[user] applies [src] to [user.p_their()] [BP.plaintext_zone]."))
-			else
-				user.visible_message(span_notice("[user] applies [src] to [M]'s [BP.plaintext_zone]."))
-			BP.apply_bandage(src)
-		return
+	var/mob/living/carbon/human/target = interacting_with
+	var/obj/item/bodypart/BP = target.get_bodypart(user.zone_selected, TRUE)
+	if(BP.bandage)
+		to_chat(user, span_warning("[target]'s [BP.plaintext_zone] is already bandaged."))
+		return ITEM_INTERACT_BLOCKING
 
-	return ..()
+	if(!do_after(user, target, 5 SECONDS, DO_PUBLIC, display = src))
+		return ITEM_INTERACT_BLOCKING
 
+	if(user == target)
+		user.visible_message(span_notice("[user] applies [src] to [user.p_their()] [BP.plaintext_zone]."))
+	else
+		user.visible_message(span_notice("[user] applies [src] to [target]'s [BP.plaintext_zone]."))
+	BP.apply_bandage(src)
+	return ITEM_INTERACT_SUCCESS
 
 //ATTACK HAND IGNORING PARENT RETURN VALUE
 /obj/item/stack/attack_hand(mob/user, list/modifiers)

@@ -25,10 +25,10 @@ TYPEINFO_DEF(/obj/item/melee/powerfist)
 /obj/item/melee/powerfist/examine(mob/user)
 	. = ..()
 	if(!in_range(user, src))
-		. += span_notice("You'll need to get closer to see any more.")
+		. += span_info("You'll need to get closer to see any more.")
 		return
 	if(tank)
-		. += span_notice("[icon2html(tank, user)] It has \a [tank] mounted onto it.")
+		. += span_info("[icon2html(tank, user)] It has \a [tank] mounted onto it.")
 
 /obj/item/melee/powerfist/wrench_act(mob/living/user, obj/item/tool)
 	switch(fisto_setting)

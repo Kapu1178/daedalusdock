@@ -24,7 +24,9 @@
 	. = ..()
 	if(isnum(vol) && vol > 0)
 		volume = vol
+
 	create_reagents(volume, reagent_flags)
+
 	if(spawned_disease)
 		var/datum/pathogen/F = new spawned_disease()
 		var/list/data = list("viruses"= list(F))
@@ -39,9 +41,9 @@
 /obj/item/reagent_containers/examine()
 	. = ..()
 	if(possible_transfer_amounts.len > 1)
-		. += span_notice("Left-click or right-click in-hand to increase or decrease its transfer amount.")
+		. += span_info("Left-click or right-click in-hand to increase or decrease its transfer amount.")
 	else if(possible_transfer_amounts.len)
-		. += span_notice("Left-click or right-click in-hand to view its transfer amount.")
+		. += span_info("Left-click or right-click in-hand to view its transfer amount.")
 
 /obj/item/reagent_containers/create_reagents(max_vol, flags)
 	. = ..()
@@ -88,12 +90,6 @@
 	amount_per_transfer_from_this = possible_transfer_amounts[amount_list_position]
 	balloon_alert(user, "transferring [amount_per_transfer_from_this]u")
 	mode_change_message(user)
-
-/obj/item/reagent_containers/pre_attack_secondary(atom/target, mob/living/user, params)
-	if (try_splash(user, target))
-		return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
-
-	return ..()
 
 /// Tries to splash the target. Used on both right-click and normal click when in combat mode.
 /obj/item/reagent_containers/proc/try_splash(mob/user, atom/target)

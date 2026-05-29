@@ -756,7 +756,7 @@
 		originalname = H.real_name
 		H.dna.copy_dna(originalDNA)
 		randomize_human(H)
-		H.dna.update_dna_identity()
+		H.dna.update_dna_identity(update_fingerprints = TRUE)
 	return ..()
 
 // Only occasionally give examiners a warning.

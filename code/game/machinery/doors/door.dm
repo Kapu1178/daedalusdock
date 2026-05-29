@@ -155,8 +155,8 @@ DEFINE_INTERACTABLE(/obj/machinery/door)
 /obj/machinery/door/examine(mob/user)
 	. = ..()
 	if(red_alert_access)
-		. += span_notice("In the event of a red alert, its access requirements will automatically lift.")
-	. += span_notice("Its maintenance panel is [panel_open ? "open" : "<b>screwed</b> in place"].")
+		. += span_info("In the event of a red alert, its access requirements will automatically lift.")
+	. += span_info("Its maintenance panel is [panel_open ? "open" : "<b>screwed</b> in place"].")
 
 /obj/machinery/door/add_context(atom/source, list/context, obj/item/held_item, mob/user)
 	. = ..()
@@ -167,7 +167,7 @@ DEFINE_INTERACTABLE(/obj/machinery/door)
 	if(isaicamera(user) || issilicon(user))
 		return .
 
-	if (isnull(held_item) && Adjacent(user))
+	if (isnull(held_item))
 		context[SCREENTIP_CONTEXT_LMB] = "Open"
 		context[SCREENTIP_CONTEXT_RMB] = "Knock"
 		return CONTEXTUAL_SCREENTIP_SET
@@ -277,7 +277,7 @@ DEFINE_INTERACTABLE(/obj/machinery/door)
 	if(istype(mover) && (mover.pass_flags & PASSGLASS))
 		return !opacity
 
-/obj/machinery/door/CanAStarPass(to_dir, datum/can_pass_info/pass_info)
+/obj/machinery/door/CanAStarPass(to_dir, datum/can_pass_info/pass_info, leaving)
 	. = ..()
 	if(.)
 		return
@@ -414,7 +414,7 @@ DEFINE_INTERACTABLE(/obj/machinery/door)
 	try_to_crowbar_secondary(tool, user, forced_open)
 	return ITEM_INTERACT_SUCCESS
 
-/obj/machinery/door/take_damage(damage_amount, damage_type = BRUTE, damage_flag = 0, sound_effect = 1, attack_dir)
+/obj/machinery/door/take_damage(damage_amount, damage_type = BRUTE, damage_flag = 0, sound_effect = 1, attack_dir, armor_penetration = 0, allow_break = TRUE)
 	. = ..()
 	if(. && atom_integrity > 0)
 		if(damage_amount >= 10 && prob(30))

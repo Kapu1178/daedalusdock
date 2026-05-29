@@ -413,11 +413,11 @@ SUBSYSTEM_DEF(job)
 
 	JobDebug("DO, Len: [unassigned.len]")
 
-	if(unassigned.len == 0)
-		return validate_required_jobs(required_jobs)
-
 	//Scale number of open security officer slots to population
 	setup_officer_positions()
+
+	if(unassigned.len == 0)
+		return validate_required_jobs(required_jobs)
 
 	//Jobs will have fewer access permissions if the number of players exceeds the threshold defined in game_options.txt
 	var/mat = CONFIG_GET(number/minimal_access_threshold)
@@ -611,28 +611,38 @@ SUBSYSTEM_DEF(job)
 			handle_auto_deadmin_roles(player_client, job.title)
 
 	if(player_client)
-		job.on_join_message(player_client, chosen_title)
 		job.on_join_popup(player_client, chosen_title)
 
-	if(player_client)
-		var/related_policy = get_policy(job.title)
-		if(related_policy)
-			to_chat(player_client, related_policy)
+	if(equipping.mind)
+		equipping.mind.roundstart_messages[ROUNDSTART_INFOKEY_JOB] = job.get_join_message(player_client, chosen_title)
+		var/policy = get_policy(job.title)
+		if(policy)
+			equipping.mind.roundstart_messages[ROUNDSTART_INFOKEY_POLICY] = "<span>[policy]</span>"
 
-		if(CONFIG_GET(number/minimal_access_threshold))
-			to_chat(player_client, span_notice("<B>As this station was initially staffed with a [CONFIG_GET(flag/jobs_have_minimal_access) ? "full crew, only your job's necessities" : "skeleton crew, additional access may"] have been added to your ID card.</B>"))
+		if(CONFIG_GET(number/minimal_access_threshold) && !CONFIG_GET(flag/jobs_have_minimal_access))
+			equipping.mind.roundstart_messages[ROUNDSTART_INFOKEY_OOC] += "As this colony is small, you may have expanded access on your identification card."
+
+		if(job.radio_help_message)
+			equipping.mind.roundstart_messages[ROUNDSTART_INFOKEY_OOC] += job.radio_help_message
 
 	if(ishuman(equipping))
 		var/mob/living/carbon/human/wageslave = equipping
 		var/datum/bank_account/bank = SSeconomy.bank_accounts_by_id["[wageslave.account_id]"]
 
-		wageslave.mind.set_note(NOTES_BANK_ACCOUNT, list("Account ID: [wageslave.account_id]<br>Account PIN: [bank.account_pin]"))
-		to_chat(player_client, span_obviousnotice("Your bank account pin is: <b>[bank.account_pin]</b>"))
+		wageslave.mind.set_note(NOTES_BANK_ACCOUNT, "Account ID: [wageslave.account_id]<br>Account PIN: [bank.account_pin]")
+		equipping.mind.roundstart_messages[ROUNDSTART_INFOKEY_MEMORIES] += span_info("Your bank account pin: <b>[bank.account_pin]</b>")
+
+		if(job.pinpad_key)
+			var/pin = SSid_access.get_static_pincode(job.pinpad_key)
+			equipping.mind.set_note(NOTES_DOOR_CODES, "The pin to your doors is [pin]")
+			equipping.mind.roundstart_messages[ROUNDSTART_INFOKEY_MEMORIES] += span_info("The pin to your doors: <b>[pin]</b>")
 
 		setup_alt_job_items(wageslave, job, player_client) //PARIAH EDIT ADDITION
 
 	job.after_spawn(equipping, player_client)
 
+	if(equipping.mind)
+		SSticker.OnRoundstart(CALLBACK(equipping.mind, TYPE_PROC_REF(/datum/mind, give_roundstart_message)))
 
 /datum/controller/subsystem/job/proc/handle_auto_deadmin_roles(client/C, rank)
 	if(!C?.holder)
@@ -662,7 +672,8 @@ SUBSYSTEM_DEF(job)
 	var/ssc = CONFIG_GET(number/security_scaling_coeff)
 	if(ssc > 0)
 		if(J.spawn_positions > 0)
-			var/officer_positions = min(12, max(J.spawn_positions, round(unassigned.len / ssc))) //Scale between configured minimum and 12 officers
+			//Scale between configured minimum and 12 officers
+			var/officer_positions = clamp(round(unassigned.len / ssc), J.spawn_positions, 12)
 			JobDebug("Setting open security officer positions to [officer_positions]")
 			J.total_positions = officer_positions
 			J.spawn_positions = officer_positions
@@ -672,13 +683,12 @@ SUBSYSTEM_DEF(job)
 	if(equip_needed < 0) // -1: infinite available slots
 		equip_needed = 12
 
-	for(var/i=equip_needed-5, i>0, i--)
-		if(GLOB.secequipment.len)
-			var/spawnloc = GLOB.secequipment[1]
-			new /obj/structure/closet/secure_closet/security/sec(spawnloc)
-			GLOB.secequipment -= spawnloc
-		else //We ran out of spare locker spawns!
-			break
+	for(var/i in equip_needed to 1 step -1)
+		if(!GLOB.secequipment.len)
+			break //We ran out of spare locker spawns!
+
+		var/turf/spawnloc = pick_n_take(GLOB.secequipment)
+		new /obj/structure/closet/secure_closet/security/sec(spawnloc)
 
 /datum/controller/subsystem/job/proc/HandleFeedbackGathering()
 	for(var/datum/job/job as anything in joinable_occupations)
@@ -824,13 +834,13 @@ SUBSYSTEM_DEF(job)
 ///////////////////////////////////
 //Keeps track of all living heads//
 ///////////////////////////////////
-/datum/controller/subsystem/job/proc/get_living_heads(management_only)
+/datum/controller/subsystem/job/proc/get_living_heads(federation_only)
 	. = list()
 	for(var/mob/living/carbon/human/player as anything in GLOB.human_list)
 		if(player.stat == DEAD || !player.mind?.assigned_role)
 			continue
 
-		if(management_only && (player.mind.assigned_role.departments_bitflags & DEPARTMENT_BITFLAG_MANAGEMENT))
+		if(federation_only && (player.mind.assigned_role.departments_bitflags & DEPARTMENT_BITFLAG_FEDERATION))
 			. += player.mind
 
 		else if ((player.mind.assigned_role.departments_bitflags & DEPARTMENT_BITFLAG_COMPANY_LEADER))
@@ -839,28 +849,28 @@ SUBSYSTEM_DEF(job)
 ////////////////////////////
 //Keeps track of all heads//
 ////////////////////////////
-/datum/controller/subsystem/job/proc/get_all_heads(management_only)
+/datum/controller/subsystem/job/proc/get_all_heads(federation_only)
 	. = list()
 	for(var/mob/living/carbon/human/player as anything in GLOB.human_list)
 		if(!player.mind?.assigned_role)
 			continue
 
-		if(management_only && (player.mind.assigned_role.departments_bitflags & DEPARTMENT_BITFLAG_MANAGEMENT))
+		if(federation_only && (player.mind.assigned_role.departments_bitflags & DEPARTMENT_BITFLAG_FEDERATION))
 			. += player.mind
 
 		else if ((player.mind.assigned_role.departments_bitflags & DEPARTMENT_BITFLAG_COMPANY_LEADER))
 			. += player.mind
 
 /////////////////////////////////
-//Keeps track of all management//
+//Keeps track of all Federation members//
 /////////////////////////////////
-/datum/controller/subsystem/job/proc/get_all_management(management_only)
+/datum/controller/subsystem/job/proc/get_all_federation()
 	. += list()
 	for(var/mob/living/carbon/human/player as anything in GLOB.human_list)
 		if(!player.mind?.assigned_role)
 			continue
 
-		if(player.mind.assigned_role.departments_bitflags & DEPARTMENT_BITFLAG_MANAGEMENT)
+		if(player.mind.assigned_role.departments_bitflags & DEPARTMENT_BITFLAG_FEDERATION)
 			. += player.mind
 
 //////////////////////////////////////////////
@@ -899,7 +909,7 @@ SUBSYSTEM_DEF(job)
 
 /obj/item/paper/fluff/spare_id_safe_code/Initialize(mapload)
 	. = ..()
-	var/safe_code = SSid_access.spare_id_safe_code
+	var/safe_code = SSid_access.get_static_pincode(PINCODE_SPARE_ID_SAFE, 5)
 
 	info = "Captain's Spare ID safe code combination: [safe_code ? safe_code : "\[REDACTED\]"]<br><br>The spare ID can be found in its dedicated safe on the bridge.<br><br>If your job would not ordinarily have Head of Staff access, your ID card has been specially modified to possess it."
 	update_appearance()
@@ -910,16 +920,12 @@ SUBSYSTEM_DEF(job)
 
 /obj/item/paper/fluff/emergency_spare_id_safe_code/Initialize(mapload)
 	. = ..()
-	var/safe_code = SSid_access.spare_id_safe_code
+	var/safe_code = SSid_access.get_static_pincode(PINCODE_SPARE_ID_SAFE, 5)
 
 	info = "Captain's Spare ID safe code combination: [safe_code ? safe_code : "\[REDACTED\]"]<br><br>The spare ID can be found in its dedicated safe on the bridge."
 	update_appearance()
 
 /datum/controller/subsystem/job/proc/promote_to_captain(mob/living/carbon/human/new_captain, acting_captain = FALSE)
-	var/id_safe_code = SSid_access.spare_id_safe_code
-
-	if(!id_safe_code)
-		CRASH("Cannot promote [new_captain.real_name] to Captain, there is no id_safe_code.")
 
 	var/paper = new /obj/item/paper/fluff/spare_id_safe_code()
 	var/list/slots = list(
@@ -939,8 +945,8 @@ SUBSYSTEM_DEF(job)
 	var/obj/item/id_slot = new_captain.get_item_by_slot(ITEM_SLOT_ID)
 	if(id_slot)
 		var/obj/item/card/id/id_card = id_slot.GetID(TRUE) || locate() in id_slot
-		if(id_card && !(ACCESS_MANAGEMENT in id_card.access))
-			id_card.add_access(ACCESS_MANAGEMENT)
+		if(id_card && !(ACCESS_FEDERATION in id_card.access))
+			id_card.add_access(ACCESS_FEDERATION)
 
 	assigned_captain = TRUE
 
@@ -1008,16 +1014,16 @@ SUBSYSTEM_DEF(job)
 	JobDebug("Assign Captain: Nobody signed up for captain. Pulling from users signed up for Command.")
 
 	// Okay nobody is signed up for captain, let's try something more drastic.
-	var/datum/job_department/management = get_department_type(/datum/job_department/command)
-	for(var/datum/job/management_job as anything in management.department_jobs)
+	var/datum/job_department/federation = get_department_type(/datum/job_department/command)
+	for(var/datum/job/federation_job as anything in federation.department_jobs)
 		for(var/level in level_order)
-			var/list/candidates = FindOccupationCandidates(management_job, level)
+			var/list/candidates = FindOccupationCandidates(federation_job, level)
 			if(!candidates.len)
 				continue
 
 			for(var/mob/dead/new_player/candidate as anything in candidates)
 				if(AssignRole(candidate, captain_job))
-					JobDebug("Assign Captain: Found captain from pool of management roles.")
+					JobDebug("Assign Captain: Found captain from pool of Federation roles.")
 					return TRUE
 
 	JobDebug("Assign Captain: Failed, no captain was found. DivideOccupations aborted.")

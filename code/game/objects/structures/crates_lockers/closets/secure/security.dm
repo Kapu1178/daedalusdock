@@ -184,7 +184,7 @@
 
 /obj/structure/closet/secure_closet/brig/genpop/examine(mob/user)
 	. = ..()
-	. += span_notice("<b>Right-click</b> with a Security-level ID to reset [src]'s registered ID.")
+	. += span_info("<b>Right-click</b> with a Security-level ID to reset [src]'s registered ID.")
 
 /obj/structure/closet/secure_closet/brig/genpop/attackby(obj/item/card/id/advanced/prisoner/used_id, mob/user, params)
 	. = ..()
@@ -250,7 +250,7 @@
 /obj/structure/closet/secure_closet/contraband/heads
 	anchored = TRUE
 	name = "Contraband Locker"
-	req_access = list(ACCESS_MANAGEMENT)
+	req_access = list(ACCESS_FEDERATION)
 
 /obj/structure/closet/secure_closet/armory1
 	name = "armory armor locker"

@@ -42,7 +42,7 @@ TYPEINFO_DEF(/obj/structure/tank_holder)
 		. += "It is holding one [tank]."
 	else
 		. += "It is empty."
-	. += span_notice("It is held together by some <b>screws</b>.")
+	. += span_info("It is held together by some <b>screws</b>.")
 
 /obj/structure/tank_holder/attackby(obj/item/W, mob/living/user, params)
 	if(user.combat_mode)

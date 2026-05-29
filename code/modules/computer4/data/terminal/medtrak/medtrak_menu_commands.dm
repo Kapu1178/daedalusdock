@@ -3,7 +3,7 @@
 
 /datum/shell_command/medtrak/home/quit/exec(datum/c4_file/terminal_program/operating_system/thinkdos/system, datum/c4_file/terminal_program/program, list/arguments, list/options)
 	system.println("Quitting...")
-	program.get_computer().unload_program(program)
+	system.unload_program(program)
 
 /datum/shell_command/medtrak/home/index
 	aliases = list("records", "1", "index", "view")
@@ -19,7 +19,7 @@
 	var/datum/c4_file/terminal_program/medtrak/medtrak = program
 	medtrak.await_input("Enter target Name, or ID.", CALLBACK(src, PROC_REF(search_input)))
 
-/datum/shell_command/medtrak/home/search/proc/search_input(datum/c4_file/terminal_program/medtrak/medtrak, datum/shell_stdin/stdin)
+/datum/shell_command/medtrak/home/search/proc/search_input(datum/c4_file/terminal_program/medtrak/medtrak, datum/parsed_cmdline/stdin)
 	var/search_text = stdin.raw
 	if(isnull(search_text))
 		medtrak.view_home()
@@ -47,12 +47,12 @@
 			var/i
 			for(var/datum/data/record/found_record as anything in results)
 				i++
-				out += "<b>\[[fit_with_zeros("[i]", 3)]\]</b> [found_record.fields[DATACORE_ID]]: [found_record.fields[DATACORE_NAME]]"
+				out += "[ANSI_WRAP_BOLD("\[[fit_with_zeros("[i]", 3)]\]")] [found_record.fields[DATACORE_ID]]: [found_record.fields[DATACORE_NAME]]"
 
-			medtrak.await_input(jointext(out, "<br>"), CALLBACK(src, PROC_REF(fulfill_search), results))
+			medtrak.await_input(jointext(out, "\n"), CALLBACK(src, PROC_REF(fulfill_search), results))
 			return
 
-/datum/shell_command/medtrak/home/search/proc/fulfill_search(list/results, datum/c4_file/terminal_program/medtrak/medtrak, datum/shell_stdin/stdin)
+/datum/shell_command/medtrak/home/search/proc/fulfill_search(list/results, datum/c4_file/terminal_program/medtrak/medtrak, datum/parsed_cmdline/stdin)
 	var/number = text2num(ckey(stdin.raw))
 	if(isnull(number) || !(number in 1 to length(results)))
 		medtrak.view_home()

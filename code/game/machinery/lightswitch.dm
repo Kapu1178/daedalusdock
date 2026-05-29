@@ -1,7 +1,13 @@
+TYPEINFO_DEF(/obj/item/wallframe/light_switch)
+	default_materials = list(
+		/datum/material/iron = 200,
+		/datum/material/glass = 200,
+	)
+
 /obj/item/wallframe/light_switch
 	name = "light switch frame"
-	icon = 'modular_pariah/modules/aesthetics/lightswitch/icons/lightswitch.dmi'
-	icon_state = "lightswitch_frame"
+	icon = /obj/machinery/light_switch::icon
+	icon_state = /obj/machinery/light_switch::icon_state
 	result_path = /obj/machinery/light_switch
 	pixel_shift = 26
 
@@ -27,10 +33,10 @@
 DEFINE_INTERACTABLE(/obj/machinery/light_switch)
 /obj/machinery/light_switch
 	name = "light switch"
-	icon = 'modular_pariah/modules/aesthetics/lightswitch/icons/lightswitch.dmi'
+	icon = 'icons/obj/machines/buttons.dmi'
 	icon_state = "lightswitch-base"
 	base_icon_state = "lightswitch"
-	desc = "Make dark."
+	desc = "A binary power switch."
 	power_channel = AREA_USAGE_LIGHT
 	use_power = NO_POWER_USE
 	zmm_flags = ZMM_MANGLE_PLANES
@@ -40,7 +46,7 @@ DEFINE_INTERACTABLE(/obj/machinery/light_switch)
 	var/area/area = null
 	var/has_wires = TRUE
 
-MAPPING_DIRECTIONAL_HELPERS(/obj/machinery/light_switch, 26)
+MAPPING_DIRECTIONAL_HELPERS_ROBUST_INVERSE_DIR(/obj/machinery/light_switch, 28, -20, 21, -21)
 
 /obj/machinery/light_switch/Initialize(mapload)
 	. = ..()
@@ -141,12 +147,12 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/machinery/light_switch, 26)
 	. = ..()
 	if(panel_open)
 		if(has_wires)
-			. += span_notice("The wires are visible and could be <i>screwed</i> in place.")
+			. += span_info("The wires are visible and could be <i>screwed</i> in place.")
 		else
-			. += span_notice("The circuitry needs to be <i>wired</i> to be functional.")
+			. += span_info("The circuitry needs to be <i>wired</i> to be functional.")
 		return .
 
-	. += span_notice("It is in the [area.lightswitch ? "on" : "off"] position.")
+	. += span_info("It is in the [area.lightswitch ? "on" : "off"] position.")
 
 /obj/machinery/light_switch/interact(mob/user)
 	. = ..()
@@ -163,7 +169,7 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/machinery/light_switch, 26)
 			did_anything = set_lights(!area.lightswitch)
 
 	if(did_anything)
-		playsound(src, 'modular_pariah/modules/aesthetics/lightswitch/sound/lightswitch.ogg', 100, 1)
+		playsound(src, 'sound/machines/lightswitch.ogg', 100, 1)
 
 	return TRUE
 

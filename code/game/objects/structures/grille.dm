@@ -53,9 +53,9 @@ TYPEINFO_DEF(/obj/structure/grille)
 /obj/structure/grille/examine(mob/user)
 	. = ..()
 	if(anchored)
-		. += span_notice("It's secured in place with <b>screws</b>. The rods look like they could be <b>cut</b> through.")
+		. += span_info("It's secured in place with <b>screws</b>. The rods look like they could be <b>cut</b> through.")
 	if(!anchored)
-		. += span_notice("The anchoring screws are <i>unscrewed</i>. The rods look like they could be <b>cut</b> through.")
+		. += span_info("The anchoring screws are <i>unscrewed</i>. The rods look like they could be <b>cut</b> through.")
 
 /obj/structure/grille/rcd_vals(mob/user, obj/item/construction/rcd/the_rcd)
 	switch(the_rcd.mode)
@@ -147,7 +147,7 @@ TYPEINFO_DEF(/obj/structure/grille)
 	if(!. && istype(mover, /obj/projectile))
 		return prob(30)
 
-/obj/structure/grille/CanAStarPass(to_dir, datum/can_pass_info/pass_info)
+/obj/structure/grille/CanAStarPass(to_dir, datum/can_pass_info/pass_info, leaving)
 	if(!density)
 		return TRUE
 

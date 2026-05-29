@@ -30,6 +30,7 @@ GLOBAL_LIST_INIT(sandstone_recipes, list ( \
 
 /obj/item/stack/sheet/mineral
 	abstract_type = /obj/item/stack/sheet/mineral
+	hitsound = 'sound/weapons/attack/metal_sheet_hit.ogg'
 
 /obj/item/stack/sheet/mineral/sandstone
 	name = "sandstone bricks"
@@ -155,7 +156,7 @@ GLOBAL_LIST_INIT(uranium_recipes, list ( \
 	singular_name = "plasma sheet"
 	sheettype = "plasma"
 	resistance_flags = FLAMMABLE
-	max_integrity = 100
+	max_integrity = 30
 	mats_per_unit = list(/datum/material/plasma=MINERAL_MATERIAL_AMOUNT)
 	grind_results = list(/datum/reagent/toxin/plasma = 20)
 	point_value = 20

@@ -95,7 +95,7 @@
 	refill()
 
 	if(edible)
-		AddComponent(/datum/component/edible, bite_consumption = reagents.total_volume / (charges_left / 5), after_eat = CALLBACK(src, PROC_REF(after_eat)))
+		AddComponent(/datum/component/edible, bite_consumption = reagents.total_volume / (charges_left / 5), after_eat = CALLBACK(src, PROC_REF(after_eat)), initial_reagents = reagent_contents)
 
 /// Used for edible component to reduce charges_left on bite.
 /obj/item/toy/crayon/proc/after_eat(mob/user)
@@ -719,7 +719,7 @@ TYPEINFO_DEF(/obj/item/storage/crayons)
 		. += "It has [charges_left] use\s left."
 	else
 		. += "It is empty."
-	. += span_notice("Alt-click [src] to [ is_capped ? "take the cap off" : "put the cap on"]. Right-click a colored object to match its existing color.")
+	. += span_info("Alt-click [src] to [ is_capped ? "take the cap off" : "put the cap on"]. Right-click a colored object to match its existing color.")
 
 /obj/item/toy/crayon/spraycan/can_use_on(atom/target, mob/user, list/modifiers)
 	if(iscarbon(target))

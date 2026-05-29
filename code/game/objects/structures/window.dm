@@ -69,22 +69,35 @@ TYPEINFO_DEF(/obj/structure/window)
 	if (flags_1 & ON_BORDER_1)
 		AddElement(/datum/element/connect_loc, loc_connections)
 
+	register_context()
+
+/obj/structure/window/add_context(atom/source, list/context, obj/item/held_item, mob/user)
+	if(!isliving(user))
+		return
+
+	if(held_item || astype(user, /mob/living).combat_mode)
+		return
+
+	context[SCREENTIP_CONTEXT_LMB] = "Knock"
+	return CONTEXTUAL_SCREENTIP_SET
+
+
 /obj/structure/window/examine(mob/user)
 	. = ..()
 	if(reinf)
 		if(anchored && state == WINDOW_SCREWED_TO_FRAME)
-			. += span_notice("The window is <b>bolted</b> to the frame.")
+			. += span_info("The window is <b>bolted</b> to the frame.")
 		else if(anchored && state == WINDOW_IN_FRAME)
-			. += span_notice("The window is <i>unbolted</i> but still <b>pried</b> into the frame.")
+			. += span_info("The window is <i>unbolted</i> but still <b>pried</b> into the frame.")
 		else if(anchored && state == WINDOW_OUT_OF_FRAME)
-			. += span_notice("The window is out of the frame, but could be <i>pried</i> in. It is <b>screwed</b> to the floor.")
+			. += span_info("The window is out of the frame, but could be <i>pried</i> in. It is <b>screwed</b> to the floor.")
 		else if(!anchored)
-			. += span_notice("The window is <i>unscrewed</i> from the floor, and could be deconstructed by <b>wrenching</b>.")
+			. += span_info("The window is <i>unscrewed</i> from the floor, and could be deconstructed by <b>wrenching</b>.")
 	else
 		if(anchored)
-			. += span_notice("The window is <b>screwed</b> to the floor.")
+			. += span_info("The window is <b>screwed</b> to the floor.")
 		else
-			. += span_notice("The window is <i>unscrewed</i> from the floor, and could be deconstructed by <b>wrenching</b>.")
+			. += span_info("The window is <i>unscrewed</i> from the floor, and could be deconstructed by <b>wrenching</b>.")
 
 /obj/structure/window/disco_flavor(mob/living/carbon/human/user, nearby = FALSE, is_station_level = FALSE)
 	. = ..()
@@ -328,7 +341,7 @@ TYPEINFO_DEF(/obj/structure/window)
 	return TRUE
 
 
-/obj/structure/window/take_damage(damage_amount, damage_type = BRUTE, damage_flag = 0, sound_effect = 1)
+/obj/structure/window/take_damage(damage_amount, damage_type = BRUTE, damage_flag = 0, sound_effect = 1, armor_penetration = 0, allow_break = TRUE)
 	var/initial_damage_percentage = get_integrity_percentage()
 	. = ..()
 	if(.) //received damage
@@ -449,11 +462,15 @@ TYPEINFO_DEF(/obj/structure/window)
 /obj/structure/window/get_dumping_location()
 	return null
 
-/obj/structure/window/CanAStarPass(to_dir, datum/can_pass_info/pass_info)
+/obj/structure/window/CanAStarPass(to_dir, datum/can_pass_info/pass_info, leaving)
 	if(!density)
 		return TRUE
+
+	if(fulltile && leaving)
+		return TRUE
+
 	if(fulltile || (dir == to_dir))
-		return FALSE
+		return pass_info && (pass_info.pass_flags & pass_flags_self)
 
 	return TRUE
 

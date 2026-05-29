@@ -91,7 +91,7 @@ TYPEINFO_DEF(/obj/item/clothing/suit/space/hardsuit)
 /obj/item/clothing/suit/space/hardsuit/examine(mob/user)
 	. = ..()
 	if(!helmet && helmettype)
-		. += span_notice("The helmet on [src] seems to be malfunctioning. Its light bulb needs to be replaced.")
+		. += span_info("The helmet on [src] seems to be malfunctioning. Its light bulb needs to be replaced.")
 
 /obj/item/clothing/suit/space/hardsuit/attackby(obj/item/I, mob/user, params)
 	if(istype(I, /obj/item/light) && helmettype)

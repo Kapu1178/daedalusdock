@@ -21,9 +21,9 @@
 
 /obj/item/mcobject/messaging/signal_builder/examine(mob/user)
 	. = ..()
-	. += span_notice("Current buffer contents: [sanitize(buffer)]")
-	. += span_notice("Current leading string: [sanitize(start_str)]")
-	. += span_notice("Current trailing string: [sanitize(end_str)]")
+	. += span_info("Current buffer contents: [sanitize(buffer)]")
+	. += span_info("Current leading string: [sanitize(start_str)]")
+	. += span_info("Current trailing string: [sanitize(end_str)]")
 
 /obj/item/mcobject/messaging/signal_builder/proc/set_prefix(datum/mcmessage/input)
 	start_str = input.cmd

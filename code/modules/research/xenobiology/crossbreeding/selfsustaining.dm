@@ -58,7 +58,7 @@ Self-sustaining extracts:
 /obj/item/autoslime/examine(mob/user)
 	. = ..()
 	if(effect_desc)
-		. += span_notice("[effect_desc]")
+		. += span_info("[effect_desc]")
 
 //Different types.
 

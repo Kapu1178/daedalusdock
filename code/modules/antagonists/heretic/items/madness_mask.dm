@@ -18,8 +18,8 @@
 /obj/item/clothing/mask/madness_mask/examine(mob/user)
 	. = ..()
 	if(IS_HERETIC_OR_MONSTER(user))
-		. += span_notice("Actively drains the sanity and stamina of nearby non-heretics when worn.")
-		. += span_notice("If forced onto the face of a non-heretic, they will be unable to remove it willingly.")
+		. += span_info("Actively drains the sanity and stamina of nearby non-heretics when worn.")
+		. += span_info("If forced onto the face of a non-heretic, they will be unable to remove it willingly.")
 	else
 		. += span_danger("The eyes fill you with dread... You best avoid it.")
 

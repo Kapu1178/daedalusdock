@@ -14,7 +14,7 @@ DEFINE_INTERACTABLE(/obj/item)
 	///the icon to indicate this object is being dragged
 	mouse_drag_pointer = MOUSE_ACTIVE_POINTER
 
-	max_integrity = 200
+	max_integrity = 10
 	obj_flags = NONE
 	pass_flags = PASSTABLE
 
@@ -109,6 +109,9 @@ DEFINE_INTERACTABLE(/obj/item)
 	var/combat_mode_force_attack = FALSE
 	/// If set to FALSE, interact_with_atom will not be called when the user has combat mode on.
 	var/has_combat_mode_interaction = FALSE
+
+	/// The type of special attack this item uses, if any.
+	var/special_attack_type
 
 	///Sound played when you hit something with the item
 	var/hitsound
@@ -808,6 +811,25 @@ DEFINE_INTERACTABLE(/obj/item)
 		block_sound = pick('sound/weapons/block/block1.ogg', 'sound/weapons/block/block2.ogg', 'sound/weapons/block/block3.ogg')
 	playsound(wielder, block_sound, 70, TRUE)
 
+/// Passed flags that describe what happened in the exchange.
+/obj/item/proc/play_combat_sound(combat_result)
+	switch(combat_result)
+		if(MOB_ATTACKEDBY_SUCCESS)
+			playsound(loc, get_hitsound(), get_clamped_volume(), TRUE, extrarange = stealthy_audio ? SILENCED_SOUND_EXTRARANGE : -1, falloff_distance = 0)
+			return TRUE
+
+		if(MOB_ATTACKEDBY_MISS)
+			playsound(loc, get_misssound(), 30, TRUE, extrarange = stealthy_audio ? SILENCED_SOUND_EXTRARANGE : -1)
+			return TRUE
+
+		if(MOB_ATTACKEDBY_NO_DAMAGE)
+			playsound(loc, 'sound/weapons/tap.ogg', 50, TRUE, -1)
+			return TRUE
+
+		//if(MOB_ATTACKEDBY_BLOCKED) blocking usually already plays a sound.
+
+	return FALSE
+
 /obj/item/proc/talk_into(mob/M, input, channel, spans, datum/language/language, list/message_mods)
 	if(isnull(language))
 		language = M?.get_selected_language()
@@ -1049,8 +1071,8 @@ DEFINE_INTERACTABLE(/obj/item)
  *The default action is attack_self().
  *Checks before we get to here are: mob is alive, mob is not restrained, stunned, asleep, resting, laying, item is on the mob.
  */
-/obj/item/proc/ui_action_click(mob/user, actiontype)
-	if(SEND_SIGNAL(src, COMSIG_ITEM_UI_ACTION_CLICK, user, actiontype) & COMPONENT_ACTION_HANDLED)
+/obj/item/proc/ui_action_click(mob/user, datum/action/item_action/used_action)
+	if(SEND_SIGNAL(src, COMSIG_ITEM_UI_ACTION_CLICK, user, used_action) & COMPONENT_ACTION_HANDLED)
 		return
 
 	attack_self(user)
@@ -1063,6 +1085,10 @@ DEFINE_INTERACTABLE(/obj/item)
 		return SLASH
 
 	return BLUNT
+
+/// Returns a special attack datum if applicable.
+/obj/item/proc/get_special_attack()
+	return GLOB.special_attacks[special_attack_type]
 
 ///This proc determines if and at what an object will reflect energy projectiles if it's in l_hand,r_hand or wear_suit
 /obj/item/proc/IsReflect(def_zone)
@@ -1438,7 +1464,7 @@ DEFINE_INTERACTABLE(/obj/item)
 	delay *= toolspeed * skill_modifier
 
 	if(delay && iscarbon(user) && user.stats.cooldown_finished("use_tool")) // Fuck borgs!!!
-		var/datum/roll_result/result = user.stat_roll(7, /datum/rpg_skill/handicraft)
+		var/datum/roll_result/result = user.stat_roll(7, /datum/rpg_skill/fine_motor)
 		switch(result.outcome)
 			if(CRIT_SUCCESS)
 				result.do_skill_sound(user)
@@ -1706,7 +1732,16 @@ DEFINE_INTERACTABLE(/obj/item)
 
 // Update icons if this is being carried by a mob
 /obj/item/wash(clean_types)
+	var/was_bloody = !!blood_DNA_length()
 	. = ..()
+
+	var/datum/component/hidden_blood/hidden_blood = GetComponent(/datum/component/hidden_blood)
+	if(clean_types & CLEAN_TYPE_HIDDEN_BLOOD)
+		if(hidden_blood)
+			qdel(hidden_blood)
+
+	else if(!hidden_blood && was_bloody && !blood_DNA_length()) // Blood was removed
+		AddComponent(/datum/component/hidden_blood)
 
 	if(equipped_to)
 		if(equipped_to.is_holding(src))
@@ -1764,6 +1799,10 @@ DEFINE_INTERACTABLE(/obj/item)
 	pickup_animation.layer = ABOVE_MOB_LAYER
 	pickup_animation.transform.Scale(0.75)
 	pickup_animation.appearance_flags = APPEARANCE_UI_IGNORE_ALPHA
+	pickup_animation.maptext = null
+
+	// Preventing overlay lighting images from stacking during pickup animations.
+	remove_lighting_underlays(pickup_animation)
 
 	var/direction = get_dir(source, target)
 	var/to_x = target.base_pixel_x
@@ -1963,7 +2002,7 @@ DEFINE_INTERACTABLE(/obj/item)
 
 /// Returns the sound the item makes when used as a weapon, but missing.
 /obj/item/proc/get_misssound()
-	. = src.miss_sound
+	. = miss_sound
 	if(islist(.))
 		. = pick(miss_sound)
 	else if(isnull(.))
@@ -2002,3 +2041,7 @@ DEFINE_INTERACTABLE(/obj/item)
 	if(!isnull(loc))
 		SEND_SIGNAL(loc, COMSIG_ATOM_CONTENTS_WEIGHT_CLASS_CHANGED, src, old_w_class, new_w_class)
 	return TRUE
+
+/// Called by the attack chain, returns the item to use for attacking. CAN NOT RETURN NULL.
+/obj/item/proc/get_attacking_item(mob/living/user, atom/target) as /obj/item
+	return src

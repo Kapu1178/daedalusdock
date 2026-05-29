@@ -6,7 +6,7 @@
 	var/obj/item/peripheral/network_card/wireless/adapter = probe.get_adapter()
 
 	if(!adapter)
-		system.println("<b>Error:</b> No network adapter found.")
+		system.println("[ANSI_WRAP_BOLD("Error:")] No network adapter found.")
 		return
 
 	if(adapter.ping())
@@ -18,7 +18,7 @@
 /datum/shell_command/probe_cmd/view/exec(datum/c4_file/terminal_program/operating_system/thinkdos/system, datum/c4_file/terminal_program/program, list/arguments, list/options)
 	var/datum/c4_file/terminal_program/probe/probe = program
 	if(!length(probe.ping_replies))
-		system.println("<b>Error:</b> No replies found.")
+		system.println("[ANSI_WRAP_BOLD("Error:")] No replies found.")
 		return
 
 	var/list/out = list("Reply list:")
@@ -29,21 +29,20 @@
 
 		out += "\[[reply_netclass]\]-TYPE: [reply_id]"
 
-	system.println(jointext(out, "<br>"))
+	system.println(jointext(out, "\n"))
 
 /datum/shell_command/probe_cmd/quit
 	aliases = list("quit", "q")
 
 /datum/shell_command/probe_cmd/quit/exec(datum/c4_file/terminal_program/operating_system/thinkdos/system, datum/c4_file/terminal_program/program, list/arguments, list/options)
-	var/obj/machinery/computer4/computer = system.get_computer()
 	var/force = !!length(options & list("f", "force"))
 
 	if(force)
 		system.println("Quitting...")
-		computer.unload_program(program)
+		system.unload_program(program)
 		return
 
-	if(computer.try_background_program(program))
+	if(system.try_background_program(program))
 		system.println("Moved [program.name] to background processes.")
 	else
-		system.println("<b>Error: RAM is full.</b>")
+		system.println("[ANSI_WRAP_BOLD("Error: RAM is full.")]")

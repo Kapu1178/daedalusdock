@@ -94,6 +94,13 @@
 	ammo_type = list(/obj/item/ammo_casing/energy/mindflayer)
 	ammo_x_offset = 2
 
+TYPEINFO_DEF(/obj/item/gun/energy/plasmacutter)
+	default_materials = list(
+		/datum/material/iron = 1500,
+		/datum/material/glass = 500,
+		/datum/material/plasma = 400
+	)
+
 /obj/item/gun/energy/plasmacutter
 	name = "plasma cutter"
 	desc = "A mining tool capable of expelling concentrated plasma bursts. You could use it to cut limbs off xenos! Or, you know, mine stuff."
@@ -123,7 +130,7 @@
 /obj/item/gun/energy/plasmacutter/examine(mob/user)
 	. = ..()
 	if(cell)
-		. += span_notice("[src] is [round(cell.percent())]% charged.")
+		. += span_info("[src] is [round(cell.percent())]% charged.")
 
 /obj/item/gun/energy/plasmacutter/attackby(obj/item/I, mob/user)
 	var/charge_multiplier = 0 //2 = Refined stack, 1 = Ore
@@ -206,7 +213,7 @@
 
 /obj/item/gun/energy/wormhole_projector/examine(mob/user)
 	. = ..()
-	. += span_notice("<b>Left-click</b> to fire blue wormholes and <b><font color=orange>right-click</font></b> to fire orange wormholes.")
+	. += span_info("<b>Left-click</b> to fire blue wormholes and <b><font color=orange>right-click</font></b> to fire orange wormholes.")
 
 /obj/item/gun/energy/wormhole_projector/attackby(obj/item/C, mob/user)
 	if(istype(C, /obj/item/assembly/signaler/anomaly/bluespace))
@@ -216,7 +223,7 @@
 		qdel(C)
 		return
 
-/obj/item/gun/energy/wormhole_projector/can_fire()
+/obj/item/gun/energy/wormhole_projector/can_fire(check_lockout = FALSE)
 	if(!firing_core)
 		return FALSE
 	return ..()
@@ -360,7 +367,7 @@
 		return
 	return ..()
 
-/obj/item/gun/energy/gravity_gun/can_fire()
+/obj/item/gun/energy/gravity_gun/can_fire(check_lockout = FALSE)
 	if(!firing_core)
 		return FALSE
 	return ..()

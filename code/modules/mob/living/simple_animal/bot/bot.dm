@@ -131,7 +131,7 @@
 		internal_radio.keyslot = new radio_key
 	internal_radio.subspace_transmission = TRUE
 	internal_radio.canhear_range = -1 // anything greater will have the bot broadcast the channel as if it were saying it out loud.
-	internal_radio.recalculateChannels()
+	internal_radio.recalculate_channels()
 
 	//Adds bot to the diagnostic HUD system
 	prepare_huds()
@@ -276,15 +276,15 @@
 			. += "[src]'s parts look very loose!"
 	else
 		. += "[src] is in pristine condition."
-	. += span_notice("Its maintenance panel is [bot_cover_flags & BOT_COVER_OPEN ? "open" : "closed"].")
+	. += span_info("Its maintenance panel is [bot_cover_flags & BOT_COVER_OPEN ? "open" : "closed"].")
 	. += span_info("You can use a <b>screwdriver</b> to [bot_cover_flags & BOT_COVER_OPEN ? "close" : "open"] it.")
 	if(bot_cover_flags & BOT_COVER_OPEN)
-		. += span_notice("Its control panel is [bot_cover_flags & BOT_COVER_LOCKED ? "locked" : "unlocked"].")
+		. += span_info("Its control panel is [bot_cover_flags & BOT_COVER_LOCKED ? "locked" : "unlocked"].")
 		var/is_sillycone = issilicon(user)
 		if(!(bot_cover_flags & BOT_COVER_EMAGGED) && (is_sillycone || user.Adjacent(src)))
 			. += span_info("Alt-click [is_sillycone ? "" : "or use your ID on "]it to [bot_cover_flags & BOT_COVER_LOCKED ? "un" : ""]lock its control panel.")
 	if(paicard)
-		. += span_notice("It has a pAI device installed.")
+		. += span_info("It has a pAI device installed.")
 		if(!(bot_cover_flags & BOT_COVER_OPEN))
 			. += span_info("You can use a <b>hemostat</b> to remove it.")
 
@@ -463,7 +463,7 @@
 	else if(message_mods[RADIO_EXTENSION] == MODE_DEPARTMENT)
 		internal_radio.talk_into(src, message, message_mods[RADIO_EXTENSION], spans, language, message_mods)
 		return REDUCE_RANGE
-	else if(message_mods[RADIO_EXTENSION] in GLOB.radiochannels)
+	else if(message_mods[RADIO_EXTENSION] in GLOB.radio_channel_to_frequency)
 		internal_radio.talk_into(src, message, message_mods[RADIO_EXTENSION], spans, language, message_mods)
 		return REDUCE_RANGE
 
@@ -628,7 +628,7 @@ Pass a positive integer as an argument to override a bot's default speed.
 
 	var/list/access = SSid_access.get_access_for_group(/datum/access_group/station/all)
 
-	set_path(jps_path_to(src, waypoint, max_distance=200, access = access.Copy(), diagonal_handling=DIAGONAL_REMOVE_ALL))
+	set_path(jps_path_to(src, waypoint, max_steps=200, access = access.Copy(), diagonal_handling=DIAGONAL_REMOVE_ALL))
 	calling_ai = invoker //Link the AI to the bot!
 	ai_waypoint = waypoint
 
@@ -844,12 +844,12 @@ Pass a positive integer as an argument to override a bot's default speed.
 // given an optional turf to avoid
 /mob/living/simple_animal/bot/proc/calc_path(turf/avoid)
 	check_bot_access()
-	set_path(jps_path_to(src, patrol_target, max_distance=120, access = access_card?.GetAccess(), exclude=avoid, diagonal_handling=DIAGONAL_REMOVE_ALL))
+	set_path(jps_path_to(src, patrol_target, max_steps=120, access = access_card?.GetAccess(), exclude=avoid, diagonal_handling=DIAGONAL_REMOVE_ALL))
 
 /mob/living/simple_animal/bot/proc/calc_summon_path(turf/avoid)
 	check_bot_access()
 	var/datum/callback/path_complete = CALLBACK(src, PROC_REF(on_summon_path_finish))
-	SSpathfinder.pathfind(src, summon_target, max_distance=150, access = access_card?.GetAccess(), exclude=avoid, diagonal_handling=DIAGONAL_REMOVE_ALL, on_finish = path_complete)
+	SSpathfinder.jps_pathfind(src, summon_target, max_steps=150, access = access_card?.GetAccess(), exclude=avoid, diagonal_handling=DIAGONAL_REMOVE_ALL, on_finish = path_complete)
 
 /mob/living/simple_animal/bot/proc/on_summon_path_finish(list/path)
 	set_path(path)

@@ -1,7 +1,10 @@
 /datum/job/clown
 	title = JOB_CLOWN
-	description = "Entertain the crew, make bad jokes, go on a holy quest to find bananium, HONK!"
+	description = "Entertain the crew, make horrible jokes, get beat up."
 	faction = FACTION_STATION
+
+	pinpad_key = "pantomime"
+
 	total_positions = 2
 	spawn_positions = 2
 	exp_granted_type = EXP_TYPE_CREW
@@ -46,6 +49,7 @@
 		return
 
 	spawned.apply_pref_name(/datum/preference/name/clown)
+	spawned.apply_status_effect(/datum/status_effect/skill_mod/entertainer)
 
 /datum/outfit/job/clown
 	name = "Clown"

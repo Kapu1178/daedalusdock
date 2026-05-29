@@ -38,12 +38,6 @@
 	/// Can't use tools on the machine
 	#define COMPONENT_CANT_USE_MACHINE_TOOLS (1<<1)
 
-///from obj/machinery/iv_drip/IV_attach(target, usr) : (attachee)
-#define COMSIG_IV_ATTACH "iv_attach"
-///from obj/machinery/iv_drip/IV_detach() : (detachee)
-#define COMSIG_IV_DETACH "iv_detach"
-
-
 // /obj/machinery/computer/teleporter
 /// from /obj/machinery/computer/teleporter/proc/set_target(target, old_target)
 #define COMSIG_TELEPORTER_NEW_TARGET "teleporter_new_target"
@@ -408,8 +402,6 @@
 #define COMSIG_ITEM_ATTACK_SECONDARY "item_pre_attack_secondary"
 ///from base of [obj/item/attack()]: (atom/target, mob/user, proximity_flag, list/modifiers)
 #define COMSIG_ITEM_AFTERATTACK "item_afterattack"
-///from base of obj/item/attack_qdeleted(): (atom/target, mob/user, params)
-#define COMSIG_ITEM_ATTACK_QDELETED "item_attack_qdeleted"
 
 ///from /obj/item/assembly/proc/pulsed()
 #define COMSIG_ASSEMBLY_PULSED "assembly_pulsed"

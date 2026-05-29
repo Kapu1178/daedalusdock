@@ -353,16 +353,18 @@ GLOBAL_VAR_INIT(normal_ooc_colour, "#002eb8")
 	set category = "OOC"
 	set desc = "View the last round end report you've seen"
 
-	SSticker.show_roundend_report(src, report_type = PERSONAL_LAST_ROUND)
+	SSticker.show_roundend_report(src, report_type = ROUNDEND_PERSONAL_LAST)
 
 /client/proc/show_servers_last_roundend_report()
 	set name = "Server's Last Round"
 	set category = "OOC"
 	set desc = "View the last round end report from this server"
 
-	SSticker.show_roundend_report(src, report_type = SERVER_LAST_ROUND)
+	SSticker.show_roundend_report(src, report_type = ROUNDEND_SERVER_LAST)
 
 /client/verb/fit_viewport()
+	set waitfor = FALSE
+
 	set name = "Fit Viewport"
 	set category = "OOC"
 	set desc = "Fit the width of the map window to match the viewport"
@@ -442,7 +444,7 @@ GLOBAL_VAR_INIT(normal_ooc_colour, "#002eb8")
 	if (!prefs.read_preference(/datum/preference/toggle/auto_fit_viewport))
 		return
 	if(fully_created)
-		INVOKE_ASYNC(src, .verb/fit_viewport)
+		fit_viewport()
 	else //Delayed to avoid wingets from Login calls.
 		addtimer(CALLBACK(src, .verb/fit_viewport, 1 SECONDS))
 
@@ -454,7 +456,7 @@ GLOBAL_VAR_INIT(normal_ooc_colour, "#002eb8")
 	//Collect keywords
 	var/list/keywords = mob.get_policy_keywords()
 	var/header = get_policy(POLICY_VERB_HEADER)
-	var/list/policytext = list(header,"<hr>")
+	var/list/policytext = list("<!DOCTYPE html> [header] <hr>")
 	var/anything = FALSE
 	for(var/keyword in keywords)
 		var/p = get_policy(keyword)

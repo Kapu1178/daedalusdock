@@ -18,7 +18,7 @@
 	. = ..()
 	if(copied)
 		return
-	. += span_notice("Right-click to tear off the carbon-copy (you must use both hands).")
+	. += span_info("Right-click to tear off the carbon-copy (you must use both hands).")
 
 /obj/item/paper/carbon/proc/removecopy(mob/living/user)
 	if(copied)

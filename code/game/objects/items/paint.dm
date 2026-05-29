@@ -31,8 +31,8 @@ TYPEINFO_DEF(/obj/item/paint_sprayer)
 /obj/item/paint_sprayer/examine(mob/user)
 	. = ..()
 
-	. += span_notice("It is configured to paint walls using <span style='color:[wall_color]'>[wall_color]</span> paint and trims using <span style='color:[stripe_color]'>[stripe_color]</span> paint.")
-	. += span_notice("Paint wall stripes by right clicking a wall.")
+	. += span_info("It is configured to paint walls using <span style='color:[wall_color]'>[wall_color]</span> paint and trims using <span style='color:[stripe_color]'>[stripe_color]</span> paint.")
+	. += span_info("Paint wall stripes by right clicking a wall.")
 
 /obj/item/paint_sprayer/update_overlays()
 	. = ..()
@@ -118,11 +118,10 @@ TYPEINFO_DEF(/obj/item/paint_sprayer)
 	inhand_icon_state = "paintcan"
 	w_class = WEIGHT_CLASS_NORMAL
 	resistance_flags = FLAMMABLE
-	max_integrity = 100
 
 /obj/item/paint_remover/examine(mob/user)
 	. = ..()
-	. += span_notice("Remove wall stripe paint by right-clicking a wall.")
+	. += span_info("Remove wall stripe paint by right-clicking a wall.")
 
 /obj/item/paint_remover/interact_with_atom(atom/interacting_with, mob/living/user, list/modifiers)
 	var/atom/target = interacting_with // Yes i am supremely lazy

@@ -234,8 +234,9 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 				preference_middleware.on_new_character(usr)
 
 			character_preview_view.update_body()
-
+			astype(usr, /mob/dead/new_player)?.npp?.update()
 			return TRUE
+
 		if ("rotate")
 			character_preview_view.dir = turn(character_preview_view.dir, -90)
 
@@ -351,7 +352,7 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 	return html_topic(href, href_list)
 
 /datum/preferences/proc/create_character_preview_view(mob/user)
-	character_preview_view = new(null, src, user.client)
+	character_preview_view = new(null, null, src, user.client)
 	character_preview_view.update_body()
 	character_preview_view.register_to_client(user.client)
 
@@ -419,7 +420,7 @@ INITIALIZE_IMMEDIATE(/atom/movable/screen/character_preview_view)
 
 	var/list/atom/movable/screen/subscreens = list()
 
-/atom/movable/screen/character_preview_view/Initialize(mapload, datum/preferences/preferences, client/client)
+/atom/movable/screen/character_preview_view/Initialize(mapload, datum/hud/hud, datum/preferences/preferences, client/client)
 	. = ..()
 
 	assigned_map = "character_preview_map"
@@ -435,7 +436,7 @@ INITIALIZE_IMMEDIATE(/atom/movable/screen/character_preview_view)
 		qdel(plane_master)
 
 	client?.clear_map(assigned_map)
-
+	client?.screen -= src
 	preferences?.character_preview_view = null
 
 	client = null

@@ -1,7 +1,6 @@
 /datum/job/station_engineer
 	title = JOB_STATION_ENGINEER
-	description = "Start the Supermatter, wire the solars, repair station hull \
-		and wiring damage."
+	description = "Maintain the colony's guts, turn up the thermostat if you don't get your way."
 	department_head = list(JOB_CHIEF_ENGINEER)
 	faction = FACTION_STATION
 	total_positions = 5
@@ -37,7 +36,7 @@
 		),
 	)
 
-	paycheck = PAYCHECK_MEDIUM
+	paycheck = PAYCHECK_ASSISTANT * 5
 	paycheck_department = ACCOUNT_ENG
 
 	liver_traits = list(TRAIT_ENGINEER_METABOLISM)
@@ -57,6 +56,10 @@
 	rpg_title = "Crystallomancer"
 	job_flags = JOB_ANNOUNCE_ARRIVAL | JOB_CREW_MANIFEST | JOB_EQUIP_RANK | JOB_CREW_MEMBER | JOB_NEW_PLAYER_JOINABLE | JOB_REOPEN_ON_ROUNDSTART_LOSS | JOB_ASSIGN_QUIRKS | JOB_CAN_BE_INTERN
 
+
+/datum/job/station_engineer/after_spawn(mob/living/spawned, client/player_client)
+	. = ..()
+	spawned.apply_status_effect(/datum/status_effect/skill_mod/engineer)
 
 /datum/outfit/job/engineer
 	name = "Station Engineer"

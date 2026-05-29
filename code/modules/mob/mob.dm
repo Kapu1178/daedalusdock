@@ -361,7 +361,8 @@
 
 	var/raw_msg = message
 	if(audible_message_flags & EMOTE_MESSAGE)
-		message = "<span class='emote'><b>[src]</b>[separation][message]</span>" //PARIAH EDIT - Better emotes
+		message = "<span class='emote'><b>[src]</b>[separation][message]</span>"
+
 	for(var/atom/movable/AM as anything in hearers)
 		if(istype(AM, /obj))
 			continue
@@ -604,7 +605,7 @@
 		if(examine_time && (world.time - examine_time < EXAMINE_MORE_WINDOW))
 			result = examinify.examine_more(src)
 			if(!length(result))
-				result += span_notice("<i>You examine [examinify] closer, but find nothing of interest...</i>")
+				result += span_notice("You examine [examinify] closer, but find nothing of interest.")
 		else
 			result = examinify.examine(src)
 			client.recent_examines[ref_to_atom] = world.time // set to when we last normal examine'd them
@@ -615,6 +616,7 @@
 	else
 		result = examinify.examine(src) // if a tree is examined but no client is there to see it, did the tree ever really exist?
 
+	list_clear_nulls(result)
 
 	if(result[length(result)] == "") // Pop off a trailing space
 		result.len -= 1
@@ -622,6 +624,9 @@
 	for(var/i in 1 to length(result) - 1)
 		if(!findtext(result[i], "<hr>"))
 			result[i] += "\n"
+
+	if(result[length(result)] == "<hr>")
+		result.len--
 
 	to_chat(src, "<div class='examine_block'><span class='infoplain'>[result.Join()]</span></div>") //PARIAH EDIT CHANGE
 	SEND_SIGNAL(src, COMSIG_MOB_EXAMINATE, examinify)
@@ -852,11 +857,11 @@
 
 ///Update the pulling hud icon
 /mob/proc/update_pull_hud_icon()
-	hud_used?.pull_icon?.update_appearance()
+	hud_used?.screen_objects?[HUDKEY_MOB_PULL].update_appearance()
 
 ///Update the resting hud icon
 /mob/proc/update_rest_hud_icon()
-	hud_used?.rest_icon?.update_appearance()
+	hud_used?.screen_objects?[HUDKEY_MOB_REST].update_appearance()
 
 /**
  * Verb to activate the object in your held hand
@@ -1095,6 +1100,9 @@
 /// Performs the actual ritual of swapping hands, such as setting the held index variables
 /mob/proc/perform_hand_swap(held_index)
 	PROTECTED_PROC(TRUE)
+	if(!length(held_items))
+		return
+
 	if(!held_index)
 		held_index = (active_hand_index % held_items.len) + 1
 
@@ -1105,10 +1113,10 @@
 	active_hand_index = held_index
 	if(hud_used)
 		var/atom/movable/screen/inventory/hand/held_location
-		held_location = hud_used.hand_slots["[previous_index]"]
+		held_location = hud_used.hand_slots[previous_index]
 		if(!isnull(held_location))
 			held_location.update_appearance()
-		held_location = hud_used.hand_slots["[held_index]"]
+		held_location = hud_used.hand_slots[held_index]
 		if(!isnull(held_location))
 			held_location.update_appearance()
 	return TRUE
@@ -1201,11 +1209,6 @@
 
 ///Can the mob interact() with an atom?
 /mob/proc/can_interact_with(atom/A)
-	if(istype(A, /atom/movable/screen))
-		var/atom/movable/screen/screen = A
-		if(screen.hud?.mymob ==src)
-			return TRUE
-
 	if(isAdminGhostAI(src) || Adjacent(A))
 		return TRUE
 
@@ -1492,7 +1495,7 @@
 	if(href_list[VV_HK_PLAYER_PANEL])
 		if(!check_rights(NONE))
 			return
-		usr.client.holder.show_player_panel(src)
+		usr.client.show_player_panel(src)
 	if(href_list[VV_HK_GODMODE])
 		if(!check_rights(R_ADMIN))
 			return

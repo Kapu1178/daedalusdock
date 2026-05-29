@@ -26,7 +26,7 @@
 	flags_1 = CONDUCT_1 | PREVENT_CONTENTS_EXPLOSION_1 // We detonate upon being exploded.
 	slot_flags = ITEM_SLOT_BELT
 	resistance_flags = FLAMMABLE
-	max_integrity = 40
+	max_integrity = 20
 	/// Bitfields which prevent the grenade from detonating if set. Includes ([GRENADE_DUD]|[GRENADE_USED])
 	var/dud_flags = NONE
 	///Is this grenade currently armed?
@@ -100,7 +100,7 @@
 		else
 			. += "\The [src] is set for instant detonation."
 	if (dud_flags & GRENADE_USED)
-		. += span_warning("It looks like [p_theyve()] already been used.")
+		. += span_alert("It looks like [p_theyve()] already been used.")
 
 /obj/item/grenade/attack_self(mob/user)
 	if(HAS_TRAIT(src, TRAIT_NODROP))

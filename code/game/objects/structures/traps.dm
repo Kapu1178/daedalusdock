@@ -48,7 +48,7 @@
 	if(user.mind && (user.mind in immune_minds))
 		return
 	if(get_dist(user, src) <= 1)
-		. += span_notice("You reveal [src]!")
+		. += span_info("You reveal [src]!")
 		flare()
 
 /obj/structure/trap/proc/flare()
@@ -156,7 +156,7 @@
 	radio = new(src)
 	radio.subspace_transmission = TRUE
 	radio.canhear_range = -1
-	radio.recalculateChannels()
+	radio.recalculate_channels()
 	spark_system = new
 	spark_system.set_up(4,1,src)
 	spark_system.attach(src)

@@ -2,7 +2,7 @@
 #define WELDER_FUEL_BURN_INTERVAL 9
 TYPEINFO_DEF(/obj/item/weldingtool)
 	default_armor = list(BLUNT = 0, PUNCTURE = 0, SLASH = 0, LASER = 0, ENERGY = 0, BOMB = 0, BIO = 0, FIRE = 100, ACID = 30)
-	default_materials = list(/datum/material/iron=70, /datum/material/glass=30)
+	default_materials = list(/datum/material/iron=70, /datum/material/glass=20)
 
 /obj/item/weldingtool
 	name = "welding tool"
@@ -155,21 +155,6 @@ TYPEINFO_DEF(/obj/item/weldingtool)
 		message_admins("[ADMIN_LOOKUPFLW(user)] set [key_name_admin(attacked_mob)] on fire with [src] at [AREACOORD(user)]")
 		log_game("[key_name(user)] set [key_name(attacked_mob)] on fire with [src] at [AREACOORD(user)]")
 
-/obj/item/weldingtool/attack_qdeleted(atom/attacked_atom, mob/user, proximity)
-	. = ..()
-	if(!proximity)
-		return
-
-	if(isOn())
-		handle_fuel_and_temps(1, user)
-
-		if(!QDELETED(attacked_atom) && isliving(attacked_atom)) // can't ignite something that doesn't exist
-			var/mob/living/attacked_mob = attacked_atom
-			if(attacked_mob.ignite_mob())
-				message_admins("[ADMIN_LOOKUPFLW(user)] set [key_name_admin(attacked_mob)] on fire with [src] at [AREACOORD(user)]")
-				log_game("[key_name(user)] set [key_name(attacked_mob)] on fire with [src] at [AREACOORD(user)]")
-
-
 /obj/item/weldingtool/attack_self(mob/user)
 	if(src.reagents.has_reagent(/datum/reagent/toxin/plasma))
 		message_admins("[ADMIN_LOOKUPFLW(user)] activated a rigged welder at [AREACOORD(user)].")
@@ -259,7 +244,7 @@ TYPEINFO_DEF(/obj/item/weldingtool)
 
 /obj/item/weldingtool/examine(mob/user)
 	. = ..()
-	. += span_notice("It contains [get_fuel()] unit\s of fuel out of [max_fuel].")
+	. += span_info("It contains [get_fuel()] unit\s of fuel out of [max_fuel].")
 
 /obj/item/weldingtool/get_temperature()
 	return welding * heat

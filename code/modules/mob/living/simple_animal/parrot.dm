@@ -182,7 +182,7 @@
 		if(ears)
 			ears.talk_into(src, message, message_mods[RADIO_EXTENSION], spans, language, message_mods)
 		return ITALICS | REDUCE_RANGE
-	else if(message_mods[RADIO_EXTENSION] in GLOB.radiochannels)
+	else if(message_mods[RADIO_EXTENSION] in GLOB.radio_channel_to_frequency)
 		if(ears)
 			ears.talk_into(src, message, message_mods[RADIO_EXTENSION], spans, language, message_mods)
 			return ITALICS | REDUCE_RANGE
@@ -239,8 +239,8 @@ GLOBAL_LIST_INIT(strippable_parrot_items, create_strippable_list(list(
 		switch (channel)
 			if (RADIO_CHANNEL_ENGINEERING)
 				channel_to_add = RADIO_TOKEN_ENGINEERING
-			if (RADIO_CHANNEL_COMMAND)
-				channel_to_add = RADIO_TOKEN_COMMAND
+			if (RADIO_CHANNEL_FEDERATION)
+				channel_to_add = RADIO_TOKEN_FEDERATION
 			if (RADIO_CHANNEL_SECURITY)
 				channel_to_add = RADIO_TOKEN_SECURITY
 			if (RADIO_CHANNEL_SCIENCE)
@@ -900,7 +900,6 @@ GLOBAL_LIST_INIT(strippable_parrot_items, create_strippable_list(list(
 	if(rounds_survived == longest_survival)
 		speak += pick("...[longest_survival].", "The things I've seen!", "I have lived many lives!", "What are you before me?")
 		desc += " Old as sin, and just as loud. Claimed to be [rounds_survived]."
-		speak_chance = 20 //His hubris has made him more annoying/easier to justify killing
 		add_atom_colour("#EEEE22", FIXED_COLOUR_PRIORITY)
 	else if(rounds_survived == longest_deathstreak)
 		speak += pick("What are you waiting for!", "Violence breeds violence!", "Blood! Blood!", "Strike me down if you dare!")

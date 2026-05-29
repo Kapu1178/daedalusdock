@@ -27,7 +27,7 @@ DEFINE_INTERACTABLE(/obj/machinery/light)
 	///The inner radius of the bulb's light, where it is at maximum brightness
 	var/bulb_inner_range = 1.8
 	///Basically the alpha of the emitted light source
-	var/bulb_power = 0.6
+	var/bulb_power = 0.8
 	///The falloff of the emitted light. Adjust until it looks good.
 	var/bulb_falloff = 1.85
 	///Default colour of the light.
@@ -256,16 +256,16 @@ DEFINE_INTERACTABLE(/obj/machinery/light)
 	switch(status)
 		if(LIGHT_OK)
 			if(!on)
-				. += span_notice("It is turned off.")
+				. += span_info("It is turned off.")
 		if(LIGHT_EMPTY)
-			. += span_notice("The [fitting] has been removed.")
+			. += span_info("The [fitting] has been removed.")
 		if(LIGHT_BURNED)
-			. += span_notice("The [fitting] is burnt out.")
+			. += span_info("The [fitting] is burnt out.")
 		if(LIGHT_BROKEN)
 			. += span_alert("The [fitting] has been smashed.")
 
 	if(cell)
-		. += span_notice("Its backup power charge meter reads: [round((cell.charge / cell.maxcharge) * 100, 0.1)]%.")
+		. += span_info("Its backup power charge meter reads: [round((cell.charge / cell.maxcharge) * 100, 0.1)]%.")
 
 	if(constant_flickering)
 		. += span_alert("The lighting ballast appears to be damaged, this could be fixed with a multitool.")

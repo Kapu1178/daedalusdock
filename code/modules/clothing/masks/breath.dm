@@ -28,7 +28,7 @@
 
 /obj/item/clothing/mask/breath/examine(mob/user)
 	. = ..()
-	. += span_notice("Alt-click [src] to adjust it.")
+	. += span_info("Alt-click [src] to adjust it.")
 
 /obj/item/clothing/mask/breath/medical
 	desc = "A close-fitting sterile mask that can be connected to an air supply."
@@ -39,8 +39,6 @@
 	equip_delay_other = 10
 
 /obj/item/clothing/mask/breath/vox
-	desc = "A close-fitting mask that can be connected to an air supply. This one's got an easily accessible feeding port to be more suitable for the Vox crewmembers."
+	desc = "A close-fitting mask that can be connected to an air supply."
 	name = "vox breath mask"
 	icon_state = "voxmask"
-	actions_types = list()
-	flags_cover = NONE

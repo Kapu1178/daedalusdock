@@ -8,7 +8,7 @@ GLOBAL_LIST_INIT(department_radio_keys, list(
 
 	// Department
 	MODE_KEY_DEPARTMENT = MODE_DEPARTMENT,
-	RADIO_KEY_COMMAND = RADIO_CHANNEL_COMMAND,
+	RADIO_KEY_FEDERATION = RADIO_CHANNEL_FEDERATION,
 	RADIO_KEY_SCIENCE = RADIO_CHANNEL_SCIENCE,
 	RADIO_KEY_MEDICAL = RADIO_CHANNEL_MEDICAL,
 	RADIO_KEY_ENGINEERING = RADIO_CHANNEL_ENGINEERING,
@@ -38,7 +38,7 @@ GLOBAL_LIST_INIT(department_radio_keys, list(
 
 	// Department
 	"р" = MODE_DEPARTMENT,
-	"с" = RADIO_CHANNEL_COMMAND,
+	"с" = RADIO_CHANNEL_FEDERATION,
 	"т" = RADIO_CHANNEL_SCIENCE,
 	"ь" = RADIO_CHANNEL_MEDICAL,
 	"у" = RADIO_CHANNEL_ENGINEERING,
@@ -210,7 +210,7 @@ GLOBAL_LIST_INIT(message_modes_stat_limits, list(
 		else
 			log_talk(message, LOG_SAY, forced_by = forced, custom_say_emote = message_mods[MODE_CUSTOM_SAY_EMOTE])
 
-	message = treat_message(message) // unfortunately we still need this
+	message = treat_message(message, is_visual_language = is_visual_language) // unfortunately we still need this
 
 	spans |= speech_span
 
@@ -277,6 +277,9 @@ GLOBAL_LIST_INIT(message_modes_stat_limits, list(
 		message = language.before_speaking(src, message)
 		if(isnull(message))
 			return FALSE
+
+	if(stat == CONSCIOUS)
+		last_words = message
 
 	send_speech(message, range, src, bubble_type, spans, language, message_mods)//roughly 58% of living/say()'s total cost
 
@@ -437,7 +440,7 @@ GLOBAL_LIST_INIT(message_modes_stat_limits, list(
  * message - The message to treat.
  * correct_grammar - Whether or not to capitalize the first letter and add punctuation.
  */
-/mob/living/proc/treat_message(message, correct_grammar = TRUE)
+/mob/living/proc/treat_message(message, correct_grammar = TRUE, is_visual_language = FALSE)
 	if(HAS_TRAIT(src, TRAIT_UNINTELLIGIBLE_SPEECH))
 		message = unintelligize(message)
 
@@ -449,6 +452,9 @@ GLOBAL_LIST_INIT(message_modes_stat_limits, list(
 		var/static/regex/ends_with_punctuation = regex("\[?!-.\]")
 		if((!client || client.prefs.read_preference(/datum/preference/toggle/auto_punctuation)) && !ends_with_punctuation.Find(message, length(message)))
 			message += "."
+
+	if(!is_visual_language && copytext_char(message, -2) == "!!")
+		message = uppertext(message)
 
 	return message
 

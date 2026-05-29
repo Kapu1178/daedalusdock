@@ -30,7 +30,7 @@
 
 /obj/machinery/stasis/examine(mob/user)
 	. = ..()
-	. += span_notice("Alt-click to [stasis_enabled ? "turn off" : "turn on"] the machine.")
+	. += span_info("Alt-click to [stasis_enabled ? "turn off" : "turn on"] the machine.")
 
 /obj/machinery/stasis/proc/play_power_sound()
 	var/_running = stasis_running()

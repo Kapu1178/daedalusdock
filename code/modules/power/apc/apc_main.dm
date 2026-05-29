@@ -5,6 +5,9 @@
 // may be opened to change power cell
 // three different channels (lighting/equipment/environ) - may each be set to on, off, or auto
 
+TYPEINFO_DEF(/obj/machinery/power/apc)
+	default_armor = list(BLUNT = 20, PUNCTURE = 20, SLASH = 0, LASER = 10, ENERGY = 100, BOMB = 30, BIO = 100, FIRE = 90, ACID = 50)
+
 DEFINE_INTERACTABLE(/obj/machinery/power/apc)
 /obj/machinery/power/apc
 	name = "area power controller"
@@ -63,7 +66,7 @@ DEFINE_INTERACTABLE(/obj/machinery/power/apc)
 	///Is the AI locked from using the APC
 	var/aidisabled = FALSE
 	///Reference to our cable terminal
-	var/obj/machinery/power/terminal/datanet/terminal = null
+	var/obj/machinery/power/terminal/terminal = null
 	///Amount of power used by the lighting channel
 	var/lastused_light = 0
 	///Amount of power used by the equipment channel
@@ -112,13 +115,9 @@ DEFINE_INTERACTABLE(/obj/machinery/power/apc)
 	/// Offsets the object by APC_PIXEL_OFFSET (defined in apc_defines.dm) pixels in the direction we want it placed in. This allows the APC to be embedded in a wall, yet still inside an area (like mapping).
 	var/offset_old
 
-GLOBAL_REAL_VAR(default_apc_armor) = list(BLUNT = 20, PUNCTURE = 20, SLASH = 0, LASER = 10, ENERGY = 100, BOMB = 30, BIO = 100, FIRE = 90, ACID = 50)
-
 /obj/machinery/power/apc/New(turf/loc, ndir, building=0)
 	if(!req_access)
 		req_access = list(ACCESS_ENGINE_EQUIP)
-	if(!armor)
-		armor = global.default_apc_armor
 	..()
 	SET_TRACKING(__TYPE__)
 
@@ -589,6 +588,9 @@ GLOBAL_REAL_VAR(default_apc_armor) = list(BLUNT = 20, PUNCTURE = 20, SLASH = 0, 
 
 /obj/machinery/power/apc/proc/report()
 	return "[area.name] : [equipment]/[lighting]/[environ] ([lastused_total]) : [cell? cell.percent() : "N/C"] ([charging])"
+
+/obj/machinery/power/apc/try_flock_convert(datum/flock/flock, force)
+	return
 
 /*Power module, used for APC construction*/
 /obj/item/electronics/apc

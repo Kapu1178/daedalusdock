@@ -75,7 +75,7 @@
 	base_pixel_x = 11
 	base_pixel_y = 10
 
-	custom_premium_price = PAYCHECK_MEDIUM
+	custom_premium_price = PAYCHECK_ASSISTANT * 1.5
 
 /obj/item/canvas/Initialize(mapload)
 	. = ..()
@@ -399,7 +399,7 @@
 	pixels_per_unit = 20
 	w_class = WEIGHT_CLASS_BULKY
 
-	custom_premium_price = PAYCHECK_HARD * 1.25
+	custom_premium_price = PAYCHECK_ASSISTANT * 1.2
 
 /obj/item/canvas/thirtysix_twentyfour/Initialize()
 	. = ..()
@@ -422,7 +422,7 @@
 	pixels_per_unit = 18
 	w_class = WEIGHT_CLASS_BULKY
 
-	custom_premium_price = PAYCHECK_HARD * 1.75
+	custom_premium_price = PAYCHECK_ASSISTANT * 2.7
 
 /obj/item/canvas/fortyfive_twentyseven/Initialize()
 	. = ..()
@@ -487,12 +487,12 @@ TYPEINFO_DEF(/obj/structure/sign/painting)
 /obj/structure/sign/painting/examine(mob/user)
 	. = ..()
 	if(persistence_id)
-		. += span_notice("Any painting placed here will be archived at the end of the shift.")
+		. += span_info("Any painting placed here will be archived at the end of the shift.")
 	if(current_canvas)
 		current_canvas.ui_interact(user)
-		. += span_notice("Use wirecutters to remove the painting.")
+		. += span_info("Use wirecutters to remove the painting.")
 		if(IS_WEAKREF_OF(user?.mind, current_canvas.last_patron))
-			. += span_notice("<b>Alt-Click</b> to change select a new appearance for the frame of this painting.")
+			. += span_info("<b>Alt-Click</b> to change select a new appearance for the frame of this painting.")
 
 /obj/structure/sign/painting/wirecutter_act(mob/living/user, obj/item/I)
 	. = ..()

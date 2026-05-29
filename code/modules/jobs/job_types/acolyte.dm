@@ -17,7 +17,7 @@
 		),
 	)
 
-	paycheck = PAYCHECK_MEDIUM
+	paycheck = PAYCHECK_ASSISTANT * 3.5 // It's a cult. You think they pay well?
 	paycheck_department = ACCOUNT_MED
 
 	mind_traits = list(TRAIT_AETHERITE)
@@ -26,7 +26,7 @@
 
 	departments_list = list(
 		/datum/job_department/medical,
-		)
+	)
 
 	family_heirlooms = list(/obj/item/storage/medkit/ancient/heirloom)
 
@@ -43,7 +43,7 @@
 
 /datum/job/acolyte/New()
 	. = ..()
-	description = "A member of a strange religious organization, you aid your \
+	description = "A member of a strange religious organization, you aid the elder member known as the \
 	<span style='color:[/datum/job/augur::selection_color]'>Augur</span> in maintaining the Sacred Cycle. \
 	Aid those who are not yet ready to pass unto the Ephemeral Twilight, and condemn those who attempt to avoid it."
 
@@ -51,6 +51,8 @@
 	. = ..()
 	if(!isvox(spawned))
 		spawned.AddComponent(/datum/component/clothing_lover, list(/obj/item/clothing/mask/utopia), "aether_maskless", /datum/mood_event/aether_maskless, ITEM_SLOT_MASK)
+
+	spawned.apply_status_effect(/datum/status_effect/skill_mod/doctor)
 
 /datum/outfit/job/doctor
 	name = JOB_ACOLYTE
@@ -76,7 +78,7 @@
 
 /datum/outfit/job/doctor/post_equip(mob/living/carbon/human/H, visualsOnly)
 	. = ..()
-	astype(H.w_uniform.GetComponent(/datum/component/hooded), /datum/component/hooded)?.try_equip_hood(H.w_uniform, H)
+	astype(H.w_uniform.GetComponent(/datum/component/hooded), /datum/component/hooded)?.try_equip_hood(H)
 
 /datum/outfit/job/doctor/mod
 	name = JOB_ACOLYTE + " (MODsuit)"

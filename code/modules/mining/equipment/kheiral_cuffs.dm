@@ -33,7 +33,7 @@
 /obj/item/kheiral_cuffs/examine(mob/user)
 	. = ..()
 	if(gps_enabled)
-		. += span_notice("The cuff's GPS signal is on.")
+		. += span_info("The cuff's GPS signal is on.")
 
 /obj/item/kheiral_cuffs/item_action_slot_check(slot)
 	return slot == ITEM_SLOT_GLOVES

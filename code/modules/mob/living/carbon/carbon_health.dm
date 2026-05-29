@@ -5,12 +5,14 @@
 /// Returns JAUNDICE_EYES or JAUNDICE_SKIN if the mob would have yellowed skin/eyes.
 /mob/living/carbon/proc/undergoing_jaundice()
 	if(!needs_organ(ORGAN_SLOT_LIVER))
-		return FALSE
+		return NONE
 
 	if(HAS_TRAIT(src, TRAIT_JAUNDICE_SKIN))
 		return JAUNDICE_SKIN
 
 	var/obj/item/organ/liver/liver = getorganslot(ORGAN_SLOT_LIVER)
+	if(!liver)
+		return JAUNDICE_SKIN
 	if(liver.damage > (liver.low_threshold * liver.maxHealth))
 		return JAUNDICE_EYES
 
@@ -120,7 +122,7 @@
 	else
 		visible_message("\The [src] twitches a bit as \his heart restarts!")
 
-	shock_stage = min(shock_stage, SHOCK_AMT_FOR_FIBRILLATION - 25)
+	traumatic_shock_stage = min(traumatic_shock_stage, SHOCK_AMT_FOR_FIBRILLATION - 25)
 
 	// Clamp oxy loss to 70 for 200 health mobs. This is a 0.65 modifier for blood oxygenation.
 	if(getOxyLoss() >= maxHealth * 0.35)

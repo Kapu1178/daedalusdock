@@ -1,21 +1,27 @@
 TYPEINFO_DEF(/obj/machinery/button)
 	default_armor = list(BLUNT = 50, PUNCTURE = 50, SLASH = 90, LASER = 50, ENERGY = 50, BOMB = 10, BIO = 100, FIRE = 90, ACID = 70)
 
+DEFINE_INTERACTABLE(/obj/machinery/button)
 /obj/machinery/button
 	name = "button"
 	desc = "A remote control switch."
-	icon = 'icons/obj/stationobjs.dmi'
+	icon = 'icons/obj/machines/buttons.dmi'
 	icon_state = "doorctrl"
-	var/skin = "doorctrl"
+
+	resistance_flags = LAVA_PROOF | FIRE_PROOF
+
+	idle_power_usage = BASE_MACHINE_IDLE_CONSUMPTION * 0.02
 	power_channel = AREA_USAGE_ENVIRON
+
+	var/light_mask = "doorctrl-light-mask"
+	var/skin = "doorctrl"
+
 	var/obj/item/assembly/device
 	var/obj/item/electronics/airlock/board
 	var/device_type = null
 	var/id = null
 	var/initialized_button = 0
 	var/silicon_access_disabled = FALSE
-	idle_power_usage = BASE_MACHINE_IDLE_CONSUMPTION * 0.02
-	resistance_flags = LAVA_PROOF | FIRE_PROOF
 
 /obj/machinery/button/indestructible
 	resistance_flags = INDESTRUCTIBLE | LAVA_PROOF | FIRE_PROOF | UNACIDABLE | ACID_PROOF
@@ -54,8 +60,13 @@ TYPEINFO_DEF(/obj/machinery/button)
 
 /obj/machinery/button/update_overlays()
 	. = ..()
+
+	if(!(machine_stat & (NOPOWER|BROKEN)) && !panel_open)
+		. += emissive_appearance(icon, light_mask, alpha = 120)
+
 	if(!panel_open)
 		return
+
 	if(device)
 		. += "button-device"
 	if(board)
@@ -138,9 +149,12 @@ TYPEINFO_DEF(/obj/machinery/button)
 	. = ..()
 	if(.)
 		return
+
 	if(!initialized_button)
 		setup_device()
+
 	add_fingerprint(user)
+
 	if(panel_open)
 		if(device || board)
 			if(device)
@@ -162,34 +176,40 @@ TYPEINFO_DEF(/obj/machinery/button)
 			to_chat(user, span_notice("You change the button frame's front panel."))
 		return
 
+	return try_activate_button(user)
+
+/obj/machinery/button/proc/try_activate_button(mob/living/user)
 	if((machine_stat & (NOPOWER|BROKEN)))
-		return
+		return FALSE
 
 	if(device && device.next_activate > world.time)
-		return
+		return FALSE
 
 	if(!allowed(user))
 		to_chat(user, span_alert("Access Denied."))
 		z_flick("[skin]-denied", src)
-		return
+		return FALSE
 
 	use_power(5)
 	icon_state = "[skin]1"
 
 	if(device)
 		device.pulsed()
-	SEND_GLOBAL_SIGNAL(COMSIG_GLOB_BUTTON_PRESSED,src)
+
+	SEND_GLOBAL_SIGNAL(COMSIG_GLOB_BUTTON_PRESSED, src)
 
 	addtimer(CALLBACK(src, TYPE_PROC_REF(/atom, update_appearance)), 15)
+	return TRUE
 
 /obj/machinery/button/door
 	name = "door button"
 	desc = "A door remote control switch."
+
 	var/normaldoorcontrol = FALSE
 	var/specialfunctions = OPEN // Bitflag, see assembly file
 	var/sync_doors = TRUE
 
-MAPPING_DIRECTIONAL_HELPERS(/obj/machinery/button/door, 24)
+MAPPING_DIRECTIONAL_HELPERS_ROBUST_INVERSE_DIR(/obj/machinery/button/door, 28, -20, 21, -21)
 
 /obj/machinery/button/door/indestructible
 	resistance_flags = INDESTRUCTIBLE | LAVA_PROOF | FIRE_PROOF | UNACIDABLE | ACID_PROOF
@@ -311,8 +331,8 @@ TYPEINFO_DEF(/obj/item/wallframe/button)
 
 /obj/machinery/button/elevator/examine(mob/user)
 	. = ..()
-	. += span_notice("There's a small inscription on the button...")
-	. += span_notice("THIS CALLS THE ELEVATOR! IT DOES NOT OPERATE IT! Interact with the elevator itself to use it!")
+	. += span_info("There's a small inscription on the button...")
+	. += span_info("THIS CALLS THE ELEVATOR! IT DOES NOT OPERATE IT! Interact with the elevator itself to use it!")
 
 /obj/machinery/button/tram
 	name = "tram caller"
@@ -330,5 +350,5 @@ TYPEINFO_DEF(/obj/item/wallframe/button)
 
 /obj/machinery/button/tram/examine(mob/user)
 	. = ..()
-	. += span_notice("There's a small inscription on the button...")
-	. += span_notice("THIS CALLS THE TRAM! IT DOES NOT OPERATE IT! The console on the tram tells it where to go!")
+	. += span_info("There's a small inscription on the button...")
+	. += span_info("THIS CALLS THE TRAM! IT DOES NOT OPERATE IT! The console on the tram tells it where to go!")

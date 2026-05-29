@@ -306,7 +306,7 @@ GLOBAL_LIST_INIT(malf_modules, subtypesof(/datum/ai_module))
 /obj/machinery/doomsday_device/process()
 	var/turf/T = get_turf(src)
 	if(!T || !is_station_level(T.z))
-		minor_announce("DOOMSDAY DEVICE OUT OF STATION RANGE, ABORTING", "ERROR ER0RR $R0RRO$!R41.%%!!(%$^^__+ @#F0E4", TRUE)
+		priority_announce("DOOMSDAY DEVICE OUT OF STATION RANGE, ABORTING", "ERROR ER0RR $R0RRO$!R41.%%!!(%$^^__+ @#F0E4", sound_type = ANNOUNCER_ALERT)
 		owner.ShutOffDoomsdayDevice()
 		return
 	if(!timing)
@@ -317,7 +317,7 @@ GLOBAL_LIST_INIT(malf_modules, subtypesof(/datum/ai_module))
 		timing = FALSE
 		detonate()
 	else if(world.time >= next_announce)
-		minor_announce("[sec_left] SECONDS UNTIL DOOMSDAY DEVICE ACTIVATION!", "ERROR ER0RR $R0RRO$!R41.%%!!(%$^^__+ @#F0E4", TRUE)
+		priority_announce("[sec_left] SECONDS UNTIL DOOMSDAY DEVICE ACTIVATION!", "ERROR ER0RR $R0RRO$!R41.%%!!(%$^^__+ @#F0E4", sound_type = ANNOUNCER_ALERT)
 		next_announce += DOOMSDAY_ANNOUNCE_INTERVAL
 
 /obj/machinery/doomsday_device/proc/detonate()
@@ -363,11 +363,14 @@ GLOBAL_LIST_INIT(malf_modules, subtypesof(/datum/ai_module))
 	if(C)
 		C.post_status("alert", "lockdown")
 
-	minor_announce("Hostile runtime detected in door controllers. Isolation lockdown protocols are now in effect. Please remain calm.","Network Alert:", TRUE)
+	priority_announce("Hostile runtime detected in door controllers. Isolation lockdown protocols are now in effect. Please remain calm.","Network Alert", sound_type = ANNOUNCER_ALERT)
 	to_chat(owner, span_danger("Lockdown initiated. Network reset in 90 seconds."))
-	addtimer(CALLBACK(GLOBAL_PROC, GLOBAL_PROC_REF(minor_announce),
-		"Automatic system reboot complete. Have a secure day.",
-		"Network reset:"), 900)
+	addtimer(CALLBACK(GLOBAL_PROC, GLOBAL_PROC_REF(priority_announce),\
+			"Automatic system reboot complete. Have a secure day.",\
+			null,\
+			"Network Reset"),\
+		900\
+	)
 
 /// Override Machine: Allows the AI to override a machine, animating it into an angry, living version of itself.
 /datum/ai_module/destructive/override_machine

@@ -3,6 +3,11 @@
 /proc/getArmor(blunt = 0, puncture = 0, slash = 0, laser = 0, energy = 0, bomb = 0, bio = 0, fire = 0, acid = 0)
 	. = locate(ARMORID)
 	if (!.)
+		#ifdef UNIT_TESTS
+		for(var/arg in args)
+			if(!isnum(arg))
+				stack_trace("getArmor was given a non-number armor value: [arg]!")
+		#endif
 		. = new /datum/armor(blunt, puncture, slash, laser, energy, bomb, bio, fire, acid)
 
 ///Retreive an atom's armor, creating it if it doesn't exist
@@ -12,24 +17,21 @@
 		return armor
 
 	if(islist(armor))
-		stack_trace("Legacy armor definition")
-		armor = getArmor(arglist(armor))
-		return armor
+		return setArmor(getArmor(arglist(armor)))
 
 	var/datum/typeinfo/atom/typeinfo = typeinfo(type)
 	if(isnull(typeinfo.default_armor))
-		armor = getArmor()
-		return armor
+		return setArmor(getArmor())
 
 	if(islist(typeinfo.default_armor))
-		armor = getArmor(arglist(typeinfo.default_armor))
-		return armor
+		return setArmor(getArmor(arglist(typeinfo.default_armor)))
 
 	CRASH("Typeinfo Armor is not a datum or a list, what the fuck?")
 
-///Setter for armor
+///Setter for armor.
 /atom/proc/setArmor(datum/new_armor)
 	armor = new_armor
+	return armor
 
 /datum/armor
 	var/blunt

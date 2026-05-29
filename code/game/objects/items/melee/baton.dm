@@ -15,6 +15,9 @@
 	stamina_critical_chance = 5
 	force = 12
 
+	has_combat_mode_interaction = TRUE
+	fingerprint_flags_interact_with_atom = FINGERPRINT_ITEM_SUCCESS | FINGERPRINT_OBJECT_SUCCESS
+
 	/// Whether this baton is active or not
 	var/active = TRUE
 	/// Default wait time until can stun again.
@@ -78,18 +81,31 @@
 	else
 		icon_state = initial(icon_state)
 
-/**
- * Ok, think of baton attacks like a melee attack chain:
- */
-/obj/item/melee/baton/attack(mob/living/target, mob/living/user, params)
+/obj/item/melee/baton/interact_with_atom(atom/interacting_with, mob/living/user, list/modifiers)
 	if(flipped && !active)
-		return ..() // Go straight up the chain
+		return NONE
 
-	if(melee_baton_attack(target, user))
-		if(!baton_effect(target, user))
-			return ..()
+	if(!isliving(interacting_with))
+		return NONE
 
-	add_fingerprint(user) //Only happens if we didn't go up the chain
+	if(melee_baton_attack(interacting_with, user))
+		if(!baton_effect(interacting_with, user))
+			return ITEM_INTERACT_ATTACK
+
+	return ITEM_INTERACT_BLOCKING
+
+// /**
+//  * Ok, think of baton attacks like a melee attack chain:
+//  */
+// /obj/item/melee/baton/attack(mob/living/target, mob/living/user, params)
+// 	if(flipped && !active)
+// 		return ..() // Go straight up the chain
+
+// 	if(melee_baton_attack(target, user))
+// 		if(!baton_effect(target, user))
+// 			return ..()
+
+// 	add_fingerprint(user) //Only happens if we didn't go up the chain
 
 /obj/item/melee/baton/equipped(mob/user, slot, initial)
 	. = ..()
@@ -152,6 +168,8 @@
 	return CONTEXTUAL_SCREENTIP_SET
 
 /obj/item/melee/baton/proc/melee_baton_attack(mob/living/target, mob/living/user)
+	user.changeNext_move(combat_click_delay)
+
 	if(clumsy_check(user, target))
 		return
 
@@ -462,9 +480,9 @@ TYPEINFO_DEF(/obj/item/melee/baton/security)
 /obj/item/melee/baton/security/examine(mob/user)
 	. = ..()
 	if(cell)
-		. += span_notice("\The [src] is [round(cell.percent())]% charged.")
+		. += span_info("\The [src] is [round(cell.percent())]% charged.")
 	else
-		. += span_warning("\The [src] does not have a power source installed.")
+		. += span_alert("\The [src] does not have a power source installed.")
 
 /obj/item/melee/baton/security/screwdriver_act(mob/living/user, obj/item/tool)
 	if(tryremovecell(user))

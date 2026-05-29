@@ -176,9 +176,9 @@
 		if(MEDBOT_PANIC_MED to MEDBOT_PANIC_HIGH)
 			. += "They are tipped over and appear visibly distressed." // now we humanize the medbot as a they, not an it
 		if(MEDBOT_PANIC_HIGH to MEDBOT_PANIC_FUCK)
-			. += span_warning("They are tipped over and visibly panicking!")
+			. += span_alert("They are tipped over and visibly panicking!")
 		if(MEDBOT_PANIC_FUCK to INFINITY)
-			. += span_warning("<b>They are freaking out from being tipped over!</b>")
+			. += span_alert("<b>They are freaking out from being tipped over!</b>")
 
 /mob/living/simple_animal/bot/medbot/update_icon_state()
 	. = ..()
@@ -438,7 +438,7 @@
 
 		if(path.len == 0 && (get_dist(src,patient) > 1))
 			set_mode(BOT_PATHING)
-			path = jps_path_to(src, patient, max_distance=30, mintargetdist=1, access = access_card?.GetAccess())
+			path = jps_path_to(src, patient, max_steps=30, mintargetdist=1, access = access_card?.GetAccess())
 			set_mode(BOT_MOVING)
 			if(!path.len) //Do not chase a patient we cannot reach.
 				add_to_ignore(patient)

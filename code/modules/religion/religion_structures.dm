@@ -115,7 +115,7 @@ TYPEINFO_DEF(/obj/item/ritual_totem)
 	. = ..()
 	var/is_holy = user.mind?.holy_role
 	if(is_holy)
-		. += span_notice("[src] can only be moved by important followers of [GLOB.deity].")
+		. += span_info("[src] can only be moved by important followers of [GLOB.deity].")
 
 /obj/item/ritual_totem/pickup(mob/taker)
 	var/initial_loc = loc

@@ -12,7 +12,7 @@
 #define ROLE_CHANGELING "Changeling"
 #define ROLE_CULTIST "Cultist"
 #define ROLE_FAMILIES "Gangster"
-#define ROLE_FLOCK "Flock"
+#define ROLE_FLOCK "Divine Flock"
 #define ROLE_HERETIC "Heretic"
 #define ROLE_MALF "Malf AI"
 #define ROLE_OPERATIVE "Operative"
@@ -67,7 +67,6 @@
 #define ROLE_DEATHSQUAD "Deathsquad"
 #define ROLE_POSITRONIC_BRAIN "Positronic Brain"
 #define ROLE_FREE_GOLEM "Free Golem"
-#define ROLE_SERVANT_GOLEM "Servant Golem"
 #define ROLE_NUCLEAR_OPERATIVE "Nuclear Operative"
 #define ROLE_CLOWN_OPERATIVE "Clown Operative"
 #define ROLE_WIZARD_APPRENTICE "apprentice"
@@ -118,6 +117,7 @@ GLOBAL_LIST_INIT(special_roles, list(
 	ROLE_TRAITOR = 0,
 	ROLE_WIZARD = 14,
 	ROLE_VAMPIRE = 0,
+	ROLE_FLOCK = 0,
 
 	// Midround
 	ROLE_ABDUCTOR = 0,

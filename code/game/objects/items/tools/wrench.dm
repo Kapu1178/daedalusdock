@@ -34,6 +34,10 @@ TYPEINFO_DEF(/obj/item/wrench)
 	playsound(loc, 'sound/weapons/genhit.ogg', 50, TRUE, -1)
 	return (BRUTELOSS)
 
+/obj/item/wrench/disco_flavor(mob/living/carbon/human/user, nearby, is_station_level)
+	. = ..()
+	user.disco_made_easy("wrench_combat", 8, /datum/rpg_skill/bloodsport, success_text = "It has a pleasant heft, would make short work of an unprepared assailant.")
+
 TYPEINFO_DEF(/obj/item/wrench/abductor)
 	default_materials = list(/datum/material/iron = 5000, /datum/material/silver = 2500, /datum/material/plasma = 1000, /datum/material/titanium = 2000, /datum/material/diamond = 2000)
 
@@ -61,7 +65,7 @@ TYPEINFO_DEF(/obj/item/wrench/abductor)
 /obj/item/wrench/medical/examine(mob/user)
 	. = ..()
 	if(suicider)
-		. += span_notice("For some reason, it reminds you of [suicider].")
+		. += span_info("For some reason, it reminds you of [suicider].")
 
 /obj/item/wrench/medical/suicide_act(mob/living/user)
 	user.visible_message(span_suicide("[user] is praying to the medical wrench to take [user.p_their()] soul. It looks like [user.p_theyre()] trying to commit suicide!"))

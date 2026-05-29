@@ -63,6 +63,9 @@
 			battery.forceMove(drop_location())
 		return TRUE
 
+TYPEINFO_DEF(/obj/item/stock_parts/cell/computer)
+	default_materials = list(/datum/material/iron=700, /datum/material/glass=50)
+
 /obj/item/stock_parts/cell/computer
 	name = "standard battery"
 	desc = "A standard power cell, commonly seen in high-end portable microcomputers or low-end laptops."

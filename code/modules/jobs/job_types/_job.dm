@@ -1,5 +1,5 @@
 GLOBAL_LIST_INIT(job_display_order, list(
-	// Management
+	// The Federation
 	/datum/job/captain,
 	/datum/job/head_of_personnel,
 	///datum/job/bureaucrat,
@@ -47,7 +47,7 @@ GLOBAL_LIST_INIT(job_display_order, list(
 	var/description
 
 	/// A string added to the on-join block to tell you how to use your radio.
-	var/radio_help_message = "<b>Prefix your message with :h to speak on your faction's radio. To see other prefixes, look closely at your headset.</b>"
+	var/radio_help_message = ""
 
 	/// Innate skill levels unlocked at roundstart. Based on config.jobs_have_minimal_access config setting, for example with a skeleton crew. Format is list(/datum/skill/foo = SKILL_EXP_NOVICE) with exp as an integer or as per code/_DEFINES/skills.dm
 	var/list/skills
@@ -104,7 +104,11 @@ GLOBAL_LIST_INIT(job_display_order, list(
 	/// Experience type granted by playing in this job.
 	var/exp_granted_type = ""
 
-	var/paycheck = PAYCHECK_MINIMAL
+	///How many paychecks should players start out the round with?
+	var/starting_paycheck_amount = 1
+	/// How much someone is paid every pay period (~45 minutes)
+	var/paycheck = PAYCHECK_ASSISTANT * 5
+	/// The department the paycheck comes from. They don't get one at all if null.
 	var/paycheck_department = null
 
 	/// Traits added to the mind of the mob assigned this job.
@@ -170,16 +174,22 @@ GLOBAL_LIST_INIT(job_display_order, list(
 	/// Default security status. Skipped if null.
 	var/default_security_status = null
 
+	/// Pinpad key for their doors, if any.
+	var/pinpad_key = null
 
 /datum/job/New()
 	. = ..()
-	//PARIAH ADDITION START
+
 	if(!job_spawn_title)
 		job_spawn_title = title
-	//PARIAH ADDITION END
+
+	if(pinpad_key)
+		SSid_access.get_static_pincode(pinpad_key, 5)
+
 	var/list/jobs_changes = get_map_changes()
 	if(!jobs_changes)
 		return
+
 	if(isnum(jobs_changes["spawn_positions"]))
 		spawn_positions = jobs_changes["spawn_positions"]
 	if(isnum(jobs_changes["total_positions"]))
@@ -251,10 +261,10 @@ GLOBAL_LIST_INIT(job_display_order, list(
 	dress_up_as_job(equipping, FALSE, used_pref, TRUE)
 	var/obj/item/storage/wallet/W = wear_id
 	if(istype(W))
-		var/monero = round(equipping.paycheck, 10)
+		var/monero = round(equipping.paycheck * equipping.starting_paycheck_amount, 10)
 		SSeconomy.spawn_ones_for_amount(monero, W)
 	else
-		bank_account.payday()
+		bank_account.payday(equipping.starting_paycheck_amount)
 
 /mob/living/proc/dress_up_as_job(datum/job/equipping, visual_only = FALSE)
 	return
@@ -482,7 +492,7 @@ GLOBAL_LIST_INIT(job_display_order, list(
 
 
 /// Applies the preference options to the spawning mob, taking the job into account. Assumes the client has the proper mind.
-/mob/living/proc/apply_prefs_job(client/player_client, datum/job/job)
+/mob/proc/apply_prefs_job(client/player_client, datum/job/job)
 	return
 
 /mob/living/carbon/human/apply_prefs_job(client/player_client, datum/job/job)
@@ -523,8 +533,8 @@ GLOBAL_LIST_INIT(job_display_order, list(
 
 			var/gender = player_client.prefs.read_preference(/datum/preference/choiced/gender)
 			set_real_name(species.random_name(gender, TRUE))
-	dna.update_dna_identity()
 
+	dna.update_dna_identity(update_fingerprints = TRUE)
 
 /mob/living/silicon/ai/apply_prefs_job(client/player_client, datum/job/job)
 	if(GLOB.current_anonymous_theme)
@@ -595,7 +605,7 @@ GLOBAL_LIST_INIT(job_display_order, list(
 	SEND_GLOBAL_SIGNAL(COMSIG_GLOB_JOB_AFTER_LATEJOIN_SPAWN, src, spawning)
 
 /// Called by SSjob when a player joins the round as this job.
-/datum/job/proc/on_join_message(client/C, job_title_pref)
+/datum/job/proc/get_join_message(client/C, job_title_pref) as text
 	var/completed_title = "<span style='color:[selection_color]'>[job_title_pref]</span>"
 	var/prefix
 	if(spawn_positions == 1)
@@ -610,9 +620,7 @@ GLOBAL_LIST_INIT(job_display_order, list(
 		job_info += "<br><br>As the <span style='color:[selection_color]'>[job_title_pref == title ? job_title_pref : "[job_title_pref] ([title])"]</span> \
 		you answer directly to [supervisors]. Special circumstances may change this."
 
-	job_info += "<br><br>[radio_help_message]"
-
-	to_chat(C, examine_block("[job_header][jointext(job_info, "")]"))
+	return "[job_header][jointext(job_info, "")]"
 
 /// Called by SSjob when a player joins the round as this job.
 /datum/job/proc/on_join_popup(client/C, job_title_pref)

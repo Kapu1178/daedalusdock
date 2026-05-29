@@ -24,6 +24,9 @@ GLOBAL_LIST_EMPTY(features_by_species)
 	// Default color. If mutant colors are disabled, this is the color that will be used by that race.
 	var/default_color = "#FFFFFF"
 
+	/// The type of name generator to use.
+	var/name_generator_type = /datum/name_generator/human
+
 	///Whether or not the race has sexual characteristics (biological genders). At the moment this is only FALSE for skeletons and shadows
 	var/sexes = TRUE
 	///A bitfield of "bodytypes", updated by /datum/obj/item/bodypart/proc/synchronize_bodytypes()
@@ -325,21 +328,10 @@ GLOBAL_LIST_EMPTY(features_by_species)
  * * lastname - Does this species' naming system adhere to the last name system? Set to false if it doesn't.
  */
 /datum/species/proc/random_name(gender,unique,lastname)
-	if(unique)
-		return random_unique_name(gender)
-
-	var/randname
-	if(gender == MALE)
-		randname = pick(GLOB.first_names_male)
-	else
-		randname = pick(GLOB.first_names_female)
-
-	if(lastname)
-		randname += " [lastname]"
-	else
-		randname += " [pick(GLOB.last_names)]"
-
-	return randname
+	var/datum/name_generator/name_gen = new name_generator_type
+	name_gen.ensure_unique = unique
+	name_gen.given_surname = lastname
+	return name_gen.Generate()
 
 /**
  * Copies some vars and properties over that should be kept when creating a copy of this species.
@@ -997,8 +989,8 @@ GLOBAL_LIST_EMPTY(features_by_species)
 /datum/species/proc/harm(mob/living/carbon/human/user, mob/living/carbon/human/target, datum/martial_art/attacker_style)
 	// Pacifists can't harm.
 	if(HAS_TRAIT(user, TRAIT_PACIFISM))
-		to_chat(user, span_warning("You don't want to harm [target]!"))
-		return FALSE
+		to_chat(user, span_warning("You don't want to harm [target]."))
+		return ATTACK_DO_NOTHING
 
 	// If martial arts did something, bail.
 	if(attacker_style?.harm_act(user,target) == MARTIAL_ATTACK_SUCCESS)
@@ -1019,12 +1011,12 @@ GLOBAL_LIST_EMPTY(features_by_species)
 	// If we're biting them, make sure we can bite, or bail.
 	if(atk_effect == ATTACK_EFFECT_BITE)
 		if(!user.has_mouth())
-			to_chat(user, span_warning("You can't [atk_verb] without a mouth!"))
-			return FALSE
+			to_chat(user, span_warning("You cannot [atk_verb] without a mouth."))
+			return ATTACK_DO_NOTHING
 
 		if(user.is_mouth_covered(mask_only = TRUE))
-			to_chat(user, span_warning("You can't [atk_verb] with your mouth covered!"))
-			return FALSE
+			to_chat(user, span_warning("You cannot [atk_verb] with your mouth covered."))
+			return ATTACK_DO_NOTHING
 
 	// By this point, we are attempting an attack!!!
 	user.do_attack_animation(target, atk_effect)
@@ -1032,7 +1024,7 @@ GLOBAL_LIST_EMPTY(features_by_species)
 	// Set damage and find hit bodypart using weighted rng
 	var/target_zone = deprecise_zone(user.zone_selected)
 	var/bodyzone_modifier = GLOB.bodyzone_gurps_mods[target_zone]
-	var/roll = !HAS_TRAIT(user, TRAIT_PERFECT_ATTACKER) ? user.stat_roll(10, /datum/rpg_skill/skirmish, bodyzone_modifier, -7, defender = target).outcome : SUCCESS
+	var/roll = !HAS_TRAIT(user, TRAIT_PERFECT_ATTACKER) ? user.stat_roll(10, /datum/rpg_skill/bloodsport, bodyzone_modifier, -7, defender = target).outcome : SUCCESS
 	// If we succeeded, hit the target area.
 	var/attacking_zone = (roll >= SUCCESS) ? target_zone : target.get_random_valid_zone()
 	var/obj/item/bodypart/affecting
@@ -1046,16 +1038,16 @@ GLOBAL_LIST_EMPTY(features_by_species)
 		playsound(target.loc, attacking_bodypart.unarmed_miss_sound, 25, TRUE, -1)
 
 		target.visible_message(
-			span_danger("[user]'s [atk_verb] misses [target][rolled ? "as [target.p_they()] roll out of the way" : ""]!"),
+			span_danger("[user]'s [atk_verb] misses [target][rolled ? "as [target.p_they()] roll out of the way" : ""]."),
 			null,
-			span_hear("You hear a swoosh!"),
+			span_hear("You hear a swoosh."),
 			COMBAT_MESSAGE_RANGE,
 		)
 		if(rolled)
 			target.setDir(pick(GLOB.cardinals))
 
 		log_combat(user, target, "attempted to punch (missed)")
-		return FALSE
+		return ATTACK_CONSUME_STAMINA | ATTACK_HANDLED
 
 	var/attack_sharpness = NONE
 	switch(atk_effect)
@@ -1071,10 +1063,11 @@ GLOBAL_LIST_EMPTY(features_by_species)
 
 	playsound(target.loc, attacking_bodypart.unarmed_attack_sound, 25, TRUE, -1)
 
+	var/target_str = user == target ? "[user.p_them()]self" : "[target]"
 	user.visible_message(
-		span_danger("<b>[user]</b> [atk_verb]ed <b>[target]</b> in the [affecting.plaintext_zone]!"),
+		span_danger("<b>[user]</b> [atk_verb]ed <b>[target_str]</b> in the [affecting.plaintext_zone]."),
 		null,
-		span_hear("You hear a scuffle!"),
+		span_hear("You hear a scuffle."),
 		COMBAT_MESSAGE_RANGE
 	)
 
@@ -1108,8 +1101,6 @@ GLOBAL_LIST_EMPTY(features_by_species)
 	if(user.body_position != STANDING_UP)
 		return FALSE
 	if(user == target)
-		return FALSE
-	if(user.loc == target.loc)
 		return FALSE
 
 	user.disarm(target)

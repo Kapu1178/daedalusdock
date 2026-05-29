@@ -1,0 +1,40 @@
+2026-05-10:
+  Floyd (Yes, _that_ Floyd):
+  - bugfix: Sounds powered by sound-tokens start playing after logging back in.
+2026-05-15:
+  francinum:
+  - refactor: Computer4 styling has been altered and is now packet-safe.
+2026-05-19:
+  Kapu1178:
+  - tweak: Renamed the Chemist to the Alchemist
+  - tweak: Renamed Chemistry (location) to the Apothecary
+  - rscadd: Appending two exclamation points to a message will make your character
+      YELL VERY VERY LOUDLY!!
+  - bugfix: Runechat no longer "jitters" for a frame.
+2026-05-21:
+  Kapu1178:
+  - rscadd: Vending machines now accept cash.
+  - tweak: Adjusted the formula for sound falloff, everything should be SLIGHTLY louder
+      and notably more consistent.
+  - bugfix: Some machines consume slightly less power.
+  - bugfix: Carrots don't break everything relating to hydroponics.
+  - bugfix: Internal radios no longer act as wire taps.
+  - bugfix: Monkeys are less hungry.
+  - bugfix: Runtimes.
+2026-05-25:
+  Doctor-Derp:
+  - rscadd: Added a filing cabinet to Atlas' Medical Bay.
+  - rscadd: Added a sink to Atlas' Kitchen.
+  - rscadd: Added a whiteship dock marker south of Atlas' Asteroid Magnet.
+  - rscadd: Added an ATM to Theseus' Cargo Bay Lobby.
+  - bugfix: Fixed ATM placements in Theseus' Psychology Office and Dormitories.
+  - rscdel: Removed security access from Theseus' interior Genpop airlocks.
+  - rscdel: Replaced mining shuttle & outpost camera consoles in Theseus' Mining Bay
+      with a cell recharger.
+  Kapu1178:
+  - rscadd: Overhauls TGchat
+2026-05-28:
+  Doctor-Derp:
+  - rscadd: Replaced the standard EVA and emergency suit sprites with ones ported
+      from Baystation.
+  - rscadd: Standard EVA suits now include a headlamp and welding visor toggle.

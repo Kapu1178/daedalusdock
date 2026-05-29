@@ -87,7 +87,7 @@ const AccountDisplay = (_) => {
           </Table.Cell>
           <Table.Cell collapsing>
             <Box color="good">
-              {user?.balance} cr <Icon color="gold" name="coins" />
+              {user?.balance} mk <Icon color="gold" name="coins" />
             </Box>
           </Table.Cell>
         </Table.Row>
@@ -140,7 +140,7 @@ const TerminalDisplay = (props) => {
               content={
                 <>
                   <Icon name="coins" />
-                  Pay {force_fee + ' cr'}
+                  Pay {force_fee + ' mk'}
                 </>
               }
               disabled={cannot_pay}

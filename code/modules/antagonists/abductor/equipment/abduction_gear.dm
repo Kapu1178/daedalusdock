@@ -626,13 +626,13 @@ Congratulations! You are now trained for invasive xenobiology research!"}
 	if(AbductorCheck(user))
 		switch(mode)
 			if(BATON_STUN)
-				. += span_warning("The baton is in stun mode.")
+				. += span_alert("The baton is in stun mode.")
 			if(BATON_SLEEP)
-				. += span_warning("The baton is in sleep inducement mode.")
+				. += span_alert("The baton is in sleep inducement mode.")
 			if(BATON_CUFF)
-				. += span_warning("The baton is in restraining mode.")
+				. += span_alert("The baton is in restraining mode.")
 			if(BATON_PROBE)
-				. += span_warning("The baton is in probing mode.")
+				. += span_alert("The baton is in probing mode.")
 
 /obj/item/radio/headset/abductor
 	name = "alien headset"

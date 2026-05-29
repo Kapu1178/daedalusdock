@@ -23,7 +23,7 @@
 	w_class = WEIGHT_CLASS_BULKY
 	slot_flags = ITEM_SLOT_BACK //ERROOOOO
 	resistance_flags = NONE
-	max_integrity = 300
+	max_integrity = 10
 	supports_variations_flags = CLOTHING_TESHARI_VARIATION | CLOTHING_VOX_VARIATION
 
 	storage_type = /datum/storage/backpack
@@ -218,7 +218,7 @@ TYPEINFO_DEF(/obj/item/storage/backpack/holding)
 	supports_variations_flags = NONE
 
 /obj/item/storage/backpack/chemistry
-	name = "chemistry backpack"
+	name = "apothecary backpack"
 	desc = "A backpack specially designed to repel stains and hazardous liquids."
 	icon_state = "chempack"
 	inhand_icon_state = "chempack"
@@ -383,7 +383,7 @@ TYPEINFO_DEF(/obj/item/storage/backpack/holding)
 	atom_storage.set_holdable(cant_hold_list = list(/obj/item/storage/backpack/satchel/flat)) //muh recursive backpacks)
 
 /obj/item/storage/backpack/satchel/flat/PopulateContents()
-	var/datum/supply_pack/costumes_toys/randomised/contraband/C = new
+	var/datum/supply_pack/misc/contraband/C = new
 	for(var/i in 1 to 2)
 		var/ctype = pick(C.contains)
 		new ctype(src)
@@ -417,7 +417,7 @@ TYPEINFO_DEF(/obj/item/storage/backpack/holding)
 	inhand_icon_state = "duffel-curse"
 	slowdown = 2
 	item_flags = DROPDEL
-	max_integrity = 100
+	max_integrity = 20
 	///counts time passed since it ate food
 	var/hunger = 0
 	supports_variations_flags = NONE
@@ -460,7 +460,7 @@ TYPEINFO_DEF(/obj/item/storage/backpack/holding)
 	supports_variations_flags = NONE
 
 /obj/item/storage/backpack/duffelbag/chemistry
-	name = "chemistry duffel bag"
+	name = "apothecary duffel bag"
 	desc = "A large duffel bag for holding extra chemical substances."
 	icon_state = "duffel-chemistry"
 	inhand_icon_state = "duffel-chemistry"

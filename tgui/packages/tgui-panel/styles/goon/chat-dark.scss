@@ -3,6 +3,12 @@
  * SPDX-License-Identifier: MIT
  */
 
+/*
+ Kapu's sanity here!
+ tgui-panel\styles\main.scss contains the BACKGROUND color for the chatpane
+ You also need to change tgui-panel\themes.ts
+*/
+
 em {
   font-style: normal;
   font-weight: bold;
@@ -227,7 +233,8 @@ a.popt {
 .prefix,
 .admin,
 .medal,
-.yell {
+.yell,
+.bigyell {
   font-weight: bold;
 }
 
@@ -308,7 +315,7 @@ em {
 }
 
 .name {
-  font-weight: bold;
+  color: #5bb498;
 }
 
 .say,
@@ -316,6 +323,10 @@ em {
 .infoplain,
 .oocplain,
 .warningplain {
+}
+
+.say {
+  color: #ccdbeb;
 }
 
 .deadsay {
@@ -340,70 +351,130 @@ em {
 
 .radio {
   color: #39894a;
+
+  > .name {
+    color: #39894a;
+  }
 }
 
 .sciradio {
   color: #c68cfa;
+
+  > .name {
+    color: #c68cfa;
+  }
 }
 
 .comradio {
   color: #fcdf03;
+
+  > .name {
+    color: #fcdf03;
+  }
 }
 
 .secradio {
   color: #b71c1c;
+
+  > .name {
+    color: #b71c1c;
+  }
 }
 
 .medradio {
   color: #0097a7;
+
+  > .name {
+    color: #0097a7;
+  }
 }
 
 .engradio {
   color: #f37746;
+
+  > .name {
+    color: #f37746;
+  }
 }
 
 .suppradio {
   color: #b88646;
+
+  > .name {
+    color: #b88646;
+  }
 }
 
 .servradio {
   color: #6ca729;
+
+  > .name {
+    color: #6ca729;
+  }
 }
 
 .syndradio {
   color: #8f4a4b;
+
+  > .name {
+    color: #8f4a4b;
+  }
 }
 
 .gangradio {
   color: #ac2ea1;
+
+  > .name {
+    color: #ac2ea1;
+  }
 }
 
 .centcomradio {
   color: #2681a5;
+
+  > .name {
+    color: #2681a5;
+  }
 }
 
 .aiprivradio {
   color: #d65d95;
+
+  > .name {
+    color: #d65d95;
+  }
 }
 
 .redteamradio {
   color: #ff4444;
+
+  > .name {
+    color: #ff4444;
+  }
 }
 
 .blueteamradio {
   color: #3434fd;
+
+  > .name {
+    color: #3434fd;
+  }
 }
 
 .greenteamradio {
   color: #34fd34;
+
+  > .name {
+    color: #34fd34;
+  }
 }
 
 .yellowteamradio {
   color: #fdfd34;
-}
 
-.yell {
-  font-weight: bold;
+  > .name {
+    color: #fdfd34;
+  }
 }
 
 .alert {
@@ -411,24 +482,24 @@ em {
 }
 
 .userdanger {
-  color: #dd3535;
+  color: #c14343;
   font-weight: bold;
   font-size: 185%;
 }
 
 .bolddanger {
-  color: #dd3535;
-  text-shadow: 0 0 0.3em #ff0000;
+  color: #c14343;
+  text-shadow: 0 0 0.4em #ff0000;
   font-weight: bold;
 }
 
 .danger {
-  color: #dd3535;
-  text-shadow: 0 0 0.3em #ff0000;
+  color: #c14343;
+  text-shadow: 0 0 0.4em #ff0000;
 }
 
 .warning {
-  color: #ff6d6d;
+  color: #b17e7e;
   font-style: italic;
 }
 
@@ -478,12 +549,12 @@ em {
 }
 
 .notice {
-  color: #d47d5a;
+  color: #4d6479;
 }
 
 .obviousnotice {
   color: #44e4e4;
-  text-shadow: 0 0 0.1em #f5aa42;
+  font-weight: bold;
 }
 .obviousnotice a {
   text-shadow: none;
@@ -742,6 +813,10 @@ em {
   font-size: 310%;
 }
 
+.bigyell {
+  font-size: 200%;
+}
+
 .greentext {
   color: #059223;
   font-size: 185%;
@@ -955,7 +1030,7 @@ em {
 .examine_block {
   background: rgba(0, 0, 0, 0.2);
   border: 1px solid rgba(55, 55, 55, 0.33);
-  margin: 7px 4px;
+  margin: 10px 4px;
   padding: 8px 12px;
   width: 34.375em;
 }
@@ -965,10 +1040,6 @@ em {
   background: #222;
   height: 1px;
   margin: 8px 16px 8px 16px;
-}
-
-.talk {
-  //color: #A5D6C1;
 }
 
 .sayverb {
@@ -1008,17 +1079,15 @@ em {
   border-style: solid;
 }
 
-// If you change this, change the code in roll.dm
 .statsGood {
   color: #03fca1;
-  text-shadow: 0 0 0.1em #dd3535;
+  text-shadow: 0 0 0.5em #5bb498;
   font-style: italic;
 }
 
-// If you change this, change the code in roll.dm
 .statsBad {
-  color: #fc4b32;
-  text-shadow: 0 0 0.1em #8a8888;
+  color: #b8046d;
+  text-shadow: 0 0 0.5em #b8044c;
   font-style: italic;
 }
 
@@ -1045,4 +1114,44 @@ em {
 
 .flocknpc {
   color: #afc9c3;
+}
+
+// Announcements
+.priorityAnnounceHeader {
+  text-align: center;
+  > h1 {
+    font-size: 2.5rem;
+    color: #c14343;
+  }
+
+  > h2 {
+    font-size: 2rem;
+    color: #dfdfcf;
+  }
+}
+
+.priorityAnnounceBody {
+  font-size: 1.5rem;
+  color: #dfdfcf;
+}
+
+// Roundstart notifications
+.roundstartNotifications {
+  margin: 0 auto;
+  .entryHeader {
+    text-align: center;
+    line-height: 1.2;
+
+    > h1 {
+      font-size: 2rem;
+      color: #c14343;
+      padding: 0px;
+    }
+
+    > h2 {
+      font-size: 1rem;
+      font-style: italic;
+      padding-bottom: 8px;
+    }
+  }
 }

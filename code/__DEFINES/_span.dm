@@ -125,6 +125,7 @@
 #define span_userdanger(str) ("<span class='userdanger'>" + str + "</span>")
 #define span_warning(str) ("<span class='warning'>" + str + "</span>")
 #define span_yell(str) ("<span class='yell'>" + str + "</span>")
+#define span_bigyell(str) ("<span class='bigyell'>" + str + "</span>")
 #define span_yellowteamradio(str) ("<span class='yellowteamradio'>" + str + "</span>")
 
 // Spans that use embedded tgui components:

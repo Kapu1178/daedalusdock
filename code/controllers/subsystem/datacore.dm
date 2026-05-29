@@ -265,7 +265,7 @@ SUBSYSTEM_DEF(datacore)
 	// Add to company-specific manifests
 	var/datum/job_department/department = SSjob.departments_by_type[job.departments_list?[1]]
 	if(department?.manifest_key)
-		library[department.manifest_key].inject_record(G)
+		library[department.manifest_key].inject_record(G.Copy())
 
 	//Medical Record
 	var/datum/data/record/medical/M = new()
@@ -392,7 +392,7 @@ SUBSYSTEM_DEF(datacore)
 /datum/controller/subsystem/datacore/proc/can_modify_records(record_key, list/access)
 	switch(record_key)
 		if(DATACORE_RECORDS_STATION)
-			if((ACCESS_CAPTAIN in access) || (ACCESS_DELEGATE in access)) // HACK, need to split ACCESS_FACTION_LEADER away from a new ACCESS_MANAGEMENT
+			if((ACCESS_CAPTAIN in access) || (ACCESS_DELEGATE in access)) // HACK, need to split ACCESS_FACTION_LEADER away from a new ACCESS_FEDERATION
 				return TRUE
 
 		if(DATACORE_RECORDS_AETHER, DATACORE_RECORDS_MEDICAL)

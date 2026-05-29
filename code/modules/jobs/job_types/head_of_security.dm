@@ -1,6 +1,6 @@
 /datum/job/head_of_security
 	title = JOB_SECURITY_MARSHAL
-	description = "Coordinate security personnel, ensure Management's needs are met."
+	description = "Wrangle your rowdy mercenaries to ensure the Feds pay up their end of the bargain."
 	auto_deadmin_role_flags = DEADMIN_POSITION_HEAD|DEADMIN_POSITION_SECURITY
 	department_head = list(JOB_CAPTAIN)
 	head_announce = list(RADIO_CHANNEL_SECURITY)
@@ -33,7 +33,7 @@
 	mind_traits = list(TRAIT_DONUT_LOVER)
 	liver_traits = list(TRAIT_LAW_ENFORCEMENT_METABOLISM, TRAIT_ROYAL_METABOLISM)
 
-	paycheck = PAYCHECK_COMMAND
+	paycheck = PAYCHECK_ASSISTANT * 10
 	paycheck_department = ACCOUNT_SEC
 
 	family_heirlooms = list(/obj/item/book/manual/wiki/security_space_law)
@@ -43,24 +43,12 @@
 	voice_of_god_power = 1.4 //Command staff has authority
 
 
+/datum/job/head_of_security/after_spawn(mob/living/spawned, client/player_client)
+	. = ..()
+	spawned.apply_status_effect(/datum/status_effect/skill_mod/security_marshal)
+
 /datum/job/head_of_security/get_captaincy_announcement(mob/living/captain)
 	return "Due to staffing shortages, newly promoted Acting Captain [captain.real_name] on deck!"
-
-/datum/job/head_of_security/on_join_popup(client/C, job_title_pref)
-	var/content = {"
-		<div style='width:100%; text-align:center; font-size: 20px'>
-		You are the <b>[title]</b>
-		</div>
-		<br>
-		<div style='padding: 0px 30px; text-align: center; font-size: 14px;'>
-		You are loudly and proudly a member of the Federation Galaxia, and you push your corps to carry out Management's will.
-		Ensure the Superintendent is pleased, and your team follows your orders. Insubordination is not tolerated.
-		</div>
-	"}
-	var/datum/browser/popup = new(C.mob, "jobinfo", "Role Information", 480, 360)
-	popup.set_window_options("can_close=1;can_resize=0")
-	popup.set_content(content)
-	popup.open(FALSE)
 
 /datum/outfit/job/hos
 	name = JOB_SECURITY_MARSHAL

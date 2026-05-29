@@ -1,6 +1,6 @@
 /datum/slapcraft_recipe/torch
 	name = "torch"
-	examine_hint = "You could craft a torch, starting by adding dried leaf to a log..."
+	examine_hint = "You could craft a torch with a log and some dry leaves."
 	category = SLAP_CAT_RUSTIC
 	steps = list(
 		/datum/slapcraft_step/log,

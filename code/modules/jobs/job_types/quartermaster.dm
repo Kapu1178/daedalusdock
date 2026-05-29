@@ -1,11 +1,10 @@
 /datum/job/quartermaster
 	title = JOB_QUARTERMASTER
-	description = "Manage your Deckhands and Prospectors, assist with \
-		economical purchasing."
+	description = "Manipulate the colony's economy to your benefit with the help of your Deckhands."
 	faction = FACTION_STATION
 	total_positions = 1
 	spawn_positions = 1
-	selection_color = "#15381b"
+	selection_color = "#276932"
 	exp_requirements = 180
 	exp_required_type = EXP_TYPE_CREW
 	exp_required_type_department = EXP_TYPE_SUPPLY
@@ -21,7 +20,7 @@
 		),
 	)
 
-	paycheck = PAYCHECK_COMMAND
+	paycheck = PAYCHECK_ASSISTANT * 10
 	paycheck_department = ACCOUNT_CAR
 
 	liver_traits = list(TRAIT_ROYAL_METABOLISM)

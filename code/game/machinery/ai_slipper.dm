@@ -18,7 +18,7 @@ TYPEINFO_DEF(/obj/machinery/ai_slipper)
 
 /obj/machinery/ai_slipper/examine(mob/user)
 	. = ..()
-	. += span_notice("It has <b>[uses]</b> uses of foam remaining.")
+	. += span_info("It has <b>[uses]</b> uses of foam remaining.")
 
 /obj/machinery/ai_slipper/update_icon_state()
 	if(machine_stat & BROKEN)

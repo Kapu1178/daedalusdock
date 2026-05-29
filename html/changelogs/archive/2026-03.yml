@@ -1,0 +1,15 @@
+2026-03-07:
+  Kapu1178:
+  - bugfix: Fixed AI being unable to properly use their radio like at all. (FOR REAL
+      THIS TIME)
+  - rscadd: Added armor ratings to magboots. (I forget whose idea this was)
+  - rscadd: Stairs now allow you to climb onto tables or low walls, notably the Theatre
+      of the Atlas.
+2026-03-28:
+  Doctor-Derp:
+  - rscadd: Added a blindfold to Medical's ritual room.
+  - rscadd: Added ATMs to Cargo Lobby, Dormitories, and Medical Lobby.
+  - bugfix: Fixes atmospherics' oxygen tank.
+  - bugfix: Fixes the scrubbers pipe adapter connecting to the supply line in atmospherics
+      maintenance.
+  - bugfix: Fixes Security's camera console to be hooked into the proper network.

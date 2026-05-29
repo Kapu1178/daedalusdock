@@ -1,8 +1,6 @@
 /datum/job/cargo_technician
 	title = JOB_DECKHAND
-	description = "Distribute supplies to the departments that ordered them, \
-		collect empty crates, load and unload the supply shuttle, \
-		ship bounty cubes."
+	description = "Manage the colony's supply chain, making as much money and as few enemies as you can."
 	department_head = list(JOB_QUARTERMASTER)
 	faction = FACTION_STATION
 	total_positions = 3
@@ -20,7 +18,7 @@
 		),
 	)
 
-	paycheck = PAYCHECK_EASY
+	paycheck = PAYCHECK_ASSISTANT * 5
 	paycheck_department = ACCOUNT_CAR
 	departments_list = list(
 		/datum/job_department/cargo,

@@ -56,16 +56,16 @@
 	. = ..()
 	switch(state)
 		if(GIRDER_REINF)
-			. += span_notice("It's reinforcement can be <b>screwed</b> off.")
+			. += span_info("It's reinforcement can be <b>screwed</b> off.")
 		if(GIRDER_REINF_STRUTS)
-			. += span_notice("The reinforcement struts can be <b>reinforced</b> with a material or <b>cut</b> off.")
+			. += span_info("The reinforcement struts can be <b>reinforced</b> with a material or <b>cut</b> off.")
 		if(GIRDER_NORMAL)
-			. += span_notice("The girder can be prepared for reinforcement with <b>rods</b>.")
+			. += span_info("The girder can be prepared for reinforcement with <b>rods</b>.")
 	if(anchored)
 		if(can_displace)
-			. += span_notice("The bolts are <b>wrenched</b> in place.")
+			. += span_info("The bolts are <b>wrenched</b> in place.")
 	else
-		. += span_notice("The bolts are <i>loosened</i>, but the <b>screws</b> are holding [src] together.")
+		. += span_info("The bolts are <i>loosened</i>, but the <b>screws</b> are holding [src] together.")
 
 /obj/structure/girder/attackby(obj/item/W, mob/user, params)
 	var/platingmodifier = 1
@@ -254,7 +254,7 @@
 	if((mover.pass_flags & PASSGRILLE) || istype(mover, /obj/projectile))
 		return prob(girderpasschance)
 
-/obj/structure/girder/CanAStarPass(to_dir, datum/can_pass_info/pass_info)
+/obj/structure/girder/CanAStarPass(to_dir, datum/can_pass_info/pass_info, leaving)
 	if(!density)
 		return TRUE
 

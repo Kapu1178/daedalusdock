@@ -4,8 +4,8 @@
 		emergencies, give patients a roller bed ride to medbay."
 	department_head = list(JOB_AUGUR)
 	faction = FACTION_STATION
-	total_positions = 2
-	spawn_positions = 2
+	total_positions = 0
+	spawn_positions = 0
 	supervisors = "the medical director"
 	selection_color = "#013d3b"
 	exp_granted_type = EXP_TYPE_CREW
@@ -20,7 +20,7 @@
 		),
 	)
 
-	paycheck = PAYCHECK_MEDIUM
+	paycheck = /datum/job/acolyte::paycheck
 	paycheck_department = ACCOUNT_MED
 
 	liver_traits = list(TRAIT_MEDICAL_METABOLISM)
@@ -40,7 +40,7 @@
 		/obj/item/reagent_containers/hypospray/medipen/survival/luxury = 5
 	)
 	rpg_title = "Corpse Runner"
-	job_flags = JOB_ANNOUNCE_ARRIVAL | JOB_CREW_MANIFEST | JOB_EQUIP_RANK | JOB_CREW_MEMBER | JOB_NEW_PLAYER_JOINABLE | JOB_REOPEN_ON_ROUNDSTART_LOSS | JOB_ASSIGN_QUIRKS | JOB_CAN_BE_INTERN
+	job_flags = JOB_ANNOUNCE_ARRIVAL | JOB_CREW_MANIFEST | JOB_EQUIP_RANK | JOB_CREW_MEMBER  | JOB_REOPEN_ON_ROUNDSTART_LOSS | JOB_ASSIGN_QUIRKS | JOB_CAN_BE_INTERN
 
 
 /datum/outfit/job/paramedic

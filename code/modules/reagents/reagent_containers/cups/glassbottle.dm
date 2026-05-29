@@ -79,7 +79,7 @@
 	smash(target, user, extra_bump = FALSE)
 	return TRUE
 
-/obj/item/reagent_containers/cup/glass/bottle/attack(mob/living/M, mob/living/user, params)
+/obj/item/reagent_containers/cup/glass/bottle/attack(mob/living/M, mob/living/user, params, datum/special_attack/used_special)
 	. = ..()
 	if(. && !QDELING(src))
 		smash(M, user)
@@ -224,7 +224,7 @@
 	volume = 30
 	list_reagents = list(/datum/reagent/consumable/ethanol/ale = 30)
 	drink_type = GRAIN | ALCOHOL
-	custom_price = PAYCHECK_EASY
+	custom_price = PAYCHECK_ASSISTANT * 2
 
 	alcoholism_key = "alcoholism_ale"
 	alcoholism_message = "Amber and frothy. You know you want it."
@@ -309,7 +309,7 @@
 	desc = "A 40 full of malt liquor. Kicks stronger than, well, a rabid bear."
 	icon_state = "maltliquorbottle"
 	list_reagents = list(/datum/reagent/consumable/ethanol/beer/maltliquor = 100)
-	custom_price = PAYCHECK_EASY
+	custom_price = PAYCHECK_ASSISTANT * 2
 
 /obj/item/reagent_containers/cup/glass/bottle/holywater
 	name = "flask of holy water"
@@ -364,7 +364,7 @@
 		LAZYSET(W.data,"vintage",wine_info)
 
 /obj/item/reagent_containers/cup/glass/bottle/wine/proc/generate_vintage()
-	return "[CURRENT_STATION_YEAR] Daedalus Light Red"
+	return "'77 Daedalus Light Red"
 
 /obj/item/reagent_containers/cup/glass/bottle/wine/unlabeled
 	name = "unlabeled wine bottle"
@@ -372,10 +372,10 @@
 
 /obj/item/reagent_containers/cup/glass/bottle/wine/unlabeled/generate_vintage()
 	var/current_year = CURRENT_STATION_YEAR
-	var/year = rand(current_year-50,current_year)
+	var/year = rand(current_year-100,current_year-10)
 	var/type = pick("Sparkling","Dry White","Sweet White","Rich White","Rose","Light Red","Medium Red","Bold Red","Dessert")
 	var/origin = pick("Ananke", "Daedalus","Syndicate","Local")
-	return "[year] [origin] [type]"
+	return "'[year] [origin] [type]"
 
 /obj/item/reagent_containers/cup/glass/bottle/absinthe
 	name = "extra-strong absinthe"

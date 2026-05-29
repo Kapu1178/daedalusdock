@@ -204,8 +204,8 @@ INITIALIZE_IMMEDIATE(/obj/effect/landmark)
 	icon_state = JOB_PARAMEDIC
 
 /obj/effect/landmark/start/chemist
-	name = JOB_CHEMIST
-	icon_state = JOB_CHEMIST
+	name = JOB_ALCHEMIST
+	icon_state = JOB_ALCHEMIST
 
 
 /obj/effect/landmark/start/chief_medical_officer

@@ -65,9 +65,9 @@ TYPEINFO_DEF(/obj/item/laser_pointer)
 	. = ..()
 	if(in_range(user, src) || isobserver(user))
 		if(!diode)
-			. += span_notice("The diode is missing.")
+			. += span_info("The diode is missing.")
 		else
-			. += span_notice("A class <b>[diode.rating]</b> laser diode is installed. It is <i>screwed</i> in place.")
+			. += span_info("A class <b>[diode.rating]</b> laser diode is installed. It is <i>screwed</i> in place.")
 
 /obj/item/laser_pointer/interact_with_atom(atom/interacting_with, mob/living/user, list/modifiers)
 	laser_act(interacting_with, user)
@@ -177,7 +177,7 @@ TYPEINFO_DEF(/obj/item/laser_pointer)
 			to_chat(user, span_warning("[src]'s battery is overused, it needs time to recharge!"))
 			recharge_locked = TRUE
 
-	flick_overlay_view(I, targloc, 10)
+	targloc.flick_overlay_view(I, 10)
 	icon_state = "pointer"
 
 /obj/item/laser_pointer/process(delta_time)

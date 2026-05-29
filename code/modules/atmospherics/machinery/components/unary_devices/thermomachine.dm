@@ -121,18 +121,20 @@ TYPEINFO_DEF(/obj/machinery/atmospherics/components/unary/thermomachine)
 	if(!initial(icon))
 		return
 	var/mutable_appearance/thermo_overlay = new(initial(icon))
-	. += get_pipe_image(thermo_overlay, "pipe", dir, COLOR_LIME, piping_layer)
+	var/image/pipe = get_pipe_image(thermo_overlay, "pipe", dir, pipe_color, piping_layer)
+	pipe.appearance_flags |= RESET_COLOR|KEEP_APART
+	. += pipe
 
 /obj/machinery/atmospherics/components/unary/thermomachine/examine(mob/user)
 	. = ..()
-	. += span_notice("With the panel open:")
-	. += span_notice(" -Use a wrench with left-click to rotate [src] and right-click to unanchor it.")
-	. += span_notice(" -Use a multitool with left-click to change the piping layer and right-click to change the piping color.")
-	. += span_notice("The thermostat is set to [target_temperature]K ([(T0C-target_temperature)*-1]C).")
+	. += span_info("With the panel open:")
+	. += span_info(" -Use a wrench with left-click to rotate [src] and right-click to unanchor it.")
+	. += span_info(" -Use a multitool with left-click to change the piping layer and right-click to change the piping color.")
+	. += span_info("The thermostat is set to [target_temperature]K ([(T0C-target_temperature)*-1]C).")
 
 	if(in_range(user, src) || isobserver(user))
-		. += span_notice("Heatsink temperature at <b>[heatsink_temperature]K</b>.")
-		. += span_notice("Temperature range <b>[min_temperature]K - [max_temperature]K ([(T0C-min_temperature)*-1]C - [(T0C-max_temperature)*-1]C)</b>.")
+		. += span_info("Heatsink temperature at <b>[heatsink_temperature]K</b>.")
+		. += span_info("Temperature range <b>[min_temperature]K - [max_temperature]K ([(T0C-min_temperature)*-1]C - [(T0C-max_temperature)*-1]C)</b>.")
 
 /obj/machinery/atmospherics/components/unary/thermomachine/AltClick(mob/living/user)
 	if(!can_interact(user))
@@ -341,6 +343,9 @@ TYPEINFO_DEF(/obj/machinery/atmospherics/components/unary/thermomachine)
 		update_appearance()
 		return
 	. = ..()
+
+/obj/machinery/atmospherics/components/unary/thermomachine/update_layer()
+	return
 
 /obj/machinery/atmospherics/components/unary/thermomachine/freezer
 

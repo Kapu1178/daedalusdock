@@ -17,7 +17,7 @@
 	GLOB.mob_living_list += src
 	SSpoints_of_interest.make_point_of_interest(src)
 	voice_type = pick(voice_type2sound)
-	mob_mood = new(src)
+	create_mood()
 
 	AddElement(/datum/element/movetype_handler)
 	gravity_setup()
@@ -52,6 +52,12 @@
 	QDEL_LAZYLIST(diseases)
 	return ..()
 
+/mob/living/base_item_interaction(mob/living/user, obj/item/tool, list/modifiers)
+	if (user.can_perform_surgery_on(src) && tool.attempt_surgery(src, user))
+		return ITEM_INTERACT_SUCCESS
+
+	return ..()
+
 /mob/living/onZImpact(turf/T, levels, message = TRUE)
 	if(m_intent == MOVE_INTENT_WALK && levels <= 1 && !throwing && !incapacitated())
 		visible_message(
@@ -76,12 +82,15 @@
 	if(SEND_SIGNAL(src, COMSIG_LIVING_Z_IMPACT, levels, T) & NO_Z_IMPACT_DAMAGE)
 		return
 
-	visible_message(span_danger("<b>[src]</b> slams into [T]!"), blind_message = span_hear("You hear something slam into the deck."))
-	TakeFallDamage(levels)
+	visible_message(
+		span_danger("<b>[src]</b> falls onto [T]."),
+		blind_message = span_hear("You hear something slam into the deck.")
+	)
+	TakeFallDamage(T, levels)
 	return TRUE
 
-/mob/living/proc/TakeFallDamage(levels)
-	adjustBruteLoss((levels * 5) ** 1.5)
+/mob/living/proc/TakeFallDamage(turf/T, levels)
+	adjustBruteLoss((levels * 15) ** 1.5)
 	Knockdown(levels * 5 SECONDS)
 	Stun(levels * 2 SECONDS)
 	return TRUE
@@ -158,7 +167,7 @@
 	if(!M.buckled && !M.has_buckled_mobs())
 		if(can_mobswap_with(M))
 			//switch our position with M
-			if(loc && !loc.MultiZAdjacent(M.loc))
+			if(!loc?.MultiZAdjacent(M.loc, M, src))
 				return TRUE
 
 			now_pushing = TRUE
@@ -353,18 +362,6 @@
 		return FALSE
 	log_message("points at [pointing_at]", LOG_EMOTE)
 	visible_message("<span class='infoplain'>[span_name("[src]")] points at [pointing_at].</span>", span_notice("You point at [pointing_at]."))
-
-/mob/living/verb/succumb(whispered as null)
-	set hidden = TRUE
-	if (stat == CONSCIOUS)
-		to_chat(src, text="You are unable to succumb to death! This life continues.", type=MESSAGE_TYPE_INFO)
-		return
-	log_message("Has [whispered ? "whispered his final words" : "succumbed to death"] with [round(health, 0.1)] points of health!", LOG_ATTACK)
-	adjustOxyLoss(health - HEALTH_THRESHOLD_DEAD)
-	updatehealth()
-	if(!whispered)
-		to_chat(src, span_notice("You have given up life and succumbed to death."))
-	death()
 
 /**
  * Checks if a mob is incapacitated
@@ -621,8 +618,9 @@
 /mob/living/update_health_hud()
 	var/severity = 0
 	var/healthpercent = (health/maxHealth) * 100
-	if(hud_used?.healthdoll) //to really put you in the boots of a simplemob
-		var/atom/movable/screen/healthdoll/living/livingdoll = hud_used.healthdoll
+	var/atom/movable/screen/healthdoll/living/livingdoll = hud_used?.screen_objects[HUDKEY_MOB_HEALTH]
+
+	if(livingdoll) //to really put you in the boots of a simplemob
 		switch(healthpercent)
 			if(100 to INFINITY)
 				severity = 0
@@ -638,15 +636,19 @@
 				severity = 5
 			else
 				severity = 6
+
 		livingdoll.icon_state = "living[severity]"
 		if(!livingdoll.filtered)
 			livingdoll.filtered = TRUE
 			var/icon/mob_mask = icon(icon, icon_state)
+
 			if(mob_mask.Height() > world.icon_size || mob_mask.Width() > world.icon_size)
 				var/health_doll_icon_state = health_doll_icon ? health_doll_icon : "megasprite"
 				mob_mask = icon('icons/hud/screen_gen.dmi', health_doll_icon_state) //swap to something generic if they have no special doll
+
 			livingdoll.add_filter("mob_shape_mask", 1, alpha_mask_filter(icon = mob_mask))
 			livingdoll.add_filter("inset_drop_shadow", 2, drop_shadow_filter(size = -1))
+
 	if(severity > 0)
 		overlay_fullscreen("brute", /atom/movable/screen/fullscreen/brute, severity)
 	else
@@ -972,17 +974,36 @@
 /mob/living/proc/resist_restraints()
 	return
 
-/mob/living/proc/update_gravity(gravity)
+/// Called when the mob's gravity state is updated via refresh_gravity()
+/mob/living/proc/update_gravity(new_gravity_state, old_gravity_state)
+	PRIVATE_PROC(TRUE)
+
 	// Handle movespeed stuff
-	var/speed_change = max(0, gravity - STANDARD_GRAVITY)
+	var/speed_change = max(0, new_gravity_state - STANDARD_GRAVITY)
 	if(speed_change)
 		add_or_update_variable_movespeed_modifier(/datum/movespeed_modifier/gravity, slowdown=speed_change)
 	else
 		remove_movespeed_modifier(/datum/movespeed_modifier/gravity)
 
+	update_gravity_alert(new_gravity_state, old_gravity_state)
+
+	// This breaks unit tests
+	#ifndef UNIT_TESTS
+	if(old_gravity_state != null && old_gravity_state != STANDARD_GRAVITY && new_gravity_state == STANDARD_GRAVITY && isturf(loc) && !CanZFall(loc, DOWN))
+		var/datum/roll_result/result = stat_roll(13, /datum/rpg_skill/electric_body)
+		if(result.outcome <= FAILURE)
+			result.do_skill_sound(src)
+			to_chat(src, result.create_tooltip("The sudden change in gravity sends you to the floor."))
+			Knockdown(3 SECONDS)
+	#endif
+
+/// Called by update_gravity().
+/mob/living/proc/update_gravity_alert(new_gravity_state, old_gravity_state)
+	PRIVATE_PROC(TRUE)
+
 	// Time to add/remove gravity alerts. sorry for the mess it's gotta be fast
 	var/atom/movable/screen/alert/gravity_alert = alerts[ALERT_GRAVITY]
-	switch(gravity)
+	switch(new_gravity_state)
 		if(-INFINITY to NEGATIVE_GRAVITY)
 			if(!istype(gravity_alert, /atom/movable/screen/alert/negative))
 				throw_alert(ALERT_GRAVITY, /atom/movable/screen/alert/negative)
@@ -1006,9 +1027,11 @@
 	// If we had no gravity alert, or the same alert as before, go home
 	if(!gravity_alert || alerts[ALERT_GRAVITY] == gravity_alert)
 		return
+
 	// By this point we know that we do not have the same alert as we used to
 	if(istype(gravity_alert, /atom/movable/screen/alert/weightless))
 		REMOVE_TRAIT(src, TRAIT_MOVE_FLOATING, NO_GRAVITY_TRAIT)
+
 	if(istype(gravity_alert, /atom/movable/screen/alert/negative))
 		var/matrix/flipped_matrix = transform
 		flipped_matrix.b = -flipped_matrix.b
@@ -1265,8 +1288,8 @@
 
 			// Randomize everything but the species, which was already handled above.
 			new_human.randomize_human_appearance(~RANDOMIZE_SPECIES)
-			new_human.update_body(is_creating = TRUE)
 			new_human.dna.update_dna_identity()
+			new_human.update_body(is_creating = TRUE)
 			new_mob = new_human
 
 	if(!new_mob)
@@ -1820,7 +1843,7 @@ GLOBAL_LIST_EMPTY(fire_appearances)
 		if(CONSCIOUS)
 			if(. >= UNCONSCIOUS)
 				REMOVE_TRAIT(src, TRAIT_IMMOBILIZED, TRAIT_KNOCKEDOUT)
-				mob_mood?.update_mood()
+				mob_mood?.update_mood(quiet = TRUE)
 				blur_eyes(4)
 
 			REMOVE_TRAIT(src, TRAIT_HANDS_BLOCKED, STAT_TRAIT)
@@ -1853,9 +1876,9 @@ GLOBAL_LIST_EMPTY(fire_appearances)
 	. = ..()
 	switch(blindness_level)
 		if(BLIND_SLEEPING, BLIND_PHYSICAL)
-			stats?.set_skill_modifier(-4, /datum/rpg_skill/skirmish, SKILL_SOURCE_BLINDNESS)
+			stats?.set_skill_modifier(-4, /datum/rpg_skill/bloodsport, SKILL_SOURCE_BLINDNESS)
 		else
-			stats?.remove_skill_modifier(/datum/rpg_skill/skirmish, SKILL_SOURCE_BLINDNESS)
+			stats?.remove_skill_modifier(/datum/rpg_skill/bloodsport, SKILL_SOURCE_BLINDNESS)
 
 ///Reports the event of the change in value of the buckled variable.
 /mob/living/proc/set_buckled(new_buckled)
@@ -2001,13 +2024,13 @@ GLOBAL_LIST_EMPTY(fire_appearances)
 		set_lying_angle(pick(LYING_ANGLE_EAST, LYING_ANGLE_WEST))
 		set_body_position(LYING_DOWN)
 		on_fall()
-		stats?.set_skill_modifier(-2, /datum/rpg_skill/skirmish, SKILL_SOURCE_FLOORED)
+		stats?.set_skill_modifier(-2, /datum/rpg_skill/bloodsport, SKILL_SOURCE_FLOORED)
 
 /// Proc to append behavior to the condition of being floored. Called when the condition ends.
 /mob/living/proc/on_floored_end()
 	if(!resting)
 		get_up()
-		stats?.remove_skill_modifier(/datum/rpg_skill/skirmish, SKILL_SOURCE_FLOORED)
+		stats?.remove_skill_modifier(/datum/rpg_skill/bloodsport, SKILL_SOURCE_FLOORED)
 
 /// Proc to append behavior to the condition of being handsblocked. Called when the condition starts.
 /mob/living/proc/on_handsblocked_start()
@@ -2247,12 +2270,25 @@ GLOBAL_LIST_EMPTY(fire_appearances)
 			return MOUSE_ICON_HOVERING_INTERACTABLE
 		return
 
-	if(A.is_mouseover_interactable && (mobility_flags & MOBILITY_USE) && can_interact_with(A))
-		if(isitem(A))
-			if(!isturf(loc) || (mobility_flags & MOBILITY_PICKUP))
+
+	if(A.is_mouseover_interactable && (mobility_flags & MOBILITY_USE))
+		var/can_interact = FALSE
+		if(istype(A, /atom/movable/screen))
+			if(astype(A, /atom/movable/screen).hud?.mymob == src)
+				can_interact = TRUE
+
+			if(istype(A, /atom/movable/screen/alert))
+				can_interact = astype(A, /atom/movable/screen/alert).owner == src
+
+		else if(can_interact_with(A))
+			can_interact = TRUE
+
+		if(can_interact)
+			if(isitem(A))
+				if(!isturf(loc) || (mobility_flags & MOBILITY_PICKUP))
+					return MOUSE_ICON_HOVERING_INTERACTABLE
+			else
 				return MOUSE_ICON_HOVERING_INTERACTABLE
-		else
-			return MOUSE_ICON_HOVERING_INTERACTABLE
 
 
 /mob/living/do_hurt_animation()
@@ -2304,3 +2340,9 @@ GLOBAL_LIST_EMPTY(fire_appearances)
 /mob/living/set_nutrition(change)
 	. = ..()
 	mob_mood?.update_nutrition_moodlets()
+
+/// This exists so mobs can override mood creation.
+/mob/living/proc/create_mood()
+	if(mob_mood)
+		CRASH("Tried to run create_mood but we already have one.")
+	mob_mood = new(src)

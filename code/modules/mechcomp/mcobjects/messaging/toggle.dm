@@ -9,9 +9,9 @@
 
 /obj/item/mcobject/messaging/toggle/examine(mob/user)
 	. = ..()
-	. += span_notice("Currently [on ? "ON":"OFF"]")
-	. += span_notice("Current ON Message: [on_signal]")
-	. += span_notice("Current OFF Message: [off_signal]")
+	. += span_info("Currently [on ? "ON":"OFF"]")
+	. += span_info("Current ON Message: [on_signal]")
+	. += span_info("Current OFF Message: [off_signal]")
 
 /obj/item/mcobject/messaging/toggle/Initialize(mapload)
 	. = ..()

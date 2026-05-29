@@ -23,12 +23,12 @@ SUBSYSTEM_DEF(communications)
 		return FALSE
 
 	if(is_silicon)
-		minor_announce(html_decode(input),"Station Announcement by [user.name] (AI)", players = players)
+		priority_announce(html_decode(input), "Colony Announcement by [user.name] (AI)", players = players, use_announcer_sound = FALSE)
 		COOLDOWN_START(src, silicon_message_cooldown, COMMUNICATION_COOLDOWN_AI)
 	else
 		priority_announce(
 			html_decode(user.treat_message(input)),
-			"Station Announcement by [sender_name]",
+			"Colony Announcement by [sender_name]",
 			sound_type = 'sound/misc/announce.ogg',
 			send_to_newscaster = !syndicate,
 			do_not_modify = TRUE,

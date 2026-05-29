@@ -252,8 +252,8 @@
 
 /obj/machinery/atmospherics/components/binary/circulator/examine(mob/user)
 	. = ..()
-	. += span_notice(" -Use a wrench with left-click to rotate it and right-click to unanchor it.")
-	. += span_notice(" -Use a screwdriver to toggle hot/cold mode.")
-	. += span_notice(" -Use a multitool with left-click to change pipe layer and right-click to change pipe color.")
-	. += span_notice("Its outlet port is to the [dir2text(flipped ? (turn(dir, 270)) : (turn(dir, 90)))].")
-	. += span_notice("It is on [mode ? "cold" : "hot"] mode.")
+	. += span_info(" -Use a wrench with left-click to rotate it and right-click to unanchor it.")
+	. += span_info(" -Use a screwdriver to toggle hot/cold mode.")
+	. += span_info(" -Use a multitool with left-click to change pipe layer and right-click to change pipe color.")
+	. += span_info("Its outlet port is to the [dir2text(flipped ? (turn(dir, 270)) : (turn(dir, 90)))].")
+	. += span_info("It is on [mode ? "cold" : "hot"] mode.")

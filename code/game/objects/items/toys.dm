@@ -207,7 +207,7 @@
 
 /obj/item/toy/captainsaid/examine_more(mob/user)
 	. = ..()
-	. += span_notice("You could swear you've been hearing advertisments for the 'soon upcoming' release of a tablet version for the better part of 3 years...")
+	. += span_info("You could swear you've been hearing advertisments for the 'soon upcoming' release of a tablet version for the better part of 3 years...")
 
 /obj/item/toy/captainsaid/attack_self(mob/living/user)
 	current_mode++
@@ -350,7 +350,7 @@ TYPEINFO_DEF(/obj/item/toy/gun)
 	return ITEM_INTERACT_SUCCESS
 
 TYPEINFO_DEF(/obj/item/toy/ammo/gun)
-	default_materials = list(/datum/material/iron=10, /datum/material/glass=10)
+	default_materials = list(/datum/material/iron = 20, /datum/material/glass = 5)
 
 /obj/item/toy/ammo/gun
 	name = "capgun ammo"
