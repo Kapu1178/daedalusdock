@@ -8,6 +8,9 @@
 		if(isabstract(design))
 			continue
 
+		if(design.build_type & BIOGENERATOR)
+			continue
+
 		var/object_path = design.build_path
 		if(isnull(object_path))
 			if(!length(design.make_reagents))
