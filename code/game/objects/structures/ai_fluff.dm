@@ -1,5 +1,7 @@
-#warn name desc
 /obj/structure/ai_fluff
+	name = "BRAD-II Computer Mainframe"
+	desc = "The logical core of a BRAD-II unit."
+
 	icon = 'goon/icons/obj/96x96.dmi'
 	icon_state = "oldai-t2"
 
@@ -15,3 +17,4 @@
 /obj/structure/ai_fluff/brad
 	icon = 'goon/icons/obj/96x96.dmi'
 	icon_state = "oldai-t1"
+

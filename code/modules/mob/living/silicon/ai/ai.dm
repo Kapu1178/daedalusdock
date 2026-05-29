@@ -11,10 +11,11 @@
 				subject.attack_ai(M)
 	return is_in_use
 
-#warn desc
 /mob/living/silicon/ai
 	name = "AI"
 	real_name = "AI"
+
+	desc = "A BRAD-II model Independent Station Intelligence."
 	icon = 'icons/mob/ai.dmi'
 	icon_state = ""
 
