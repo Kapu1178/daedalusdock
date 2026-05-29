@@ -30,10 +30,10 @@
 	mapload_design_flags = DESIGN_FAB_SERVICE | DESIGN_FAB_OMNI
 
 /datum/design/crowbar
-	name = "Pocket Crowbar"
+	name = "Crowbar"
 	id = "crowbar"
 	build_type = AUTOLATHE | FABRICATOR
-	materials = list(/datum/material/iron = 50)
+	materials = list(/datum/material/iron = 70)
 	build_path = /obj/item/crowbar
 	category = list(DCAT_BASIC_TOOL)
 	mapload_design_flags = DESIGN_FAB_ENGINEERING | DESIGN_FAB_OMNI
@@ -141,7 +141,7 @@
 	name = "Cable Coil"
 	id = "cable_coil"
 	build_type = AUTOLATHE | FABRICATOR
-	materials = list(/datum/material/iron = 10, /datum/material/glass = 5)
+	materials = list(/datum/material/iron = 10 * MAXCOIL, /datum/material/glass = 5 * MAXCOIL)
 	build_path = /obj/item/stack/cable_coil
 	category = list(DCAT_BASIC_TOOL)
 	maxstack = MAXCOIL

@@ -52,7 +52,7 @@
 	desc = "A gas mask with built in welding goggles and face shield. Looks like a skull, clearly designed by a nerd."
 	id = "weldingmask"
 	build_type = FABRICATOR
-	materials = list(/datum/material/iron = 3000, /datum/material/glass = 1000)
+	materials = list(/datum/material/iron=4000, /datum/material/glass=2000)
 	build_path = /obj/item/clothing/mask/gas/welding
 	category = list(DCAT_WEARABLE, DCAT_ATMOS)
 	mapload_design_flags = DESIGN_FAB_OMNI | DESIGN_FAB_ENGINEERING

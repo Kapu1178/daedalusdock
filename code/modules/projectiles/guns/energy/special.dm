@@ -94,6 +94,13 @@
 	ammo_type = list(/obj/item/ammo_casing/energy/mindflayer)
 	ammo_x_offset = 2
 
+TYPEINFO_DEF(/obj/item/gun/energy/plasmacutter)
+	default_materials = list(
+		/datum/material/iron = 1500,
+		/datum/material/glass = 500,
+		/datum/material/plasma = 400
+	)
+
 /obj/item/gun/energy/plasmacutter
 	name = "plasma cutter"
 	desc = "A mining tool capable of expelling concentrated plasma bursts. You could use it to cut limbs off xenos! Or, you know, mine stuff."

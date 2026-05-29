@@ -1,3 +1,9 @@
+TYPEINFO_DEF(/obj/item/wallframe/light_switch)
+	default_materials = list(
+		/datum/material/iron = 200,
+		/datum/material/glass = 200,
+	)
+
 /obj/item/wallframe/light_switch
 	name = "light switch frame"
 	icon = /obj/machinery/light_switch::icon

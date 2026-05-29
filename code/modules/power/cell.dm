@@ -299,7 +299,7 @@ TYPEINFO_DEF(/obj/item/stock_parts/cell/super)
 	empty = TRUE
 
 TYPEINFO_DEF(/obj/item/stock_parts/cell/hyper)
-	default_materials = list(/datum/material/glass=400)
+	default_materials = list(/datum/material/iron = 700, /datum/material/gold = 150, /datum/material/silver = 150, /datum/material/glass = 80)
 
 /obj/item/stock_parts/cell/hyper
 	name = "hyper-capacity power cell"
@@ -311,7 +311,7 @@ TYPEINFO_DEF(/obj/item/stock_parts/cell/hyper)
 	empty = TRUE
 
 TYPEINFO_DEF(/obj/item/stock_parts/cell/bluespace)
-	default_materials = list(/datum/material/glass=600)
+	default_materials = list(/datum/material/iron = 800, /datum/material/gold = 120, /datum/material/glass = 160, /datum/material/diamond = 160, /datum/material/titanium = 300, /datum/material/bluespace = 100)
 
 /obj/item/stock_parts/cell/bluespace
 	name = "bluespace power cell"

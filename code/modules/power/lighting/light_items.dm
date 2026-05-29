@@ -45,6 +45,9 @@ TYPEINFO_DEF(/obj/item/light)
 /obj/item/light/tube/broken
 	status = LIGHT_BROKEN
 
+TYPEINFO_DEF(/obj/item/light/bulb)
+	default_materials = list(/datum/material/glass = 50)
+
 /obj/item/light/bulb
 	name = "light bulb"
 	desc = "A replacement light bulb."

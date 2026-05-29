@@ -33,3 +33,8 @@
       with a cell recharger.
   Kapu1178:
   - rscadd: Overhauls TGchat
+2026-05-28:
+  Doctor-Derp:
+  - rscadd: Replaced the standard EVA and emergency suit sprites with ones ported
+      from Baystation.
+  - rscadd: Standard EVA suits now include a headlamp and welding visor toggle.
