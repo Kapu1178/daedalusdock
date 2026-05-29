@@ -9,16 +9,17 @@
 	announceWhen = 15
 
 	var/virus_type
-
 	var/max_severity = 3
 
 
 /datum/round_event/disease_outbreak/announce(fake)
-	priority_announce("Confirmed outbreak of level 7 viral biohazard aboard [station_name()]. All personnel must contain the outbreak.", sound_type = ANNOUNCER_OUTBREAK7)
+	priority_announce(
+		"Confirmed outbreak of level 7 viral biohazard aboard [station_name()]. Please work with any available medical professionals to quarentine the threat.",
+		sound_type = ANNOUNCER_OUTBREAK7
+	)
 
 /datum/round_event/disease_outbreak/setup()
 	announceWhen = rand(15, 30)
-
 
 /datum/round_event/disease_outbreak/start()
 	var/advanced_virus = FALSE

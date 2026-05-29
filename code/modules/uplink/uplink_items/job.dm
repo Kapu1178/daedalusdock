@@ -19,14 +19,6 @@
 	restricted_roles = list(JOB_ARCHIVIST)
 	limited_stock = 1 //please don't spam deadchat
 
-/datum/uplink_item/role_restricted/bureaucratic_error_remote
-	name = "Organic Resources Disturbance Inducer"
-	desc = "A device that raises hell in organic resources indirectly. Single use."
-	cost = 2
-	limited_stock = 1
-	item = /obj/item/devices/bureaucratic_error_remote
-	restricted_roles = list(JOB_HEAD_OF_PERSONNEL, JOB_QUARTERMASTER)
-
 /datum/uplink_item/role_restricted/clumsinessinjector //clown ops can buy this too, but it's in the pointless badassery section for them
 	name = "Clumsiness Injector"
 	desc = "Inject yourself with this to become as clumsy as a clown... or inject someone ELSE with it to make THEM as clumsy as a clown. Useful for clowns who wish to reconnect with their former clownish nature or for clowns who wish to torment and play with their prey before killing them."

@@ -1,29 +1,42 @@
-#define RANDOM_EVENT_ADMIN_INTERVENTION_TIME 10
+#define RANDOM_EVENT_ADMIN_INTERVENTION_TIME 20
 
-//this singleton datum is used by the events controller to dictate how it selects events
+/// Every round event has a round event controller that persists across event runs to store transient data.
 /datum/round_event_control
-	var/name //The human-readable name of the event
-	var/typepath //The typepath of the event datum /datum/round_event
+	/// The human-readable name of the event
+	var/name
+	/// The typepath of the event datum /datum/round_event
+	var/datum/round_event/typepath
 
-	var/weight = 10 //The weight this event has in the random-selection process.
-									//Higher weights are more likely to be picked.
-									//10 is the default weight. 20 is twice more likely; 5 is half as likely as this default.
-									//0 here does NOT disable the event, it just makes it extremely unlikely
+	///The weight this event has in the random-selection process.
+	/// Higher weights are more likely to be picked.
+	/// 10 is the default weight. 20 is twice more likely; 5 is half as likely as this default.
+	/// 0 here does NOT disable the event, it just makes it extremely unlikely
+	var/weight = 10
 
-	var/earliest_start = 20 MINUTES //The earliest world.time that an event can start (round-duration in deciseconds) default: 20 mins
-	var/min_players = 0 //The minimum amount of alive, non-AFK human players on server required to start the event.
+	/// The earliest world.time that an event can start.
+	var/earliest_start = 20 MINUTES
+	// /The minimum amount of alive, non-AFK human players on server required to start the event.
+	var/min_players = 0
 
+	/// How many times this event has occured
 	var/occurrences = 0 //How many times this event has occured
-	var/max_occurrences = 20 //The maximum number of times this event can occur (naturally), it can still be forced.
-									//By setting this to 0 you can effectively disable an event.
 
-	var/holidayID = "" //string which should be in the SSeventss.holidays list if you wish this event to be holiday-specific
-									//anything with a (non-null) holidayID which does not match holiday, cannot run.
+	///The maximum number of times this event can occur (naturally), it can still be forced.
+	/// By setting this to 0 you can effectively disable an event.
+	var/max_occurrences = 20
+
+	/// string which should be in the SSeventss.holidays list if you wish this event to be holiday-specific
+	/// anything with a (non-null) holidayID which does not match holiday, cannot run.
+	var/holidayID = ""
+
+	/// This event requires Wizard Mode:tm: to be able to run.
 	var/wizardevent = FALSE
-	var/alert_observers = TRUE //should we let the ghosts and admins know this event is firing
-									//should be disabled on events that fire a lot
 
-	var/triggering //admin cancellation
+	/// Should we let the ghosts and admins know this event is firing?
+	var/alert_observers = TRUE
+
+	/// Set to TRUE while sleeping to give admins time to cancel the event.
+	var/awaiting_admin_intervention = FALSE
 
 	/// Whether or not dynamic should hijack this event
 	var/dynamic_should_hijack = FALSE
@@ -41,7 +54,7 @@
 /datum/round_event_control/proc/canSpawnEvent(players_amt)
 	if(occurrences >= max_occurrences)
 		return FALSE
-	if(earliest_start >= world.time-SSticker.round_start_time)
+	if(earliest_start >= world.time - SSticker.round_start_time)
 		return FALSE
 	if(wizardevent != SSevents.wizardmode)
 		return FALSE
@@ -58,6 +71,7 @@
 
 	return TRUE
 
+/// Called before an event executes. An admin can potentially intervene here.
 /datum/round_event_control/proc/preRunEvent()
 	if(!ispath(typepath, /datum/round_event))
 		return EVENT_CANT_RUN
@@ -65,27 +79,29 @@
 	if (SEND_GLOBAL_SIGNAL(COMSIG_GLOB_PRE_RANDOM_EVENT, src) & CANCEL_PRE_RANDOM_EVENT)
 		return EVENT_INTERRUPTED
 
-	triggering = TRUE
-	if (alert_observers)
-		message_admins("Random Event triggering in [RANDOM_EVENT_ADMIN_INTERVENTION_TIME] seconds: [name] (<a href='?src=[REF(src)];cancel=1'>CANCEL</a>)")
-		sleep(RANDOM_EVENT_ADMIN_INTERVENTION_TIME SECONDS)
-		var/players_amt = get_active_player_count(alive_check = TRUE, afk_check = TRUE, human_check = TRUE)
-		if(!canSpawnEvent(players_amt))
-			message_admins("Second pre-condition check for [name] failed, skipping...")
-			return EVENT_INTERRUPTED
+	awaiting_admin_intervention = TRUE
 
-	if(!triggering)
+	message_admins("Random Event triggering in [RANDOM_EVENT_ADMIN_INTERVENTION_TIME] seconds: [name] (<a href='?src=[REF(src)];cancel=1'>CANCEL</a>)")
+	sleep(RANDOM_EVENT_ADMIN_INTERVENTION_TIME SECONDS)
+	var/players_amt = get_active_player_count(alive_check = TRUE, afk_check = TRUE, human_check = TRUE)
+	if(!canSpawnEvent(players_amt))
+		message_admins("Second pre-condition check for [name] failed, skipping...")
+		return EVENT_INTERRUPTED
+
+	if(!awaiting_admin_intervention)
 		return EVENT_CANCELLED //admin cancelled
-	triggering = FALSE
+
+	awaiting_admin_intervention = FALSE
 	return EVENT_READY
 
 /datum/round_event_control/Topic(href, href_list)
 	..()
 	if(href_list["cancel"])
-		if(!triggering)
+		if(!awaiting_admin_intervention)
 			to_chat(usr, span_admin("You are too late to cancel that event"))
 			return
-		triggering = FALSE
+
+		awaiting_admin_intervention = FALSE
 		message_admins("[key_name_admin(usr)] cancelled event [name].")
 		log_admin_private("[key_name(usr)] cancelled event [name].")
 		SSblackbox.record_feedback("tally", "event_admin_cancelled", 1, typepath)

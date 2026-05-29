@@ -405,7 +405,7 @@ DEFINE_INTERACTABLE(/obj/machinery/power/apc)
 
 	return TRUE
 
-/obj/machinery/power/apc/process()
+/obj/machinery/power/apc/process(delta_time)
 	if(icon_update_needed)
 		update_appearance()
 	if(machine_stat & (BROKEN|MAINT))
@@ -413,7 +413,7 @@ DEFINE_INTERACTABLE(/obj/machinery/power/apc)
 	if(!area || !area.requires_power)
 		return
 	if(failure_timer)
-		failure_timer--
+		failure_timer = max(0, failure_timer - delta_time)
 		force_update = TRUE
 		return
 

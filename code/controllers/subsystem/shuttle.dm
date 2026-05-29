@@ -109,9 +109,6 @@ SUBSYSTEM_DEF(shuttle)
 	/// Only the images from the [/datum/controller/subsystem/shuttle/hidden_shuttle_turfs] list.
 	var/list/hidden_shuttle_turf_images = list()
 
-	/// The current shuttle loan event, if any.
-	var/datum/round_event/shuttle_loan/shuttle_loan
-
 	/// If the event happens where the crew can purchase shuttle insurance, catastrophe can't run.
 	var/shuttle_insurance = FALSE
 	// If the station has purchased a replacement escape shuttle this round.
@@ -680,9 +677,6 @@ SUBSYSTEM_DEF(shuttle)
 		request_list = SSshuttle.request_list
 	if (istype(SSshuttle.order_history))
 		order_history = SSshuttle.order_history
-
-	if (istype(SSshuttle.shuttle_loan))
-		shuttle_loan = SSshuttle.shuttle_loan
 
 	if (istype(SSshuttle.shuttle_purchase_requirements_met))
 		shuttle_purchase_requirements_met = SSshuttle.shuttle_purchase_requirements_met

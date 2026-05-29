@@ -519,6 +519,17 @@
 		group.register(i)
 	desc += " The implants are registered to the \"[group.name]\" group."
 
+// Moved from shuttle loan code, im lazy.
+/obj/item/storage/belt/fannypack/yellow/bee_terrorist/PopulateContents()
+	new /obj/item/grenade/c4 (src)
+	new /obj/item/reagent_containers/pill/cyanide(src)
+	new /obj/item/grenade/chem_grenade/facid(src)
+
+/obj/item/paper/fluff/bee_objectives
+	name = "Objectives of a Bee Liberation Front Operative"
+	info = "<b>Objective #1</b>. Liberate all bees on the NT transport vessel 2416/B. <b>Success!</b>  <br><b>Objective #2</b>. Escape alive. <b>Failed.</b>"
+
+
 #undef KIT_RECON
 #undef KIT_BLOODY_SPAI
 #undef KIT_STEALTHY

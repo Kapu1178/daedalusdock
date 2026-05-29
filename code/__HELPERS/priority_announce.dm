@@ -10,9 +10,9 @@
  * * send_to_newscaster (boolean) Whether or not to post this to newscasters
  * * do_not_modify (boolean) Whether or not station announcers can add to this message.
  * * players (list or null) The players we're sending to. If null, send to all players.
- * * use_announcer_sound (boolean) If FALSE, will play the voiceless chime instead of using the station announcer.
+ * * override_sound (sound or null) A sound datum to play instead of the usual sound.
  */
-/proc/priority_announce(text = "", super_title = "Colony Announcement", sub_title = "", sound_type = ANNOUNCER_DEFAULT, send_to_newscaster = FALSE, do_not_modify = FALSE, list/players, use_announcer_sound = TRUE)
+/proc/priority_announce(text = "", super_title = "Colony Announcement", sub_title = "", sound_type = ANNOUNCER_DEFAULT, send_to_newscaster = FALSE, do_not_modify = FALSE, list/players, sound/override_sound = TRUE)
 	if(!text)
 		return
 
@@ -32,7 +32,7 @@
 	else
 		announcement += "<div class='priorityAnnounceBody'>[html_encode(text)]</div>"
 
-	var/sound/sound2use = use_announcer_sound ? SSstation.announcer.event_sounds[sound_type] : 'goon/sounds/announcement_1.ogg'
+	var/sound/sound2use = override_sound || SSstation.announcer.event_sounds[sound_type]
 
 	//Find the sound requested if it isn't covered by announcer events already
 	if(isnull(sound2use))

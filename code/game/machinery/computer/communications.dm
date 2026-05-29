@@ -268,9 +268,9 @@
 			var/datum/bank_account/bank_account = SSeconomy.department_accounts_by_id[ACCOUNT_CAR]
 			if (bank_account.account_balance < shuttle.credit_cost)
 				return
+
 			SSshuttle.shuttle_purchased = SHUTTLEPURCHASE_PURCHASED
-			for(var/datum/round_event_control/shuttle_insurance/insurance_event in SSevents.control)
-				insurance_event.weight *= 20
+
 			SSshuttle.unload_preview()
 			SSshuttle.existing_shuttle = SSshuttle.emergency
 			SSshuttle.action_load(shuttle, replace = TRUE)
@@ -280,7 +280,6 @@
 			priority_announce(
 				"[purchaser_name] has purchased [shuttle.name] for [shuttle.credit_cost] marks.[shuttle.extra_desc ? " [shuttle.extra_desc]" : ""]" ,
 				sub_title = "Shuttle Purchase",
-				use_announcer_sound = FALSE
 			)
 
 			message_admins("[ADMIN_LOOKUPFLW(usr)] purchased [shuttle.name].")
@@ -465,7 +464,7 @@
 	payload["sender_ckey"] = usr.ckey
 
 	send2otherserver(html_decode(station_name()), message, "Comms_Console", destination == "all" ? null : list(destination), additional_data = payload)
-	priority_announce(message, sub_title = "Outbound message to nearby station", use_announcer_sound = FALSE)
+	priority_announce(message, sub_title = "Outbound message to nearby station")
 	usr.log_talk(message, LOG_SAY, tag = "message to the other server")
 	message_admins("[ADMIN_LOOKUPFLW(usr)] has sent a message to the other server\[s].")
 	deadchat_broadcast(" has sent an outgoing message to the other station(s).</span>", "<span class='bold'>[usr.real_name]", usr, message_type = DEADCHAT_ANNOUNCEMENT)

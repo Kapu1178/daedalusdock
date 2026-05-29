@@ -23,7 +23,7 @@ SUBSYSTEM_DEF(communications)
 		return FALSE
 
 	if(is_silicon)
-		priority_announce(html_decode(input), "Colony Announcement by [user.name] (AI)", players = players, use_announcer_sound = FALSE)
+		priority_announce(html_decode(input), "Colony Announcement by [user.name] (AI)", sound_type = ANNOUNCER_DEFAULT, players = players)
 		COOLDOWN_START(src, silicon_message_cooldown, COMMUNICATION_COOLDOWN_AI)
 	else
 		priority_announce(
