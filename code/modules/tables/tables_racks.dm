@@ -930,6 +930,10 @@ TYPEINFO_DEF(/obj/structure/table/optable)
 	var/obj/machinery/vitals_monitor/connected_monitor
 	var/mob/living/carbon/human/patient = null
 
+/obj/structure/table/optable/examine(mob/user)
+	. = ..()
+	. += user.disco_made_easy("operating_table", 13, skill_path = /datum/rpg_skill/forensics, is_examine=TRUE,  success_text = "There is something engraved on the surface; \"Minerva's blessings to you, bless us. Twilight Mother blessings to you, bless us.\"")
+
 /obj/structure/table/optable/Destroy()
 	if(patient)
 		set_patient(null)
