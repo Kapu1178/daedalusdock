@@ -5674,6 +5674,7 @@
 /obj/structure/cable/yellow{
 	icon_state = "8"
 	},
+/obj/machinery/door/window/left/directional/north,
 /turf/open/floor/iron/iron_large,
 /area/station/medical/medbay)
 "fSW" = (
@@ -19328,7 +19329,6 @@
 /turf/open/floor/plating,
 /area/station/maintenance/fore)
 "toh" = (
-/obj/structure/window/spawner,
 /obj/effect/turf_decal/ported/techfloor/edges,
 /turf/open/floor/iron,
 /area/station/hallway/primary/central/fore)
@@ -20243,7 +20243,6 @@
 /turf/open/floor/plating,
 /area/station/maintenance/starboard/lesser)
 "uqe" = (
-/obj/machinery/door/window/left/directional/south,
 /obj/effect/turf_decal/ported/techfloor/edges,
 /obj/machinery/atm/directional/west,
 /turf/open/floor/iron,
@@ -21592,6 +21591,7 @@
 /obj/structure/cable/yellow{
 	icon_state = "6"
 	},
+/obj/machinery/door/window/left/directional/north,
 /turf/open/floor/iron/iron_large,
 /area/station/medical/medbay)
 "vHq" = (
