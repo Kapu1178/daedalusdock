@@ -5967,7 +5967,9 @@
 	dir = 1
 	},
 /obj/effect/turf_decal/siding/fancy/grey/corner,
-/obj/machinery/computer/security,
+/obj/machinery/computer/security{
+	network = list("engineering", "civilian", "cargo", "public", "command", "medical", "security")
+	},
 /obj/machinery/power/apc/auto_name/directional/north,
 /obj/structure/cable/yellow{
 	icon_state = "2"
@@ -9164,7 +9166,6 @@
 /area/station/medical/surgery/port)
 "jjD" = (
 /obj/machinery/modular_computer/console/preset/id,
-/obj/item/paper/fluff/ids_for_dummies,
 /turf/open/floor/carpet/royalblue,
 /area/station/hallway/secondary/command)
 "jkz" = (
