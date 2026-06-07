@@ -646,7 +646,7 @@
 /obj/structure/table/wood,
 /obj/machinery/power/data_terminal,
 /obj/machinery/telephone/service{
-	friendly_name = Bar
+	friendly_name = "Bar"
 	},
 /obj/structure/cable/yellow{
 	icon_state = "32"
