@@ -2224,7 +2224,6 @@
 /obj/structure/table/glass,
 /obj/machinery/body_scan_display/directional/south,
 /obj/item/fixovein,
-/obj/item/cautery,
 /obj/item/radio/intercom/directional/east,
 /turf/open/floor/iron/white/white_large,
 /area/station/medical/surgery/starboard)
@@ -4809,8 +4808,8 @@
 /obj/effect/turf_decal/tile/neutral{
 	dir = 1
 	},
-/obj/structure/tank_holder/extinguisher,
 /obj/machinery/firealarm/directional/north,
+/obj/machinery/telecomms/message_server/preset,
 /turf/open/floor/iron,
 /area/station/tcommsat/server)
 "eZf" = (
@@ -7848,6 +7847,7 @@
 "hUV" = (
 /obj/structure/table/glass,
 /obj/machinery/light/small/directional/west,
+/obj/item/storage/box/bodybags,
 /turf/open/floor/iron,
 /area/station/medical/morgue)
 "hVz" = (
@@ -9159,7 +9159,6 @@
 /obj/structure/table/glass,
 /obj/machinery/body_scan_display/directional/south,
 /obj/item/fixovein,
-/obj/item/cautery,
 /obj/item/radio/intercom/directional/east,
 /turf/open/floor/iron/white/white_large,
 /area/station/medical/surgery/port)
@@ -10809,6 +10808,7 @@
 	},
 /obj/machinery/airalarm/directional/north,
 /obj/machinery/atmospherics/components/unary/vent_pump/on/layer4,
+/obj/structure/tank_holder/extinguisher,
 /turf/open/floor/iron,
 /area/station/tcommsat/server)
 "kYp" = (
@@ -12811,7 +12811,7 @@
 	icon_state = "16"
 	},
 /obj/machinery/telephone/engineering{
-	friendly_name = Engine Monitoring Room
+	friendly_name = EngineMonitoringRoom
 	},
 /obj/machinery/power/data_terminal,
 /turf/open/floor/iron/dark,
@@ -15333,6 +15333,7 @@
 /obj/structure/table/glass,
 /obj/machinery/airalarm/directional/north,
 /obj/item/radio/intercom/directional/west,
+/obj/effect/mapping_helpers/dead_body_placer,
 /turf/open/floor/iron,
 /area/station/medical/morgue)
 "pwo" = (
