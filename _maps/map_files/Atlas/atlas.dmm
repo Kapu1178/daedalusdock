@@ -12812,7 +12812,7 @@
 	icon_state = "16"
 	},
 /obj/machinery/telephone/engineering{
-	friendly_name = EngineMonitoringRoom
+	friendly_name = "EngineMonitoringRoom"
 	},
 /obj/machinery/power/data_terminal,
 /turf/open/floor/iron/dark,
