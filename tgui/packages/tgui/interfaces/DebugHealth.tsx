@@ -1,5 +1,5 @@
 import { toTitleCase } from 'common/string';
-import { Tooltip } from 'tgui-core/components';
+import { Tooltip } from '../components';
 
 import { useBackend, useLocalState } from '../backend';
 import {

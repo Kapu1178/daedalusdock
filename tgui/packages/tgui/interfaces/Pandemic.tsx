@@ -1,4 +1,4 @@
-import { Tooltip } from 'tgui-core/components';
+import { Tooltip } from '../components';
 
 import { BooleanLike } from '../../common/react';
 import { useBackend, useLocalState } from '../backend';
