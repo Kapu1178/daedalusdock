@@ -121,9 +121,8 @@ GLOBAL_DATUM_INIT(success_roll, /datum/roll_result/success, new)
 /datum/roll_result/proc/calculate_probability()
 	success_prob = round(dice_probability(3, 6, clamp(requirement - modifier, 0, 18)), 0.01)
 
-
 /datum/roll_result/proc/create_tooltip(body, body_only = FALSE)
-	if(!skill_type_used)
+	if(!skill_type_used || body_only)
 		if(outcome >= SUCCESS)
 			body = span_statsgood(body)
 		else
@@ -160,33 +159,8 @@ GLOBAL_DATUM_INIT(success_roll, /datum/roll_result/success, new)
 		if(CRIT_FAILURE)
 			success = "Critical Failure"
 
-	// var/finished_prob_string = "<span style='color: #bbbbad;font-style: italic'>\[[prob_string]: [success]\]</span>"
-	// var/prefix
-	// if(outcome >= SUCCESS)
-	// 	prefix = "<span class='statsGood' style='text-shadow: inherit;'>[uppertext(initial(skill_type_used.name))]</span> "
-	// 	body = span_statsgood(body)
-	// else
-	// 	prefix = "<span class='statsBad' style='text-shadow: inherit;'>[uppertext(initial(skill_type_used.name))]</span> "
-	// 	body = span_statsbad(body)
-
-	// var/modifier_string = ""
-	// if(modifier)
-	// 	var/modifier_string_inner = modifier > 0 ? "+[modifier]" : "[modifier]"
-	// 	var/modifier_class = (modifier >= 0) ? "statsGood" : "statsBad"
-	// 	modifier_string = " (<span class='[modifier_class]' style='font-weight: bold;text-shadow: inherit;font-style: inherit'>[modifier_string_inner]</span>)"
-
-	// var/result_class = (outcome >= SUCCESS) ? "statsGood" : "statsBad"
-	// var/result_string = "Result: <span class='[result_class]' style='font-weight: bold;text-shadow: inherit;font-style: inherit'><b>[roll + modifier]</b></span>[modifier_string]"
-	// var/tooltip_html = "<div>[success_prob]% | [result_string] | Check: <b>[requirement]</b></div><div style='display: flex;flex-direction: horizontal;justify-content: center;margin-top: 8px;gap: 4px;'>[dice_svg_cache]</div>"
-	// var/seperator = "<span style='color: #bbbbad;font-style: italic'>: </span>"
-
 	var/finished_prob_string = "\[[prob_string]: [success]\]"
-
-	if(body_only)
-		return body
-	//return "[prefix]<span data-component=\"Tooltip\" data-innerhtml=\"[html_encode(tooltip_html)]\" data-position=\"top\" class=\"tooltip\">[finished_prob_string]</span>[seperator][body]"
-
-	return "<span data-component=\"SkillRollTooltip\" data-chance=\"[success_prob]\" data-chancestring=\"[finished_prob_string]\" data-good=\"$[outcome >= SUCCESS ? "true" : "false"]\" data-modifier=\"[modifier || 0]\" data-requirement=\"[requirement]\" data-roll=\"[roll]\" data-skillName=\"[uppertext(skill_type_used.name)]\" data-text=\"[body]\" data-dice=\"[jointext(dice_list, "-")]\"</span>"
+	return "<span data-component=\"SkillRollTooltip\" data-chance=\"[success_prob]\" data-chancestring=\"[finished_prob_string]\" data-success=\"$[outcome >= SUCCESS ? "true" : "false"]\" data-modifier=\"[modifier || 0]\" data-requirement=\"[requirement]\" data-roll=\"[roll]\" data-skillName=\"[uppertext(skill_type_used.name)]\" data-text=\"[body]\" data-dice=\"[jointext(dice_list, "-")]\"</span>"
 
 /// Play
 /datum/roll_result/proc/do_skill_sound(mob/user)

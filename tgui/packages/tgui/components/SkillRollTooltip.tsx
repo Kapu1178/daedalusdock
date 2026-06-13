@@ -1,3 +1,4 @@
+import { classes } from 'common/react';
 import { BooleanLike } from 'tgui-core/react';
 
 import { Flex } from './Flex';
@@ -5,8 +6,8 @@ import { Tooltip } from './Tooltip';
 
 type Props = {
   chanceString: string;
-  good: BooleanLike;
   skillName: string;
+  success: BooleanLike;
   text: string;
 } & Omit<TooltipContentProps, 'classChaser'>;
 
@@ -15,7 +16,7 @@ export function SkillRollTooltip(props: Props) {
     chance,
     chanceString,
     dice,
-    good,
+    success,
     modifier,
     requirement,
     roll,
@@ -23,7 +24,7 @@ export function SkillRollTooltip(props: Props) {
     text,
   } = props;
 
-  const goodorbadClass = good ? 'good' : 'bad';
+  const goodorbadClass = success ? 'good' : 'bad';
   return (
     <Flex direction="row">
       <span className={`RollTooltip__skillName--${goodorbadClass}`}>
@@ -39,6 +40,7 @@ export function SkillRollTooltip(props: Props) {
             modifier={modifier}
             roll={roll}
             requirement={requirement}
+            success={success}
           />
         }
       >
@@ -57,34 +59,36 @@ type TooltipContentProps = {
   modifier: number;
   requirement: number;
   roll: number;
+  success: BooleanLike;
 };
 
 function TooltipContent(props: TooltipContentProps) {
-  const { chance, classChaser, dice, modifier, roll, requirement } = props;
+  const { chance, classChaser, dice, modifier, roll, requirement, success } =
+    props;
   const resultClassName = 'RollTooltip__result--' + classChaser;
   return (
-    <div className="RollTooltip__floating">
+    <Flex
+      direction="column"
+      gap="6px"
+      align="center"
+      className="RollTooltip__floating"
+    >
       <div>
-        {`${chance}% | Result: `}
         <span className={resultClassName}>{roll + (modifier || 0)}</span>
         {modifier !== 0 && (
           <span>
-            {` (`}
-            {
-              <span className={resultClassName}>
-                {modifier > 0 && '+'}
-                {modifier}
-              </span>
-            }
+            {' '}
+            {'('}
+            <span
+              className={`RollTooltip__result--${modifier > 0 ? 'good' : 'bad'}`}
+            >
+              {modifier > 0 ? `+${modifier}` : modifier}
+            </span>
             {')'}
           </span>
         )}
-        <span>
-          {' | Check: '}
-          <span style={{ fontWeight: 'bold' }}>{requirement}</span>
-        </span>
       </div>
-      <Flex direction="row" justify="center" gap="8px" mt="4px">
+      <Flex direction="row" justify="center" gap="8px">
         {dice.split('-').map((face, i) => (
           <DieSVG
             className={'RollTooltip__die--' + classChaser}
@@ -94,7 +98,10 @@ function TooltipContent(props: TooltipContentProps) {
           />
         ))}
       </Flex>
-    </div>
+      <div className={classes([resultClassName, 'text'])}>
+        {success ? 'SUCCESS' : 'FAILURE'}
+      </div>
+    </Flex>
   );
 }
 

@@ -40,6 +40,10 @@
   &--bad {
     color: colors.$stats-bad;
   }
+
+  &.text {
+    font-size: 2rem;
+  }
 }
 
 @mixin tooltiptext {
@@ -56,7 +60,14 @@
 }
 
 .RollTooltip__floating {
-  font-size: 2rem;
+  font-size: 2.5rem;
+  .good {
+    color: colors.$stats-good;
+  }
+
+  .bad {
+    color: colors.$stats-bad;
+  }
 }
 
 .RollTooltip__die {

@@ -51,7 +51,7 @@ export const TGUI_CHAT_ATTRIBUTES_TO_PROPS = {
   chance: 'chance',
   chancestring: 'chanceString',
   dice: 'dice',
-  good: 'good',
+  success: 'success',
   modifier: 'modifier',
   requirement: 'requirement',
   roll: 'roll',
