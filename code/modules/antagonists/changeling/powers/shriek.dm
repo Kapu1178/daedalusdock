@@ -20,10 +20,10 @@
 				C.adjust_timed_status_effect(25 SECONDS, /datum/status_effect/confusion)
 				C.set_timed_status_effect(100 SECONDS, /datum/status_effect/jitter, only_if_higher = TRUE)
 			else
-				SEND_SOUND(C, sound('sound/effects/screech.ogg'))
+				SEND_SOUND(C, sound('sound/effects/screech.ogg', channel = SSsounds.random_available_channel()))
 
 		if(issilicon(M))
-			SEND_SOUND(M, sound('sound/weapons/flash.ogg'))
+			SEND_SOUND(M, sound('sound/weapons/flash.ogg', channel = SSsounds.random_available_channel()))
 			M.Paralyze(rand(100,200))
 
 	for(var/obj/machinery/light/L in range(4, user))

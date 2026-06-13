@@ -210,7 +210,7 @@
 		if(!can_scrape_rune(rune, cultist))
 			return
 
-	SEND_SOUND(cultist, 'sound/items/sheath.ogg')
+	SEND_SOUND(cultist, sound('sound/items/sheath.ogg', channel = SSsounds.random_available_channel()))
 	if(!do_after(cultist, rune, rune.erase_time, DO_PUBLIC, display = rune))
 		return
 
@@ -310,7 +310,7 @@
 	if(!initial(rune_to_scribe.no_scribe_boost) && (our_turf.type in turfs_that_boost_us))
 		scribe_mod *= 0.5
 
-	SEND_SOUND(cultist, sound('sound/weapons/slice.ogg', 0, 1, 10))
+	SEND_SOUND(cultist, sound('sound/weapons/slice.ogg', 0, 1, SSsounds.random_available_channel(), 10))
 	if(!do_after(cultist, get_turf(cultist), scribe_mod, timed_action_flags = DO_IGNORE_SLOWDOWNS))
 		cleanup_shields()
 		return FALSE

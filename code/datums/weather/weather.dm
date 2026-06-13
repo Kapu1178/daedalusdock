@@ -193,7 +193,7 @@
 				to_chat(player, alert_msg)
 
 			if(telegraph_sound)
-				SEND_SOUND(player, sound(alert_sfx))
+				SEND_SOUND(player, sound(alert_sfx, channel = SSsounds.random_available_channel()))
 
 // the checks for if a mob should recieve alerts, returns TRUE if can
 /datum/weather/proc/can_get_alert(mob/player)

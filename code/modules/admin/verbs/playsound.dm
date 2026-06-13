@@ -55,7 +55,7 @@
 	playsound(get_turf(src.mob), S, 50, FALSE, FALSE)
 	SSblackbox.record_feedback("tally", "admin_verb", 1, "Play Local Sound") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
-/client/proc/play_direct_mob_sound(S as sound, mob/M)
+/client/proc/play_direct_mob_sound(sound/S as sound, mob/M)
 	set category = "Admin.Fun"
 	set name = "Play Direct Mob Sound"
 	if(!check_rights(R_SOUND))
@@ -65,6 +65,9 @@
 		M = input(usr, "Choose a mob to play the sound to. Only they will hear it.", "Play Mob Sound") as null|anything in sort_names(GLOB.player_list)
 	if(!M || QDELETED(M))
 		return
+
+	S.channel = SSsounds.random_available_channel()
+
 	log_admin("[key_name(src)] played a direct mob sound [S] to [M].")
 	message_admins("[key_name_admin(src)] played a direct mob sound [S] to [ADMIN_LOOKUPFLW(M)].")
 	SEND_SOUND(M, S)

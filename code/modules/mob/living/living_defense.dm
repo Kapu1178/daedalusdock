@@ -114,9 +114,9 @@
 		return
 
 	if(combat_mode)
-		SEND_SOUND(src, sound('sound/misc/ui_togglecombat.ogg', volume = 25)) //Sound from interbay!
+		SEND_SOUND(src, sound('sound/misc/ui_togglecombat.ogg', volume = 25, channel = SSsounds.random_available_channel())) //Sound from interbay!
 	else
-		SEND_SOUND(src, sound('sound/misc/ui_toggleoffcombat.ogg', volume = 25)) //Slightly modified version of the above
+		SEND_SOUND(src, sound('sound/misc/ui_toggleoffcombat.ogg', volume = 25, channel = SSsounds.random_available_channel())) //Slightly modified version of the above
 
 /mob/living/hitby(atom/movable/AM, skipcatch, hitpush = TRUE, blocked = FALSE, datum/thrownthing/throwingdatum)
 	if(!isitem(AM))

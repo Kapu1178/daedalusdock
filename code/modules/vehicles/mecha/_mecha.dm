@@ -336,7 +336,7 @@ TYPEINFO_DEF(/obj/vehicle/sealed/mecha)
 	equipment_disabled = FALSE
 	for(var/occupant in occupants)
 		var/mob/mob_occupant = occupant
-		SEND_SOUND(mob_occupant, sound('sound/items/timer.ogg', volume=50))
+		SEND_SOUND(mob_occupant, sound('sound/items/timer.ogg', volume=50, channel = SSsounds.random_available_channel()))
 		to_chat(mob_occupant, span_notice("Equipment control unit has been rebooted successfully."))
 		mob_occupant.update_mouse_pointer()
 
@@ -845,7 +845,7 @@ TYPEINFO_DEF(/obj/vehicle/sealed/mecha)
 /obj/vehicle/sealed/mecha/proc/set_internal_damage(int_dam_flag)
 	internal_damage |= int_dam_flag
 	log_message("Internal damage of type [int_dam_flag].", LOG_MECHA)
-	SEND_SOUND(occupants, sound('sound/machines/warning-buzzer.ogg',wait=0))
+	SEND_SOUND(occupants, sound('sound/machines/warning-buzzer.ogg',wait=0, channel = SSsounds.random_available_channel()))
 	diag_hud_set_mechstat()
 
 /obj/vehicle/sealed/mecha/proc/clear_internal_damage(int_dam_flag)
@@ -1042,7 +1042,7 @@ TYPEINFO_DEF(/obj/vehicle/sealed/mecha)
 	setDir(dir_in)
 	playsound(src, 'sound/machines/windowdoor.ogg', 50, TRUE)
 	if(!internal_damage)
-		SEND_SOUND(newoccupant, sound('sound/mecha/nominal.ogg',volume=50))
+		SEND_SOUND(newoccupant, sound('sound/mecha/nominal.ogg',volume=50, channel = SSsounds.random_available_channel()))
 	return TRUE
 
 /obj/vehicle/sealed/mecha/proc/mmi_move_inside(obj/item/mmi/brain_obj, mob/user)
@@ -1089,7 +1089,7 @@ TYPEINFO_DEF(/obj/vehicle/sealed/mecha)
 	setDir(dir_in)
 	log_message("[brain_obj] moved in as pilot.", LOG_MECHA)
 	if(!internal_damage)
-		SEND_SOUND(brain_obj, sound('sound/mecha/nominal.ogg',volume=50))
+		SEND_SOUND(brain_obj, sound('sound/mecha/nominal.ogg',volume=50, channel = SSsounds.random_available_channel()))
 	log_game("[key_name(user)] has put the organ/posibrain of [key_name(brain_mob)] into [src] at [AREACOORD(src)]")
 	return TRUE
 

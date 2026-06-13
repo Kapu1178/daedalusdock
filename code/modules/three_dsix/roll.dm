@@ -181,7 +181,7 @@ GLOBAL_DATUM_INIT(success_roll, /datum/roll_result/success, new)
 
 	var/datum/rpg_stat/stat_path = initial(skill_type_used.parent_stat_type)
 	var/sound_path = initial(stat_path.sound)
-	SEND_SOUND(user, sound(sound_path))
+	SEND_SOUND(user, sound(sound_path, channel = SSsounds.random_available_channel()))
 
 /datum/roll_result/success
 	outcome = SUCCESS

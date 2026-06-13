@@ -47,7 +47,7 @@
 	for(var/mob/hearing_mob as anything in GLOB.player_list)
 		if(hearing_mob.z != z)
 			continue
-		SEND_SOUND(hearing_mob, 'sound/effects/supermatter.ogg') //everyone goan know bout this
+		SEND_SOUND(hearing_mob, sound('sound/effects/supermatter.ogg', channel = SSsounds.random_available_channel())) //everyone goan know bout this
 		to_chat(hearing_mob, span_boldannounce("A horrible screeching fills your ears, and a wave of dread washes over you..."))
 	qdel(src)
 	return gain
