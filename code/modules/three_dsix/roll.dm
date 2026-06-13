@@ -106,11 +106,14 @@ GLOBAL_DATUM_INIT(success_roll, /datum/roll_result/success, new)
 	/// Typepath of the skill used. Optional.
 	var/datum/rpg_skill/skill_type_used
 
+	/// Cache of the dice svg strings used in create_tooltip. Created in create_tooltip.
+	var/dice_svg_cache
 	/// How many times this result was pulled from a result cache.
 	var/cache_reads = 0
 
 /datum/roll_result/proc/calculate_probability()
 	success_prob = round(dice_probability(3, 6, clamp(requirement - modifier, 0, 18)), 0.01)
+
 
 /datum/roll_result/proc/create_tooltip(body, body_only = FALSE)
 	if(!skill_type_used)
@@ -119,6 +122,9 @@ GLOBAL_DATUM_INIT(success_roll, /datum/roll_result/success, new)
 		else
 			body = span_statsbad(body)
 		return body
+
+	if(!dice_svg_cache)
+		dice_svg_cache = generate_dice()
 
 	var/prob_string
 	switch(success_prob)
@@ -167,13 +173,33 @@ GLOBAL_DATUM_INIT(success_roll, /datum/roll_result/success, new)
 
 	var/result_class = (outcome >= SUCCESS) ? "statsGood" : "statsBad"
 	var/result_string = "Result: <span class='[result_class]' style='font-weight: bold;text-shadow: inherit;font-style: inherit'><b>[roll]</b></span>[modifier_string]"
-	var/tooltip_html = "[success_prob]% | [result_string] | Check: <b>[requirement]</b>"
+	var/tooltip_html = "<div>[success_prob]% | [result_string] | Check: <b>[requirement]</b></div><div style='display: flex;flex-direction: horizontal;justify-content: center;'>[dice_svg_cache]</div>"
 	var/seperator = "<span style='color: #bbbbad;font-style: italic'>: </span>"
 
-	tooltip_html = html_encode(dice_svg(1, "96px", "96px") + dice_svg(1, "96px", "96px") + dice_svg(1, "96px", "96px"))
 	if(body_only)
 		return body
-	return "[prefix]<span data-component=\"Tooltip\" data-innerhtml=\"[tooltip_html]\" data-position=\"top\" class=\"tooltip\">[finished_prob_string]</span>[seperator][body]"
+	return "[prefix]<span data-component=\"Tooltip\" data-innerhtml=\"[html_encode(tooltip_html)]\" data-position=\"top\" class=\"tooltip\">[finished_prob_string]</span>[seperator][body]"
+
+/datum/roll_result/proc/generate_dice()
+	var/alist/die1_choices = alist()
+
+	var/remaining_sum = roll
+	for(var/value in 1 to 6)
+		remaining_sum = roll - value
+		var/weight = max(0, 6 - abs(remaining_sum - 7))
+		if(weight)
+			die1_choices[value] = weight
+
+	var/die1 = pick_weight(die1_choices)
+	remaining_sum = roll - die1
+
+	var/min_die2 = max(1, remaining_sum - 6)
+	var/max_die2 = min(6, remaining_sum - 1)
+
+	var/die2 = rand(min_die2, max_die2)
+	var/die3 = remaining_sum - die2
+
+	return "<div>[dice_svg(die1)]</div><div>[dice_svg(die2)]</div><div>[dice_svg(die3)]</div>"
 
 /// Play
 /datum/roll_result/proc/do_skill_sound(mob/user)
@@ -256,69 +282,70 @@ GLOBAL_DATUM_INIT(success_roll, /datum/roll_result/success, new)
 		outcomes = next
 	return outcomes
 
-/proc/dice_svg(face = 1, width = "100%", height = "100%")
+/proc/dice_svg(face = 1, width = "32px", height = "32px")
 	var/face_str
 	switch(face)
 		if(1)
 			face_str = {"
-				<g transform="translate(0, 0)">
-				<rect class="die-bg" x="2" y="2" width="96" height="96" />
-				<circle class="pip" cx="50" cy="50" r="8" /></g>
+				<g>
+					<rect class="die-bg" x="2" y="2" width="96" height="96" />
+					<circle class="pip" cx="50" cy="50" />
+				</g>
 			"}
 		if(2)
 			face_str = {"
-			  <g transform="translate(110, 0)">
-				<rect class="die-bg" x="2" y="2" width="96" height="96" />
-				<circle class="pip" cx="26" cy="26" r="8" />
-				<circle class="pip" cx="74" cy="74" r="8" />
+				<g>
+					<rect class="die-bg" x="2" y="2" width="96" height="96" />
+					<circle class="pip" cx="26" cy="26" />
+					<circle class="pip" cx="74" cy="74" />
 				</g>
 			"}
 		if(3)
 			face_str = {"
-			<g transform="translate(220, 0)">
-				<rect class="die-bg" x="2" y="2" width="96" height="96" />
-				<circle class="pip" cx="26" cy="26" r="8" />
-				<circle class="pip" cx="50" cy="50" r="8" />
-				<circle class="pip" cx="74" cy="74" r="8" />
-			</g>
+				<g>
+					<rect class="die-bg" x="2" y="2" width="96" height="96" />
+					<circle class="pip" cx="26" cy="26" />
+					<circle class="pip" cx="50" cy="50" />
+					<circle class="pip" cx="74" cy="74" />
+				</g>
 			"}
 		if(4)
 			face_str = {"
-			<g transform="translate(330, 0)">
-				<rect class="die-bg" x="2" y="2" width="96" height="96" />
-				<circle class="pip" cx="26" cy="26" r="8" />
-				<circle class="pip" cx="74" cy="26" r="8" />
-				<circle class="pip" cx="26" cy="74" r="8" />
-				<circle class="pip" cx="74" cy="74" r="8" />
-			</g>
+				<g>
+					<rect class="die-bg" x="2" y="2" width="96" height="96" />
+					<circle class="pip" cx="26" cy="26" />
+					<circle class="pip" cx="74" cy="26" />
+					<circle class="pip" cx="26" cy="74" />
+					<circle class="pip" cx="74" cy="74" />
+				</g>
 			"}
 		if(5)
 			face_str = {"
-			<g transform="translate(440, 0)">
-				<rect class="die-bg" x="2" y="2" width="96" height="96" />
-				<circle class="pip" cx="26" cy="26" r="8" />
-				<circle class="pip" cx="74" cy="26" r="8" />
-				<circle class="pip" cx="50" cy="50" r="8" />
-				<circle class="pip" cx="26" cy="74" r="8" />
-				<circle class="pip" cx="74" cy="74" r="8" />
-			</g>
+				<g>
+					<rect class="die-bg" x="2" y="2" width="96" height="96" />
+					<circle class="pip" cx="26" cy="26" />
+					<circle class="pip" cx="74" cy="26" />
+					<circle class="pip" cx="50" cy="50" />
+					<circle class="pip" cx="26" cy="74" />
+					<circle class="pip" cx="74" cy="74" />
+				</g>
 			"}
 		if(6)
 			face_str = {"
-			<g transform="translate(550, 0)">
-				<rect class="die-bg" x="2" y="2" width="96" height="96" />
-				<circle class="pip" cx="26" cy="26" r="8" />
-				<circle class="pip" cx="74" cy="26" r="8" />
-				<circle class="pip" cx="26" cy="50" r="8" />
-				<circle class="pip" cx="74" cy="50" r="8" />
-				<circle class="pip" cx="26" cy="74" r="8" />
-				<circle class="pip" cx="74" cy="74" r="8" />
-			</g>
+				<g>
+					<rect class="die-bg" x="2" y="2" width="96" height="96" />
+					<circle class="pip" cx="26" cy="26" />
+					<circle class="pip" cx="74" cy="26" />
+					<circle class="pip" cx="26" cy="50" />
+					<circle class="pip" cx="74" cy="50" />
+					<circle class="pip" cx="26" cy="74" />
+					<circle class="pip" cx="74" cy="74" />
+				</g>
 			"}
 
 	var/static/regex/regex = regex(@"[\n\t]", "g")
 	return replacetext({"
-		<svg viewBox="0 0 100 100" width="100%" height="100%">
+		<svg viewBox="0 0 100 100" width="[width]" height="[height]">
 		<defs>
 			<style>
 			.die-bg { fill: #ffffff; stroke: #000000; stroke-width: 4; rx: 12px; }
@@ -328,3 +355,12 @@ GLOBAL_DATUM_INIT(success_roll, /datum/roll_result/success, new)
 		[face_str]
 		</svg>
 	"}, regex, "")
+
+/client/verb/test_roll()
+	set name = "Test Roll"
+	set category = "Debug"
+
+	var/mob/living/carbon/human/user = usr
+
+	var/datum/roll_result/result = user.stat_roll(11, /datum/rpg_skill/bloodsport)
+	to_chat(user, result.create_tooltip("This is a test."))
