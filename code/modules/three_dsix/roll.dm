@@ -170,6 +170,7 @@ GLOBAL_DATUM_INIT(success_roll, /datum/roll_result/success, new)
 	var/tooltip_html = "[success_prob]% | [result_string] | Check: <b>[requirement]</b>"
 	var/seperator = "<span style='color: #bbbbad;font-style: italic'>: </span>"
 
+	tooltip_html = html_encode(dice_svg(1, "96px", "96px") + dice_svg(1, "96px", "96px") + dice_svg(1, "96px", "96px"))
 	if(body_only)
 		return body
 	return "[prefix]<span data-component=\"Tooltip\" data-innerhtml=\"[tooltip_html]\" data-position=\"top\" class=\"tooltip\">[finished_prob_string]</span>[seperator][body]"
@@ -254,3 +255,76 @@ GLOBAL_DATUM_INIT(success_roll, /datum/roll_result/success, new)
 				next[i+j] += outcomes[j]
 		outcomes = next
 	return outcomes
+
+/proc/dice_svg(face = 1, width = "100%", height = "100%")
+	var/face_str
+	switch(face)
+		if(1)
+			face_str = {"
+				<g transform="translate(0, 0)">
+				<rect class="die-bg" x="2" y="2" width="96" height="96" />
+				<circle class="pip" cx="50" cy="50" r="8" /></g>
+			"}
+		if(2)
+			face_str = {"
+			  <g transform="translate(110, 0)">
+				<rect class="die-bg" x="2" y="2" width="96" height="96" />
+				<circle class="pip" cx="26" cy="26" r="8" />
+				<circle class="pip" cx="74" cy="74" r="8" />
+				</g>
+			"}
+		if(3)
+			face_str = {"
+			<g transform="translate(220, 0)">
+				<rect class="die-bg" x="2" y="2" width="96" height="96" />
+				<circle class="pip" cx="26" cy="26" r="8" />
+				<circle class="pip" cx="50" cy="50" r="8" />
+				<circle class="pip" cx="74" cy="74" r="8" />
+			</g>
+			"}
+		if(4)
+			face_str = {"
+			<g transform="translate(330, 0)">
+				<rect class="die-bg" x="2" y="2" width="96" height="96" />
+				<circle class="pip" cx="26" cy="26" r="8" />
+				<circle class="pip" cx="74" cy="26" r="8" />
+				<circle class="pip" cx="26" cy="74" r="8" />
+				<circle class="pip" cx="74" cy="74" r="8" />
+			</g>
+			"}
+		if(5)
+			face_str = {"
+			<g transform="translate(440, 0)">
+				<rect class="die-bg" x="2" y="2" width="96" height="96" />
+				<circle class="pip" cx="26" cy="26" r="8" />
+				<circle class="pip" cx="74" cy="26" r="8" />
+				<circle class="pip" cx="50" cy="50" r="8" />
+				<circle class="pip" cx="26" cy="74" r="8" />
+				<circle class="pip" cx="74" cy="74" r="8" />
+			</g>
+			"}
+		if(6)
+			face_str = {"
+			<g transform="translate(550, 0)">
+				<rect class="die-bg" x="2" y="2" width="96" height="96" />
+				<circle class="pip" cx="26" cy="26" r="8" />
+				<circle class="pip" cx="74" cy="26" r="8" />
+				<circle class="pip" cx="26" cy="50" r="8" />
+				<circle class="pip" cx="74" cy="50" r="8" />
+				<circle class="pip" cx="26" cy="74" r="8" />
+				<circle class="pip" cx="74" cy="74" r="8" />
+			</g>
+			"}
+
+	var/static/regex/regex = regex(@"[\n\t]", "g")
+	return replacetext({"
+		<svg viewBox="0 0 100 100" width="100%" height="100%">
+		<defs>
+			<style>
+			.die-bg { fill: #ffffff; stroke: #000000; stroke-width: 4; rx: 12px; }
+			.pip { fill: #000000; r: 8; }
+			</style>
+		</defs>
+		[face_str]
+		</svg>
+	"}, regex, "")
