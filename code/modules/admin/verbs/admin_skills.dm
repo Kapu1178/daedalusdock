@@ -80,20 +80,26 @@
 		return
 
 	var/roll = 16
+	var/list/dice
 	switch(outcome)
 		if(CRIT_FAILURE)
 			roll = 3
+			dice = list(1, 1, 1)
 		if(CRIT_SUCCESS)
 			roll = 18
+			dice = list(6, 6, 6)
 		if(SUCCESS)
 			roll = 16
+			dice = list(6, 4, 6)
 		if(FAILURE)
 			roll = 7
+			dice = list(2, 2, 3)
 
 	var/datum/roll_result/faux_result = new
 	faux_result.outcome = outcome
 	faux_result.requirement = 16
 	faux_result.roll = roll
+	faux_result.dice_list = dice
 	faux_result.skill_type_used = chosen_skill
 	faux_result.calculate_probability()
 	faux_result.do_skill_sound(H)

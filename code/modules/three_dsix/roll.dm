@@ -49,14 +49,20 @@ GLOBAL_DATUM_INIT(success_roll, /datum/roll_result/success, new)
 /proc/roll_3d6(requirement = STATS_BASELINE_VALUE, modifier, crit_fail_modifier = -10, datum/rpg_skill/skill_type_used)
 	RETURN_TYPE(/datum/roll_result)
 
-	var/dice = roll("3d6")
-	var/dice_after_mod = dice + modifier
+	var/list/rolls = list()
+	var/sum = 0
+	for(var/i in 1 to 3)
+		var/roll = roll("1d6")
+		rolls += roll
+		sum += roll
+
+	var/dice_after_mod = sum + modifier
 	var/crit_fail = max((requirement + crit_fail_modifier), 4)
 	var/crit_success = min((requirement + 7), 17)
 
-	// if(dice >= requirement)
+	// if(sum >= requirement)
 	// 	var/list/out = list(
-	// 		"ROLL: [dice] ([modifier >= 0 ? "+[modifier]" : "-[modifier]"])",
+	// 		"ROLL: [sum] ([modifier >= 0 ? "+[modifier]" : "-[modifier]"])",
 	// 		"SUCCESS PROB: %[round(dice_probability(3, 6, requirement - modifier), 0.01)]",
 	// 		"CRIT SP: %[round(dice_probability(3, 6, crit_success), 0.01)]",
 	// 		"MOD: [modifier]",
@@ -71,7 +77,8 @@ GLOBAL_DATUM_INIT(success_roll, /datum/roll_result/success, new)
 	// 	to_chat(world, span_adminnotice(jointext(out, "")))
 
 	var/datum/roll_result/result = new()
-	result.roll = dice
+	result.roll = sum
+	result.dice_list = rolls
 	result.modifier = modifier
 	result.requirement = requirement
 	result.skill_type_used = skill_type_used
@@ -106,7 +113,9 @@ GLOBAL_DATUM_INIT(success_roll, /datum/roll_result/success, new)
 	/// Typepath of the skill used. Optional.
 	var/datum/rpg_skill/skill_type_used
 
-	/// Cache of the dice svg strings used in create_tooltip. Created in create_tooltip.
+	/// The actual rolls from the dice.
+	var/list/dice_list
+	/// Generated SVGs for the dice list. Created in create_tooltip().
 	var/dice_svg_cache
 	/// How many times this result was pulled from a result cache.
 	var/cache_reads = 0
@@ -172,8 +181,8 @@ GLOBAL_DATUM_INIT(success_roll, /datum/roll_result/success, new)
 		modifier_string = " (<span class='[modifier_class]' style='font-weight: bold;text-shadow: inherit;font-style: inherit'>[modifier_string_inner]</span>)"
 
 	var/result_class = (outcome >= SUCCESS) ? "statsGood" : "statsBad"
-	var/result_string = "Result: <span class='[result_class]' style='font-weight: bold;text-shadow: inherit;font-style: inherit'><b>[roll]</b></span>[modifier_string]"
-	var/tooltip_html = "<div>[success_prob]% | [result_string] | Check: <b>[requirement]</b></div><div style='display: flex;flex-direction: horizontal;justify-content: center;'>[dice_svg_cache]</div>"
+	var/result_string = "Result: <span class='[result_class]' style='font-weight: bold;text-shadow: inherit;font-style: inherit'><b>[roll + modifier]</b></span>[modifier_string]"
+	var/tooltip_html = "<div>[success_prob]% | [result_string] | Check: <b>[requirement]</b></div><div style='display: flex;flex-direction: horizontal;justify-content: center;margin-top: 8px;gap: 4px;'>[dice_svg_cache]</div>"
 	var/seperator = "<span style='color: #bbbbad;font-style: italic'>: </span>"
 
 	if(body_only)
@@ -181,25 +190,8 @@ GLOBAL_DATUM_INIT(success_roll, /datum/roll_result/success, new)
 	return "[prefix]<span data-component=\"Tooltip\" data-innerhtml=\"[html_encode(tooltip_html)]\" data-position=\"top\" class=\"tooltip\">[finished_prob_string]</span>[seperator][body]"
 
 /datum/roll_result/proc/generate_dice()
-	var/alist/die1_choices = alist()
-
-	var/remaining_sum = roll
-	for(var/value in 1 to 6)
-		remaining_sum = roll - value
-		var/weight = max(0, 6 - abs(remaining_sum - 7))
-		if(weight)
-			die1_choices[value] = weight
-
-	var/die1 = pick_weight(die1_choices)
-	remaining_sum = roll - die1
-
-	var/min_die2 = max(1, remaining_sum - 6)
-	var/max_die2 = min(6, remaining_sum - 1)
-
-	var/die2 = rand(min_die2, max_die2)
-	var/die3 = remaining_sum - die2
-
-	return "<div>[dice_svg(die1)]</div><div>[dice_svg(die2)]</div><div>[dice_svg(die3)]</div>"
+	var/color = outcome >= SUCCESS ? "#03fca1" : "#b8046d"
+	return "<div>[dice_svg(dice_list[1], color_bg = "#000000", color_dot = color, color_outline = color)]</div><div>[dice_svg(dice_list[2], color_bg = "#000000", color_dot = color, color_outline = color)]</div><div>[dice_svg(dice_list[3], color_bg = "#000000", color_dot = color, color_outline = color)]</div>"
 
 /// Play
 /datum/roll_result/proc/do_skill_sound(mob/user)
@@ -282,7 +274,7 @@ GLOBAL_DATUM_INIT(success_roll, /datum/roll_result/success, new)
 		outcomes = next
 	return outcomes
 
-/proc/dice_svg(face = 1, width = "32px", height = "32px")
+/proc/dice_svg(face = 1, width = "32px", height = "32px", color_bg = "#ffffff", color_outline = "#000000", color_dot = "#000000")
 	var/face_str
 	switch(face)
 		if(1)
@@ -348,10 +340,19 @@ GLOBAL_DATUM_INIT(success_roll, /datum/roll_result/success, new)
 		<svg viewBox="0 0 100 100" width="[width]" height="[height]">
 		<defs>
 			<style>
-			.die-bg { fill: #ffffff; stroke: #000000; stroke-width: 4; rx: 12px; }
-			.pip { fill: #000000; r: 8; }
+			.die-bg { fill: [color_bg]; stroke: [color_outline]; stroke-width: 4; rx: 12px; }
+			.pip { fill: [color_dot]; r: 8; }
 			</style>
 		</defs>
 		[face_str]
 		</svg>
 	"}, regex, "")
+
+// /client/verb/test_roll()
+// 	set name = "Test Roll"
+// 	set category = "Debug"
+
+// 	var/mob/living/carbon/human/user = usr
+
+// 	var/datum/roll_result/result = user.stat_roll(11, /datum/rpg_skill/bloodsport)
+// 	to_chat(user, result.create_tooltip("This is a test."))
