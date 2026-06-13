@@ -160,7 +160,7 @@ GLOBAL_DATUM_INIT(success_roll, /datum/roll_result/success, new)
 		body = span_statsbad(body)
 
 	var/modifier_string = ""
-	if(modifier != 0)
+	if(modifier)
 		var/modifier_string_inner = modifier > 0 ? "+[modifier]" : "[modifier]"
 		var/modifier_class = (modifier >= 0) ? "statsGood" : "statsBad"
 		modifier_string = " (<span class='[modifier_class]' style='font-weight: bold;text-shadow: inherit;font-style: inherit'>[modifier_string_inner]</span>)"
@@ -172,7 +172,7 @@ GLOBAL_DATUM_INIT(success_roll, /datum/roll_result/success, new)
 
 	if(body_only)
 		return body
-	return "[prefix]<span data-component=\"Tooltip\" data-innerhtml=\"[tooltip_html]\" class=\"tooltip\">[finished_prob_string]</span>[seperator][body]"
+	return "[prefix]<span data-component=\"Tooltip\" data-innerhtml=\"[tooltip_html]\" data-position=\"top\" class=\"tooltip\">[finished_prob_string]</span>[seperator][body]"
 
 /// Play
 /datum/roll_result/proc/do_skill_sound(mob/user)

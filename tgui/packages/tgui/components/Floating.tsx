@@ -244,10 +244,12 @@ export const Floating = forwardRef<FloatingHandle, Props>((props, ref) => {
       data-position={context.placement}
       data-transition={status}
       style={{ ...floatingStyles, ...contentStyles }}
+      {...floatingProps}
       /* eslint-disable react/no-danger */
       dangerouslySetInnerHTML={{ __html: innerhtml }}
-      {...floatingProps}
-    />
+    >
+      {content}
+    </div>
   ) : (
     <div
       className={classes([
@@ -268,7 +270,7 @@ export const Floating = forwardRef<FloatingHandle, Props>((props, ref) => {
     <>
       {floatingChildren}
       {isMounted &&
-        !!content &&
+        (!!content || !!innerhtml) &&
         (preventPortal ? (
           floatingContent
         ) : (

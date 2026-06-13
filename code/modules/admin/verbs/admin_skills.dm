@@ -24,7 +24,7 @@
 	if(!message)
 		return
 
-	message = "[uppertext(skills[chosen_skill].name)]<span style='color: #bbbbad;font-style: italic'>: </span>[message]"
+	message = "[uppertext(chosen_skill.name)]<span style='color: #bbbbad;font-style: italic'>: </span>[message]"
 	message = style == "Good" ? span_statsgood(message) : span_statsbad(message)
 
 	//uggo but i dont care
