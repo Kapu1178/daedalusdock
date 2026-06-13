@@ -36,6 +36,7 @@ export { ProgressBar } from './ProgressBar';
 export { RestrictedInput } from './RestrictedInput';
 export { RoundGauge } from './RoundGauge';
 export { Section } from './Section';
+export { SkillRollTooltip } from './SkillRollTooltip';
 export { Slider } from './Slider';
 export { Stack } from './Stack';
 export { Table } from './Table';

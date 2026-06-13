@@ -115,8 +115,6 @@ GLOBAL_DATUM_INIT(success_roll, /datum/roll_result/success, new)
 
 	/// The actual rolls from the dice.
 	var/list/dice_list
-	/// Generated SVGs for the dice list. Created in create_tooltip().
-	var/dice_svg_cache
 	/// How many times this result was pulled from a result cache.
 	var/cache_reads = 0
 
@@ -131,9 +129,6 @@ GLOBAL_DATUM_INIT(success_roll, /datum/roll_result/success, new)
 		else
 			body = span_statsbad(body)
 		return body
-
-	if(!dice_svg_cache)
-		dice_svg_cache = generate_dice()
 
 	var/prob_string
 	switch(success_prob)
@@ -165,33 +160,33 @@ GLOBAL_DATUM_INIT(success_roll, /datum/roll_result/success, new)
 		if(CRIT_FAILURE)
 			success = "Critical Failure"
 
-	var/finished_prob_string = "<span style='color: #bbbbad;font-style: italic'>\[[prob_string]: [success]\]</span>"
-	var/prefix
-	if(outcome >= SUCCESS)
-		prefix = "<span class='statsGood' style='text-shadow: inherit;'>[uppertext(initial(skill_type_used.name))]</span> "
-		body = span_statsgood(body)
-	else
-		prefix = "<span class='statsBad' style='text-shadow: inherit;'>[uppertext(initial(skill_type_used.name))]</span> "
-		body = span_statsbad(body)
+	// var/finished_prob_string = "<span style='color: #bbbbad;font-style: italic'>\[[prob_string]: [success]\]</span>"
+	// var/prefix
+	// if(outcome >= SUCCESS)
+	// 	prefix = "<span class='statsGood' style='text-shadow: inherit;'>[uppertext(initial(skill_type_used.name))]</span> "
+	// 	body = span_statsgood(body)
+	// else
+	// 	prefix = "<span class='statsBad' style='text-shadow: inherit;'>[uppertext(initial(skill_type_used.name))]</span> "
+	// 	body = span_statsbad(body)
 
-	var/modifier_string = ""
-	if(modifier)
-		var/modifier_string_inner = modifier > 0 ? "+[modifier]" : "[modifier]"
-		var/modifier_class = (modifier >= 0) ? "statsGood" : "statsBad"
-		modifier_string = " (<span class='[modifier_class]' style='font-weight: bold;text-shadow: inherit;font-style: inherit'>[modifier_string_inner]</span>)"
+	// var/modifier_string = ""
+	// if(modifier)
+	// 	var/modifier_string_inner = modifier > 0 ? "+[modifier]" : "[modifier]"
+	// 	var/modifier_class = (modifier >= 0) ? "statsGood" : "statsBad"
+	// 	modifier_string = " (<span class='[modifier_class]' style='font-weight: bold;text-shadow: inherit;font-style: inherit'>[modifier_string_inner]</span>)"
 
-	var/result_class = (outcome >= SUCCESS) ? "statsGood" : "statsBad"
-	var/result_string = "Result: <span class='[result_class]' style='font-weight: bold;text-shadow: inherit;font-style: inherit'><b>[roll + modifier]</b></span>[modifier_string]"
-	var/tooltip_html = "<div>[success_prob]% | [result_string] | Check: <b>[requirement]</b></div><div style='display: flex;flex-direction: horizontal;justify-content: center;margin-top: 8px;gap: 4px;'>[dice_svg_cache]</div>"
-	var/seperator = "<span style='color: #bbbbad;font-style: italic'>: </span>"
+	// var/result_class = (outcome >= SUCCESS) ? "statsGood" : "statsBad"
+	// var/result_string = "Result: <span class='[result_class]' style='font-weight: bold;text-shadow: inherit;font-style: inherit'><b>[roll + modifier]</b></span>[modifier_string]"
+	// var/tooltip_html = "<div>[success_prob]% | [result_string] | Check: <b>[requirement]</b></div><div style='display: flex;flex-direction: horizontal;justify-content: center;margin-top: 8px;gap: 4px;'>[dice_svg_cache]</div>"
+	// var/seperator = "<span style='color: #bbbbad;font-style: italic'>: </span>"
+
+	var/finished_prob_string = "\[[prob_string]: [success]\]"
 
 	if(body_only)
 		return body
-	return "[prefix]<span data-component=\"Tooltip\" data-innerhtml=\"[html_encode(tooltip_html)]\" data-position=\"top\" class=\"tooltip\">[finished_prob_string]</span>[seperator][body]"
+	//return "[prefix]<span data-component=\"Tooltip\" data-innerhtml=\"[html_encode(tooltip_html)]\" data-position=\"top\" class=\"tooltip\">[finished_prob_string]</span>[seperator][body]"
 
-/datum/roll_result/proc/generate_dice()
-	var/color = outcome >= SUCCESS ? "#03fca1" : "#b8046d"
-	return "<div>[dice_svg(dice_list[1], color_bg = "#000000", color_dot = color, color_outline = color)]</div><div>[dice_svg(dice_list[2], color_bg = "#000000", color_dot = color, color_outline = color)]</div><div>[dice_svg(dice_list[3], color_bg = "#000000", color_dot = color, color_outline = color)]</div>"
+	return "<span data-component=\"SkillRollTooltip\" data-chance=\"[success_prob]\" data-chancestring=\"[finished_prob_string]\" data-good=\"$[outcome >= SUCCESS ? "true" : "false"]\" data-modifier=\"[modifier || 0]\" data-requirement=\"[requirement]\" data-roll=\"[roll]\" data-skillName=\"[uppertext(skill_type_used.name)]\" data-text=\"[body]\" data-dice=\"[jointext(dice_list, "-")]\"</span>"
 
 /// Play
 /datum/roll_result/proc/do_skill_sound(mob/user)
@@ -274,85 +269,11 @@ GLOBAL_DATUM_INIT(success_roll, /datum/roll_result/success, new)
 		outcomes = next
 	return outcomes
 
-/proc/dice_svg(face = 1, width = "32px", height = "32px", color_bg = "#ffffff", color_outline = "#000000", color_dot = "#000000")
-	var/face_str
-	switch(face)
-		if(1)
-			face_str = {"
-				<g>
-					<rect class="die-bg" x="2" y="2" width="96" height="96" />
-					<circle class="pip" cx="50" cy="50" />
-				</g>
-			"}
-		if(2)
-			face_str = {"
-				<g>
-					<rect class="die-bg" x="2" y="2" width="96" height="96" />
-					<circle class="pip" cx="26" cy="26" />
-					<circle class="pip" cx="74" cy="74" />
-				</g>
-			"}
-		if(3)
-			face_str = {"
-				<g>
-					<rect class="die-bg" x="2" y="2" width="96" height="96" />
-					<circle class="pip" cx="26" cy="26" />
-					<circle class="pip" cx="50" cy="50" />
-					<circle class="pip" cx="74" cy="74" />
-				</g>
-			"}
-		if(4)
-			face_str = {"
-				<g>
-					<rect class="die-bg" x="2" y="2" width="96" height="96" />
-					<circle class="pip" cx="26" cy="26" />
-					<circle class="pip" cx="74" cy="26" />
-					<circle class="pip" cx="26" cy="74" />
-					<circle class="pip" cx="74" cy="74" />
-				</g>
-			"}
-		if(5)
-			face_str = {"
-				<g>
-					<rect class="die-bg" x="2" y="2" width="96" height="96" />
-					<circle class="pip" cx="26" cy="26" />
-					<circle class="pip" cx="74" cy="26" />
-					<circle class="pip" cx="50" cy="50" />
-					<circle class="pip" cx="26" cy="74" />
-					<circle class="pip" cx="74" cy="74" />
-				</g>
-			"}
-		if(6)
-			face_str = {"
-				<g>
-					<rect class="die-bg" x="2" y="2" width="96" height="96" />
-					<circle class="pip" cx="26" cy="26" />
-					<circle class="pip" cx="74" cy="26" />
-					<circle class="pip" cx="26" cy="50" />
-					<circle class="pip" cx="74" cy="50" />
-					<circle class="pip" cx="26" cy="74" />
-					<circle class="pip" cx="74" cy="74" />
-				</g>
-			"}
+/client/verb/test_roll()
+	set name = "Test Roll"
+	set category = "Debug"
 
-	var/static/regex/regex = regex(@"[\n\t]", "g")
-	return replacetext({"
-		<svg viewBox="0 0 100 100" width="[width]" height="[height]">
-		<defs>
-			<style>
-			.die-bg { fill: [color_bg]; stroke: [color_outline]; stroke-width: 4; rx: 12px; }
-			.pip { fill: [color_dot]; r: 8; }
-			</style>
-		</defs>
-		[face_str]
-		</svg>
-	"}, regex, "")
+	var/mob/living/carbon/human/user = usr
 
-// /client/verb/test_roll()
-// 	set name = "Test Roll"
-// 	set category = "Debug"
-
-// 	var/mob/living/carbon/human/user = usr
-
-// 	var/datum/roll_result/result = user.stat_roll(11, /datum/rpg_skill/bloodsport)
-// 	to_chat(user, result.create_tooltip("This is a test."))
+	var/datum/roll_result/result = user.stat_roll(11, /datum/rpg_skill/bloodsport, -1)
+	to_chat(user, result.create_tooltip("This is a test."))
