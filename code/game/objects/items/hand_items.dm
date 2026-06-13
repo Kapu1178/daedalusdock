@@ -225,7 +225,7 @@
 		)
 		to_chat(slapped, span_userdanger("You see [user] scoff and pull back [user.p_their()] arm, then suddenly you're on the ground with an ungodly ringing in your ears!"))
 		slap_volume = 120
-		SEND_SOUND(slapped, sound('sound/weapons/flash_ring.ogg'))
+		SEND_SOUND(slapped, sound('sound/weapons/flash_ring.ogg', channel = SSsounds.random_available_channel()))
 		shake_camera(slapped, 2, 2)
 		slapped.Paralyze(2.5 SECONDS)
 		slapped.adjust_timed_status_effect(7 SECONDS, /datum/status_effect/confusion)

@@ -105,13 +105,13 @@
 		if(B.current)
 			B.current?.update_mob_action_buttons()
 			if(!B.current.incapacitated())
-				SEND_SOUND(B.current, 'sound/hallucinations/im_here1.ogg')
+				SEND_SOUND(B.current, sound('sound/hallucinations/im_here1.ogg', channel = SSsounds.random_available_channel()))
 				to_chat(B.current, span_cultlarge("Acolyte [Nominee] has asserted that [Nominee.p_theyre()] worthy of leading the cult. A vote will be called shortly."))
 	sleep(100)
 	var/list/asked_cultists = list()
 	for(var/datum/mind/B in team.members)
 		if(B.current && B.current != Nominee && !B.current.incapacitated())
-			SEND_SOUND(B.current, 'sound/magic/exit_blood.ogg')
+			SEND_SOUND(B.current, sound('sound/magic/exit_blood.ogg', channel = SSsounds.random_available_channel()))
 			asked_cultists += B.current
 	var/list/yes_voters = poll_candidates("[Nominee] seeks to lead your cult, do you support [Nominee.p_them()]?", poll_time = 300, group = asked_cultists)
 	if(QDELETED(Nominee) || Nominee.incapacitated())
@@ -349,7 +349,7 @@
 	if(QDELETED(owner) || QDELETED(src))
 		return
 
-	SEND_SOUND(owner, 'sound/magic/enter_blood.ogg')
+	SEND_SOUND(owner, sound('sound/magic/enter_blood.ogg', channel = SSsounds.random_available_channel()))
 	to_chat(owner, span_cultbold("Your previous mark is gone - you are now ready to create a new blood mark."))
 	build_all_button_icons(UPDATE_BUTTON_NAME|UPDATE_BUTTON_ICON)
 
@@ -438,7 +438,7 @@
 			var/mob/living/living_clicked = clicked_on
 			if(!IS_CULTIST(living_clicked))
 				return FALSE
-			SEND_SOUND(invoker, sound('sound/weapons/thudswoosh.ogg'))
+			SEND_SOUND(invoker, sound('sound/weapons/thudswoosh.ogg', channel = SSsounds.random_available_channel()))
 			to_chat(invoker, span_cultbold("You reach through the veil with your mind's eye and seize [clicked_on]! <b>Click anywhere nearby to teleport [clicked_on.p_them()]!</b>"))
 			throwee_ref = WEAKREF(clicked_on)
 			return TRUE

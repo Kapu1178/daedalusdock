@@ -54,8 +54,8 @@
 		span_warning("<b>[user]</b> aims [tool] at <b>[target]</b>!"), \
 	)
 
-	SEND_SOUND(target, sound('sound/weapons/TargetOn.ogg'))
-	SEND_SOUND(user, sound('sound/weapons/TargetOn.ogg'))
+	SEND_SOUND(target, sound('sound/weapons/TargetOn.ogg', channel = SSsounds.random_available_channel()))
+	SEND_SOUND(user, sound('sound/weapons/TargetOn.ogg', channel = SSsounds.random_available_channel()))
 
 	addtimer(CALLBACK(src, PROC_REF(set_locked)), lock_time)
 

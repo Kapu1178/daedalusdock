@@ -28,4 +28,4 @@
 	else
 		card.registered_account.account_balance = card.registered_account.account_balance - new_cost
 		card.registered_account.bank_card_talk("[new_cost] marks deducted from your account based on performance review.")
-	SEND_SOUND(target, 'sound/machines/buzz-sigh.ogg')
+	SEND_SOUND(target, sound('sound/machines/buzz-sigh.ogg', channel = SSsounds.random_available_channel()))

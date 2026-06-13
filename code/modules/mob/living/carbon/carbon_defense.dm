@@ -611,7 +611,7 @@
 			else if(ears.damage >= 5)
 				to_chat(src, span_warning("Your ears begin to ring."))
 
-			SEND_SOUND(src, sound('sound/weapons/flash_ring.ogg',0,1,0,250))
+			SEND_SOUND(src, sound('sound/weapons/flash_ring.ogg',0,1,volume = 250, channel = SSsounds.random_available_channel()))
 		return effect_amount //how soundbanged we are
 
 

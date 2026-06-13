@@ -594,7 +594,7 @@ TYPEINFO_DEF(/obj/item/defibrillator)
 
 	// Cinematic effect.
 	if((H.stat == UNCONSCIOUS) && H.client)
-		var/sound/patient_sound = sound('sound/machines/defib_charge.ogg', volume = 50)
+		var/sound/patient_sound = sound('sound/machines/defib_charge.ogg', volume = 50, channel = SSsounds.random_available_channel())
 		patient_sound.environment = SOUND_ENVIRONMENT_UNDERWATER
 		SEND_SOUND(H, patient_sound)
 
@@ -603,7 +603,7 @@ TYPEINFO_DEF(/obj/item/defibrillator)
 		for(var/obj/item/clothing/C in H.get_equipped_items())
 			if((C.body_parts_covered & CHEST) && (C.clothing_flags & THICKMATERIAL)) //check to see if something is obscuring their chest.
 				user.audible_message(span_warning("[req_defib ? "[defib]" : "[src]"] buzzes: Patient's chest is obscured. Operation aborted."))
-				playsound(src, 'sound/machines/defib_failed.ogg', 50, FALSE)
+				playsound(src, 'sound/machines/defib_failed.ogg', 50, FALSE, channel = SSsounds.random_available_channel())
 				do_cancel()
 				return
 
@@ -636,7 +636,7 @@ TYPEINFO_DEF(/obj/item/defibrillator)
 
 	// Cinematic effect.
 	if(H.stat == UNCONSCIOUS && H.client)
-		var/sound/patient_sound = sound('sound/machines/defib_zap.ogg', volume = 50)
+		var/sound/patient_sound = sound('sound/machines/defib_zap.ogg', volume = 50, channel = SSsounds.random_available_channel())
 		patient_sound.environment = SOUND_ENVIRONMENT_UNDERWATER
 		SEND_SOUND(H, patient_sound)
 

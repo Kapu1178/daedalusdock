@@ -49,7 +49,7 @@
 				sound2use = 'goon/sounds/announcement_1.ogg'
 
 
-	sound2use = sound(sound2use)
+	sound2use = sound(sound2use, channel = SSsounds.random_available_channel())
 
 	for(var/mob/target in players)
 		if(!isnewplayer(target) && target.can_hear())
@@ -72,7 +72,7 @@
  * * button_zone - Area where the meeting was called and where everyone will get teleported to
  */
 /proc/call_emergency_meeting(mob/living/user, area/button_zone)
-	var/meeting_sound = sound('sound/misc/emergency_meeting.ogg')
+	var/meeting_sound = sound('sound/misc/emergency_meeting.ogg', channel = SSsounds.random_available_channel())
 	var/announcement
 	announcement += "<h1 class='alert'>Captain Alert</h1>"
 	announcement += "<br>[span_alert("[user] has called an Emergency Meeting!")]<br><br>"

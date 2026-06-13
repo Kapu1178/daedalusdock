@@ -282,7 +282,7 @@
 	if(ratio > CULT_RISEN && !cult_risen)
 		for(var/datum/mind/mind as anything in members)
 			if(mind.current)
-				SEND_SOUND(mind.current, 'sound/hallucinations/i_see_you2.ogg')
+				SEND_SOUND(mind.current, sound('sound/hallucinations/i_see_you2.ogg', channel = SSsounds.random_available_channel()))
 				to_chat(mind.current, span_cultlarge(span_warning("The veil weakens as your cult grows, your eyes begin to glow...")))
 				mind.current.AddComponentFrom(CULT_TRAIT, /datum/component/cult_eyes)
 		cult_risen = TRUE
@@ -291,7 +291,7 @@
 	if(ratio > CULT_ASCENDENT && !cult_ascendent)
 		for(var/datum/mind/mind as anything in members)
 			if(mind.current)
-				SEND_SOUND(mind.current, 'sound/hallucinations/im_here1.ogg')
+				SEND_SOUND(mind.current, sound('sound/hallucinations/im_here1.ogg', channel = SSsounds.random_available_channel()))
 				to_chat(mind.current, span_cultlarge(span_warning("Your cult is ascendent and the red harvest approaches...")))
 		cult_ascendent = TRUE
 		log_game("The blood cult has ascended with [cultplayers] players.")
@@ -505,7 +505,7 @@
 			continue
 
 		to_chat(cultist.current, span_bold(span_cultlarge("[marker] has marked [blood_target] in the [target_area.name] as the cult's top priority, get there immediately!")))
-		SEND_SOUND(cultist.current, sound(pick('sound/hallucinations/over_here2.ogg','sound/hallucinations/over_here3.ogg'), 0, 1, 75))
+		SEND_SOUND(cultist.current, sound(pick('sound/hallucinations/over_here2.ogg','sound/hallucinations/over_here3.ogg'), 0, 1, SSsounds.random_available_channel(), 75))
 		cultist.current.client.images += blood_target_image
 
 	blood_target_reset_timer = addtimer(CALLBACK(src, PROC_REF(unset_blood_target)), duration, TIMER_STOPPABLE)

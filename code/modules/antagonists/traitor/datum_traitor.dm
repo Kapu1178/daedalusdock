@@ -220,7 +220,7 @@
 		result += "<div style='font-size: 1.5em;margin-top: 1em;'><span class='highlighter'>The [special_role_text] succeeded in their mission.</span></div>"
 	else
 		result += "<div style='font-size: 1.5em;margin-top: 1em;'><span class='highlighter'>The [special_role_text] failed their mission.</span></div>"
-		SEND_SOUND(owner.current, 'sound/ambience/ambifailure.ogg')
+		SEND_SOUND(owner.current, sound('sound/ambience/ambifailure.ogg', channel = SSsounds.random_available_channel()))
 
 	return result.Join("")
 

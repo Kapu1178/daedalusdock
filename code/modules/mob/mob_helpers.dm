@@ -315,7 +315,7 @@ GLOBAL_LIST_INIT(bodyzone_gurps_mods, list(
 			orbit_link = " <a href='?src=[REF(O)];follow=[REF(source)]'>(Orbit)</a>"
 		to_chat(O, span_ghostalert("[message][(enter_link) ? " [enter_link]" : ""][orbit_link]"))
 		if(ghost_sound)
-			SEND_SOUND(O, sound(ghost_sound, volume = notify_volume))
+			SEND_SOUND(O, sound(ghost_sound, volume = notify_volume, channel = SSsounds.random_available_channel()))
 		if(flashwindow)
 			window_flash(O.client)
 		if(source)

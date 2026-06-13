@@ -82,7 +82,7 @@ TYPEINFO_DEF(/obj/vehicle/sealed/car/vim)
 	update_appearance()
 	playsound(src, 'sound/machines/windowdoor.ogg', 50, TRUE)
 	if(atom_integrity == max_integrity)
-		SEND_SOUND(newoccupant, sound('sound/mecha/nominal.ogg',volume=50))
+		SEND_SOUND(newoccupant, sound('sound/mecha/nominal.ogg',volume=50, channel = SSsounds.random_available_channel()))
 
 /obj/vehicle/sealed/car/vim/mob_try_exit(mob/pilot, mob/user, silent = FALSE, randomstep = FALSE)
 	. = ..()

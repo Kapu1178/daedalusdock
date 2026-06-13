@@ -86,7 +86,7 @@
 	app_mind.add_antag_datum(app)
 	app_mind.set_assigned_role(SSjob.GetJobType(/datum/job/wizard_apprentice))
 	app_mind.special_role = ROLE_WIZARD_APPRENTICE
-	SEND_SOUND(M, sound('sound/effects/magic.ogg'))
+	SEND_SOUND(M, sound('sound/effects/magic.ogg', channel = SSsounds.random_available_channel()))
 
 ///////////BORGS AND OPERATIVES
 

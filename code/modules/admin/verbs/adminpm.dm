@@ -70,7 +70,7 @@
 	var/message_prompt = "Message:"
 
 	if(AH?.opening_responders && length(AH.ticket_interactions) == 1)
-		SEND_SOUND(src, sound('sound/machines/buzz-sigh.ogg', volume=30))
+		SEND_SOUND(src, sound('sound/machines/buzz-sigh.ogg', volume=30, channel = SSsounds.random_available_channel()))
 		message_prompt += "\n\n**This ticket is already being responded to by: [english_list(AH.opening_responders)]**"
 
 	if(AH)
@@ -273,7 +273,7 @@
 
 			//play the receiving admin the adminhelp sound (if they have them enabled)
 			if(recipient.prefs.toggles & SOUND_ADMINHELP)
-				SEND_SOUND(recipient, sound('goon/sounds/adminhelp.ogg'))
+				SEND_SOUND(recipient, sound('goon/sounds/adminhelp.ogg', channel = SSsounds.random_available_channel()))
 		else
 			if(holder) //sender is an admin but recipient is not. Do BIG RED TEXT
 				var/already_logged = FALSE
@@ -321,7 +321,7 @@
 					SSblackbox.LogAhelp(recipient.current_ticket.id, "Reply", msg, recipient.ckey, src.ckey)
 
 				//always play non-admin recipients the adminhelp sound
-				SEND_SOUND(recipient, sound('goon/sounds/adminhelp.ogg'))
+				SEND_SOUND(recipient, sound('goon/sounds/adminhelp.ogg', channel = SSsounds.random_available_channel()))
 
 			else //neither are admins
 				if(!current_ticket)
@@ -456,7 +456,7 @@
 
 	window_flash(C, ignorepref = TRUE)
 	//always play non-admin recipients the adminhelp sound
-	SEND_SOUND(C, 'goon/sounds/adminhelp.ogg')
+	SEND_SOUND(C, sound('goon/sounds/adminhelp.ogg', channel = SSsounds.random_available_channel()))
 
 	C.externalreplyamount = EXTERNALREPLYCOUNT
 

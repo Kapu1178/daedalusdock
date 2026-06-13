@@ -63,7 +63,7 @@
 	for(var/client/admin_client in GLOB.admins)
 		if(admin_client.prefs.toggles & SOUND_ADMINHELP)
 			window_flash(admin_client, ignorepref = TRUE)
-			SEND_SOUND(admin_client, sound('sound/effects/gong.ogg'))
+			SEND_SOUND(admin_client, sound('sound/effects/gong.ogg', channel = SSsounds.random_available_channel()))
 
 /obj/item/station_charter/proc/reject_proposed(user)
 	if(!user)
