@@ -355,12 +355,3 @@ GLOBAL_DATUM_INIT(success_roll, /datum/roll_result/success, new)
 		[face_str]
 		</svg>
 	"}, regex, "")
-
-/client/verb/test_roll()
-	set name = "Test Roll"
-	set category = "Debug"
-
-	var/mob/living/carbon/human/user = usr
-
-	var/datum/roll_result/result = user.stat_roll(11, /datum/rpg_skill/bloodsport)
-	to_chat(user, result.create_tooltip("This is a test."))
