@@ -1,6 +1,5 @@
-import { Tooltip } from '../components';
-
 import { useBackend, useLocalState } from '../backend';
+import { Tooltip } from '../components';
 import {
   Box,
   Button,
