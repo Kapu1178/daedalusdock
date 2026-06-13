@@ -11,12 +11,6 @@
 	spell_type = /datum/action/cooldown/spell/pointed/projectile/spell_cards
 	category = "Offensive"
 
-/datum/spellbook_entry/rod_form
-	name = "Rod Form"
-	desc = "Take on the form of an immovable rod, destroying all in your path. Purchasing this spell multiple times will also increase the rod's damage and travel range."
-	spell_type = /datum/action/cooldown/spell/rod_form
-	category = "Offensive"
-
 /datum/spellbook_entry/disintegrate
 	name = "Smite"
 	desc = "Charges your hand with an unholy energy that can be used to cause a touched victim to violently explode."

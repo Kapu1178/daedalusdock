@@ -8,6 +8,9 @@
 		if(isabstract(design))
 			continue
 
+		if(design.build_type & BIOGENERATOR)
+			continue
+
 		var/object_path = design.build_path
 		if(isnull(object_path))
 			if(!length(design.make_reagents))
@@ -16,6 +19,11 @@
 
 		var/obj/item/built = new object_path(run_loc_floor_bottom_left)
 		var/list/item_materials = built.get_material_composition()
+
+		var/total_created = values_sum(item_materials)
+		var/total_cost = values_sum(design.materials)
+		if(total_created > total_cost)
+			TEST_FAIL("Design [design.type]'s product has more overall materials than it costs. (Cost: [total_cost] | Produces: [total_created])")
 
 		for(var/material_or_text, cost in design.materials)
 			if(!istext(material_or_text))

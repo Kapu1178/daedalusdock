@@ -159,7 +159,7 @@
 	name = "Sheet of Cardboard"
 	id = "cardboard"
 	build_type = BIOGENERATOR
-	materials = list(/datum/material/biomass= 25)
+	materials = list(/datum/material/biomass = 25)
 	build_path = /obj/item/stack/sheet/cardboard
 	category = list("Organic Materials")
 	mapload_design_flags = DESIGN_BIOGENERATOR

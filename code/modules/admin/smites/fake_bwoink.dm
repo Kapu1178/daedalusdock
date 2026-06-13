@@ -4,4 +4,4 @@
 
 /datum/smite/fake_bwoink/effect(client/user, mob/living/target)
 	. = ..()
-	SEND_SOUND(target, 'sound/effects/adminhelp.ogg')
+	SEND_SOUND(target, sound('sound/effects/adminhelp.ogg', channel = SSsounds.random_available_channel()))

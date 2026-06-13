@@ -19,7 +19,7 @@
 					Today, we will snuff out one of those lights.</b>")
 	to_chat(owner, span_boldwarning("You have five minutes to find a safe location to place down the first rift.  If you take longer than five minutes to place a rift, you will be returned from whence you came."))
 	owner.announce_objectives()
-	SEND_SOUND(owner.current, sound('sound/magic/demon_attack1.ogg'))
+	SEND_SOUND(owner.current, sound('sound/magic/demon_attack1.ogg', channel = SSsounds.random_available_channel()))
 
 /datum/antagonist/space_dragon/proc/forge_objectives()
 	var/datum/objective/summon_carp/summon = new()

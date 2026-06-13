@@ -330,7 +330,7 @@
 		card_slot = computer.all_components[MC_CARD]
 		card_slot2 = computer.all_components[MC_CARD2]
 		printer = computer.all_components[MC_PRINT]
-		data["have_auth_card"] = !!(card_slot)
+		data["have_auth_card"] = !!(card_slot?.stored_card)
 		data["have_id_slot"] = !!(card_slot2)
 		data["have_printer"] = !!(printer)
 	else

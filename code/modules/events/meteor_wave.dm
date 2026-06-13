@@ -4,9 +4,9 @@
 	name = "Meteor Wave: Normal"
 	typepath = /datum/round_event/meteor_wave
 	weight = 6
-	min_players = 15
-	max_occurrences = 3
-	earliest_start = 25 MINUTES
+	min_players = 30
+	max_occurrences = 1
+	earliest_start = 60 MINUTES
 
 /datum/round_event/meteor_wave
 	startWhen = 6
@@ -47,7 +47,7 @@
 			kill()
 
 /datum/round_event/meteor_wave/announce(fake)
-	priority_announce("Meteors have been detected on collision course with [GLOB.station_name]. Brace for impact!", FLAVOR_ANANKE_STATION, sound_type = ANNOUNCER_METEORS)
+	priority_announce("Meteors have been detected on collision course with [GLOB.station_name]. Brace for impact!", FLAVOR_DEFENSE_SYSTEM, sound_type = ANNOUNCER_METEORS)
 
 /datum/round_event/meteor_wave/tick()
 	if(ISMULTIPLE(activeFor, 3))

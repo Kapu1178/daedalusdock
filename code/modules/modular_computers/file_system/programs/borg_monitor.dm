@@ -136,10 +136,10 @@
 			to_chat(R, "<br><br>[span_notice("Message from [ID] -- \"[message]\"")]<br>")
 			to_chat(usr, "Message sent to [R]: [message]")
 			R.logevent("Message from [ID] -- \"[message]\"")
-			SEND_SOUND(R, 'sound/machines/twobeep_high.ogg')
+			SEND_SOUND(R, sound('sound/machines/twobeep_high.ogg', channel = SSsounds.random_available_channel()))
 			if(R.connected_ai)
 				to_chat(R.connected_ai, "<br><br>[span_notice("Message from [ID] to [R] -- \"[message]\"")]<br>")
-				SEND_SOUND(R.connected_ai, 'sound/machines/twobeep_high.ogg')
+				SEND_SOUND(R.connected_ai, sound('sound/machines/twobeep_high.ogg', channel = SSsounds.random_available_channel()))
 			usr.log_talk(message, LOG_PDA, tag="Cyborg Monitor Program: ID name \"[ID]\" to [R]")
 
 ///This proc is used to determin if a borg should be shown in the list (based on the borg's scrambledcodes var). Syndicate version overrides this to show only syndicate borgs.

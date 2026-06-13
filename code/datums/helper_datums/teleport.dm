@@ -13,7 +13,6 @@
 		/obj/effect = TRUE,
 		/obj/effect/dummy/chameleon = FALSE,
 		/obj/effect/mob_spawn = FALSE,
-		/obj/effect/immovablerod = FALSE,
 	))
 	if(delete_atoms[teleatom.type])
 		qdel(teleatom)

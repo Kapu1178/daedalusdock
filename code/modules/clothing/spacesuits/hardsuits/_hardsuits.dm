@@ -42,14 +42,15 @@ TYPEINFO_DEF(/obj/item/clothing/suit/space/hardsuit)
 		helmet = W
 
 /obj/item/clothing/suit/space/hardsuit/proc/RemoveHelmet()
-	if(!helmet)
+	if(!helmet || !helmet_on)
 		return
+
 	helmet_on = FALSE
 	if(ishuman(helmet.loc))
 		var/mob/living/carbon/H = helmet.loc
 		if(helmet.on)
 			helmet.attack_self(H)
-		H.transferItemToLoc(helmet, src, TRUE)
+		H.transferItemToLoc(helmet, src, TRUE, animate = FALSE)
 		H.update_worn_oversuit()
 		to_chat(H, span_notice("The helmet on the hardsuit disengages."))
 		playsound(src.loc, 'sound/mecha/mechmove03.ogg', 50, TRUE)

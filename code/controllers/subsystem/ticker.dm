@@ -291,7 +291,7 @@ SUBSYSTEM_DEF(ticker)
 	round_start_timeofday = REALTIMEOFDAY
 	INVOKE_ASYNC(SSdbcore, TYPE_PROC_REF(/datum/controller/subsystem/dbcore,SetRoundStart))
 
-	SEND_SOUND(world, sound(SSstation.announcer.get_rand_welcome_sound()))
+	SEND_SOUND(world, sound(SSstation.announcer.get_rand_welcome_sound(), channel = SSsounds.random_available_channel()))
 
 	current_state = GAME_STATE_PLAYING
 	Master.SetRunLevel(RUNLEVEL_GAME)
@@ -503,7 +503,7 @@ SUBSYSTEM_DEF(ticker)
 		list_clear_nulls(queued_players)
 		for (var/mob/dead/new_player/NP in queued_players)
 			to_chat(NP, span_userdanger("The alive players limit has been released!<br><a href='?src=[REF(NP)];late_join=override'>[html_encode(">>Join Game<<")]</a>"))
-			SEND_SOUND(NP, sound('sound/misc/notice1.ogg'))
+			SEND_SOUND(NP, sound('sound/misc/notice1.ogg', channel = SSsounds.random_available_channel()))
 			NP.npp.LateChoices()
 		queued_players.len = 0
 		queue_delay = 0
@@ -518,7 +518,7 @@ SUBSYSTEM_DEF(ticker)
 			if(living_player_count() < hpc)
 				if(next_in_line?.client)
 					to_chat(next_in_line, span_userdanger("A slot has opened! You have approximately 20 seconds to join. <a href='?src=[REF(next_in_line)];late_join=override'>\>\>Join Game\<\<</a>"))
-					SEND_SOUND(next_in_line, sound('sound/misc/notice1.ogg'))
+					SEND_SOUND(next_in_line, sound('sound/misc/notice1.ogg', channel = SSsounds.random_available_channel()))
 					next_in_line.npp.LateChoices()
 					return
 				queued_players -= next_in_line //Client disconnected, remove he
@@ -699,7 +699,7 @@ SUBSYSTEM_DEF(ticker)
 	if(!round_end_sound)
 		round_end_sound = choose_round_end_song()
 	///The reference to the end of round sound that we have chosen.
-	var/sound/end_of_round_sound_ref = sound(round_end_sound)
+	var/sound/end_of_round_sound_ref = sound(round_end_sound, channel = SSsounds.random_available_channel())
 	for(var/mob/M in GLOB.player_list)
 		if(M.client.prefs?.toggles & SOUND_ENDOFROUND)
 			SEND_SOUND(M.client, end_of_round_sound_ref)

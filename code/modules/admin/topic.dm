@@ -130,7 +130,7 @@
 			return
 		SSshuttle.emergency.setTimer(timer SECONDS)
 		log_admin("[key_name(usr)] edited the Emergency Shuttle's timeleft to [timer] seconds.")
-		priority_announce("The emergency shuttle will reach its destination in [DisplayTimeText(timer SECONDS)].", use_announcer_sound = FALSE)
+		priority_announce("The emergency shuttle will reach its destination in [DisplayTimeText(timer SECONDS)].")
 		message_admins(span_adminnotice("[key_name_admin(usr)] edited the Emergency Shuttle's timeleft to [timer] seconds."))
 	else if(href_list["trigger_centcom_recall"])
 		if(!check_rights(R_ADMIN))
@@ -954,7 +954,7 @@
 		message_admins("[key_name(H)] got their [new_item], spawned by [key_name(src.owner)].")
 		SSblackbox.record_feedback("amount", "admin_cookies_spawned", 1)
 		to_chat(H, span_adminnotice("Your prayers have been answered!! You received the <b>best [new_item.name]!</b>"), confidential = TRUE)
-		SEND_SOUND(H, sound('sound/effects/pray_chaplain.ogg'))
+		SEND_SOUND(H, sound('sound/effects/pray_chaplain.ogg', channel = SSsounds.random_available_channel()))
 
 	else if (href_list["adminpopup"])
 		if (!check_rights(R_ADMIN))

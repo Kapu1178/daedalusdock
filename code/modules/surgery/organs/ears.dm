@@ -43,7 +43,7 @@
 		deaf = max(deaf - (0.5 * delta_time), 0)
 		if((damage > low_threshold) && DT_PROB(damage / 60, delta_time))
 			adjustEarDamage(0, 4)
-			SEND_SOUND(owner, sound('sound/weapons/flash_ring.ogg'))
+			SEND_SOUND(owner, sound('sound/weapons/flash_ring.ogg', channel = SSsounds.random_available_channel()))
 
 	if(deaf)
 		ADD_TRAIT(owner, TRAIT_DEAF, EAR_DAMAGE)

@@ -610,7 +610,7 @@ structure_check() searches for nearby cultist structures required for the invoca
 		else
 			fail_invoke()
 			return
-	SEND_SOUND(mob_to_revive, 'sound/ambience/antag/bloodcult.ogg')
+	SEND_SOUND(mob_to_revive, sound('sound/ambience/antag/bloodcult.ogg', channel = SSsounds.random_available_channel()))
 	to_chat(mob_to_revive, span_cultlarge("\"PASNAR SAVRAE YAM'TOTH. Arise.\""))
 	mob_to_revive.visible_message(span_warning("[mob_to_revive] draws in a huge breath, red light shining from [mob_to_revive.p_their()] eyes."), \
 								  span_cultlarge("You awaken suddenly from the void. You're alive!"))
@@ -968,7 +968,7 @@ structure_check() searches for nearby cultist structures required for the invoca
 			add_alt_appearance(/datum/atom_hud/alternate_appearance/basic/noncult, "human_apoc", A, NONE)
 			addtimer(CALLBACK(M,TYPE_PROC_REF(/atom, remove_alt_appearance),"human_apoc",TRUE), duration)
 			images += A
-			SEND_SOUND(M, pick(sound('sound/ambience/antag/bloodcult.ogg'),sound('sound/voice/ghost_whisper.ogg'),sound('sound/misc/ghosty_wind.ogg')))
+			SEND_SOUND(M, sound(pick('sound/ambience/antag/bloodcult.ogg','sound/voice/ghost_whisper.ogg','sound/misc/ghosty_wind.ogg'), channel = SSsounds.random_available_channel()))
 		else
 			var/construct = pick("floater","artificer","behemoth")
 			var/image/B = image('icons/mob/mob.dmi',M,construct, ABOVE_MOB_LAYER)
@@ -984,39 +984,8 @@ structure_check() searches for nearby cultist structures required for the invoca
 				images += C
 		else
 			to_chat(M, span_cultlarge("An Apocalypse Rune was invoked in the [place.name], it is no longer available as a summoning site!"))
-			SEND_SOUND(M, 'sound/effects/pope_entry.ogg')
+			SEND_SOUND(M, sound('sound/effects/pope_entry.ogg', channel = SSsounds.random_available_channel()))
 	image_handler(images, duration)
-
-	if(intensity>=285) // Based on the prior formula, this means the cult makes up <15% of current players
-		var/outcome = rand(1,100)
-		switch(outcome)
-			if(1 to 12)
-				var/datum/round_event_control/disease_outbreak/D = new()
-				var/datum/round_event_control/animal_infestation/vermin/M = new()
-				D.runEvent()
-				M.runEvent()
-			if(13 to 25)
-				var/datum/round_event_control/radiation_storm/RS = new()
-				RS.runEvent()
-			if(26 to 37)
-				var/datum/round_event_control/brand_intelligence/BI = new()
-				BI.runEvent()
-			if(38 to 50)
-				var/datum/round_event_control/immovable_rod/R = new()
-				R.runEvent()
-				R.runEvent()
-				R.runEvent()
-			if(51 to 62)
-				var/datum/round_event_control/meteor_wave/MW = new()
-				MW.runEvent()
-			if(63 to 75)
-				var/datum/round_event_control/spacevine/SV = new()
-				var/datum/round_event_control/grey_tide/GT = new()
-				SV.runEvent()
-				GT.runEvent()
-			if(75 to 100)
-				var/datum/round_event_control/portal_storm_narsie/N = new()
-				N.runEvent()
 	qdel(src)
 
 /obj/effect/rune/apocalypse/proc/image_handler(list/images, duration)

@@ -38,3 +38,9 @@
   - rscadd: Replaced the standard EVA and emergency suit sprites with ones ported
       from Baystation.
   - rscadd: Standard EVA suits now include a headlamp and welding visor toggle.
+2026-05-29:
+  Kapu1178:
+  - rscadd: A new random event.
+  - rscdel: Bad random events.
+  - bugfix: Hardsuit sound bug.
+  - bugfix: Several sources of infinite material exploits.

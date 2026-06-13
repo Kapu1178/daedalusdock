@@ -70,7 +70,7 @@
 	if(QDELETED(src) || owner.incapacitated() || !BS || (rune && !(locate(/obj/effect/rune/empower) in range(1, owner))) || (length(spells) >= limit))
 		return
 	to_chat(owner,span_warning("You begin to carve unnatural symbols into your flesh!"))
-	SEND_SOUND(owner, sound('sound/weapons/slice.ogg',0,1,10))
+	SEND_SOUND(owner, sound('sound/weapons/slice.ogg',0,1,SSsounds.random_available_channel(), 10))
 	if(!channeling)
 		channeling = TRUE
 	else
@@ -209,7 +209,7 @@
 	else
 		owner.visible_message(span_warning("A [summoned_blade] appears at [owner]'s feet!"), \
 			span_cultitalic("A [summoned_blade] materializes at your feet."))
-	SEND_SOUND(owner, sound('sound/effects/magic.ogg', FALSE, 0, 25))
+	SEND_SOUND(owner, sound('sound/effects/magic.ogg', FALSE, 0, SSsounds.random_available_channel(), 25))
 	charges--
 	if(charges <= 0)
 		qdel(src)
@@ -240,7 +240,7 @@
 /datum/action/innate/cult/blood_spell/horror/do_ability(mob/living/invoker, mob/living/carbon/human/clicked_on)
 
 	clicked_on.hallucination = max(clicked_on.hallucination, 120)
-	SEND_SOUND(invoker, sound('sound/effects/ghost.ogg', FALSE, TRUE, 50))
+	SEND_SOUND(invoker, sound('sound/effects/ghost.ogg', FALSE, TRUE, SSsounds.random_available_channel(), 50))
 
 	var/image/sparkle_image = image('icons/effects/cult/effects.dmi', clicked_on, "bloodsparkles", ABOVE_MOB_LAYER)
 	clicked_on.add_alt_appearance(/datum/atom_hud/alternate_appearance/basic/cult, "cult_apoc", sparkle_image, NONE)
@@ -271,7 +271,7 @@
 		owner.visible_message(span_warning("Thin grey dust falls from [owner]'s hand!"), \
 			span_cultitalic("You invoke the veiling spell, hiding nearby runes."))
 		charges--
-		SEND_SOUND(owner, sound('sound/magic/smoke.ogg',0,1,25))
+		SEND_SOUND(owner, sound('sound/magic/smoke.ogg',0,1,SSsounds.random_available_channel(), 25))
 		owner.whisper(invocation, language = /datum/language/common)
 		for(var/obj/effect/rune/R in range(5,owner))
 			R.conceal()
@@ -291,7 +291,7 @@
 			span_cultitalic("You invoke the counterspell, revealing nearby runes."))
 		charges--
 		owner.whisper(invocation, language = /datum/language/common)
-		SEND_SOUND(owner, sound('sound/magic/enter_blood.ogg',0,1,25))
+		SEND_SOUND(owner, sound('sound/magic/enter_blood.ogg',0,1, SSsounds.random_available_channel(), 25))
 		for(var/obj/effect/rune/R in range(7,owner)) //More range in case you weren't standing in exactly the same spot
 			R.reveal()
 		for(var/obj/structure/destructible/cult/S in range(6,owner))
@@ -569,7 +569,7 @@
 				uses--
 				to_chat(user, span_warning("A dark cloud emanates from your hand and swirls around the iron, twisting it into a construct shell!"))
 				new /obj/structure/constructshell(T)
-				SEND_SOUND(user, sound('sound/effects/magic.ogg',0,1,25))
+				SEND_SOUND(user, sound('sound/effects/magic.ogg',0,1, SSsounds.random_available_channel(), 25))
 			else
 				to_chat(user, span_warning("You need [IRON_TO_CONSTRUCT_SHELL_CONVERSION] iron to produce a construct shell!"))
 				return
@@ -580,7 +580,7 @@
 				uses --
 				new /obj/item/stack/sheet/runed_metal(T,quantity)
 				to_chat(user, span_warning("A dark cloud emanates from you hand and swirls around the plasteel, transforming it into runed metal!"))
-				SEND_SOUND(user, sound('sound/effects/magic.ogg',0,1,25))
+				SEND_SOUND(user, sound('sound/effects/magic.ogg',0,1, SSsounds.random_available_channel(),25))
 		else if(istype(target,/mob/living/silicon/robot))
 			var/mob/living/silicon/robot/candidate = target
 			if(candidate.mmi || candidate.shell)
@@ -613,7 +613,7 @@
 				uses--
 				to_chat(user, span_warning("A dark cloud emanates from you hand and swirls around [candidate] - twisting it into a construct shell!"))
 				new /obj/structure/constructshell(T)
-				SEND_SOUND(user, sound('sound/effects/magic.ogg',0,1,25))
+				SEND_SOUND(user, sound('sound/effects/magic.ogg',0,1, SSsounds.random_available_channel(), 25))
 				qdel(candidate)
 		else if(istype(target,/obj/machinery/door/airlock))
 			channeling = TRUE
@@ -626,7 +626,7 @@
 				target.narsie_act()
 				uses--
 				user.visible_message(span_warning("Black ribbons suddenly emanate from [user]'s hand and cling to the airlock - twisting and corrupting it!"))
-				SEND_SOUND(user, sound('sound/effects/magic.ogg',0,1,25))
+				SEND_SOUND(user, sound('sound/effects/magic.ogg',0,1, SSsounds.random_available_channel(), 25))
 				channeling = FALSE
 			else
 				channeling = FALSE
@@ -637,7 +637,7 @@
 			if(candidate.corrupt())
 				uses--
 				to_chat(user, span_warning("You corrupt [candidate]!"))
-				SEND_SOUND(user, sound('sound/effects/magic.ogg',0,1,25))
+				SEND_SOUND(user, sound('sound/effects/magic.ogg',0,1, SSsounds.random_available_channel(), 25))
 		else
 			to_chat(user, span_warning("The spell will not work on [target]!"))
 			return

@@ -171,8 +171,9 @@ GLOBAL_LIST_INIT(bodyzone_gurps_mods, list(
  *
  * text is the inputted message, replace_characters will cause original letters to be replaced and chance are the odds that a character gets modified.
  */
-/proc/Gibberish(text, replace_characters = FALSE, chance = 50)
-	text = html_decode(text)
+/proc/Gibberish(text, replace_characters = FALSE, chance = 50, decode = TRUE, encode = TRUE)
+	if(decode)
+		text = html_decode(text)
 	. = ""
 	var/rawchar = ""
 	var/letter = ""
@@ -185,7 +186,8 @@ GLOBAL_LIST_INIT(bodyzone_gurps_mods, list(
 			for(var/j in 1 to rand(0, 2))
 				letter += pick("#", "@", "*", "&", "%", "$", "/", "<", ">", ";", "*", "*", "*", "*", "*", "*", "*")
 		. += letter
-	return sanitize(.)
+
+	return encode ? sanitize(.) : .
 
 #define TILES_PER_SECOND 0.7
 ///Shake the camera of the person viewing the mob SO REAL!
@@ -313,7 +315,7 @@ GLOBAL_LIST_INIT(bodyzone_gurps_mods, list(
 			orbit_link = " <a href='?src=[REF(O)];follow=[REF(source)]'>(Orbit)</a>"
 		to_chat(O, span_ghostalert("[message][(enter_link) ? " [enter_link]" : ""][orbit_link]"))
 		if(ghost_sound)
-			SEND_SOUND(O, sound(ghost_sound, volume = notify_volume))
+			SEND_SOUND(O, sound(ghost_sound, volume = notify_volume, channel = SSsounds.random_available_channel()))
 		if(flashwindow)
 			window_flash(O.client)
 		if(source)

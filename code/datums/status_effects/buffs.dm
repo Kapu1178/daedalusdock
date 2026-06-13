@@ -85,7 +85,7 @@
 	for(var/datum/mind/B as anything in get_antag_minds(/datum/antagonist/cult))
 		if(isliving(B.current))
 			var/mob/living/M = B.current
-			SEND_SOUND(M, sound('sound/hallucinations/veryfar_noise.ogg'))
+			SEND_SOUND(M, sound('sound/hallucinations/veryfar_noise.ogg', channel = SSsounds.random_available_channel()))
 			to_chat(M, span_cultlarge("The Cult's Master, [owner], has fallen in \the [A]!"))
 
 /datum/status_effect/cult_master/tick()
@@ -471,7 +471,7 @@
 /datum/status_effect/mayhem/on_apply()
 	. = ..()
 	to_chat(owner, "<span class='reallybig redtext'>RIP AND TEAR</span>")
-	SEND_SOUND(owner, sound('sound/hallucinations/veryfar_noise.ogg'))
+	SEND_SOUND(owner, sound('sound/hallucinations/veryfar_noise.ogg', channel = SSsounds.random_available_channel()))
 	new /datum/hallucination/delusion(owner, forced = TRUE, force_kind = "demon", duration = duration, skip_nearby = FALSE)
 	chainsaw = new(get_turf(owner))
 	owner.log_message("entered a blood frenzy", LOG_ATTACK)

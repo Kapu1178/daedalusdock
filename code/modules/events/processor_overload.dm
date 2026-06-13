@@ -2,7 +2,7 @@
 	name = "Processor Overload"
 	typepath = /datum/round_event/processor_overload
 	weight = 7
-	min_players = 20
+	min_players = 50
 
 /datum/round_event/processor_overload
 	announceWhen = 1

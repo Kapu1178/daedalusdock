@@ -169,8 +169,8 @@
 		blob_mobs += blobber
 		var/mob/dead/observer/C = pick(candidates)
 		blobber.PossessByPlayer(C.key)
-		SEND_SOUND(blobber, sound('sound/effects/blobattack.ogg'))
-		SEND_SOUND(blobber, sound('sound/effects/attackblob.ogg'))
+		SEND_SOUND(blobber, sound('sound/effects/blobattack.ogg', channel = SSsounds.random_available_channel()))
+		SEND_SOUND(blobber, sound('sound/effects/attackblob.ogg', channel = SSsounds.random_available_channel()))
 		to_chat(blobber, "<b>You are a blobbernaut!</b>")
 		to_chat(blobber, "You are powerful, hard to kill, and slowly regenerate near nodes and cores, [span_cultlarge("but will slowly die if not near the blob")] or if the factory that made you is killed.")
 		to_chat(blobber, "You can communicate with other blobbernauts and overminds via <b>:b</b>")

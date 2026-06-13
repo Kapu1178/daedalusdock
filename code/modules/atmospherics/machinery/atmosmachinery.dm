@@ -433,13 +433,15 @@ TYPEINFO_DEF(/obj/machinery/atmospherics)
 		var/datum/gas_mixture/env_air = loc.return_air()
 		pressures = int_air.returnPressure() - env_air.returnPressure()
 
-	user.visible_message(span_danger("[user] is sent flying by pressure!"),span_userdanger("The pressure sends you flying!"))
+	if(HAS_TRAIT(user, TRAIT_NEGATES_GRAVITY))
+		return
 
 	// if get_dir(src, user) is not 0, target is the edge_target_turf on that dir
 	// otherwise, edge_target_turf uses a random cardinal direction
 	// range is pressures / 250
 	// speed is pressures / 1250
-	user.throw_at(get_edge_target_turf(user, get_dir(src, user) || pick(GLOB.cardinals)), pressures / 250, pressures / 1250)
+	if(user.throw_at(get_edge_target_turf(user, get_dir(src, user) || pick(GLOB.cardinals)), pressures / 250, pressures / 1250))
+		user.visible_message(span_danger("[user] is launched across the room."))
 
 /**
  * Pipe deconstruction
