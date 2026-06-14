@@ -82,7 +82,6 @@
 	if(!isliving(user))
 		return
 
-	var/has_seen_before = !!astype(user, /mob/living).stats.get_stashed_result("phone_examine")
 	. += user.disco_made_easy("phone_examine", 11, is_examine = TRUE, success_text = "Stamped into the metal lies the old insignia of Rae Communications Limited.")
 
 /obj/machinery/telephone/disco_flavor(mob/living/carbon/human/user, nearby, is_station_level)
@@ -90,9 +89,7 @@
 	if(!nearby)
 		return
 
-	user.disco_made_easy("phone_ring", 16, success_text = "The phone begins to ring.")
-	var/datum/roll_result/result = user.stats.get_stashed_result("phone_ring")
-	if(result?.outcome >= SUCCESS)
+	if(user.disco_made_easy("phone_ring", 16, success_text = "The phone begins to ring."))
 		user.playsound_local(src, 'goon/sounds/phone/ring_incoming.ogg', 20, FALSE)
 
 ///Recalculate our name.
