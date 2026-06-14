@@ -90,7 +90,8 @@
 	if(!nearby)
 		return
 
-	var/datum/roll_result/result = user.disco_made_easy("phone_ring", 16, success_text = "The phone begins to ring.")
+	user.disco_made_easy("phone_ring", 16, success_text = "The phone begins to ring.")
+	var/datum/roll_result/result = user.stats.get_stashed_result("phone_ring")
 	if(result?.outcome >= SUCCESS)
 		user.playsound_local(src, 'goon/sounds/phone/ring_incoming.ogg', 20, FALSE)
 
