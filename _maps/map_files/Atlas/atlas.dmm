@@ -3908,17 +3908,10 @@
 "efu" = (
 /obj/effect/turf_decal/tile/yellow/opposingcorners,
 /obj/structure/table,
-/obj/item/paper_bin{
-	pixel_y = 4;
-	pixel_x = -4
-	},
-/obj/item/pen{
-	pixel_y = 5;
-	pixel_x = -6
-	},
-/obj/item/storage/box/lights/mixed{
-	pixel_y = 2;
-	pixel_x = 8
+/obj/item/book/manual/codex/supermatter,
+/obj/item/screwdriver{
+	pixel_y = -3;
+	pixel_x = 2
 	},
 /turf/open/floor/iron/dark,
 /area/station/engineering/main)
@@ -5583,13 +5576,19 @@
 /area/station/engineering/storage)
 "fNZ" = (
 /obj/effect/decal/cleanable/cobweb,
-/obj/machinery/power/emitter,
 /obj/item/radio/intercom/directional/west,
-/obj/effect/turf_decal/box/corners{
-	dir = 1
+/obj/structure/table,
+/obj/item/paper_bin{
+	pixel_y = 4;
+	pixel_x = -4
 	},
-/obj/effect/turf_decal/box/corners{
-	dir = 8
+/obj/item/pen{
+	pixel_y = 5;
+	pixel_x = -6
+	},
+/obj/item/storage/box/lights/mixed{
+	pixel_y = 2;
+	pixel_x = 8
 	},
 /turf/open/floor/iron/ported/techfloor,
 /area/station/engineering/storage)
@@ -8275,6 +8274,12 @@
 	dir = 4
 	},
 /obj/effect/turf_decal/box/corners,
+/obj/effect/turf_decal/box/corners{
+	dir = 8
+	},
+/obj/effect/turf_decal/box/corners{
+	dir = 1
+	},
 /turf/open/floor/iron/ported/techfloor,
 /area/station/engineering/storage)
 "inH" = (
@@ -9199,14 +9204,17 @@
 	pixel_y = 6
 	},
 /obj/item/reagent_containers/cup/glass/coffee{
-	pixel_y = 9;
-	pixel_x = -6
+	pixel_y = 17;
+	pixel_x = -7
 	},
-/obj/item/screwdriver{
-	pixel_y = -3;
-	pixel_x = 2
+/obj/item/taperecorder/empty{
+	pixel_x = -7;
+	pixel_y = 0
 	},
-/mob/living/simple_animal/parrot/poly,
+/obj/item/tape/engine{
+	pixel_x = 6;
+	pixel_y = -4
+	},
 /turf/open/floor/iron/dark,
 /area/station/engineering/main)
 "jlE" = (
@@ -12805,9 +12813,6 @@
 "mUr" = (
 /obj/effect/turf_decal/tile/yellow/opposingcorners,
 /obj/structure/table/reinforced,
-/obj/item/folder/yellow{
-	pixel_y = 4
-	},
 /obj/structure/cable/yellow{
 	icon_state = "16"
 	},
@@ -16427,6 +16432,7 @@
 	spawn_loot_count = 2;
 	spawn_random_offset = 1
 	},
+/mob/living/simple_animal/parrot/poly,
 /turf/open/floor/iron/dark,
 /area/station/engineering/main)
 "qys" = (

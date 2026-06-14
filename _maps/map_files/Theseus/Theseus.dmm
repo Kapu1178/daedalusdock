@@ -19194,7 +19194,14 @@
 	pixel_y = -8;
 	id = "engine_sides"
 	},
-/obj/item/book/manual/codex/supermatter,
+/obj/item/tape/engine{
+	pixel_x = -5;
+	pixel_y = 10
+	},
+/obj/item/taperecorder/empty{
+	pixel_x = -6;
+	pixel_y = -2
+	},
 /turf/open/floor/iron,
 /area/station/engineering/monitoring)
 "gNl" = (
@@ -20636,6 +20643,7 @@
 /obj/structure/cable/yellow{
 	icon_state = "12"
 	},
+/obj/item/book/manual/codex/supermatter,
 /turf/open/floor/iron,
 /area/station/engineering/monitoring)
 "hsV" = (
