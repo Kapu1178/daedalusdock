@@ -68,7 +68,7 @@
 /obj/effect/aether_rune/Destroy(force)
 	touching_rune = null
 	timed_action = null
-	try_cancel_invoke(RUNE_FAIL_GRACEFUL)
+	try_cancel_invoke(/datum/invoke_failure/graceful)
 	QDEL_NULL(outer_ring)
 	QDEL_NULL(particle_holder)
 	return ..()
@@ -242,9 +242,18 @@
 	wipe_state()
 
 /// Called when invocation fails.
-/obj/effect/aether_rune/proc/fail_invoke(failure_reason = RUNE_FAIL_GRACEFUL, failure_source)
+/obj/effect/aether_rune/proc/fail_invoke(datum/invoke_failure/failure_reason = /datum/invoke_failure/graceful, failure_source, had_started = FALSE)
 	SHOULD_CALL_PARENT(TRUE)
 	SHOULD_NOT_SLEEP(TRUE)
+
+	if(failure_reason != /datum/invoke_failure/graceful)
+		playsound(src, 'sound/effects/ghost2.ogg', 25)
+		for(var/mob/M in viewers(get_turf(src)))
+			shake_camera(M, 1 SECOND, 3)
+
+		var/mob/living/carbon/human/invoker = blackboard[RUNE_BB_INVOKER]
+		if(failure_reason.desc && invoker && invoker.stat == CONSCIOUS)
+			to_chat(invoker, span_statsbad("Mystick energy reverberates through you, the ritual has torn itself apart because [failure_reason.desc]."))
 
 	invoking = RUNE_INVOKING_IDLE
 	wipe_state()
@@ -257,9 +266,9 @@
 	if(timed_action.status != ACTION_WORKING)
 		return
 
-	timed_action.cancel()
 	blackboard[RUNE_BB_CANCEL_REASON] = reason
 	blackboard[RUNE_BB_CANCEL_SOURCE] = source
+	timed_action.cancel()
 
 /// Does what it says on the tin
 /obj/effect/aether_rune/proc/start_invoke_animation(time)
@@ -390,9 +399,9 @@
 
 	remove_invoker(blackboard[RUNE_BB_INVOKER])
 	if(QDELETED(source))
-		try_cancel_invoke(RUNE_FAIL_GRACEFUL)
+		try_cancel_invoke(/datum/invoke_failure/graceful)
 	else
-		try_cancel_invoke(RUNE_FAIL_INVOKER_INCAP, source)
+		try_cancel_invoke(/datum/invoke_failure/invoker_incap, source)
 
 /// Removes a helper for being knocked out or killed
 /obj/effect/aether_rune/proc/invoker_dir_change(datum/source, dir, newdir)
@@ -402,7 +411,7 @@
 		return
 
 	remove_invoker(blackboard[RUNE_BB_INVOKER])
-	try_cancel_invoke(RUNE_FAIL_INVOKER_INCAP, source)
+	try_cancel_invoke(/datum/invoke_failure/invoker_incap, source)
 
 /obj/effect/aether_rune/proc/check_invoker_hands(datum/source)
 	SIGNAL_HANDLER
@@ -410,7 +419,7 @@
 	var/mob/living/L = source
 	if(!L.get_empty_held_index())
 		remove_invoker(blackboard[RUNE_BB_INVOKER])
-		try_cancel_invoke(RUNE_FAIL_INVOKER_INCAP, source)
+		try_cancel_invoke(/datum/invoke_failure/invoker_incap, source)
 
 /// Removes a helper for moving or being deleted, or becoming incapacitated.
 /obj/effect/aether_rune/proc/helper_cant_help_no_more(datum/source)
@@ -419,14 +428,14 @@
 	remove_helper(source)
 	var/mob/living/L = source
 	if(QDELETED(L))
-		try_cancel_invoke(RUNE_FAIL_GRACEFUL)
+		try_cancel_invoke(/datum/invoke_failure/graceful)
 		return
 
 	L.visible_message(
 		span_warning("[L] removes [L.p_their()] hand from [src]."),
 	)
 
-	try_cancel_invoke(RUNE_FAIL_HELPER_REMOVED_HAND, source)
+	try_cancel_invoke(/datum/invoke_failure/helper_hand_removed, source)
 
 
 /// Removes a helper for being knocked out or killed
@@ -434,7 +443,7 @@
 	SIGNAL_HANDLER
 
 	remove_helper(source)
-	try_cancel_invoke(RUNE_FAIL_HELPER_REMOVED_HAND, source)
+	try_cancel_invoke(/datum/invoke_failure/helper_hand_removed, source)
 
 /// Removes a helper for being knocked out or killed
 /obj/effect/aether_rune/proc/helper_dir_change(datum/source, dir, newdir)
@@ -448,7 +457,7 @@
 	L.visible_message(
 		span_warning("[L] removes [L.p_their()] hand from [src]."),
 	)
-	try_cancel_invoke(RUNE_FAIL_HELPER_REMOVED_HAND, source)
+	try_cancel_invoke(/datum/invoke_failure/helper_hand_removed, source)
 
 /obj/effect/aether_rune/proc/check_helper_hands(datum/source)
 	SIGNAL_HANDLER
@@ -459,13 +468,13 @@
 			span_warning("[L] removes [L.p_their()] hand from [src]."),
 		)
 		remove_helper(source)
-		try_cancel_invoke(RUNE_FAIL_HELPER_REMOVED_HAND, source)
+		try_cancel_invoke(/datum/invoke_failure/helper_hand_removed, source)
 
 /// Handles the tome being moved
 /obj/effect/aether_rune/proc/tome_dropped(datum/source)
 	SIGNAL_HANDLER
 
-	try_cancel_invoke(RUNE_FAIL_TOME_GONE, source)
+	try_cancel_invoke(/datum/invoke_failure/tome_gone, source)
 
 
 /// Handle the target being moved.
@@ -474,16 +483,16 @@
 
 	var/mob/target = source
 	if(QDELETED(target))
-		try_cancel_invoke(RUNE_FAIL_GRACEFUL)
+		try_cancel_invoke(/datum/invoke_failure/graceful)
 		return
 
 	if(target.loc != loc)
-		try_cancel_invoke(RUNE_FAIL_TARGET_MOB_MOVED, target)
+		try_cancel_invoke(/datum/invoke_failure/target_mob_moved, target)
 
 /obj/effect/aether_rune/proc/target_stand_up(datum/source)
 	SIGNAL_HANDLER
 
-	try_cancel_invoke(RUNE_FAIL_TARGET_STOOD_UP, source)
+	try_cancel_invoke(/datum/invoke_failure/target_mob_getup, source)
 
 /obj/effect/aether_rune/proc/register_item(obj/item/I)
 	RegisterSignal(I, list(COMSIG_PARENT_QDELETING, COMSIG_MOVABLE_MOVED), PROC_REF(item_moved_or_deleted))
@@ -498,8 +507,8 @@
 
 	var/obj/item/I = source
 	if(QDELETED(I))
-		try_cancel_invoke(RUNE_FAIL_GRACEFUL)
+		try_cancel_invoke(/datum/invoke_failure/graceful)
 		return
 
 	if(!isturf(I.loc) || get_dist(src, I) > 1)
-		try_cancel_invoke(RUNE_FAIL_TARGET_ITEM_OUT_OF_RUNE, I)
+		try_cancel_invoke(/datum/invoke_failure/target_item_range, I)

@@ -75,8 +75,8 @@
 			target_mob.set_heartattack(FALSE)
 	return ..()
 
-/obj/effect/aether_rune/heal/fail_invoke(failure_reason, failure_source)
-	if(failure_reason == RUNE_FAIL_GRACEFUL)
+/obj/effect/aether_rune/heal/fail_invoke(datum/invoke_failure/failure_reason = /datum/invoke_failure/graceful, failure_source, had_started = FALSE)
+	if(failure_reason == /datum/invoke_failure/graceful)
 		return ..()
 
 	var/mob/living/carbon/human/target_mob = blackboard[RUNE_BB_TARGET_MOB]
@@ -89,11 +89,11 @@
 	target_mob.gib()
 
 	switch(failure_reason)
-		if(RUNE_FAIL_TARGET_MOB_MOVED, RUNE_FAIL_TARGET_STOOD_UP)
+		if(/datum/invoke_failure/target_mob_moved, /datum/invoke_failure/target_mob_getup)
 			for(var/mob/living/carbon/human/H in touching_rune + blackboard[RUNE_BB_INVOKER])
 				cover_in_blood(H, blood_dna)
 
-		if(RUNE_FAIL_HELPER_REMOVED_HAND, RUNE_FAIL_INVOKER_INCAP)
+		if(/datum/invoke_failure/helper_hand_removed, /datum/invoke_failure/invoker_incap)
 			cover_in_blood(failure_source, blood_dna)
 
 	return ..()

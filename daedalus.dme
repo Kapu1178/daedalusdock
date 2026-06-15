@@ -2214,6 +2214,7 @@
 #include "code\modules\aether\chalk.dm"
 #include "code\modules\aether\runes\_aether_rune_timed_action.dm"
 #include "code\modules\aether\runes\_aether_runes.dm"
+#include "code\modules\aether\runes\_invoke_failure_reasons.dm"
 #include "code\modules\aether\runes\exanguinate_rune.dm"
 #include "code\modules\aether\runes\exchange_rune.dm"
 #include "code\modules\aether\runes\heal_rune.dm"

@@ -60,12 +60,12 @@
 
 	return ..()
 
-/obj/effect/aether_rune/exchange/fail_invoke(failure_reason, failure_source)
-	if(failure_reason == RUNE_FAIL_GRACEFUL)
+/obj/effect/aether_rune/exchange/fail_invoke(datum/invoke_failure/failure_reason = /datum/invoke_failure/graceful, failure_source, had_started = FALSE)
+	if(failure_reason == /datum/invoke_failure/graceful)
 		return ..()
 
 	switch(failure_reason)
-		if(RUNE_FAIL_TARGET_MOB_MOVED, RUNE_FAIL_TARGET_STOOD_UP)
+		if(/datum/invoke_failure/target_mob_moved, /datum/invoke_failure/target_mob_getup)
 			switch(rand(1,10))
 				if(1 to 6)
 					rip_out_target_heart()
@@ -74,13 +74,13 @@
 				if(9 to 10)
 					rip_out_organs(failure_source)
 
-		if(RUNE_FAIL_HELPER_REMOVED_HAND)
+		if(/datum/invoke_failure/helper_hand_removed)
 			if(prob(50))
 				dismember_mob(failure_source)
 			else
 				rip_out_organs(failure_source)
 
-		if(RUNE_FAIL_INVOKER_INCAP)
+		if(/datum/invoke_failure/invoker_incap)
 			if(length(touching_rune))
 				var/victim = pick(touching_rune)
 				if(prob(50))

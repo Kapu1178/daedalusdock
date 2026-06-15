@@ -133,15 +133,15 @@
 
 	var/mob/M = source
 	if(QDELETED(source))
-		try_cancel_invoke(RUNE_FAIL_GRACEFUL)
+		try_cancel_invoke(/datum/invoke_failure/graceful)
 		return
 
 	if(M.loc != loc)
-		try_cancel_invoke(RUNE_FAIL_TARGET_MOB_MOVED, source)
+		try_cancel_invoke(/datum/invoke_failure/target_mob_moved, source)
 
 /obj/effect/aether_rune/revival/proc/target_stat_change(datum/source)
 	SIGNAL_HANDLER
 
 	var/mob/living/L = source
 	if(L.stat != DEAD)
-		try_cancel_invoke(RUNE_FAIL_REVIVAL_TARGET_ALIVE, L)
+		try_cancel_invoke(/datum/invoke_failure/revival/target_alive, L)
