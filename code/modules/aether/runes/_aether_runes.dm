@@ -14,6 +14,9 @@
 	resistance_flags = FIRE_PROOF | UNACIDABLE | ACID_PROOF
 	anchored = TRUE
 
+	/// Friendly name shown to aetherites.
+	var/invocation_name = "\improper KAPU HELP ITS BROKEN"
+
 	/// Used to build the appearance.
 	var/rune_type = "revival"
 
@@ -82,6 +85,11 @@
 		return NONE
 
 	return CONTEXTUAL_SCREENTIP_SET
+
+/obj/effect/aether_rune/examine(mob/user)
+	. = ..()
+	if(HAS_MIND_TRAIT(user, TRAIT_AETHERITE))
+		. += span_statsgood("You're familiar with this sigil, this denotes \a [invocation_name] ritual.")
 
 /obj/effect/aether_rune/CheckReachableAdjacency(atom/movable/reacher, obj/item/tool)
 	. = ..()

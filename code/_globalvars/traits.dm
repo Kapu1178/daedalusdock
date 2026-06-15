@@ -4,6 +4,12 @@
 	quirks have it's own panel so we don't need them here.
 */
 GLOBAL_LIST_INIT(traits_by_type, list(
+	/datum/mind = list(
+		"TRAIT_DICK" = TRAIT_DICK,
+		"TRAIT_AETHERITE" = TRAIT_AETHERITE,
+		"TRAIT_ADVANCED_RACE_THEORY" = TRAIT_ADVANCED_RACE_THEORY,
+		"TRAIT_CHEF" = TRAIT_CHEF,
+	),
 	/mob = list(
 		"TRAIT_KNOCKEDOUT" = TRAIT_KNOCKEDOUT,
 		"TRAIT_IMMOBILIZED" = TRAIT_IMMOBILIZED,

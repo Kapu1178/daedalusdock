@@ -1,5 +1,6 @@
 /obj/effect/aether_rune/exchange
 	rune_type = "exchange"
+	invocation_name = "\improper Exchange"
 
 	invocation_phrases = list(
 		"Ar sha cholo shalotzata" = 3 SECONDS,

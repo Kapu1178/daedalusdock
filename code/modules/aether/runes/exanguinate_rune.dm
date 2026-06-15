@@ -1,5 +1,6 @@
 /obj/effect/aether_rune/exanguinate
 	rune_type = "exanguinate"
+	invocation_name = "\improper Blossom"
 
 	required_helpers = 1
 	required_blood_amt = 0

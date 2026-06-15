@@ -1,5 +1,6 @@
 /obj/effect/aether_rune/heal
 	rune_type = "heal"
+	invocation_name = "\improper Renewal"
 
 	invocation_phrases = list(
 		"Bes' arlo" = 1.5 SECONDS,

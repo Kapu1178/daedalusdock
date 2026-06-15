@@ -1,5 +1,6 @@
 /obj/effect/aether_rune/revival
 	rune_type = "revival"
+	invocation_name = "\improper Sunrise"
 
 	required_helpers = 3
 	required_blood_amt = 30
