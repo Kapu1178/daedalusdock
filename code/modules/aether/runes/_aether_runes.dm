@@ -89,7 +89,7 @@
 /obj/effect/aether_rune/examine(mob/user)
 	. = ..()
 	if(HAS_MIND_TRAIT(user, TRAIT_AETHERITE))
-		. += span_statsgood("You're familiar with this sigil, this denotes \a [invocation_name] ritual.")
+		. += span_statsgood("You're familiar with this sigil, it denotes \a [invocation_name] ritual.")
 
 /obj/effect/aether_rune/CheckReachableAdjacency(atom/movable/reacher, obj/item/tool)
 	. = ..()
