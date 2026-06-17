@@ -153,22 +153,20 @@
 //Order is important, since we check source, we need to do the check whenever we have all the organs in the crate
 
 /obj/structure/closet/crate/freezer/open(mob/living/user, force = FALSE)
-	recursive_organ_check(src)
+	toggle_organ_freeze(src, FALSE)
 	..()
 
 /obj/structure/closet/crate/freezer/close()
 	..()
-	recursive_organ_check(src)
+	toggle_organ_freeze(src, TRUE)
 
-/obj/structure/closet/crate/freezer/Destroy()
-	recursive_organ_check(src)
+/obj/structure/closet/crate/freezer/deconstruct()
+	toggle_organ_freeze(src, FALSE)
 	return ..()
 
 /obj/structure/closet/crate/freezer/Initialize(mapload)
 	. = ..()
-	recursive_organ_check(src)
-
-
+	toggle_organ_freeze(src, TRUE)
 
 /obj/structure/closet/crate/freezer/blood
 	name = "blood freezer"

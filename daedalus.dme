@@ -246,6 +246,7 @@
 #include "code\__DEFINES\traits.dm"
 #include "code\__DEFINES\traits_hydroponics.dm"
 #include "code\__DEFINES\traits_job.dm"
+#include "code\__DEFINES\traits_organ.dm"
 #include "code\__DEFINES\traits_vampire.dm"
 #include "code\__DEFINES\turbine_defines.dm"
 #include "code\__DEFINES\turfs.dm"

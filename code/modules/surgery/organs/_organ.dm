@@ -271,7 +271,7 @@ INITIALIZE_IMMEDIATE(/obj/item/organ)
 
 /// This is on_life() but for when the owner is dead or outside of a mob. Bad name.
 /obj/item/organ/proc/on_death(delta_time, times_fired)
-	if(organ_flags & (ORGAN_SYNTHETIC|ORGAN_FROZEN|ORGAN_DEAD))
+	if(organ_flags & (ORGAN_SYNTHETIC|ORGAN_DEAD) || HAS_TRAIT(src, TRAIT_ORGAN_FROZEN))
 		return
 
 	set_germ_level(germ_level + rand(1,3))
@@ -295,7 +295,7 @@ INITIALIZE_IMMEDIATE(/obj/item/organ)
 	if(organ_flags & ORGAN_SYNTHETIC)
 		return
 
-	if(owner.bodytemperature > TCRYO && !(organ_flags & ORGAN_FROZEN))
+	if(owner.bodytemperature > TCRYO && !HAS_TRAIT(src, TRAIT_ORGAN_FROZEN))
 		handle_antibiotics()
 		. = handle_germ_effects()
 

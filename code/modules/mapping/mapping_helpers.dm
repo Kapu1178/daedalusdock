@@ -529,9 +529,8 @@ INITIALIZE_IMMEDIATE(/obj/effect/mapping_helpers/no_lava)
 		for (var/part in h.processing_organs) //randomly remove organs from each body, set those we keep to be in stasis
 			if (prob(40))
 				qdel(part)
-			else
-				var/obj/item/organ/O = part
-				O.organ_flags |= ORGAN_FROZEN
+
+		toggle_organ_freeze(j, TRUE)
 		j.update_appearance()
 	qdel(src)
 
