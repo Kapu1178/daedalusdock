@@ -274,9 +274,9 @@ INITIALIZE_IMMEDIATE(/obj/item/organ)
 	if(organ_flags & (ORGAN_SYNTHETIC|ORGAN_FROZEN|ORGAN_DEAD))
 		return
 
-	germ_level += rand(1,3)
+	set_germ_level(germ_level + rand(1,3))
 	if(germ_level >= INFECTION_LEVEL_TWO)
-		germ_level += rand(1,3)
+		set_germ_level(germ_level + rand(1,3))
 	if(germ_level >= INFECTION_LEVEL_THREE)
 		set_organ_dead(TRUE, "Necrosis")
 
@@ -319,29 +319,26 @@ INITIALIZE_IMMEDIATE(/obj/item/organ)
 		return
 
 	if (germ_level < INFECTION_LEVEL_ONE)
-		germ_level = 0	//cure instantly
+		set_germ_level(0)	//cure instantly
 	else if (germ_level < INFECTION_LEVEL_TWO)
-		germ_level -= 5	//at germ_level == 500, this should cure the infection in 5 minutes
+		set_germ_level(germ_level - 5) //at germ_level == 500, this should cure the infection in 5 minutes
 	else
-		germ_level -= 3 //at germ_level == 1000, this will cure the infection in 10 minutes
+		set_germ_level(germ_level - 3) //at germ_level == 1000, this will cure the infection in 10 minutes
 
 	if(owner.body_position == LYING_DOWN)
-		germ_level -= 2
-
-	germ_level = max(0, germ_level)
-
+		set_germ_level(germ_level - 2)
 
 /obj/item/organ/proc/handle_germ_effects()
 	//** Handle the effects of infections
 	var/antibiotics = owner.reagents.get_reagent_amount(/datum/reagent/medicine/spaceacillin)
 
 	if (germ_level > 0 && germ_level < INFECTION_LEVEL_ONE/2 && prob(0.3))
-		germ_level--
+		set_germ_level(germ_level - 1)
 
 	if (germ_level >= INFECTION_LEVEL_ONE/2)
 		//aiming for germ level to go from ambient to INFECTION_LEVEL_TWO in an average of 15 minutes, when immunity is full.
 		if(antibiotics < 5 && prob(round(germ_level/6 * 0.01)))
-			germ_level += 1
+			set_germ_level(germ_level + 1)
 
 	if(germ_level >= INFECTION_LEVEL_ONE)
 		var/fever_temperature = (owner.dna.species.heat_level_1 - owner.dna.species.bodytemp_normal - 5)* min(germ_level/INFECTION_LEVEL_TWO, 1) + owner.dna.species.bodytemp_normal
@@ -350,10 +347,10 @@ INITIALIZE_IMMEDIATE(/obj/item/organ)
 	if (germ_level >= INFECTION_LEVEL_TWO)
 		//spread germs
 		if (antibiotics < 5 && ownerlimb.germ_level < germ_level && ( ownerlimb.germ_level < INFECTION_LEVEL_ONE*2 || prob(0.3) ))
-			ownerlimb.germ_level++
+			ownerlimb.set_germ_level(ownerlimb.germ_level + 1)
 
 		if (prob(3))	//about once every 30 seconds
-			applyOrganDamage(1,silent=prob(30), updating_health = FALSE)
+			return applyOrganDamage(1,silent=prob(30), updating_health = FALSE)
 
 /obj/item/organ/examine(mob/user)
 	. = ..()

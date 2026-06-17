@@ -96,7 +96,7 @@
 
 		O.applyOrganDamage(-INFINITY)
 		O.set_organ_dead(FALSE)
-		O.germ_level = 0
+		O.set_germ_level(0)
 		if(istype(O, /obj/item/organ/brain))
 			var/obj/item/organ/brain/B = O
 			B.cure_all_traumas(TRAUMA_LIMIT_MAGIC)

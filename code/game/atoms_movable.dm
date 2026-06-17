@@ -1335,7 +1335,7 @@
 
 /atom/movable/wash(clean_types)
 	. = ..()
-	germ_level = 0
+	set_germ_level(0)
 
 /atom/movable/proc/add_passmob(source)
 	if(!source)
@@ -1381,3 +1381,7 @@
 
 	if(!HAS_TRAIT(src, TRAIT_MOVABLE_FLUORESCENCE_REVEALED))
 		return TRUE
+
+/// Setter for germ_level.
+/atom/movable/proc/set_germ_level(new_germ)
+	germ_level = max(new_germ, 0)
