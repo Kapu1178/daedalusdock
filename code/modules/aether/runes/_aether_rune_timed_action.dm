@@ -29,7 +29,7 @@
 	var/mob/living/user = parent_rune.blackboard[RUNE_BB_INVOKER]
 
 	if(!user?.can_speak_vocal())
-		parent_rune.try_cancel_invoke(/datum/invoke_failure/invoker_incap)
+		parent_rune.try_cancel_invoke(/datum/ritual_failure/invoker_incap)
 		return FALSE
 
 	if(phrase_time <= world.time && phrase_index <= length(parent_rune.invocation_phrases))

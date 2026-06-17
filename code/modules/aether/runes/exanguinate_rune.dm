@@ -47,13 +47,13 @@
 		register_item(reagent_container)
 		blackboard[RUNE_BB_EXANGUINATE_CONTAINERS] += reagent_container
 
-/obj/effect/aether_rune/exanguinate/can_invoke()
+/obj/effect/aether_rune/exanguinate/check_for_errors()
 	. = ..()
-	if(!.)
+	if(.)
 		return
 
 	if(!length(blackboard[RUNE_BB_EXANGUINATE_CONTAINERS]))
-		return FALSE
+		return /datum/ritual_failure/exanguinate/no_containers
 
 /obj/effect/aether_rune/exanguinate/succeed_invoke(mob/living/carbon/human/target_mob)
 	var/list/reagent_containers = blackboard[RUNE_BB_EXANGUINATE_CONTAINERS]
