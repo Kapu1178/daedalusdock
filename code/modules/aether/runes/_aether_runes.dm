@@ -174,9 +174,6 @@
 
 /// Returns null if the rune can be invoked.
 /obj/effect/aether_rune/proc/check_for_errors() as /datum/ritual_failure
-	if(invoking == RUNE_INVOKING_PENDING_CANCEL)
-		return blackboard[RUNE_BB_CANCEL_REASON]
-
 	if(length(touching_rune) < required_helpers)
 		return /datum/ritual_failure/few_helpers
 

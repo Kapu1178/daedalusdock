@@ -25,6 +25,5 @@
 /// List of reagent containers to put blood into.
 #define RUNE_BB_EXANGUINATE_CONTAINERS "exanguinate_containers"
 
-#define RUNE_INVOKING_PENDING_CANCEL -1
 #define RUNE_INVOKING_IDLE 0
 #define RUNE_INVOKING_ACTIVE 1
