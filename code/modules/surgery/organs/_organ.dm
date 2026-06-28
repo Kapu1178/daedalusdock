@@ -113,6 +113,20 @@ INITIALIZE_IMMEDIATE(/obj/item/organ)
 		stack_trace("Organ removed while it still had an ownerlimb.")
 
 
+/obj/item/organ/update_icon(updates)
+	. = ..()
+	if(organ_flags & ORGAN_DEAD)
+		color = "#252424"
+	else
+		color = initial(color)
+
+/obj/item/organ/update_name(updates)
+	. = ..()
+	if(organ_flags & ORGAN_DEAD)
+		name = "rotten [initial(name)]"
+	else
+		name = initial(name)
+
 /*
  * Insert the organ into the select mob.
  *
@@ -505,11 +519,13 @@ INITIALIZE_IMMEDIATE(/obj/item/organ)
 			return FALSE
 		organ_flags |= ORGAN_DEAD
 		time_of_death = world.time
+		update_appearance()
 		return TRUE
 	else
 		if(organ_flags & ORGAN_DEAD)
 			organ_flags &= ~ORGAN_DEAD
 			time_of_death = 0
+			update_appearance()
 			return TRUE
 
 /// Can this organ be revived from the dead?
