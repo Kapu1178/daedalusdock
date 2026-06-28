@@ -26,7 +26,7 @@ export function SkillRollTooltip(props: Props) {
 
   const goodorbadClass = success ? 'good' : 'bad';
   return (
-    <Flex direction="row">
+    <Flex direction="row" flexWrap="wrap">
       <span className={`RollTooltip__skillName--${goodorbadClass}`}>
         {`${skillName} `}
       </span>

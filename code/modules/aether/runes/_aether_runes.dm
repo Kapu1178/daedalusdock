@@ -165,7 +165,7 @@
 	pre_invoke(user, tome)
 
 	var/datum/ritual_failure/failure_reason = check_for_errors()
-	if(istype(failure_reason))
+	if(ispath(failure_reason))
 		fail_invoke(failure_reason, had_started = FALSE)
 		return FALSE
 
@@ -228,7 +228,7 @@
 	blood_bottle?.reagents.remove_reagent(/datum/reagent/blood, required_blood_amt)
 
 	playsound(src, 'sound/magic/voidblink.ogg', 50, TRUE)
-	visible_message(span_statsbad("[src] stops moving, and dulls in color."))
+	visible_message(span_notice("[src] stops moving, and dulls in color."))
 
 	invoke_success_visual_effect()
 
