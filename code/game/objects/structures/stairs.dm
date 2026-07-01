@@ -99,7 +99,7 @@
 
 	if(!(climber.throwing || (climber.movement_type & (VENTCRAWLING | FLYING)) || HAS_TRAIT(climber, TRAIT_IMMOBILIZED)))
 		playsound(my_turf, 'sound/effects/stairs_step.ogg', 50)
-		playsound(my_turf, 'sound/effects/stairs_step.ogg', 50)
+		playsound(target, 'sound/effects/stairs_step.ogg', 50)
 
 	/// Moves anything that's being dragged by src or anything buckled to it to the stairs turf.
 	for(var/mob/living/buckled as anything in climber.buckled_mobs)
