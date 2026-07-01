@@ -60,7 +60,7 @@
 
 	if(direction == dir && !(GetAbove(src) || check_ascent(leaving, TRUE)))
 		var/turf/dest_turf = get_step(src, direction)
-		if(locate(/obj/structure/table, dest_turf) || locate(/obj/structure/stairs, dest_turf))
+		if(locate(/obj/structure/table, dest_turf) || locate(/obj/structure/stairs, dest_turf) || locate(/obj/structure/low_wall, dest_turf))
 			return NONE
 
 	if(!isobserver(leaving) && isTerminator() && direction == dir)
