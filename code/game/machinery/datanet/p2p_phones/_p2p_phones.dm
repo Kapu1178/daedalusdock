@@ -32,7 +32,7 @@
 
 /obj/machinery/telephone
 	name = "phone - UNINITIALIZED"
-	desc = "It's a phone. You pick it up, select from the list of other phones, and scream at the other person. The voice quality isn't all that great."
+	desc = "A telephone, the optimal device for screaming at people further than 50 meters."
 	icon = 'goon/icons/obj/phones.dmi'
 	icon_state = "phone"
 
@@ -74,9 +74,23 @@
 /obj/machinery/telephone/LateInitialize()
 	. = ..()
 	if(!friendly_name)
-		friendly_name = get_area(src)
-		friendly_name = format_text(friendly_name:name) //~
+		friendly_name = format_text(astype(get_area(src), /area).name)
 	recalculate_name()
+
+/obj/machinery/telephone/examine(mob/user)
+	. = ..()
+	if(!isliving(user))
+		return
+
+	. += user.disco_made_easy("phone_examine", 11, is_examine = TRUE, success_text = "Stamped into the metal lies the old insignia of Rae Communications Limited.")
+
+/obj/machinery/telephone/disco_flavor(mob/living/carbon/human/user, nearby, is_station_level)
+	. = ..()
+	if(!nearby)
+		return
+
+	if(user.disco_made_easy("phone_ring", 16, success_text = "The phone begins to ring."))
+		user.playsound_local(src, 'goon/sounds/phone/ring_incoming.ogg', 20, FALSE)
 
 ///Recalculate our name.
 /obj/machinery/telephone/proc/recalculate_name()
