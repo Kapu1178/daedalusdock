@@ -248,3 +248,7 @@ The areas used here are STRICTLY on the CC Z level.
 
 /area/centcom/asteroid/nearstation/bomb_site
 	name = "\improper Bomb Testing Asteroid"
+
+/area/centcom/theatre
+	name = "The Theatre"
+

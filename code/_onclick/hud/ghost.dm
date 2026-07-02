@@ -1,7 +1,6 @@
 /datum/hud/ghost/initialize_screens()
 	. = ..()
 
-	add_screen_object(/atom/movable/screen/ghost/spawners_menu, HUDKEY_GHOST_SPAWNERS, HUDGROUP_STATIC_INVENTORY)
 	add_screen_object(/atom/movable/screen/ghost/orbit, HUDKEY_GHOST_ORBIT, HUDGROUP_STATIC_INVENTORY)
 	add_screen_object(/atom/movable/screen/ghost/reenter_corpse, HUDKEY_GHOST_REENTER_CORPSE, HUDGROUP_STATIC_INVENTORY)
 	add_screen_object(/atom/movable/screen/ghost/teleport, HUDKEY_GHOST_TELEPORT, HUDGROUP_STATIC_INVENTORY)

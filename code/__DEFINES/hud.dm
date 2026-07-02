@@ -319,7 +319,6 @@
 #define HUDKEY_PAI_HOST_MONITOR "paimonitor"
 #define HUDKEY_PAI_GPS "paigps"
 
-#define HUDKEY_GHOST_SPAWNERS "ghostspawners"
 #define HUDKEY_GHOST_ORBIT "ghostorbit"
 #define HUDKEY_GHOST_REENTER_CORPSE "ghostcorpse"
 #define HUDKEY_GHOST_TELEPORT "ghostteleport"

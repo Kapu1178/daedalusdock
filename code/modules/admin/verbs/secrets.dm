@@ -535,8 +535,8 @@ GLOBAL_DATUM(everyone_a_traitor, /datum/everyone_is_a_traitor_controller)
 			log_admin("[key_name(holder)] has Un-Fully Immersed everyone.")
 		if("makeNerd")
 			var/spawnpoint = pick(GLOB.blobstart)
-			var/list/mob/dead/observer/candidates
-			var/mob/dead/observer/chosen_candidate
+			var/list/mob/dead/ghost/candidates
+			var/mob/dead/ghost/chosen_candidate
 			var/mob/living/simple_animal/drone/nerd
 			var/teamsize
 

@@ -2231,6 +2231,10 @@
 /obj/effect/turf_decal/stripes/line,
 /turf/open/floor/iron,
 /area/centcom/central_command_areas/armory)
+"gx" = (
+/obj/structure/stairs/east,
+/turf/open/floor/wood/airless,
+/area/centcom/theatre)
 "gy" = (
 /obj/machinery/shower{
 	dir = 4
@@ -2883,6 +2887,9 @@
 /obj/machinery/status_display/evac/directional/west,
 /turf/open/floor/iron,
 /area/centcom/central_command_areas/prison)
+"iq" = (
+/turf/open/floor/wood/airless,
+/area/centcom/theatre)
 "ir" = (
 /turf/closed/indestructible/fakeglass,
 /area/centcom/central_command_areas/prison/cells)
@@ -4203,6 +4210,11 @@
 	icon_state = "alien11"
 	},
 /area/centcom/abductor_ship)
+"ma" = (
+/obj/structure/low_wall/wood,
+/obj/structure/curtain/cloth/fancy/closed,
+/turf/open/floor/wood/airless,
+/area/centcom/theatre)
 "mb" = (
 /obj/effect/turf_decal/siding/thinplating_new/dark{
 	dir = 5
@@ -7913,6 +7925,10 @@
 	},
 /turf/open/floor/iron/white,
 /area/centcom/tdome/observation)
+"wS" = (
+/obj/structure/stairs/west,
+/turf/open/floor/wood/airless,
+/area/centcom/theatre)
 "wU" = (
 /obj/structure/extinguisher_cabinet/directional/south,
 /turf/open/floor/iron/smooth_half{
@@ -11247,6 +11263,10 @@
 	},
 /turf/open/lava,
 /area/centcom/wizard_station)
+"Gs" = (
+/obj/machinery/light/directional,
+/turf/open/floor/wood/airless,
+/area/centcom/theatre)
 "Gt" = (
 /obj/effect/turf_decal/siding/wood{
 	dir = 8
@@ -12151,6 +12171,10 @@
 	},
 /turf/open/lava/plasma/snow_air,
 /area/centcom/syndicate_mothership/control)
+"Jn" = (
+/obj/structure/low_wall/wood,
+/turf/open/floor/wood/airless,
+/area/centcom/theatre)
 "Jo" = (
 /obj/machinery/door/airlock/centcom{
 	name = "Briefing Room";
@@ -12528,6 +12552,12 @@
 /obj/machinery/light/directional/south,
 /turf/open/floor/wood,
 /area/centcom/central_command_areas/holding)
+"KA" = (
+/obj/structure/low_wall/wood,
+/obj/structure/curtain/cloth/fancy/closed,
+/obj/machinery/light/directional/north,
+/turf/open/floor/wood/airless,
+/area/centcom/theatre)
 "KB" = (
 /obj/machinery/camera/autoname/directional/north{
 	network = list("nukie")
@@ -13379,6 +13409,9 @@
 /obj/effect/turf_decal/tile/neutral/fourcorners,
 /turf/open/floor/iron/dark,
 /area/centcom/central_command_areas/courtroom)
+"Nq" = (
+/turf/closed/wall/mineral/wood,
+/area/centcom/theatre)
 "Nr" = (
 /obj/structure/table/reinforced,
 /obj/item/folder/red,
@@ -17479,6 +17512,10 @@
 /obj/structure/closet/cardboard,
 /turf/open/floor/plating,
 /area/centcom/syndicate_mothership/control)
+"YC" = (
+/obj/machinery/light/floor/has_bulb,
+/turf/open/floor/wood/airless,
+/area/centcom/theatre)
 "YD" = (
 /obj/structure/table/wood,
 /obj/structure/reagent_dispensers/beerkeg,
@@ -28580,15 +28617,15 @@ aa
 aa
 aa
 aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+Nq
+Nq
+Nq
+Nq
+Nq
+Nq
+Nq
+Nq
+Nq
 aa
 aa
 aa
@@ -28837,15 +28874,15 @@ aa
 aa
 aa
 aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+Nq
+iq
+iq
+iq
+iq
+iq
+iq
+iq
+Nq
 aa
 aa
 aa
@@ -29093,16 +29130,16 @@ aa
 aa
 aa
 aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+Nq
+Nq
+gx
+gx
+iq
+iq
+iq
+iq
+iq
+Nq
 aa
 aa
 aa
@@ -29350,16 +29387,16 @@ aa
 aa
 aa
 aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+Nq
+KA
+Jn
+Jn
+iq
+iq
+iq
+iq
+Gs
+Nq
 aa
 aa
 aa
@@ -29607,16 +29644,16 @@ aa
 aa
 aa
 aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+Nq
+ma
+Jn
+Jn
+YC
+iq
+iq
+iq
+iq
+Nq
 aa
 aa
 aa
@@ -29864,16 +29901,16 @@ aa
 aa
 aa
 aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+Nq
+ma
+Jn
+Jn
+Jn
+iq
+iq
+iq
+iq
+Nq
 aa
 aa
 aa
@@ -30121,16 +30158,16 @@ aa
 aa
 aa
 aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+Nq
+ma
+Jn
+Jn
+Jn
+iq
+iq
+iq
+iq
+Nq
 aa
 aa
 aa
@@ -30378,16 +30415,16 @@ aa
 aa
 aa
 aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+Nq
+ma
+Jn
+Jn
+Jn
+iq
+iq
+iq
+iq
+Nq
 aa
 aa
 aa
@@ -30635,16 +30672,16 @@ aa
 aa
 aa
 aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+Nq
+ma
+Jn
+Jn
+YC
+iq
+iq
+iq
+iq
+Nq
 aa
 aa
 aa
@@ -30892,16 +30929,16 @@ aa
 aa
 aa
 aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+Nq
+KA
+Jn
+Jn
+iq
+iq
+iq
+iq
+Gs
+Nq
 aa
 aa
 aa
@@ -31149,16 +31186,16 @@ aa
 aa
 aa
 aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+Nq
+Nq
+wS
+wS
+iq
+iq
+iq
+iq
+iq
+Nq
 aa
 aa
 aa
@@ -31407,15 +31444,15 @@ aa
 aa
 aa
 aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+Nq
+iq
+iq
+iq
+iq
+iq
+iq
+iq
+Nq
 aa
 aa
 aa
@@ -31664,15 +31701,15 @@ aa
 aa
 aa
 aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+Nq
+Nq
+Nq
+Nq
+Nq
+Nq
+Nq
+Nq
+Nq
 aa
 aa
 aa
