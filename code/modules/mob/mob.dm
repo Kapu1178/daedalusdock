@@ -551,9 +551,13 @@
 		if(isturf(loc))
 			client.eye = client.mob
 			client.perspective = MOB_PERSPECTIVE
-		else
+		else if(loc)
 			client.perspective = EYE_PERSPECTIVE
 			client.eye = loc
+		else
+			client.eye = client.mob
+			client.perspective = MOB_PERSPECTIVE
+
 	/// Signal sent after the eye has been successfully updated, with the client existing.
 	SEND_SIGNAL(src, COMSIG_MOB_RESET_PERSPECTIVE)
 	return TRUE

@@ -6,6 +6,7 @@ INITIALIZE_IMMEDIATE(/mob/dead)
 	sight = SEE_TURFS | SEE_MOBS | SEE_OBJS | SEE_SELF
 	move_resist = INFINITY
 	throwforce = 0
+	stat = DEAD
 
 	/// Can the player return to their corpse?
 	var/can_reenter_corpse = FALSE
@@ -208,4 +209,5 @@ INITIALIZE_IMMEDIATE(/mob/dead)
 
 	mind.current.PossessByPlayer(key)
 	mind.current.client.init_verbs()
+	qdel(src)
 	return TRUE

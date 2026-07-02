@@ -164,9 +164,7 @@ Works together with spawning an observer, noted above.
 */
 
 /mob/proc/ghostize(can_reenter_corpse = TRUE, admin_ghost)
-	if(!key)
-		return
-	if(key[1] == "@") // Skip aghosts.
+	if(!key || (key[1] == "@")) // Skip aghosts.
 		return
 
 	if(HAS_TRAIT(src, TRAIT_CORPSELOCKED))
@@ -180,7 +178,7 @@ Works together with spawning an observer, noted above.
 				ethereal_heart.stop_crystalization_process(crystal_fella) //stops the crystallization process
 
 	stop_sound_channel(CHANNEL_HEARTBEAT) //Stop heartbeat sounds because You Are A Ghost Now
-	var/mob/dead/ghost = admin_ghost ? new /mob/dead/observer(src, FALSE) : new /mob/dead/ghost() // Transfer safety to observer spawning proc.
+	var/mob/dead/ghost = admin_ghost ? new /mob/dead/observer(src, TRUE) : new /mob/dead/ghost() // Transfer safety to observer spawning proc.
 	SStgui.on_transfer(src, ghost) // Transfer NanoUIs.
 
 	ghost.verb_say = verb_say
@@ -193,6 +191,11 @@ Works together with spawning an observer, noted above.
 	ghost.PossessByPlayer(ckey)
 
 	ghost.client?.init_verbs()
+
+	if(!admin_ghost)
+		var/mob/dead/ghost/real_ghost = ghost
+		real_ghost.from_corpse(src)
+		real_ghost.forceMove(get_turf(locate(/obj/effect/landmark/ghost_theatre, GLOB.landmarks_list)))
 	return ghost
 
 /mob/living/ghostize(can_reenter_corpse = TRUE, admin_ghost)

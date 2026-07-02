@@ -5430,6 +5430,10 @@
 /obj/machinery/status_display/evac/directional/south,
 /turf/open/floor/iron,
 /area/centcom/central_command_areas/prison)
+"pn" = (
+/obj/effect/landmark/ghost_theatre,
+/turf/open/floor/wood/airless,
+/area/centcom/theatre)
 "pp" = (
 /obj/effect/turf_decal/stripes/box,
 /obj/machinery/shower{
@@ -12344,6 +12348,12 @@
 	},
 /turf/open/floor/mineral/plastitanium/red,
 /area/centcom/syndicate_mothership/expansion_bioterrorism)
+"JP" = (
+/obj/structure/chair/pew/left{
+	dir = 1
+	},
+/turf/open/floor/wood/airless,
+/area/centcom/theatre)
 "JS" = (
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden{
 	dir = 4
@@ -13869,6 +13879,12 @@
 /obj/effect/turf_decal/delivery,
 /turf/open/floor/iron,
 /area/centcom/central_command_areas/supplypod/loading/one)
+"OQ" = (
+/obj/structure/chair/pew{
+	dir = 1
+	},
+/turf/open/floor/wood/airless,
+/area/centcom/theatre)
 "OR" = (
 /obj/machinery/computer/secure_data{
 	dir = 1
@@ -15259,6 +15275,12 @@
 /obj/effect/turf_decal/tile/neutral/fourcorners,
 /turf/open/floor/iron/dark,
 /area/centcom/central_command_areas/control)
+"SJ" = (
+/obj/structure/chair/pew/right{
+	dir = 1
+	},
+/turf/open/floor/wood/airless,
+/area/centcom/theatre)
 "SK" = (
 /obj/structure/lattice/catwalk,
 /obj/effect/turf_decal/stripes/line{
@@ -29137,7 +29159,7 @@ gx
 iq
 iq
 iq
-iq
+pn
 iq
 Nq
 aa
@@ -29907,7 +29929,7 @@ Jn
 Jn
 Jn
 iq
-iq
+JP
 iq
 iq
 Nq
@@ -30164,7 +30186,7 @@ Jn
 Jn
 Jn
 iq
-iq
+OQ
 iq
 iq
 Nq
@@ -30421,7 +30443,7 @@ Jn
 Jn
 Jn
 iq
-iq
+SJ
 iq
 iq
 Nq
@@ -31193,7 +31215,7 @@ wS
 iq
 iq
 iq
-iq
+pn
 iq
 Nq
 aa

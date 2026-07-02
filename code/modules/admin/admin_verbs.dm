@@ -372,32 +372,37 @@ GLOBAL_PROTECT(admin_verbs_hideable)
 	set category = "Admin.Game"
 	set name = "Aghost"
 	if(!holder)
-		return
-	. = TRUE
-	if(isobserver(mob))
+		return FALSE
+
+	if(isobserver(mob) || isghost(mob))
 		//re-enter
-		var/mob/dead/observer/ghost = mob
+		var/mob/dead/ghost = mob
 		if(!ghost.mind || !ghost.mind.current) //won't do anything if there is no body
 			return FALSE
+
 		if(!ghost.can_reenter_corpse)
 			log_admin("[key_name(usr)] re-entered corpse")
 			message_admins("[key_name_admin(usr)] re-entered corpse")
+
 		ghost.can_reenter_corpse = 1 //force re-entering even when otherwise not possible
 		ghost.reenter_corpse()
 		SSblackbox.record_feedback("tally", "admin_verb", 1, "Admin Reenter") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+		return TRUE
+
 	else if(isnewplayer(mob))
 		to_chat(src, "<font color='red'>Error: Aghost: Can't admin-ghost whilst in the lobby. Join or Observe first.</font>", confidential = TRUE)
 		return FALSE
-	else
-		//ghostize
-		log_admin("[key_name(usr)] admin ghosted.")
-		message_admins("[key_name_admin(usr)] admin ghosted.")
-		var/mob/body = mob
-		body.ghostize(TRUE, TRUE)
-		init_verbs()
-		if(body && !body.key)
-			body.key = "@[key]" //Haaaaaaaack. But the people have spoken. If it breaks; blame adminbus
-		SSblackbox.record_feedback("tally", "admin_verb", 1, "Admin Ghost") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+
+	//ghostize
+	log_admin("[key_name(usr)] admin ghosted.")
+	message_admins("[key_name_admin(usr)] admin ghosted.")
+	var/mob/body = mob
+	body.ghostize(TRUE, TRUE)
+	init_verbs()
+	if(body && !body.key)
+		body.key = "@[key]" //Haaaaaaaack. But the people have spoken. If it breaks; blame adminbus
+	SSblackbox.record_feedback("tally", "admin_verb", 1, "Admin Ghost") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+	return TRUE
 
 /client/proc/invisimin()
 	set name = "Invisimin"

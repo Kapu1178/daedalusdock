@@ -604,3 +604,7 @@ INITIALIZE_IMMEDIATE(/obj/effect/landmark/start/new_player)
 
 /obj/effect/landmark/navigate_destination/disposals
 	location = "Disposals"
+
+/obj/effect/landmark/ghost_theatre
+	name = "Ghost Theatre"
+	icon_state = "observer_start"
