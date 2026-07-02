@@ -67,16 +67,3 @@
 
 	var/mob/dead/observer/G = usr
 	G.register_pai()
-
-/atom/movable/screen/ghost/minigames_menu
-	name ="Minigames"
-	icon_state = "minigames"
-	screen_loc = ui_ghost_minigames
-
-/atom/movable/screen/ghost/minigames_menu/Click()
-	. = ..()
-	if(.)
-		return FALSE
-
-	var/mob/dead/observer/observer = usr
-	observer.open_minigames_menu()

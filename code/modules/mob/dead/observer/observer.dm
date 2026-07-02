@@ -63,7 +63,6 @@ GLOBAL_VAR_INIT(fresh_ghost_adjectives, __fresh_ghost_adjectives())
 	// of the mob
 	var/deadchat_name
 	var/datum/spawners_menu/spawners_menu
-	var/datum/minigames_menu/minigames_menu
 
 /mob/dead/observer/Initialize(mapload, started_as_observer = FALSE, admin_ghost = FALSE)
 	src.started_as_observer = started_as_observer
@@ -74,8 +73,7 @@ GLOBAL_VAR_INIT(fresh_ghost_adjectives, __fresh_ghost_adjectives())
 	add_verb(src, list(
 		/mob/dead/observer/proc/dead_tele,
 		/mob/dead/observer/proc/open_spawners_menu,
-		/mob/dead/observer/proc/tray_view,
-		/mob/dead/observer/proc/open_minigames_menu))
+		/mob/dead/observer/proc/tray_view))
 
 	ghost_term = pick(GLOB.ghost_synonyms)
 	ghost_adjective = pick(GLOB.ghost_adjectives)
@@ -172,7 +170,6 @@ GLOBAL_VAR_INIT(fresh_ghost_adjectives, __fresh_ghost_adjectives())
 		mind.current.med_hud_set_status()
 
 	QDEL_NULL(spawners_menu)
-	QDEL_NULL(minigames_menu)
 	return ..()
 
 /mob/dead/observer/get_photo_description(obj/item/camera/camera)
@@ -944,24 +941,6 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	else
 		to_chat(usr, span_warning("Can't become a pAI candidate while not dead!"))
 
-/mob/dead/observer/verb/mafia_game_signup()
-	set category = "Ghost"
-	set name = "Signup for Mafia"
-	set desc = "Sign up for a game of Mafia to pass the time while dead."
-
-	mafia_signup()
-
-/mob/dead/observer/proc/mafia_signup()
-	if(!client)
-		return
-	if(!isobserver(src))
-		to_chat(usr, span_warning("You must be a ghost to join mafia!"))
-		return
-	var/datum/mafia_controller/game = GLOB.mafia_game //this needs to change if you want multiple mafia games up at once.
-	if(!game)
-		game = create_mafia_game("mafia")
-	game.ui_interact(usr)
-
 /mob/dead/observer/CtrlShiftClick(mob/user)
 	if(isobserver(user) && check_rights(R_SPAWN))
 		change_mob_type( /mob/living/carbon/human , null, null, TRUE) //always delmob, ghosts shouldn't be left lingering
@@ -1007,20 +986,6 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		spawners_menu = new(src)
 
 	spawners_menu.ui_interact(src)
-
-/mob/dead/observer/proc/open_minigames_menu()
-	set name = "Minigames Menu"
-	set desc = "See all currently available minigames"
-	set category = "Ghost"
-	if(!client)
-		return
-	if(!isobserver(src))
-		to_chat(usr, span_warning("You must be a ghost to play minigames!"))
-		return
-	if(!minigames_menu)
-		minigames_menu = new(src)
-
-	minigames_menu.ui_interact(src)
 
 /mob/dead/observer/proc/tray_view()
 	set category = "Ghost"

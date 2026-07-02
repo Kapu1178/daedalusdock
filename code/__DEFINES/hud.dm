@@ -194,7 +194,6 @@
 #define ui_ghost_reenter_corpse "SOUTH:6,CENTER-1:24"
 #define ui_ghost_teleport "SOUTH:6,CENTER:24"
 #define ui_ghost_pai "SOUTH: 6, CENTER+1:24"
-#define ui_ghost_minigames "SOUTH: 6, CENTER+2:24"
 #define ui_ghost_language_menu "SOUTH: 22, CENTER+3:8"
 
 //Blobbernauts
@@ -325,7 +324,6 @@
 #define HUDKEY_GHOST_REENTER_CORPSE "ghostcorpse"
 #define HUDKEY_GHOST_TELEPORT "ghostteleport"
 #define HUDKEY_GHOST_PAI "ghostpai"
-#define HUDKEY_GHOST_MINIGAMES "ghostminigames"
 
 #define HUDKEY_ALIEN_QUEEN_FINDER "alienqueenfinder"
 #define HUDKEY_ALIEN_PLASMA_DISPLAY "alienplasmadisplay"

@@ -2073,10 +2073,6 @@
 /obj/effect/landmark/start/new_player,
 /turf/open/floor/plating,
 /area/misc/start)
-"fZ" = (
-/obj/effect/landmark/ctf,
-/turf/open/space/basic,
-/area/space)
 "ga" = (
 /obj/structure/flora/ausbushes/lavendergrass,
 /obj/structure/flora/ausbushes/sparsegrass,
@@ -2215,10 +2211,6 @@
 /obj/effect/turf_decal/tile/neutral/fourcorners,
 /turf/open/floor/iron/dark,
 /area/centcom/central_command_areas/courtroom)
-"gt" = (
-/obj/effect/landmark/mafia_game_area,
-/turf/open/space/basic,
-/area/space)
 "gu" = (
 /turf/closed/indestructible/splashscreen,
 /area/misc/start)
@@ -49508,7 +49500,7 @@ aa
 aa
 aa
 aa
-gt
+aa
 aa
 aa
 aa
@@ -66158,7 +66150,7 @@ aa
 aa
 aa
 aa
-fZ
+aa
 aa
 aa
 aa
