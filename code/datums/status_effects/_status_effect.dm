@@ -133,7 +133,7 @@
 
 	if(duration <= 0 && should_expire())
 		qdel(src)
-		return
+		return TRUE
 
 /// Returns TRUE if the status effect has expired due to duration loss and should qdel.
 /datum/status_effect/proc/should_expire()
