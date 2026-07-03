@@ -1,7 +1,7 @@
 //Largely negative status effects go here, even if they have small benificial effects
 //STUN EFFECTS
 /datum/status_effect/incapacitating
-	tick_interval = 0
+	tick_interval = 0.2 SECONDS
 	status_type = STATUS_EFFECT_REPLACE
 	alert_type = null
 	var/needs_update_stat = FALSE
@@ -125,10 +125,9 @@
 	REMOVE_TRAIT(owner, TRAIT_KNOCKEDOUT, TRAIT_STATUS_EFFECT(id))
 	return ..()
 
-/datum/status_effect/incapacitating/unconscious/tick()
+/datum/status_effect/incapacitating/unconscious/tick(delta_time, times_fired)
 	if(owner.stamina.loss)
-		owner.stamina.adjust(-0.3) //reduce stamina loss by 0.3 per tick, 6 per 2 seconds
-
+		owner.stamina.adjust(3 * delta_time)
 
 //SLEEPING
 /datum/status_effect/incapacitating/sleeping
