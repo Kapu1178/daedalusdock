@@ -63,7 +63,7 @@
 /// Called when [TRAIT_KNOCKEDOUT] is added to the mob.
 /mob/living/proc/on_knockedout_trait_gain(datum/source)
 	SIGNAL_HANDLER
-	apply_status_effect(/datum/status_effect/incapacitating/unconscious)
+	Unconscious(1, TRUE)
 
 /// Called when [TRAIT_KNOCKEDOUT] is removed from the mob.
 /mob/living/proc/on_knockedout_trait_loss(datum/source)
