@@ -121,13 +121,19 @@
 	if(QDELING(src))
 		return // tick deleted us, no need to continue
 
-	if(duration != STATUS_EFFECT_PERMANENT)
-		if(duration <= 0)
-			if(should_expire())
-				qdel(src)
-				return
-			else
-				duration = 1
+	if(consider_expiring())
+		return
+
+/// If duration is zero, attempt to expire.
+/datum/status_effect/proc/consider_expiring()
+	if(duration == STATUS_EFFECT_PERMANENT)
+		return
+
+	ASSERT(duration >= 0)
+
+	if(duration <= 0 && should_expire())
+		qdel(src)
+		return
 
 /// Returns TRUE if the status effect has expired due to duration loss and should qdel.
 /datum/status_effect/proc/should_expire()

@@ -69,11 +69,7 @@
 /mob/living/proc/on_knockedout_trait_loss(datum/source)
 	SIGNAL_HANDLER
 	var/datum/status_effect/incapacitating/unconscious/uncon = has_status_effect(__IMPLIED_TYPE__)
-	if(!uncon) // somehow, this might be possible.
-		return
-
-	if(uncon.duration < uncon.tick_interval && uncon.should_expire())
-		qdel(uncon)
+	uncon?.consider_expiring()
 
 /// Called when [TRAIT_DEATHCOMA] is added to the mob.
 /mob/living/proc/on_deathcoma_trait_gain(datum/source)
