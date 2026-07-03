@@ -64,16 +64,16 @@
 /mob/living/proc/on_knockedout_trait_gain(datum/source)
 	SIGNAL_HANDLER
 	apply_status_effect(/datum/status_effect/incapacitating/unconscious)
-	if(stat < UNCONSCIOUS)
-		set_stat(UNCONSCIOUS)
 
 /// Called when [TRAIT_KNOCKEDOUT] is removed from the mob.
 /mob/living/proc/on_knockedout_trait_loss(datum/source)
 	SIGNAL_HANDLER
-	remove_status_effect(/datum/status_effect/incapacitating/unconscious)
-	if(stat <= UNCONSCIOUS)
-		update_stat()
+	var/datum/status_effect/incapacitating/unconscious/uncon = has_status_effect(__IMPLIED_TYPE__)
+	if(!uncon) // somehow, this might be possible.
+		return
 
+	if(uncon.duration < uncon.tick_interval && uncon.should_expire())
+		qdel(uncon)
 
 /// Called when [TRAIT_DEATHCOMA] is added to the mob.
 /mob/living/proc/on_deathcoma_trait_gain(datum/source)
