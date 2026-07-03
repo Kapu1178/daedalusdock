@@ -70,6 +70,9 @@
 
 	var/force_escaped = FALSE  // Set by Into The Sunset command of the shuttle manipulator
 
+	/// Set to TRUE when the mob is asleep and visiting the Theatre.
+	var/in_the_theatre = FALSE
+
 	var/list/learned_recipes //List of learned recipe TYPES.
 
 	///List of skills the user has received a reward for. Should not be used to keep track of currently known skills. Lazy list because it shouldnt be filled often
@@ -968,6 +971,30 @@
 	list_clear_nulls(divs)
 
 	to_chat(current.client, "<div class='examine_block roundstartNotifications'>[jointext(divs, "<hr>")]</div>")
+
+/datum/mind/proc/visit_the_theatre()
+	in_the_theatre = TRUE
+	current.update_blindness()
+
+	var/turf/ghost_loc = get_turf(locate(/obj/effect/landmark/ghost_theatre_sleeper, GLOB.landmarks_list))
+	var/obj/effect/ghost = new(ghost_loc)
+	ghost.density = TRUE
+	ghost.appearance = current.appearance
+	ghost.setDir(NORTH)
+	ghost.transform = matrix()
+	current.reset_perspective(ghost_loc)
+
+	current.add_client_colour(/datum/client_colour/monochrome/ghost_theatre)
+	RegisterSignal(current, COMSIG_MOB_RESET_PERSPECTIVE, PROC_REF(on_reset_perspective))
+
+/datum/mind/proc/on_reset_perspective(mob/source)
+	SIGNAL_HANDLER
+	if(!source.client)
+		return
+
+	var/area/eye_loc = get_area(source.client.eye)
+	if(eye_loc.type != /area/centcom/theatre)
+		current.reset_perspective(get_turf(locate(/obj/effect/landmark/ghost_theatre_sleeper, GLOB.landmarks_list)))
 
 /mob/dead/new_player/sync_mind()
 	return

@@ -121,6 +121,9 @@
 	if(owner.stamina.loss)
 		owner.stamina.adjust(3 * delta_time)
 
+	if(world.time - time_added >= 10 SECONDS && owner.mind && !owner.mind?.in_the_theatre)
+		owner.mind.visit_the_theatre()
+
 /datum/status_effect/incapacitating/unconscious/should_expire()
 	return !HAS_TRAIT(owner, TRAIT_KNOCKEDOUT)
 

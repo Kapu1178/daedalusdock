@@ -608,3 +608,7 @@ INITIALIZE_IMMEDIATE(/obj/effect/landmark/start/new_player)
 /obj/effect/landmark/ghost_theatre
 	name = "Ghost Theatre"
 	icon_state = "observer_start"
+
+/obj/effect/landmark/ghost_theatre_sleeper
+	name = "Ghost Theatre (Sleeper)"
+	icon_state = "observer_start"

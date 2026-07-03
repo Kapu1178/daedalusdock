@@ -18,6 +18,9 @@
 	/// The time until the next [proc/tick] call, gets set to [var/tick_interval] after every [proc/tick] call and decrements on every [proc/process] call.
 	var/time_until_next_tick
 
+	/// World.time this effect was added.
+	var/time_added = 0
+
 	/// The mob affected by the status effect.
 	var/mob/living/owner
 	/// How many of the effect can be on one mob, and/or what happens when you try to add a duplicate.
@@ -44,8 +47,11 @@
 	if(QDELETED(owner) || !on_apply())
 		qdel(src)
 		return
+
 	if(owner)
 		LAZYADD(owner.status_effects, src)
+
+	time_added = world.time
 
 	if(duration == INFINITY)
 		// we will optionally allow INFINITY, because i imagine it'll be convenient in some places,

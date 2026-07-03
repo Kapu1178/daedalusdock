@@ -12349,9 +12349,8 @@
 /turf/open/floor/mineral/plastitanium/red,
 /area/centcom/syndicate_mothership/expansion_bioterrorism)
 "JP" = (
-/obj/structure/chair/pew/left{
-	dir = 1
-	},
+/obj/effect/landmark/ghost_theatre_sleeper,
+/obj/item/chair/stool/wood,
 /turf/open/floor/wood/airless,
 /area/centcom/theatre)
 "JS" = (
@@ -13879,12 +13878,6 @@
 /obj/effect/turf_decal/delivery,
 /turf/open/floor/iron,
 /area/centcom/central_command_areas/supplypod/loading/one)
-"OQ" = (
-/obj/structure/chair/pew{
-	dir = 1
-	},
-/turf/open/floor/wood/airless,
-/area/centcom/theatre)
 "OR" = (
 /obj/machinery/computer/secure_data{
 	dir = 1
@@ -15275,12 +15268,6 @@
 /obj/effect/turf_decal/tile/neutral/fourcorners,
 /turf/open/floor/iron/dark,
 /area/centcom/central_command_areas/control)
-"SJ" = (
-/obj/structure/chair/pew/right{
-	dir = 1
-	},
-/turf/open/floor/wood/airless,
-/area/centcom/theatre)
 "SK" = (
 /obj/structure/lattice/catwalk,
 /obj/effect/turf_decal/stripes/line{
@@ -30186,7 +30173,7 @@ Jn
 Jn
 Jn
 iq
-OQ
+JP
 iq
 iq
 Nq
@@ -30443,7 +30430,7 @@ Jn
 Jn
 Jn
 iq
-SJ
+JP
 iq
 iq
 Nq
