@@ -86,6 +86,7 @@
 		owner.clear_alert(id)
 		LAZYREMOVE(owner.status_effects, src)
 		on_remove()
+		SEND_SIGNAL(owner, COMSIG_LIVING_STATUS_REMOVED, src)
 		owner = null
 	return ..()
 
