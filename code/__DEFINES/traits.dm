@@ -198,7 +198,10 @@ Remember to update _globalvars/traits.dm if you're adding/removing/renaming trai
 #define TRAIT_STUNRESISTANCE "stun_resistance"
 /// Anti Dual-baton cooldown bypass exploit.
 #define TRAIT_IWASBATONED "iwasbatoned"
+/// Subject cannot sleep. Takes priority over permasleep.
 #define TRAIT_SLEEPIMMUNE "sleep_immunity"
+/// Subject will be unable to wake up from Sleep at all.
+#define TRAIT_PERMASLEEP "permasleep"
 #define TRAIT_PUSHIMMUNE "push_immunity"
 #define TRAIT_SHOCKIMMUNE "shock_immunity"
 #define TRAIT_TESLA_SHOCKIMMUNE "tesla_shock_immunity"

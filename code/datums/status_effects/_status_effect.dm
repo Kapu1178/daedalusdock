@@ -117,8 +117,15 @@
 
 	if(duration != STATUS_EFFECT_PERMANENT)
 		if(duration <= 0)
-			qdel(src)
-			return
+			if(should_expire())
+				qdel(src)
+				return
+			else
+				duration = 1
+
+/// Returns TRUE if the status effect has expired due to duration loss and should qdel.
+/datum/status_effect/proc/should_expire()
+	return TRUE
 
 /// Called whenever the effect is applied in on_created
 /// Returning FALSE will cause it to delete itself during creation instead.
