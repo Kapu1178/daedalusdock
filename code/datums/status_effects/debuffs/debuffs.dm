@@ -141,9 +141,11 @@
 	if(!.)
 		return
 
-	if(!HAS_TRAIT(owner, TRAIT_SLEEPIMMUNE))
-		ADD_TRAIT(owner, TRAIT_KNOCKEDOUT, TRAIT_STATUS_EFFECT(id))
+	if(HAS_TRAIT(owner, TRAIT_SLEEPIMMUNE))
 		tick_interval = -1
+	else
+		ADD_TRAIT(owner, TRAIT_KNOCKEDOUT, TRAIT_STATUS_EFFECT(id))
+
 
 	if(owner.mind)
 		COOLDOWN_START(owner.mind, dream_cooldown, 5 SECONDS) // You need to sleep for atleast 5 seconds to begin dreaming.
