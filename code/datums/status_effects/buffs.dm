@@ -2,7 +2,7 @@
 
 /datum/status_effect/his_grace
 	id = "his_grace"
-	duration = -1
+	duration = STATUS_EFFECT_PERMANENT
 	tick_interval = 4
 	alert_type = /atom/movable/screen/alert/status_effect/his_grace
 	var/bloodlust = 0

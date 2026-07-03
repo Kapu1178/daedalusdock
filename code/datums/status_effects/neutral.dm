@@ -6,7 +6,7 @@
 
 /datum/status_effect/in_love
 	id = "in_love"
-	duration = -1
+	duration = STATUS_EFFECT_PERMANENT
 	status_type = STATUS_EFFECT_UNIQUE
 	alert_type = /atom/movable/screen/alert/status_effect/in_love
 	var/hearts
@@ -90,8 +90,8 @@
 // holdup is for the person aiming
 /datum/status_effect/holdup
 	id = "holdup"
-	duration = -1
-	tick_interval = -1
+	duration = STATUS_EFFECT_PERMANENT
+	tick_interval = STATUS_EFFECT_NO_TICK
 	status_type = STATUS_EFFECT_UNIQUE
 	alert_type = /atom/movable/screen/alert/status_effect/holdup
 
@@ -116,8 +116,8 @@
 // this status effect is used to negotiate the high-fiving capabilities of all concerned parties
 /datum/status_effect/offering
 	id = "offering"
-	duration = -1
-	tick_interval = -1
+	duration = STATUS_EFFECT_PERMANENT
+	tick_interval = STATUS_EFFECT_NO_TICK
 	status_type = STATUS_EFFECT_UNIQUE
 	alert_type = null
 	/// The people who were offered this item at the start
@@ -214,7 +214,7 @@
 /datum/status_effect/caltropped
 	id = "caltropped"
 	duration = 1 SECONDS
-	tick_interval = INFINITY
+	tick_interval = STATUS_EFFECT_NO_TICK
 	status_type = STATUS_EFFECT_REFRESH
 	alert_type = null
 

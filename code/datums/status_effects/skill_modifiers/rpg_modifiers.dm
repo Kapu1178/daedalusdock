@@ -8,7 +8,7 @@
 			to_chat(M, message)
 
 /datum/status_effect/stat_mod
-	tick_interval = -1
+	tick_interval = STATUS_EFFECT_PERMANENT
 	status_type = STATUS_EFFECT_MULTIPLE
 	alert_type = null
 

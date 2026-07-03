@@ -2,6 +2,7 @@
 //STUN EFFECTS
 /datum/status_effect/incapacitating
 	tick_interval = 0.2 SECONDS
+	processing_speed = STATUS_EFFECT_PRIORITY
 	status_type = STATUS_EFFECT_REPLACE
 	alert_type = null
 	var/needs_update_stat = FALSE
@@ -142,7 +143,7 @@
 		return
 
 	if(HAS_TRAIT(owner, TRAIT_SLEEPIMMUNE))
-		tick_interval = -1
+		tick_interval = STATUS_EFFECT_NO_TICK
 	else
 		ADD_TRAIT(owner, TRAIT_KNOCKEDOUT, TRAIT_STATUS_EFFECT(id))
 
@@ -165,7 +166,7 @@
 /datum/status_effect/incapacitating/sleeping/proc/on_owner_insomniac(mob/living/source)
 	SIGNAL_HANDLER
 	REMOVE_TRAIT(owner, TRAIT_KNOCKEDOUT, TRAIT_STATUS_EFFECT(id))
-	tick_interval = -1
+	tick_interval = STATUS_EFFECT_NO_TICK
 
 ///If the mob has the TRAIT_SLEEPIMMUNE but somehow looses it we make him sleep and restart the tick()
 /datum/status_effect/incapacitating/sleeping/proc/on_owner_sleepy(mob/living/source)
@@ -207,7 +208,7 @@
 //STASIS
 /datum/status_effect/grouped/hard_stasis
 	id = "stasis"
-	duration = -1
+	duration = STATUS_EFFECT_PERMANENT
 	alert_type = /atom/movable/screen/alert/status_effect/stasis
 	var/last_dead_time
 
@@ -279,7 +280,7 @@
 
 /datum/status_effect/his_wrath //does minor damage over time unless holding His Grace
 	id = "his_wrath"
-	duration = -1
+	duration = STATUS_EFFECT_PERMANENT
 	tick_interval = 4
 	alert_type = /atom/movable/screen/alert/status_effect/his_wrath
 
@@ -299,7 +300,7 @@
 
 /datum/status_effect/cultghost //is a cult ghost and can't use manifest runes
 	id = "cult_ghost"
-	duration = -1
+	duration = STATUS_EFFECT_PERMANENT
 	alert_type = null
 
 /datum/status_effect/cultghost/on_apply()
@@ -532,7 +533,7 @@
 	id = "neck_slice"
 	status_type = STATUS_EFFECT_UNIQUE
 	alert_type = null
-	duration = -1
+	duration = STATUS_EFFECT_PERMANENT
 
 /datum/status_effect/neck_slice/tick()
 
@@ -646,7 +647,7 @@
 /datum/status_effect/gonbola_pacify
 	id = "gonbolaPacify"
 	status_type = STATUS_EFFECT_MULTIPLE
-	tick_interval = -1
+	tick_interval = STATUS_EFFECT_PERMANENT
 	alert_type = null
 
 /datum/status_effect/gonbola_pacify/on_apply()
@@ -1114,7 +1115,7 @@
 /datum/status_effect/ghoul
 	id = "ghoul"
 	status_type = STATUS_EFFECT_UNIQUE
-	duration = -1
+	duration = STATUS_EFFECT_PERMANENT
 	alert_type = /atom/movable/screen/alert/status_effect/ghoul
 	/// The new max health value set for the ghoul, if supplied
 	var/new_max_health
@@ -1273,9 +1274,8 @@
 /datum/status_effect/monkey_retardation
 	id = "monkey_retardation"
 	alert_type = null
-	duration = -1
+	duration = STATUS_EFFECT_PERMANENT
 	status_type = STATUS_EFFECT_UNIQUE
 
 /datum/status_effect/monkey_retardation/nextmove_modifier()
 	return 2
-

@@ -1,6 +1,7 @@
 /datum/status_effect/fire_handler
-	duration = -1
+	duration = STATUS_EFFECT_PERMANENT
 	alert_type = null
+	processing_speed = STATUS_EFFECT_PRIORITY
 	status_type = STATUS_EFFECT_REFRESH //Custom code
 	on_remove_on_mob_delete = TRUE
 	tick_interval = 2 SECONDS
