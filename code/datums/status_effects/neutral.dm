@@ -43,6 +43,7 @@
 
 /datum/status_effect/bounty
 	id = "bounty"
+	alert_type = null
 	status_type = STATUS_EFFECT_UNIQUE
 	var/mob/living/rewarded
 
@@ -221,6 +222,7 @@
 ///Makes the mob luminescent for the duration of the effect.
 /datum/status_effect/tinlux_light
 	id = "tinea_luxor_light"
+	alert_type = null
 	processing_speed = STATUS_EFFECT_NORMAL_PROCESS
 	var/obj/effect/dummy/lighting_obj/moblight/mob_light_obj
 

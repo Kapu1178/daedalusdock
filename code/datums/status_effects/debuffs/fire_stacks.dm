@@ -1,4 +1,5 @@
 /datum/status_effect/fire_handler
+	abstract_type = /datum/status_effect/fire_handler
 	duration = STATUS_EFFECT_PERMANENT
 	alert_type = null
 	processing_speed = STATUS_EFFECT_PRIORITY

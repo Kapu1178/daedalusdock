@@ -1,6 +1,7 @@
 //Largely negative status effects go here, even if they have small benificial effects
 //STUN EFFECTS
 /datum/status_effect/incapacitating
+	abstract_type = /datum/status_effect/incapacitating
 	tick_interval = 0.2 SECONDS
 	processing_speed = STATUS_EFFECT_PRIORITY
 	status_type = STATUS_EFFECT_REPLACE
@@ -262,7 +263,7 @@
 /datum/status_effect/pacify
 	id = "pacify"
 	status_type = STATUS_EFFECT_REPLACE
-	tick_interval = 1
+	tick_interval = STATUS_EFFECT_NO_TICK
 	duration = 100
 	alert_type = null
 
@@ -846,7 +847,7 @@
 	id = "go_away"
 	duration = 100
 	status_type = STATUS_EFFECT_REPLACE
-	tick_interval = 1
+	tick_interval = STATUS_EFFECT_AUTO_TICK
 	alert_type = /atom/movable/screen/alert/status_effect/go_away
 	var/direction
 
@@ -869,16 +870,16 @@
 	id = "fake_virus"
 	duration = 1800//3 minutes
 	status_type = STATUS_EFFECT_REPLACE
-	tick_interval = 1
+	tick_interval = STATUS_EFFECT_AUTO_TICK
 	alert_type = null
 	var/msg_stage = 0//so you dont get the most intense messages immediately
 
-/datum/status_effect/fake_virus/tick()
+/datum/status_effect/fake_virus/tick(delta_time)
 	var/fake_msg = ""
 	var/fake_emote = ""
 	switch(msg_stage)
 		if(0 to 300)
-			if(prob(1))
+			if(DT_PROB(1, delta_time))
 				fake_msg = pick(
 				span_warning(pick("Your head hurts.", "Your head pounds.")),
 				span_warning(pick("You're having difficulty breathing.", "Your breathing becomes heavy.")),
@@ -887,7 +888,7 @@
 				span_warning(pick("Your head hurts.", "Your mind blanks for a moment.")),
 				span_warning(pick("Your throat hurts.", "You clear your throat.")))
 		if(301 to 600)
-			if(prob(2))
+			if(DT_PROB(2, delta_time))
 				fake_msg = pick(
 				span_warning(pick("Your head hurts a lot.", "Your head pounds incessantly.")),
 				span_warning(pick("Your windpipe feels like a straw.", "Your breathing becomes tremendously difficult.")),
@@ -978,6 +979,7 @@
 
 /datum/status_effect/cloudstruck
 	id = "cloudstruck"
+	alert_type = null
 	status_type = STATUS_EFFECT_REPLACE
 	duration = 3 SECONDS
 	on_remove_on_mob_delete = TRUE
