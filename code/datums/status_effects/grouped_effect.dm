@@ -7,6 +7,12 @@
 
 /datum/status_effect/grouped/on_creation(mob/living/new_owner, source)
 	var/datum/status_effect/grouped/existing = new_owner.has_status_effect(type)
+
+	if(isnull(source))
+		stack_trace("Grouped status effect applied without a source")
+		qdel(src)
+		return FALSE
+
 	if(existing)
 		existing.sources |= source
 		qdel(src)
