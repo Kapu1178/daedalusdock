@@ -6987,6 +6987,12 @@
 /obj/effect/baseturf_helper/asteroid/snow,
 /turf/closed/indestructible/syndicate,
 /area/centcom/syndicate_mothership/control)
+"tZ" = (
+/obj/structure/low_wall/wood,
+/obj/structure/curtain/cloth/fancy/closed,
+/obj/machinery/light/small/directional/north,
+/turf/open/floor/wood/airless,
+/area/centcom/theatre)
 "uc" = (
 /obj/effect/turf_decal/tile/neutral/fourcorners,
 /turf/open/floor/iron/dark,
@@ -30158,7 +30164,7 @@ aa
 aa
 aa
 Nq
-ma
+tZ
 Jn
 Jn
 Jn
