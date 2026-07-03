@@ -972,9 +972,10 @@
 
 	to_chat(current.client, "<div class='examine_block roundstartNotifications'>[jointext(divs, "<hr>")]</div>")
 
+/// Sends the character to the Mind's Eye Theatre (name pending).
 /datum/mind/proc/visit_the_theatre()
 	in_the_theatre = TRUE
-	current.update_blindness()
+	current.update_blindness() // Removes blindness overlay so you can see your schizo dream world
 
 	var/turf/ghost_loc = get_turf(locate(/obj/effect/landmark/ghost_theatre_sleeper, GLOB.landmarks_list))
 	var/obj/effect/ghost = new(ghost_loc)

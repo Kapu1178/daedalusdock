@@ -11268,7 +11268,7 @@
 /turf/open/lava,
 /area/centcom/wizard_station)
 "Gs" = (
-/obj/machinery/light/directional,
+/obj/machinery/light/small/directional/south,
 /turf/open/floor/wood/airless,
 /area/centcom/theatre)
 "Gt" = (
@@ -12561,12 +12561,6 @@
 /obj/machinery/light/directional/south,
 /turf/open/floor/wood,
 /area/centcom/central_command_areas/holding)
-"KA" = (
-/obj/structure/low_wall/wood,
-/obj/structure/curtain/cloth/fancy/closed,
-/obj/machinery/light/directional/north,
-/turf/open/floor/wood/airless,
-/area/centcom/theatre)
 "KB" = (
 /obj/machinery/camera/autoname/directional/north{
 	network = list("nukie")
@@ -17521,10 +17515,6 @@
 /obj/structure/closet/cardboard,
 /turf/open/floor/plating,
 /area/centcom/syndicate_mothership/control)
-"YC" = (
-/obj/machinery/light/floor/has_bulb,
-/turf/open/floor/wood/airless,
-/area/centcom/theatre)
 "YD" = (
 /obj/structure/table/wood,
 /obj/structure/reagent_dispensers/beerkeg,
@@ -29397,7 +29387,7 @@ aa
 aa
 aa
 Nq
-KA
+ma
 Jn
 Jn
 iq
@@ -29657,7 +29647,7 @@ Nq
 ma
 Jn
 Jn
-YC
+iq
 iq
 iq
 iq
@@ -30685,7 +30675,7 @@ Nq
 ma
 Jn
 Jn
-YC
+iq
 iq
 iq
 iq
@@ -30939,7 +30929,7 @@ aa
 aa
 aa
 Nq
-KA
+ma
 Jn
 Jn
 iq

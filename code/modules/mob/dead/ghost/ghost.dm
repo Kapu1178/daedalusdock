@@ -3,6 +3,7 @@
 
 	sight = NONE
 	simulated = FALSE
+	lighting_alpha = LIGHTING_PLANE_ALPHA_MOSTLY_VISIBLE
 
 	movement_delay = 4
 
