@@ -123,12 +123,8 @@
 
 	for(var/datum/status_effect/checking as anything in subtypesof(/datum/status_effect))
 		if(isabstract(checking))
-			// we are just assuming that a child of an abstract should not be abstract.
-			// of course in practice, this may not always be the case - but if you're
-			// structuring a status effect like this, you can just change the parent id to anything else
-			var/datum/status_effect/checking_parent = initial(checking.parent_type)
-			if(isabstract(checking_parent))
-				continue
+			continue
+
 		if(initial(checking.id) != bad_id)
 			continue
 		TEST_FAIL("[checking] has not set an id. This is required for status effects.")
