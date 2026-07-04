@@ -19,7 +19,6 @@
 
 /**
  * Stops the passed atom / image from appearing floating
- * (Living mobs also have a 'body_position_pixel_y_offset' variable that has to be taken into account here)
  *
  * In most cases you should NOT call this manually, instead use [/datum/element/movetype_handler]!
  * This is just so you can apply the animation to things which can be animated but are not movables (like images)
@@ -28,7 +27,7 @@
 	var/__final_pixel_y = 0; \
 	if(ismovable(target)) { \
 		var/atom/movable/__movable_target = target; \
-		__final_pixel_y += __movable_target.base_pixel_z; \
+		__final_pixel_y += __movable_target.base_pixel_y; \
 	}; \
 	if(isliving(target)) { \
 		var/mob/living/__living_target = target; \

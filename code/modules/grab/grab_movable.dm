@@ -64,6 +64,7 @@
 	if(!animate)
 		pixel_x = new_x
 		pixel_y = new_y
+		UPDATE_OO_IF_PRESENT
 		return TRUE
 
 	// ensures the floating animation doesn't mess with our animation

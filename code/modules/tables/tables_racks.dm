@@ -979,12 +979,16 @@ TYPEINFO_DEF(/obj/structure/table/optable)
 	if(patient)
 		REMOVE_TRAIT(patient, TRAIT_CANNOTFACE, OPTABLE_TRAIT)
 		UnregisterSignal(patient, COMSIG_PARENT_QDELETING)
+		patient.remove_offsets(type)
+
 	patient = new_patient
+
 	if(patient)
 		ADD_TRAIT(patient, TRAIT_CANNOTFACE, OPTABLE_TRAIT)
 		patient.set_lying_angle(LYING_ANGLE_EAST)
 		patient.setDir(SOUTH)
 		RegisterSignal(patient, COMSIG_PARENT_QDELETING, PROC_REF(patient_deleted))
+		patient.add_offsets(type, y_add = -10)
 
 	if(connected_monitor)
 		connected_monitor.update_appearance(UPDATE_OVERLAYS)

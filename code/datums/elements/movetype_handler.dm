@@ -26,7 +26,7 @@
 	if(movable_target.movement_type & (FLOATING|FLYING) && !HAS_TRAIT(movable_target, TRAIT_NO_FLOATING_ANIM))
 		DO_FLOATING_ANIM(movable_target)
 
-/datum/element/movetype_handler/Detach(datum/source)
+/datum/element/movetype_handler/Detach(atom/movable/source)
 	var/list/signals_to_remove = list(
 		SIGNAL_ADDTRAIT(TRAIT_NO_FLOATING_ANIM),
 		SIGNAL_REMOVETRAIT(TRAIT_NO_FLOATING_ANIM),
@@ -36,7 +36,7 @@
 	UnregisterSignal(source, signals_to_remove)
 
 	attached_atoms -= source
-	stop_floating(source)
+	STOP_FLOATING_ANIM(source)
 	return ..()
 
 /// Called when a movement type trait is added to the movable. Enables the relative bitflag.
@@ -60,27 +60,17 @@
 	var/old_state = source.movement_type
 	source.movement_type &= ~flag
 	if((old_state & (FLOATING|FLYING)) && !(source.movement_type & (FLOATING|FLYING)))
-		stop_floating(source)
+		STOP_FLOATING_ANIM(source)
 		source.zFall()
 	SEND_SIGNAL(source, COMSIG_MOVETYPE_FLAG_DISABLED, flag, old_state)
 
 /// Called when the TRAIT_NO_FLOATING_ANIM trait is added to the movable. Stops it from bobbing up and down.
 /datum/element/movetype_handler/proc/on_no_floating_anim_trait_gain(atom/movable/source, trait)
 	SIGNAL_HANDLER
-	stop_floating(source)
+	STOP_FLOATING_ANIM(source)
 
 /// Called when the TRAIT_NO_FLOATING_ANIM trait is removed from the mob. Restarts the bobbing animation.
 /datum/element/movetype_handler/proc/on_no_floating_anim_trait_loss(atom/movable/source, trait)
 	SIGNAL_HANDLER
 	if(source.movement_type & (FLOATING|FLYING))
 		DO_FLOATING_ANIM(source)
-
-/// Stops the above. Also not a comsig proc.
-/datum/element/movetype_handler/proc/stop_floating(atom/movable/target)
-	var/final_pixel_y = target.base_pixel_y
-	if(isliving(target)) //Living mobs also have a 'body_position_pixel_y_offset' variable that has to be taken into account here.
-		var/mob/living/living_target = target
-		final_pixel_y += living_target.body_position_pixel_y_offset
-	animate(target, pixel_y = final_pixel_y, time = 1 SECONDS)
-
-#undef DO_FLOATING_ANIM

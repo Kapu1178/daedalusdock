@@ -275,6 +275,8 @@ Remember to update _globalvars/traits.dm if you're adding/removing/renaming trai
 #define TRAIT_NO_SLIP_SLIDE "noslip_slide"
 /// Stops all slipping and sliding from ocurring
 #define TRAIT_NO_SLIP_ALL "noslip_all"
+/// Is pixel shifted
+#define TRAIT_PIXEL_SHIFTED "pixel_shifted"
 
 /// Invoking a Miracle rune
 #define TRAIT_INVOKING_MIRACLE "invokingmiracle"
