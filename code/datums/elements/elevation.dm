@@ -5,7 +5,7 @@
 /datum/element/elevation
 	element_flags = ELEMENT_BESPOKE | ELEMENT_DETACH
 	id_arg_index = 2
-	///The amount of pixel_z applied to the mob standing on the turf
+	///The amount of pixel_y applied to the mob standing on the turf
 	var/pixel_shift
 
 /datum/element/elevation/Attach(datum/target, pixel_shift)
@@ -144,11 +144,6 @@
 	if(isnull(old_loc) || !HAS_TRAIT_FROM(old_loc, TRAIT_ELEVATED_TURF, ELEVATION_SOURCE(src)))
 		register_new_mob(entered, elevate_time = isturf(old_loc) && source.Adjacent(old_loc) ? ELEVATE_TIME : 0)
 
-/datum/element/elevation_core/proc/on_initialized_on(turf/source, atom/movable/spawned)
-	SIGNAL_HANDLER
-	if(isliving(spawned))
-		register_new_mob(spawned, elevate_time = 0)
-
 /datum/element/elevation_core/proc/on_exited(turf/source, atom/movable/gone)
 	SIGNAL_HANDLER
 	if((isnull(gone.loc) || !HAS_TRAIT_FROM(gone.loc, TRAIT_ELEVATED_TURF, ELEVATION_SOURCE(src))) && isliving(gone))
@@ -185,7 +180,7 @@
 	if(target.buckled)
 		// We are buckled to a vehicle, so it also must be elevated
 		if(isvehicle(target.buckled))
-			animate(target.buckled, pixel_z = pixel_shift, time = elevate_time, flags = ANIMATION_RELATIVE|ANIMATION_PARALLEL)
+			z_animate(target.buckled, pixel_y = pixel_shift, time = elevate_time, flags = ANIMATION_RELATIVE|ANIMATION_PARALLEL)
 		// We are buckled to a mob - they're elevated so we're elevated
 		else if(isliving(target.buckled))
 			noop()
@@ -194,14 +189,14 @@
 			ADD_TRAIT(target, TRAIT_MOB_ELEVATED, ELEVATION_SOURCE(src))
 			return
 
-	target.add_offsets(ELEVATION_SOURCE(src), z_add = pixel_shift, animate = elevate_time > 0)
+	target.add_offsets(ELEVATION_SOURCE(src), y_add = pixel_shift, animate = elevate_time > 0)
 	ADD_TRAIT(target, TRAIT_MOB_ELEVATED, ELEVATION_SOURCE(src))
 
 /// Reverts elevation of the mob.
 /datum/element/elevation_core/proc/deelevate_mob(mob/living/target, elevate_time = ELEVATE_TIME)
 	target.remove_offsets(ELEVATION_SOURCE(src), animate = elevate_time > 0)
 	if(isvehicle(target.buckled))
-		animate(target.buckled, pixel_z = -pixel_shift, time = elevate_time, flags = ANIMATION_RELATIVE|ANIMATION_PARALLEL)
+		z_animate(target.buckled, pixel_y = -pixel_shift, time = elevate_time, flags = ANIMATION_RELATIVE|ANIMATION_PARALLEL)
 	REMOVE_TRAIT(target, TRAIT_MOB_ELEVATED, ELEVATION_SOURCE(src))
 
 /**
@@ -218,20 +213,20 @@
 		return
 	// We were buckled to something
 	if(source.buckled)
-		// It was a vehicle, so reset its pixel_z
+		// It was a vehicle, so reset its pixel_y
 		if(isvehicle(source.buckled))
-			animate(source.buckled, pixel_z = -pixel_shift, time = ELEVATE_TIME, flags = ANIMATION_RELATIVE|ANIMATION_PARALLEL)
-		// It was a mob, so revert our pixel_z
+			animate(source.buckled, pixel_y = -pixel_shift, time = ELEVATE_TIME, flags = ANIMATION_RELATIVE|ANIMATION_PARALLEL)
+		// It was a mob, so revert our pixel_y
 		else if(isliving(source.buckled))
 			deelevate_mob(source)
 		// It was some object, maybe the object itself, elevate us
 		else
-			source.add_offsets(ELEVATION_SOURCE(src), z_add = pixel_shift)
+			source.add_offsets(ELEVATION_SOURCE(src), y_add = pixel_shift)
 	// We are now buckled to something
 	if(new_buckled)
 		// It's a vehicle, so elevate it
 		if(isvehicle(new_buckled))
-			animate(new_buckled, pixel_z = pixel_shift, time = ELEVATE_TIME, flags = ANIMATION_RELATIVE|ANIMATION_PARALLEL)
+			animate(new_buckled, pixel_y = pixel_shift, time = ELEVATE_TIME, flags = ANIMATION_RELATIVE|ANIMATION_PARALLEL)
 		// It's a mob, so elevate us
 		else if(isliving(new_buckled))
 			elevate_mob(source)

@@ -87,13 +87,11 @@
  * Adds an offset to the mob's pixel position.
  *
  * * source: The source of the offset, a string
- * * w_add: pixel_w offset
  * * x_add: pixel_x offset
  * * y_add: pixel_y offset
- * * z_add: pixel_z offset
  * * animate: If TRUE, the mob will animate to the new position. If FALSE, it will instantly move.
  */
-/mob/living/proc/add_offsets(source, w_add, x_add, y_add, z_add, animate = TRUE)
+/mob/living/proc/add_offsets(source, x_add, y_add, animate = TRUE)
 	LAZYINITLIST(offsets)
 	if(isnum(x_add))
 		LAZYSET(offsets[PIXEL_X_OFFSET], source, x_add)
