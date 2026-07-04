@@ -101,6 +101,8 @@ GLOBAL_VAR_INIT(running_create_and_destroy, FALSE)
 	ignore += typesof(/obj/effect/abstract/smell_holder)
 	// Screen objects can depend on a hud datum for behavior leading to runtimes
 	ignore += typesof(/atom/movable/screen)
+	// Simulacrums are spawned under specific conditions and require a mob and landmark.
+	ignore += typesof(/obj/effect/simulacrum)
 
 	var/list/cached_contents = spawn_at.contents.Copy()
 	var/original_turf_type = spawn_at.type

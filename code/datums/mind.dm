@@ -75,7 +75,7 @@
 	/// Timer ID for the theatre exit.
 	var/theatre_timer_id
 	/// Our simulacrum in the Theatre when visiting.
-	var/obj/effect/theatre_ghost
+	var/obj/effect/simulacrum/simulacrum
 
 	var/list/learned_recipes //List of learned recipe TYPES.
 
@@ -133,7 +133,7 @@
 	QDEL_LIST(owned_requitals)
 	QDEL_LIST(targeted_requitals)
 	set_current(null)
-	QDEL_NULL(theatre_ghost)
+	QDEL_NULL(simulacrum)
 	return ..()
 
 /datum/mind/vv_edit_var(var_name, var_value)
@@ -992,29 +992,28 @@
 	if(current.stat != UNCONSCIOUS)
 		return
 
+
+	/// Pick an unoccupied landmark to spawn the simulacrum at.
+	var/obj/effect/landmark/used_landmark
+	var/list/landmarks = INSTANCES_OF_COPY(/obj/effect/landmark/ghost_theatre_sleeper)
+	while(!used_landmark && length(landmarks))
+		var/obj/effect/landmark/ghost_theatre_sleeper/landmark = pick_n_take(landmarks)
+		if(!landmark.using_this)
+			used_landmark = landmark
+			break
+
+	if(!used_landmark)
+		return
+
 	in_the_theatre = TRUE
 	current.update_blindness() // Removes blindness overlay so you can see your schizo dream world
 
 	GLOB.ghost_theatre_visitors += current
 
-	var/turf/ghost_loc = get_turf(locate(/obj/effect/landmark/ghost_theatre_sleeper, GLOB.landmarks_list))
-	theatre_ghost = new(ghost_loc)
-	theatre_ghost.density = TRUE
-	theatre_ghost.appearance = current.appearance
-	theatre_ghost.appearance_flags |= NO_CLIENT_COLOR
-	theatre_ghost.setDir(NORTH)
-	theatre_ghost.transform = matrix()
-	theatre_ghost.color = list(
-		0.45, 0.75, 1.00, 0,
-		0.45, 0.75, 1.00, 0,
-		0.45, 0.75, 1.00, 0,
-		0,    0,    0,    1
-	)
+	var/turf/ghost_loc = get_turf(used_landmark)
+	simulacrum = new(ghost_loc, current, src, used_landmark)
 
-	theatre_ghost.alpha = 0
-	animate(theatre_ghost, alpha = 255, easing = SINE_EASING|EASE_IN, time = 5 SECONDS)
-
-	current.reset_perspective(theatre_ghost)
+	current.reset_perspective(simulacrum)
 
 	current.add_client_colour(/datum/client_colour/monochrome/ghost_theatre)
 	RegisterSignal(current, COMSIG_MOB_RESET_PERSPECTIVE, PROC_REF(on_reset_perspective))
@@ -1022,6 +1021,8 @@
 
 	ADD_TRAIT(current, TRAIT_KNOCKEDOUT, "visiting_the_theatre")
 	theatre_timer_id = addtimer(CALLBACK(src, PROC_REF(exit_the_theatre)), 30 SECONDS, TIMER_DELETE_ME|TIMER_STOPPABLE)
+
+	return TRUE
 
 /datum/mind/proc/exit_the_theatre()
 	if(!in_the_theatre)
@@ -1035,10 +1036,11 @@
 	UnregisterSignal(current, list(COMSIG_MOB_RESET_PERSPECTIVE, COMSIG_MOB_STATCHANGE))
 
 	REMOVE_TRAIT(current, TRAIT_KNOCKEDOUT, "visiting_the_theatre")
-	QDEL_NULL(theatre_ghost)
+	QDEL_NULL(simulacrum)
 
 	current.update_blindness()
 	current.reset_perspective()
+	return TRUE
 
 /// Called when the owner's perspective changes whilst visiting the theatre.
 /datum/mind/proc/on_reset_perspective(mob/source)
@@ -1046,8 +1048,8 @@
 	if(!current.client)
 		return
 
-	if(current.client.eye != theatre_ghost)
-		current.reset_perspective(theatre_ghost)
+	if(current.client.eye != simulacrum)
+		current.reset_perspective(simulacrum)
 
 /// Called when the owner's stat changes whilst in the theatre.
 /datum/mind/proc/on_stat_change(mob/source, new_stat, old_stat)

@@ -192,10 +192,10 @@ Works together with spawning an observer, noted above.
 
 	ghost.client?.init_verbs()
 
-	if(!admin_ghost)
+	if(isghost(ghost))
 		var/mob/dead/ghost/real_ghost = ghost
 		real_ghost.from_corpse(src)
-		real_ghost.forceMove(get_turf(locate(/obj/effect/landmark/ghost_theatre, GLOB.landmarks_list)))
+		real_ghost.forceMove(get_turf(pick(INSTANCES_OF(/obj/effect/landmark/ghost_theatre))))
 	return ghost
 
 /mob/living/ghostize(can_reenter_corpse = TRUE, admin_ghost)

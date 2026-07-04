@@ -609,6 +609,25 @@ INITIALIZE_IMMEDIATE(/obj/effect/landmark/start/new_player)
 	name = "Ghost Theatre"
 	icon_state = "observer_start"
 
+/obj/effect/landmark/ghost_theatre/Initialize(mapload)
+	. = ..()
+	SET_TRACKING(__TYPE__)
+
+/obj/effect/landmark/ghost_theatre/Destroy()
+	UNSET_TRACKING(__TYPE__)
+	return ..()
+
 /obj/effect/landmark/ghost_theatre_sleeper
 	name = "Ghost Theatre (Sleeper)"
 	icon_state = "observer_start"
+
+	/// Simulacrum in this seat
+	var/obj/effect/simulacrum/using_this
+
+/obj/effect/landmark/ghost_theatre_sleeper/Initialize(mapload)
+	. = ..()
+	SET_TRACKING(__TYPE__)
+
+/obj/effect/landmark/ghost_theatre_sleeper/Destroy()
+	UNSET_TRACKING(__TYPE__)
+	return ..()
