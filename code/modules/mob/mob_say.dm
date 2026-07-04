@@ -113,11 +113,21 @@
 	log_talk(message, LOG_SAY, tag="DEAD")
 	if(SEND_SIGNAL(src, COMSIG_MOB_DEADSAY, message) & MOB_DEADSAY_SIGNAL_INTERCEPT)
 		return
+
 	var/displayed_key = key
 	if(client?.holder?.fakekey)
 		displayed_key = null
 
+	update_name_chat_color(GetVoice())
 	deadchat_broadcast(rendered, source, follow_target = src, speaker_key = displayed_key, runechat = src, raw_message = message)
+
+	if(isghost(src))
+		var/visitor_raw_message = Gibberish(message, replace_characters = TRUE, chance = 60)
+		var/visitor_spanned = say_quote(visitor_raw_message)
+		var/visitor_message = "<span class='game'><span class='name'>The Spirit</span><span class='message'> [visitor_spanned]</span></span>"
+		for(var/mob/visitor in GLOB.ghost_theatre_visitors)
+			to_chat(visitor, visitor_message)
+			visitor.create_chat_message(src, raw_message = visitor_raw_message)
 
 ///Check if this message is an emote
 /mob/proc/check_emote(message, forced)

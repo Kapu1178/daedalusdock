@@ -264,6 +264,9 @@ GLOBAL_LIST_EMPTY(species_list)
 		var/override = FALSE
 		if(M.client?.holder && (chat_toggles & CHAT_DEAD))
 			override = TRUE
+			if(M.stat != DEAD)
+				runechat = FALSE // No runechat for admins that aren't also observers.
+
 		if(HAS_TRAIT(M, TRAIT_SIXTHSENSE) && message_type == DEADCHAT_REGULAR)
 			override = TRUE
 		if(SSticker.current_state == GAME_STATE_FINISHED)

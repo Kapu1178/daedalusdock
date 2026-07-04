@@ -17,10 +17,9 @@
 
 	user.log_message(msg, LOG_EMOTE)
 
-
 	var/space = should_have_space_before_emote(html_decode(msg)[1]) ? " " : ""
 	var/dchatmsg = "<b>[user]</b>[space][msg]"
-	var/livingmsg = "<b>Spirit</b>[space][msg]"
+	var/livingmsg = "<b>The Spirit</b>[space][msg]"
 	var/tmp_sound = get_sound(user, intentional)
 
 	if(tmp_sound && should_play_sound(user, intentional) && !TIMER_COOLDOWN_CHECK(user, type))
