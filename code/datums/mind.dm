@@ -1018,10 +1018,15 @@
 	current.add_client_colour(/datum/client_colour/monochrome/ghost_theatre)
 	RegisterSignal(current, COMSIG_MOB_RESET_PERSPECTIVE, PROC_REF(on_reset_perspective))
 	RegisterSignal(current, COMSIG_MOB_STATCHANGE, PROC_REF(on_stat_change))
+	RegisterSignal(current, COMSIG_MOB_LOGOUT, PROC_REF(on_logout))
 
 	ADD_TRAIT(current, TRAIT_KNOCKEDOUT, "visiting_the_theatre")
 	theatre_timer_id = addtimer(CALLBACK(src, PROC_REF(exit_the_theatre)), 30 SECONDS, TIMER_DELETE_ME|TIMER_STOPPABLE)
 
+	var/datum/media/media = pick_safe(SSmedia.get_track_pool(MEDIA_TAG_SPIRIT_THEATRE))
+	if(media)
+		var/sound/S = sound(media.path, repeat = TRUE, channel = CHANNEL_LOBBYMUSIC)
+		SEND_SOUND(current.client, S)
 	return TRUE
 
 /datum/mind/proc/exit_the_theatre()
@@ -1038,6 +1043,7 @@
 	REMOVE_TRAIT(current, TRAIT_KNOCKEDOUT, "visiting_the_theatre")
 	QDEL_NULL(simulacrum)
 
+	SEND_SOUND(current.client, sound(null, channel = CHANNEL_LOBBYMUSIC))
 	current.update_blindness()
 	current.reset_perspective()
 	return TRUE
@@ -1057,6 +1063,11 @@
 
 	if(new_stat != CONSCIOUS)
 		exit_the_theatre()
+
+/// Called when the owner logs out whilst in the theatre
+/datum/mind/proc/on_logout(mob/source)
+	SIGNAL_HANDLER
+	exit_the_theatre()
 
 /mob/dead/new_player/sync_mind()
 	return
