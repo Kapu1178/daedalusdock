@@ -4,10 +4,13 @@
 	icon_state = MAP_SWITCH("white", "shroud")
 	appearance_flags = parent_type::appearance_flags | NO_CLIENT_COLOR
 
-	always_lit = TRUE
 	opacity = TRUE
 
 	initial_gas = AIRLESS_ATMOS
+
+	light_inner_range = 1
+	light_outer_range = 2
+	light_power = 1
 
 /turf/open/indestructible/shroud/Initialize(mapload)
 	. = ..()
@@ -29,7 +32,10 @@
 		pearlescent_overlay.layer = HIGH_EFFECT_LAYER
 		pearlescent_overlay.alpha = 100
 
-		add_overlays = list(whitifier_overlay, pearlescent_overlay)
+		var/image/illumination = create_fullbright_overlay()
+		illumination.alpha = 120
+
+		add_overlays = list(whitifier_overlay, pearlescent_overlay, illumination)
 	add_overlay(add_overlays)
 
 /turf/open/indestructible/shroud/Entered(atom/movable/arrived, atom/old_loc, list/atom/old_locs)
