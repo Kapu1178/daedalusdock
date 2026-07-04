@@ -1,7 +1,3 @@
-#define DO_FLOATING_ANIM(target) \
-	animate(target, pixel_y = 2, time = 1 SECONDS, loop = -1, flags = ANIMATION_RELATIVE);\
-	animate(pixel_y = -2, time = 1 SECONDS, flags = ANIMATION_RELATIVE)
-
 /**
  * An element that enables and disables movetype bitflags whenever the relative traits are added or removed.
  * It also handles the +2/-2 pixel y anim loop typical of mobs possessing the FLYING or FLOATING movetypes.
