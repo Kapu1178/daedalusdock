@@ -2003,14 +2003,16 @@ GLOBAL_LIST_EMPTY(fire_appearances)
 		return
 	if((new_value == LYING_DOWN) && !(mobility_flags & MOBILITY_LIEDOWN))
 		return
+
 	. = body_position
 	body_position = new_value
-	SEND_SIGNAL(src, COMSIG_LIVING_SET_BODY_POSITION)
+
 	if(new_value == LYING_DOWN) // From standing to lying down.
 		on_lying_down()
 	else // From lying down to standing up.
 		on_standing_up()
 
+	SEND_SIGNAL(src, COMSIG_LIVING_SET_BODY_POSITION)
 	UPDATE_OO_IF_PRESENT
 
 

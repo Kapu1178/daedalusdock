@@ -117,7 +117,8 @@
 	if(incapacitated(IGNORE_RESTRAINTS|IGNORE_STASIS))
 		return
 
-	face_atom(A)
+	if(canface())
+		face_atom(A)
 
 	if(next_move > world.time) // in the year 2000...
 		return

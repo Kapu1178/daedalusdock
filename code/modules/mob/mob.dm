@@ -1023,7 +1023,7 @@
 /mob/proc/canface()
 	if(world.time < client.last_turn)
 		return FALSE
-	if(stat >= UNCONSCIOUS)
+	if(stat > CONSCIOUS)
 		return FALSE
 	if(anchored)
 		return FALSE
