@@ -995,12 +995,25 @@
 	in_the_theatre = TRUE
 	current.update_blindness() // Removes blindness overlay so you can see your schizo dream world
 
+	GLOB.ghost_theatre_visitors += current
+
 	var/turf/ghost_loc = get_turf(locate(/obj/effect/landmark/ghost_theatre_sleeper, GLOB.landmarks_list))
 	theatre_ghost = new(ghost_loc)
 	theatre_ghost.density = TRUE
 	theatre_ghost.appearance = current.appearance
+	theatre_ghost.appearance_flags |= NO_CLIENT_COLOR
 	theatre_ghost.setDir(NORTH)
 	theatre_ghost.transform = matrix()
+	theatre_ghost.color = list(
+		0.45, 0.75, 1.00, 0,
+		0.45, 0.75, 1.00, 0,
+		0.45, 0.75, 1.00, 0,
+		0,    0,    0,    1
+	)
+
+	theatre_ghost.alpha = 0
+	animate(theatre_ghost, alpha = 255, easing = SINE_EASING|EASE_IN, time = 5 SECONDS)
+
 	current.reset_perspective(theatre_ghost)
 
 	current.add_client_colour(/datum/client_colour/monochrome/ghost_theatre)
@@ -1015,6 +1028,7 @@
 		return
 
 	in_the_theatre = FALSE
+	GLOB.ghost_theatre_visitors -= current
 	deltimer(theatre_timer_id)
 
 	current.remove_client_colour(/datum/client_colour/monochrome/ghost_theatre)

@@ -268,10 +268,13 @@ GLOBAL_LIST_EMPTY(species_list)
 			override = TRUE
 		if(SSticker.current_state == GAME_STATE_FINISHED)
 			override = TRUE
+
 		if(isnewplayer(M) && !override)
 			continue
+
 		if(M.stat != DEAD && !override)
 			continue
+
 		if(speaker_key && (speaker_key in ignoring))
 			continue
 

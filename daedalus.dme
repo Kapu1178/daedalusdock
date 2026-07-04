@@ -3691,6 +3691,7 @@
 #include "code\modules\mob\camera\z_eye.dm"
 #include "code\modules\mob\dead\crew_manifest.dm"
 #include "code\modules\mob\dead\dead.dm"
+#include "code\modules\mob\dead\ghost\emote.dm"
 #include "code\modules\mob\dead\ghost\ghost.dm"
 #include "code\modules\mob\dead\new_player\login.dm"
 #include "code\modules\mob\dead\new_player\logout.dm"
