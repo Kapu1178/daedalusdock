@@ -5,6 +5,8 @@
 	simulated = FALSE
 	lighting_alpha = LIGHTING_PLANE_ALPHA_MOSTLY_VISIBLE
 
+	hud_type = /datum/hud/ghost
+
 	movement_delay = 4
 
 	/// Prefixed adjective to the ghost's name
@@ -15,6 +17,7 @@
 /mob/dead/ghost/Initialize(mapload)
 	. = ..()
 	AddElement(/datum/element/footstep, FOOTSTEP_MOB_SHOE, 1, -6, TRUE)
+	add_client_colour(/datum/client_colour/ghostmono)
 
 /mob/dead/ghost/proc/from_corpse(mob/corpse)
 	ghost_term = pick(GLOB.ghost_synonyms)

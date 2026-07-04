@@ -20,7 +20,7 @@ GLOBAL_VAR_INIT(fresh_ghost_adjectives, __fresh_ghost_adjectives())
 	see_in_dark = 100
 	lighting_alpha = LIGHTING_PLANE_ALPHA_MOSTLY_VISIBLE
 	invisibility = INVISIBILITY_OBSERVER
-	hud_type = /datum/hud/ghost
+	hud_type = /datum/hud/observer
 	movement_type = GROUND | FLYING
 	light_system = OVERLAY_LIGHT
 	light_outer_range = 1
@@ -586,7 +586,11 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 			return
 
 /mob/dead/observer/update_monochrome()
-	return
+	if(admin_ghost)
+		remove_client_colour(/datum/client_colour/ghostmono)
+		return
+
+	return ..()
 
 //We don't want to update the current var
 //But we will still carry a mind.

@@ -188,7 +188,7 @@ INITIALIZE_IMMEDIATE(/atom/movable/screen)
 	H.open_language_menu(usr)
 
 /atom/movable/screen/language_menu/ghost
-	screen_loc = ui_ghost_language_menu
+	screen_loc = ui_observer_language_menu
 
 /atom/movable/screen/inventory
 	/// The identifier for the slot. It has nothing to do with ID cards.

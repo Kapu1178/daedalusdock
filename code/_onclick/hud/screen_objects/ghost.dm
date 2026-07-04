@@ -1,57 +1,50 @@
-/atom/movable/screen/ghost
+/atom/movable/screen/observer
 	icon = 'icons/hud/screen_ghost.dmi'
 	private_screen = FALSE
 
-/atom/movable/screen/ghost/MouseEntered(location, control, params)
+/atom/movable/screen/observer/MouseEntered(location, control, params)
 	. = ..()
 	flick(icon_state + "_anim", src)
 
-/atom/movable/screen/ghost/orbit
+/atom/movable/screen/observer/orbit
 	name = "Orbit"
 	icon_state = "orbit"
-	screen_loc = ui_ghost_orbit
+	screen_loc = ui_observer_orbit
 
-/atom/movable/screen/ghost/orbit/Click()
+/atom/movable/screen/observer/orbit/Click()
 	. = ..()
 	if(.)
 		return FALSE
 	var/mob/dead/observer/G = usr
 	G.follow()
 
-/atom/movable/screen/ghost/reenter_corpse
+/atom/movable/screen/observer/reenter_corpse
 	name = "Reenter corpse"
 	icon_state = "reenter_corpse"
-	screen_loc = ui_ghost_reenter_corpse
+	screen_loc = ui_observer_reenter_corpse
 
-/atom/movable/screen/ghost/reenter_corpse/Click()
+/atom/movable/screen/observer/reenter_corpse/Click()
 	. = ..()
 	if(.)
 		return FALSE
-	var/mob/dead/observer/G = usr
+	var/mob/dead/G = usr
 	G.reenter_corpse()
 
-/atom/movable/screen/ghost/teleport
+/// For ghosts instead of observers
+/atom/movable/screen/observer/reenter_corpse/ghost
+	name = "Reenter corpse"
+	icon_state = "reenter_corpse"
+	screen_loc = "SOUTH:6,CENTER"
+
+/atom/movable/screen/observer/teleport
 	name = "Teleport"
 	icon_state = "teleport"
-	screen_loc = ui_ghost_teleport
+	screen_loc = ui_observer_teleport
 
-/atom/movable/screen/ghost/teleport/Click()
+/atom/movable/screen/observer/teleport/Click()
 	. = ..()
 	if(.)
 		return FALSE
 
 	var/mob/dead/observer/G = usr
 	G.dead_tele()
-
-/atom/movable/screen/ghost/pai
-	name = "pAI Candidate"
-	icon_state = "pai"
-	screen_loc = ui_ghost_pai
-
-/atom/movable/screen/ghost/pai/Click()
-	. = ..()
-	if(.)
-		return FALSE
-
-	var/mob/dead/observer/G = usr
-	G.register_pai()

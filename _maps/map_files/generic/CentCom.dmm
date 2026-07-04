@@ -12356,7 +12356,7 @@
 /area/centcom/syndicate_mothership/expansion_bioterrorism)
 "JP" = (
 /obj/effect/landmark/ghost_theatre_sleeper,
-/obj/item/chair/stool/wood,
+/obj/structure/chair/stool/wood,
 /turf/open/floor/wood/airless,
 /area/centcom/theatre)
 "JS" = (
@@ -13382,6 +13382,11 @@
 /obj/machinery/monkey_recycler,
 /turf/open/floor/mineral/titanium/tiled/yellow,
 /area/centcom/syndicate_mothership/expansion_bioterrorism)
+"Nk" = (
+/obj/structure/low_wall/wood,
+/obj/machinery/light/floor/has_bulb,
+/turf/open/floor/wood/airless,
+/area/centcom/theatre)
 "Nl" = (
 /obj/machinery/light/directional/south,
 /obj/effect/turf_decal/tile/neutral{
@@ -30167,7 +30172,7 @@ Nq
 tZ
 Jn
 Jn
-Jn
+Nk
 iq
 JP
 iq

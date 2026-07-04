@@ -72,6 +72,10 @@
 
 	/// Set to TRUE when the mob is asleep and visiting the Theatre.
 	var/in_the_theatre = FALSE
+	/// Timer ID for the theatre exit.
+	var/theatre_timer_id
+	/// Our simulacrum in the Theatre when visiting.
+	var/obj/effect/theatre_ghost
 
 	var/list/learned_recipes //List of learned recipe TYPES.
 
@@ -129,6 +133,7 @@
 	QDEL_LIST(owned_requitals)
 	QDEL_LIST(targeted_requitals)
 	set_current(null)
+	QDEL_NULL(theatre_ghost)
 	return ..()
 
 /datum/mind/vv_edit_var(var_name, var_value)
@@ -145,9 +150,14 @@
 /datum/mind/proc/set_current(mob/new_current)
 	if(new_current && QDELETED(new_current))
 		CRASH("Tried to set a mind's current var to a qdeleted mob, what the fuck")
+
 	if(current)
 		UnregisterSignal(src, COMSIG_PARENT_QDELETING)
+		if(in_the_theatre)
+			exit_the_theatre()
+
 	current = new_current
+
 	if(current)
 		RegisterSignal(src, COMSIG_PARENT_QDELETING, PROC_REF(clear_current))
 
@@ -161,6 +171,7 @@
 		language_holder = new (src)
 	return language_holder
 
+/// Transfers the mind to a new mob. Ghostizes the new mob's player if they have a player that doesn't own this mind.
 /datum/mind/proc/transfer_to(mob/new_character, force_key_move = 0)
 	set_original_character(null)
 	if(current) // remove ourself from our old body's mind variable
@@ -974,28 +985,49 @@
 
 /// Sends the character to the Mind's Eye Theatre (name pending).
 /datum/mind/proc/visit_the_theatre()
+	if(in_the_theatre)
+		return
+
 	in_the_theatre = TRUE
 	current.update_blindness() // Removes blindness overlay so you can see your schizo dream world
 
 	var/turf/ghost_loc = get_turf(locate(/obj/effect/landmark/ghost_theatre_sleeper, GLOB.landmarks_list))
-	var/obj/effect/ghost = new(ghost_loc)
-	ghost.density = TRUE
-	ghost.appearance = current.appearance
-	ghost.setDir(NORTH)
-	ghost.transform = matrix()
-	current.reset_perspective(ghost_loc)
+	theatre_ghost = new(ghost_loc)
+	theatre_ghost.density = TRUE
+	theatre_ghost.appearance = current.appearance
+	theatre_ghost.setDir(NORTH)
+	theatre_ghost.transform = matrix()
+	current.reset_perspective(theatre_ghost)
 
 	current.add_client_colour(/datum/client_colour/monochrome/ghost_theatre)
 	RegisterSignal(current, COMSIG_MOB_RESET_PERSPECTIVE, PROC_REF(on_reset_perspective))
 
-/datum/mind/proc/on_reset_perspective(mob/source)
-	SIGNAL_HANDLER
-	if(!source.client)
+	ADD_TRAIT(current, TRAIT_KNOCKEDOUT, "visiting_the_theatre")
+	theatre_timer_id = addtimer(CALLBACK(src, PROC_REF(exit_the_theatre)), 30 SECONDS, TIMER_DELETE_ME|TIMER_STOPPABLE)
+
+/datum/mind/proc/exit_the_theatre()
+	if(!in_the_theatre)
 		return
 
-	var/area/eye_loc = get_area(source.client.eye)
-	if(eye_loc.type != /area/centcom/theatre)
-		current.reset_perspective(get_turf(locate(/obj/effect/landmark/ghost_theatre_sleeper, GLOB.landmarks_list)))
+	in_the_theatre = FALSE
+	deltimer(theatre_timer_id)
+
+	current.remove_client_colour(/datum/client_colour/monochrome/ghost_theatre)
+	UnregisterSignal(current, COMSIG_MOB_RESET_PERSPECTIVE)
+
+	REMOVE_TRAIT(current, TRAIT_KNOCKEDOUT, "visiting_the_theatre")
+	QDEL_NULL(theatre_ghost)
+
+	current.update_blindness()
+	current.reset_perspective()
+
+/datum/mind/proc/on_reset_perspective(mob/source)
+	SIGNAL_HANDLER
+	if(!current.client)
+		return
+
+	if(current.client.eye != theatre_ghost)
+		current.reset_perspective(theatre_ghost)
 
 /mob/dead/new_player/sync_mind()
 	return
