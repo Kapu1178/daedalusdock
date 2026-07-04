@@ -1,0 +1,5 @@
+author: Rug-Dealer
+delete-after: true
+changes:
+  - rscadd: Due to a bad batch of igniters, welding tools can now fail to start. Chances
+      improve with higher Fine Motor skill.
