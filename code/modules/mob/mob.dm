@@ -897,22 +897,25 @@
 	set name = "Respawn"
 	set category = "OOC"
 
-	if (CONFIG_GET(flag/norespawn) && (!check_rights_for(usr.client, R_ADMIN) || tgui_alert(usr, "Respawn configs disabled. Do you want to use your permissions to circumvent it?", "Respawn", list("Yes", "No")) != "Yes"))
-		return
-
-	if ((stat != DEAD || !( SSticker )))
-		to_chat(usr, span_boldnotice("You must be dead to use this!"))
-		return
-
 	log_game("[key_name(usr)] used the respawn button.")
+	respawn(FALSE)
 
-	to_chat(usr, span_boldnotice("Please roleplay correctly!"))
+/// Sends the client back to the title screen.
+/mob/proc/respawn(force = FALSE)
+	if (!force && CONFIG_GET(flag/norespawn) && (!check_rights_for(usr.client, R_ADMIN) || tgui_alert(usr, "Respawn configs disabled. Do you want to use your permissions to circumvent it?", "Respawn", list("Yes", "No")) != "Yes"))
+		return
+
+	if (!force && (stat != DEAD || !( SSticker )))
+		to_chat(usr, span_boldnotice("You must be dead to use this."))
+		return
 
 	if(!client)
 		log_game("[key_name(usr)] respawn failed due to disconnect.")
 		return
+
 	client.screen.Cut()
 	client.screen += client.void
+
 	if(!client)
 		log_game("[key_name(usr)] respawn failed due to disconnect.")
 		return
@@ -924,7 +927,7 @@
 		return
 
 	M.PossessByPlayer(key)
-
+	return TRUE
 
 /**
  * Sometimes helps if the user is stuck in another perspective or camera

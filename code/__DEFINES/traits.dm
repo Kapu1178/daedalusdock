@@ -489,6 +489,9 @@ Remember to update _globalvars/traits.dm if you're adding/removing/renaming trai
 /// Smoke temporarily cannot affect this mob.
 #define TRAIT_AFFECTED_BY_SMOKE_RECENTLY "affected_by_smoke_recently"
 
+/// Shrouded
+#define TRAIT_SHROUDED "shrouded"
+
 /// A trait applied to objects with the capacity to be revealed by UV.
 #define TRAIT_MOVABLE_FLUORESCENT "flourescence"
 /// A trait applied to objects that are revealed by something
