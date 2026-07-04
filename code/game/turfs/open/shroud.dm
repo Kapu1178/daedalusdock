@@ -2,8 +2,14 @@
 	name = "The Shroud"
 	icon = MAP_SWITCH('icons/effects/alphacolors.dmi', 'icons/turf/floors/shroud.dmi')
 	icon_state = MAP_SWITCH("white", "shroud")
+	appearance_flags = parent_type::appearance_flags | NO_CLIENT_COLOR
 
-/turf/open/indestructible/eternity/Initialize(mapload)
+	always_lit = TRUE
+	opacity = TRUE
+
+	initial_gas = AIRLESS_ATMOS
+
+/turf/open/indestructible/shroud/Initialize(mapload)
 	. = ..()
 	setDir(pick(GLOB.cardinals))
 
