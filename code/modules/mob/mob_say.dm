@@ -93,8 +93,8 @@
 
 	var/display_name = real_name
 	var/name_append = ""
-	var/mob/dead/observer/O = src
-	if(isobserver(src) && O.deadchat_name)
+	var/mob/dead/O = src
+	if(isghost(O) && O.deadchat_name)
 		display_name = "[O.deadchat_name]"
 		if(died_as_name && (real_name != died_as_name))
 			name_append = " (died as [died_as_name])"
@@ -104,7 +104,7 @@
 		else
 			display_name = real_name
 
-		if(display_name != died_as_name)
+		if(died_as_name && (display_name != died_as_name))
 			name_append = " (died as [died_as_name])"
 
 	var/spanned = say_quote(say_emphasis(message))
@@ -116,7 +116,8 @@
 	var/displayed_key = key
 	if(client?.holder?.fakekey)
 		displayed_key = null
-	deadchat_broadcast(rendered, source, follow_target = src, speaker_key = displayed_key)
+
+	deadchat_broadcast(rendered, source, follow_target = src, speaker_key = displayed_key, runechat = src, raw_message = message)
 
 ///Check if this message is an emote
 /mob/proc/check_emote(message, forced)

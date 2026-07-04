@@ -42,6 +42,14 @@ INITIALIZE_IMMEDIATE(/mob/dead)
 		AA.onNewMob(src)
 	return INITIALIZE_HINT_NORMAL
 
+//Modified version of get_message_mods, removes the trimming, the only thing we care about here is admin channels
+/mob/dead/get_message_mods(message, list/mods)
+	var/key = message[1]
+	if((key in GLOB.department_radio_prefixes) && length(message) > length(key) + 1 && !mods[RADIO_EXTENSION])
+		mods[RADIO_KEY] = lowertext(message[1 + length(key)])
+		mods[RADIO_EXTENSION] = GLOB.department_radio_keys[mods[RADIO_KEY]]
+	return message
+
 /// Helper for setting can_reenter_corpse to FALSE
 /mob/dead/proc/unset_reenter_corpse()
 	can_reenter_corpse = FALSE

@@ -214,7 +214,7 @@
 		for(var/addiction_type in subtypesof(/datum/addiction))
 			remove_addiction_points(addiction_type, MAX_ADDICTION_POINTS)
 
-	RegisterSignal(new_character, COMSIG_LIVING_DEATH, PROC_REF(set_death_time))
+	RegisterSignal(new_character, COMSIG_LIVING_DEATH, PROC_REF(on_current_death))
 
 	if(active || force_key_move)
 		new_character.PossessByPlayer(key) //now transfer the key to link the client to our new body
@@ -313,7 +313,8 @@
 	msg += "</span>"
 	to_chat(user, examine_block(msg))
 
-/datum/mind/proc/set_death_time()
+/// Called when mob.current dies.
+/datum/mind/proc/on_current_death()
 	SIGNAL_HANDLER
 
 	last_death = world.time
@@ -988,6 +989,9 @@
 	if(in_the_theatre)
 		return
 
+	if(current.stat != UNCONSCIOUS)
+		return
+
 	in_the_theatre = TRUE
 	current.update_blindness() // Removes blindness overlay so you can see your schizo dream world
 
@@ -1001,6 +1005,7 @@
 
 	current.add_client_colour(/datum/client_colour/monochrome/ghost_theatre)
 	RegisterSignal(current, COMSIG_MOB_RESET_PERSPECTIVE, PROC_REF(on_reset_perspective))
+	RegisterSignal(current, COMSIG_MOB_STATCHANGE, PROC_REF(on_stat_change))
 
 	ADD_TRAIT(current, TRAIT_KNOCKEDOUT, "visiting_the_theatre")
 	theatre_timer_id = addtimer(CALLBACK(src, PROC_REF(exit_the_theatre)), 30 SECONDS, TIMER_DELETE_ME|TIMER_STOPPABLE)
@@ -1013,7 +1018,7 @@
 	deltimer(theatre_timer_id)
 
 	current.remove_client_colour(/datum/client_colour/monochrome/ghost_theatre)
-	UnregisterSignal(current, COMSIG_MOB_RESET_PERSPECTIVE)
+	UnregisterSignal(current, list(COMSIG_MOB_RESET_PERSPECTIVE, COMSIG_MOB_STATCHANGE))
 
 	REMOVE_TRAIT(current, TRAIT_KNOCKEDOUT, "visiting_the_theatre")
 	QDEL_NULL(theatre_ghost)
@@ -1021,6 +1026,7 @@
 	current.update_blindness()
 	current.reset_perspective()
 
+/// Called when the owner's perspective changes whilst visiting the theatre.
 /datum/mind/proc/on_reset_perspective(mob/source)
 	SIGNAL_HANDLER
 	if(!current.client)
@@ -1028,6 +1034,13 @@
 
 	if(current.client.eye != theatre_ghost)
 		current.reset_perspective(theatre_ghost)
+
+/// Called when the owner's stat changes whilst in the theatre.
+/datum/mind/proc/on_stat_change(mob/source, new_stat, old_stat)
+	SIGNAL_HANDLER
+
+	if(new_stat != CONSCIOUS)
+		exit_the_theatre()
 
 /mob/dead/new_player/sync_mind()
 	return
