@@ -281,6 +281,7 @@
 /mob/living/proc/on_hearing_loss()
 	SIGNAL_HANDLER
 	refresh_looping_ambience()
+	SEND_SOUND(src, sound(null, repeat = 0, wait = 0, channel = CHANNEL_AMBIENCE))
 
 ///Called when [TRAIT_DEAF] is added to the mob.
 /mob/living/proc/on_hearing_regain()
