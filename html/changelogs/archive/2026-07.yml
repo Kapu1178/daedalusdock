@@ -4,3 +4,9 @@
       consistent total healing amount. Report any oddities.
   - refactor: Status effect code is now easier to read and makes more sense. Again,
       report any oddities, the changes are major.
+2026-07-05:
+  Ghommie, MrMelbert, the-sushi, VinylSpiders:
+  - rscadd: Standing on certain movables now visually bumps you up.
+  Rug-Dealer:
+  - rscadd: Due to a bad batch of igniters, welding tools can now fail to start. Chances
+      improve with higher Fine Motor skill.
