@@ -11,3 +11,10 @@
 		PKT_PAYLOAD = payload,
 	)
 
+	#ifdef DEBUG_PACKETS
+	if(islist(source_addr))
+		stack_trace("Packetv2 called with a list as a source addr, did you mean payload?")
+		.[PKT_HEAD_SOURCE_ADDRESS] = null
+		.[PKT_PAYLOAD] = source_addr
+	#endif
+
