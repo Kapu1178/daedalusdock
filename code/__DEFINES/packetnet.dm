@@ -52,15 +52,15 @@
 
 #define PKT_PAYLOAD "payload"
 
-//* PAYLOAD FIELDS*//
-/// Command (type) of a packet
-#define PKT_ARG_CMD "command"
-
 // Legacy fields. Do not use.
 #define LEGACY_PACKET_SOURCE_ADDRESS PKT_HEAD_SOURCE_ADDRESS
 #define LEGACY_PACKET_DESTINATION_ADDRESS PKT_HEAD_DEST_ADDRESS
 #define LEGACY_PACKET_NETCLASS PKT_HEAD_NETCLASS
 #define LEGACY_PACKET_COMMAND PKT_ARG_CMD
+
+//* PAYLOAD FIELDS*//
+/// Command (type) of a packet
+#define PKT_ARG_CMD "command"
 
 // Pagers
 /// Packet arg for pager types

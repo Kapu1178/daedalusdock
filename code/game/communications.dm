@@ -190,6 +190,9 @@ GLOBAL_LIST_EMPTY(freq2icon)
 
 /// Returns a copy of this signal.
 /datum/signal/proc/Copy()
+	var/list/cloned_data = data.Copy()
+	if(cloned_data[PKT_HEAD_VERSION] >= 2)
+		cloned_data[PKT_PAYLOAD] = astype(data[PKT_PAYLOAD], /list)?.Copy()
 	var/datum/signal/clone = new type(author, data.Copy(), transmission_method, logging_data)
 	clone.passed_bridges = src.passed_bridges?.Copy()
 	return clone
