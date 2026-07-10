@@ -233,8 +233,6 @@
 
 	COOLDOWN_RESET(src, hibernating)
 
-	var/atom/signal_sender = payload["user"]
-
 	if("purge" in payload)
 		pressure_checks &= ~EXT_BOUND
 		pump_direction = SIPHONING
@@ -253,7 +251,7 @@
 		var/old_checks = pressure_checks
 		pressure_checks = text2num(payload["checks"])
 		if(pressure_checks != old_checks)
-			investigate_log(" pressure checks were set to [pressure_checks] by [key_name(signal_sender)]",INVESTIGATE_ATMOS)
+			investigate_log(" pressure checks were set to [pressure_checks] by [signal.logging_data?["user_keyname"]]",INVESTIGATE_ATMOS)
 
 	if("checks_toggle" in payload)
 		pressure_checks = (pressure_checks?0:NO_BOUND)
@@ -265,13 +263,13 @@
 		var/old_pressure = internal_pressure_bound
 		internal_pressure_bound = clamp(text2num(payload["set_internal_pressure"]),0,ONE_ATMOSPHERE*50)
 		if(old_pressure != internal_pressure_bound)
-			investigate_log(" internal pressure was set to [internal_pressure_bound] by [key_name(signal_sender)]",INVESTIGATE_ATMOS)
+			investigate_log(" internal pressure was set to [internal_pressure_bound] by [signal.logging_data?["user_keyname"]]",INVESTIGATE_ATMOS)
 
 	if("set_external_pressure" in payload)
 		var/old_pressure = external_pressure_bound
 		external_pressure_bound = clamp(text2num(payload["set_external_pressure"]),0,ONE_ATMOSPHERE*50)
 		if(old_pressure != external_pressure_bound)
-			investigate_log(" external pressure was set to [external_pressure_bound] by [key_name(signal_sender)]",INVESTIGATE_ATMOS)
+			investigate_log(" external pressure was set to [external_pressure_bound] by [signal.logging_data?["user_keyname"]]",INVESTIGATE_ATMOS)
 
 	if("reset_external_pressure" in payload)
 		external_pressure_bound = ONE_ATMOSPHERE

@@ -116,9 +116,12 @@ GLOBAL_LIST_EMPTY(atmos_air_controllers)
 	// Ask things around us to update.
 	// Due to how signal datums work this is unoptimized but as long as our freq isnt terribly populated we should be fine.
 	// Also, we dont need to prompt sensors and meters since they already broadcast every process_atmos().
-	var/datum/signal/update_request = new(src, packetv2(payload = list("sigtype" = "command", "user" = usr, "status" = TRUE ,"tag" = "[new_id]_in")))
+	var/datum/signal/update_request = new(src, packetv2(payload = list("sigtype" = "command", "status" = TRUE ,"tag" = "[new_id]_in")))
+	update_request.logging_data = list("user_keyname" = key_name(usr))
 	radio_connection.post_signal(update_request, filter = RADIO_ATMOSIA)
-	update_request = new(src, packetv2(payload = list("sigtype" = "command", "user" = usr, "status" = TRUE ,"tag" = "[new_id]_out")))
+
+	update_request = new(src, packetv2(payload = list("sigtype" = "command", "status" = TRUE ,"tag" = "[new_id]_out")))
+	update_request.logging_data = list("user_keyname" = key_name(usr))
 	radio_connection.post_signal(update_request, filter = RADIO_ATMOSIA)
 
 	return TRUE
@@ -164,7 +167,8 @@ GLOBAL_LIST_EMPTY(atmos_air_controllers)
 	if(. || !radio_connection || !(control || reconnecting))
 		return
 
-	var/datum/signal/signal = new(src, packetv2(payload = list("sigtype" = "command", "user" = usr)))
+	var/datum/signal/signal = new(src, packetv2(payload = list("sigtype" = "command")))
+	signal.logging_data = list("user_keyname" = key_name(usr))
 	switch(action)
 		if("reconnect")
 			return reconnect(usr)

@@ -3,12 +3,12 @@
 
 /// A wrapper to generate basic, minimally-compliant data packets easily.
 /// Returns a `datum/signal` with prefilled `s_addr` and `d_addr` added to `datagram`
-/obj/machinery/proc/create_signal(destination_id, list/payload, net_class = src.net_class)
+/obj/machinery/proc/create_signal(destination_id, list/payload, net_class = src.net_class, transmission_method = TRANSMISSION_WIRE)
 	if(!payload || !destination_id)
 		return //Unfortunately /dev/null isn't network-scale.
 
 	var/list/sig_data = packetv2(net_id, destination_id, net_class = net_class, payload = payload)
-	return new /datum/signal(src, sig_data, TRANSMISSION_WIRE)
+	return new /datum/signal(src, sig_data, transmission_method)
 
 
 /// Send a signal from a ref. Data sent in signals must be dereferenced.

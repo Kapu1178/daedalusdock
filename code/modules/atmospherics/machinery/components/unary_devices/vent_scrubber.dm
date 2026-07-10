@@ -264,8 +264,6 @@
 	var/old_scrubbing = scrubbing
 	var/old_filter_length = length(filter_types)
 
-	var/atom/signal_sender = payload["user"]
-
 	if("power" in payload)
 		on = text2num(payload["power"])
 	if("power_toggle" in payload)
@@ -282,7 +280,7 @@
 		scrubbing = !scrubbing
 
 	if(scrubbing != old_scrubbing)
-		investigate_log(" was toggled to [scrubbing ? "scrubbing" : "siphon"] mode by [key_name(signal_sender)]",INVESTIGATE_ATMOS)
+		investigate_log(" was toggled to [scrubbing ? "scrubbing" : "siphon"] mode by [signal.logging_data?["user_keyname"]]",INVESTIGATE_ATMOS)
 
 	if("toggle_filter" in payload)
 		toggle_filters(payload["toggle_filter"])

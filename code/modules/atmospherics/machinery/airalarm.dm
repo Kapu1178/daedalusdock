@@ -507,7 +507,8 @@ TYPEINFO_DEF(/obj/machinery/airalarm)
 	if(!radio_connection)
 		return FALSE
 
-	var/datum/signal/signal = new(src, packetv2(payload = list("tag" = "target", "sigtype" = "command", "user" = user)))
+	var/datum/signal/signal = new(src, packetv2(payload = list("tag" = "target", "sigtype" = "command")))
+	signal.logging_data = list("user_keyname" = key_name(usr))
 	radio_connection.post_signal(signal, RADIO_FROM_AIRALARM)
 	return TRUE
 
