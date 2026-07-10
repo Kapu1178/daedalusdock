@@ -47,6 +47,8 @@
 
 #define PKT_HEAD_PROTOCOL "proto"
 	#define PKT_PROTOCOL_PDP "pdp"
+	/// The generic protocol that isn't really a protocol.
+	#define PKT_PROTOCOL_VEIP "very_easily_interpreted_protocol"
 
 #define PKT_PAYLOAD "payload"
 
@@ -59,15 +61,6 @@
 #define LEGACY_PACKET_DESTINATION_ADDRESS PKT_HEAD_DEST_ADDRESS
 #define LEGACY_PACKET_NETCLASS PKT_HEAD_NETCLASS
 #define LEGACY_PACKET_COMMAND PKT_ARG_CMD
-
-/// Source (sender) address of a packet
-#define PACKET_SOURCE_ADDRESS "s_addr"
-/// Destination (receiver) address of a packet
-#define PACKET_DESTINATION_ADDRESS "d_addr"
-/// Command (type) of a packet
-#define PACKET_CMD "command"
-/// Network Class of a device, used as part of ping replies.
-#define PACKET_NETCLASS "netclass"
 
 // Pagers
 /// Packet arg for pager types

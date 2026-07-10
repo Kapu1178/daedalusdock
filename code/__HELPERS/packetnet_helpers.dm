@@ -1,5 +1,5 @@
 /// Returns the data field for a packet.
-/proc/packetv2(source_addr, dest_addr, source_port, dest_port, netclass, protocol, list/payload) as /list
+/proc/packetv2(source_addr, dest_addr, source_port, dest_port, netclass, protocol = PKT_PROTOCOL_VEIP, list/payload) as /list
 	. = list(
 		PKT_HEAD_VERSION = 2,
 		PKT_HEAD_SOURCE_ADDRESS = source_addr,
