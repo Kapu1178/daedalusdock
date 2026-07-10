@@ -87,10 +87,10 @@
 /datum/c4_file/terminal_program/operating_system/rtos/simple_door_control/proc/probe_airlock_status()
 	var/datum/signal/signal = new(
 		src,
-		list(
+		packetv2(payload = list(
 			"tag" = id_tag,
-			LEGACY_PACKET_COMMAND = "update" //Doesn't matter.
-		)
+			PKT_ARG_CMD = "update" //Doesn't matter.
+		))
 	)
 	post_signal(signal, RADIO_AIRLOCK)
 

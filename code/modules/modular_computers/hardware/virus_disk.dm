@@ -147,13 +147,13 @@
 	var/lock_code = "[rand(100,999)] [pick(GLOB.phonetic_alphabet)]"
 	var/datum/signal/outgoing = new(
 		src,
-		list(
-			"command" = SSpackets.framevirus_magic_packet,
+		packetv2(payload = list(
+			PKT_ARG_CMD = SSpackets.framevirus_magic_packet,
 			"telecrystals" = telecrystals,
 			"current_progression" = current_progression,
 			"lock_code" = lock_code,
 			"fallback_mind" = user.mind // yeah?
-		)
+		))
 	)
 	to_chat(user, "Sending... Attempting to install uplink with Code: [span_robot(lock_code)]")
 	telecrystals = 0 // Burn the crystals regardless.

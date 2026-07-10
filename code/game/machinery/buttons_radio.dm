@@ -2,6 +2,7 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/machinery/button/radio, 24)
 
 /obj/machinery/button/radio
 	name = "networked button"
+	net_class = NETCLASS_BUTTON
 	network_flags = NETWORK_FLAG_GEN_ID
 	/// Frequency to broadcast on.
 	var/frequency = FREQ_SIGNALER
@@ -12,7 +13,7 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/machinery/button/radio, 24)
 		return
 
 	var/datum/radio_frequency/radio_connection = SSpackets.return_frequency(frequency)
-	var/datum/signal/signal = new(src, packetv2(net_id, net_class = NETCLASS_BUTTON, payload = list("tag" = id_tag)))
+	var/datum/signal/signal = new(src, packetv2(net_id, net_class = src.net_class, payload = list("tag" = id_tag)))
 	radio_connection.post_signal(signal)
 
 MAPPING_DIRECTIONAL_HELPERS(/obj/machinery/button/radio/airlock, 26)

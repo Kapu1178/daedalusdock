@@ -23,10 +23,10 @@
 
 	var/datum/signal/signal = new(
 		src,
-		list(
+		packetv2(payload = list(
 			"tag" = id_tag,
-			LEGACY_PACKET_COMMAND = NETCMD_UPDATE_REQUEST,
-		)
+			PKT_ARG_CMD = NETCMD_UPDATE_REQUEST,
+		))
 	)
 	post_signal(signal)
 
@@ -74,21 +74,21 @@
 /datum/c4_file/terminal_program/operating_system/rtos/slave/proc/handle_cardscan(datum/signal/packet)
 	var/datum/signal/signal = new(
 		src,
-		list(
+		packetv2(payload = list(
 			"tag" = id_tag,
-			LEGACY_PACKET_COMMAND = NETCMD_ECSLAVE_ACCESS,
+			PKT_ARG_CMD = NETCMD_ECSLAVE_ACCESS,
 			"packet" = list2params(packet.data)
-		)
+		))
 	)
 	post_signal(signal)
 
 /datum/c4_file/terminal_program/operating_system/rtos/slave/std_in(text)
 	var/datum/signal/signal = new(
 		src,
-		list(
+		packetv2(payload = list(
 			"tag" = id_tag,
-			LEGACY_PACKET_COMMAND = "key",
+			PKT_ARG_CMD = "key",
 			"key" = text
-		)
+		))
 	)
 	post_signal(signal)

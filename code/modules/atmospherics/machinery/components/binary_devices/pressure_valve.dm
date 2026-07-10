@@ -109,13 +109,13 @@
 	if(!radio_connection)
 		return
 
-	var/datum/signal/signal = new(src, list(
+	var/datum/signal/signal = new(src, packetv2(payload = list(
 		"tag" = id,
 		"device" = "AGP",
 		"power" = on,
 		"target_output" = target_pressure,
 		"sigtype" = "status"
-	))
+	)))
 	radio_connection.post_signal(signal, filter = RADIO_ATMOSIA)
 
 /obj/machinery/atmospherics/components/binary/pressure_valve/relaymove(mob/living/user, direction)

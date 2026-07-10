@@ -2,6 +2,7 @@
 
 // This code allows for airlocks to be controlled externally by setting an id_tag and comm frequency (disables ID access)
 /obj/machinery/door/airlock
+	net_class = NETCLASS_AIRLOCK
 	/// The current state of the airlock, used to construct the airlock overlays
 	var/airlock_state
 	var/frequency
@@ -63,12 +64,12 @@
 
 /obj/machinery/door/airlock/proc/send_status()
 	if(radio_connection)
-		var/datum/signal/signal = new(src, list(
+		var/datum/signal/signal = new(src, packetv2(payload = list(
 			"tag" = id_tag,
 			"timestamp" = world.time,
 			"door_status" = density ? "closed" : "open",
 			"lock_status" = locked ? "locked" : "unlocked"
-		))
+		)))
 		radio_connection.post_signal(signal, range = AIRLOCK_CONTROL_RANGE, filter = RADIO_AIRLOCK)
 
 
@@ -134,10 +135,10 @@
 	. = ..()
 	if(.)
 		return
-	var/datum/signal/signal = new(src, list(
+	var/datum/signal/signal = new(src, packetv2(payload = list(
 		"tag" = master_tag,
-		"command" = "cycle"
-	))
+		PKT_ARG_CMD = "cycle"
+	)))
 
 	radio_connection.post_signal(signal, range = AIRLOCK_CONTROL_RANGE, filter = RADIO_AIRLOCK)
 	z_flick("airlock_sensor_cycle", src)
@@ -148,11 +149,11 @@
 		var/pressure = round(air_sample.returnPressure(),0.1)
 		alert = (pressure < ONE_ATMOSPHERE*0.8)
 
-		var/datum/signal/signal = new(src, list(
+		var/datum/signal/signal = new(src, packetv2(payload = list(
 			"tag" = id_tag,
 			"timestamp" = world.time,
 			"pressure" = num2text(pressure)
-		))
+		)))
 
 		radio_connection.post_signal(signal, range = AIRLOCK_CONTROL_RANGE, filter = RADIO_AIRLOCK)
 

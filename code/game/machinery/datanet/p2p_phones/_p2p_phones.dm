@@ -606,16 +606,24 @@
 
 
 	//Bundle up what we care about.
-	var/datum/signal/v_signal = new(src, null, TRANSMISSION_WIRE)
+	var/datum/signal/v_signal = new(
+		src,
+		packetv2(
+			null,
+			callstation.active_caller[CALLER_NETID],
+			payload = list(
+				"command" = "tel_voicedata",
+				"virtualspeaker" = v_speaker, //This is a REAL REFERENCE. Packet MUST be discarded.
+				"message" = message,
+				"spans" = spans,
+				"language" = language,
+				"message_mods" = message_mods,
+			)
+		),
+		TRANSMISSION_WIRE
+	)
+
 	v_signal.has_magic_data = MAGIC_DATA_INVIOLABLE //We're sending a virtual speaker. This packet MUST be discarded.
-	v_signal.data[LEGACY_PACKET_SOURCE_ADDRESS] = null  //(Set by post_signal), Just setting it to null means it's always first in the list.
-	v_signal.data[LEGACY_PACKET_DESTINATION_ADDRESS] = callstation.active_caller[CALLER_NETID]
-	v_signal.data["command"] = "tel_voicedata"
-	v_signal.data["virtualspeaker"] = v_speaker //This is a REAL REFERENCE. Packet MUST be discarded.
-	v_signal.data["message"] = message
-	v_signal.data["spans"] = spans
-	v_signal.data["language"] = language
-	v_signal.data["message_mods"] = message_mods
 
 	//Send it off to the next phone.
 	callstation.post_signal(v_signal)

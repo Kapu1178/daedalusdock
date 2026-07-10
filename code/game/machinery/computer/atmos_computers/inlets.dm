@@ -32,22 +32,22 @@
 	if(!radio_connection)
 		return
 
-	var/datum/signal/signal = new(src, list(
+	var/datum/signal/signal = new(src, packetv2(payload = list(
 		"tag" = id_tag,
 		"sigtype" = "status",
 		"device" = "AO",
 		"power" = on,
 		"volume_rate" = volume_rate,
 		"timestamp" = world.time,
-	))
+	)))
 	radio_connection.post_signal(signal)
 
 /obj/machinery/atmospherics/components/unary/outlet_injector/monitored/proc/broadcast_destruction(frequency)
-	var/datum/signal/signal = new(null, list(
+	var/datum/signal/signal = new(null, packetv2(payload = list(
 		"sigtype" = "destroyed",
 		"tag" = id_tag,
 		"timestamp" = world.time,
-	))
+	)))
 	var/datum/radio_frequency/connection = SSpackets.return_frequency(frequency)
 	connection.post_signal(signal, filter = RADIO_ATMOSIA)
 

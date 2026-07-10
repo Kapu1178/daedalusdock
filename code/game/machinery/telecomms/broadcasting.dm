@@ -64,6 +64,7 @@
 
 /datum/signal/subspace/New(data)
 	src.data = data || list()
+	src.data[PKT_PAYLOAD] ||= list()
 
 /datum/signal/subspace/Copy()
 	var/datum/signal/subspace/copy = new

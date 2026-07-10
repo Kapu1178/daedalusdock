@@ -155,7 +155,7 @@
 	for(var/gas_id in ASSORTED_GASES)
 		f_types += list(list("gas_id" = gas_id, "gas_name" = gas_id, "enabled" = (gas_id in filter_types)))
 
-	var/datum/signal/signal = new(src, list(
+	var/datum/signal/signal = new(src, packetv2(payload = list(
 		"tag" = id_tag,
 		"frequency" = frequency,
 		"device" = "VS",
@@ -165,7 +165,7 @@
 		"quicksucc" = quicksucc,
 		"filter_types" = f_types,
 		"sigtype" = "status"
-	))
+	)))
 
 	var/area/scrub_area = get_area(src)
 	if(!GLOB.air_scrub_names[id_tag])

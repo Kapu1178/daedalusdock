@@ -383,13 +383,13 @@
 /datum/c4_file/terminal_program/operating_system/rtos/pincode_door/proc/send_slave_update()
 	var/datum/signal/signal = new(
 		src,
-		list(
+		packetv2(payload = list(
 			"tag" = tag_slave,
-			LEGACY_PACKET_COMMAND = NETCMD_UPDATE_DATA,
+			PKT_ARG_CMD = NETCMD_UPDATE_DATA,
 			PACKET_ARG_TEXTBUFFER = list2params(print_history),
 			PACKET_ARG_DISPLAY = display_icon,
 			PACKET_ARG_LEDS = display_indicators
-		)
+		))
 	)
 	post_signal(signal)
 

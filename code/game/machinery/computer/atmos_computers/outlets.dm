@@ -24,11 +24,11 @@
 		radio_connection = SSpackets.add_object(src, new_frequency, RADIO_ATMOSIA)
 
 /obj/machinery/atmospherics/components/unary/vent_pump/siphon/monitored/proc/broadcast_destruction(frequency)
-	var/datum/signal/signal = new(null, list(
+	var/datum/signal/signal = new(null, packetv2(payload = list(
 		"sigtype" = "destroyed",
 		"tag" = id_tag,
 		"timestamp" = world.time,
-	))
+	)))
 	var/datum/radio_frequency/connection = SSpackets.return_frequency(frequency)
 	connection.post_signal(signal, filter = RADIO_ATMOSIA)
 
@@ -151,11 +151,11 @@
 		radio_connection = SSpackets.add_object(src, new_frequency, RADIO_ATMOSIA)
 
 /obj/machinery/atmospherics/components/unary/vent_pump/high_volume/siphon/monitored/proc/broadcast_destruction(frequency)
-	var/datum/signal/signal = new(null, list(
+	var/datum/signal/signal = new(null, packetv2(payload = list(
 		"sigtype" = "destroyed",
 		"tag" = id_tag,
 		"timestamp" = world.time,
-	))
+	)))
 	var/datum/radio_frequency/connection = SSpackets.return_frequency(frequency)
 	connection.post_signal(signal, filter = RADIO_ATMOSIA)
 

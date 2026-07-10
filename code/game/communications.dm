@@ -184,7 +184,11 @@ GLOBAL_LIST_EMPTY(freq2icon)
 	if(islist(author))
 		stack_trace("Something is using the old signal/New() argument order!")
 		src.data = author
+
 	src.data = data || list()
+	if(!islist(data[PKT_PAYLOAD]))
+		data[PKT_PAYLOAD] = list()
+
 	src.transmission_method = transmission_method
 	src.logging_data = logging_data
 

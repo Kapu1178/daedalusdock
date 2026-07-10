@@ -27,11 +27,11 @@
 	return ..()
 
 /obj/machinery/air_sensor/proc/broadcast_destruction(frequency)
-	var/datum/signal/signal = new(null, list(
+	var/datum/signal/signal = new(null, packetv2(payload = list(
 		"sigtype" = "destroyed",
 		"tag" = id_tag,
 		"timestamp" = world.time,
-	))
+	)))
 	var/datum/radio_frequency/connection = SSpackets.return_frequency(frequency)
 	connection.post_signal(signal, filter = RADIO_ATMOSIA)
 
@@ -44,10 +44,10 @@
 		return
 
 	var/datum/gas_mixture/air_sample = unsafe_return_air()
-	var/datum/signal/signal = new(src, list(
+	var/datum/signal/signal = new(src, packetv2(payload = list(
 		"sigtype" = "status",
 		"tag" = id_tag,
 		"timestamp" = world.time,
 		"gasmix" = gas_mixture_parser(air_sample),
-	))
+	)))
 	radio_connection.post_signal(signal, filter = RADIO_ATMOSIA)

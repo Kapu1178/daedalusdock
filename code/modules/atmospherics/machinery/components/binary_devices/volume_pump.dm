@@ -110,13 +110,13 @@
 	if(!radio_connection)
 		return
 
-	var/datum/signal/signal = new(src, list(
+	var/datum/signal/signal = new(src, packetv2(payload = list(
 		"tag" = id,
 		"device" = "APV",
 		"power" = on,
 		"transfer_rate" = transfer_rate,
 		"sigtype" = "status"
-	))
+	)))
 	radio_connection.post_signal(signal)
 
 /obj/machinery/atmospherics/components/binary/volume_pump/ui_interact(mob/user, datum/tgui/ui)

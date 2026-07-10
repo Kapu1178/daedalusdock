@@ -153,7 +153,7 @@
 	if(!radio_connection)
 		return
 
-	var/datum/signal/signal = new(src, list(
+	var/datum/signal/signal = new(src, packetv2(payload = list(
 		"tag" = id,
 		"device" = "ADVP",
 		"power" = on,
@@ -163,7 +163,7 @@
 		"output" = output_pressure_max,
 		"external" = external_pressure_bound,
 		"sigtype" = "status"
-	))
+	)))
 
 	var/area/vent_area = get_area(src)
 	if(!GLOB.air_vent_names[id_tag])
