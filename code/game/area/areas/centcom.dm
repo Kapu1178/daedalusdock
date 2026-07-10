@@ -250,5 +250,7 @@ The areas used here are STRICTLY on the CC Z level.
 	name = "\improper Bomb Testing Asteroid"
 
 /area/centcom/theatre
-	name = "The Theatre"
+	name = "Mind's Eye Theatre"
 
+	#warn todo
+	ambientsounds = list()
