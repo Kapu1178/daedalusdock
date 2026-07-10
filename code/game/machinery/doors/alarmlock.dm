@@ -31,8 +31,9 @@
 	if(machine_stat & (NOPOWER|BROKEN))
 		return
 
-	var/alarm_area = signal.data["zone"]
-	var/alert = signal.data["alert"]
+	var/list/payload = signal.data[PKT_PAYLOAD]
+	var/alarm_area = payload["zone"]
+	var/alert = payload["alert"]
 
 	if(alarm_area == get_area_name(src))
 		switch(alert)

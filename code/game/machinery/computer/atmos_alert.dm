@@ -66,8 +66,9 @@
 	if(!signal)
 		return
 
-	var/zone = signal.data["zone"]
-	var/severity = signal.data["alert"]
+	var/list/payload = signal.data[PKT_PAYLOAD]
+	var/zone = payload["zone"]
+	var/severity = payload["alert"]
 
 	if(!zone || !severity)
 		return

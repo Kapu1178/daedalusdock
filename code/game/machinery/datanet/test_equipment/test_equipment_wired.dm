@@ -17,8 +17,8 @@
 	. = ..()
 	if(.)
 		return
-	transmission_terminal.post_signal(create_signal(NET_ADDRESS_PING, list()))
 
+	transmission_terminal.post_signal(create_signal(NET_ADDRESS_PING, list()))
 
 /obj/machinery/test_equipment/wired/say_emphasis(input)
 	//Fuck off and don't decorate debug text

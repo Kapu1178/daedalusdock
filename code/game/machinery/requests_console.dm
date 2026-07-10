@@ -341,7 +341,7 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/machinery/requests_console, 30)
 		))
 		signal.send_to_receivers()
 
-		screen = signal.data["done"] ? REQ_SCREEN_SENT : REQ_SCREEN_ERR
+		screen = signal.data[PKT_PAYLOAD]["done"] ? REQ_SCREEN_SENT : REQ_SCREEN_ERR
 
 	//Handle screen switching
 	if(href_list["setScreen"])

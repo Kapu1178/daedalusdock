@@ -52,17 +52,18 @@
 	connection.post_signal(signal, filter = RADIO_ATMOSIA)
 
 /obj/machinery/atmospherics/components/unary/outlet_injector/monitored/receive_signal(datum/signal/signal)
-	if(!signal.data["tag"] || (signal.data["tag"] != id_tag) || (signal.data["sigtype"]!="command"))
+	var/list/payload = signal.data[PKT_PAYLOAD]
+	if(!payload["tag"] || (payload["tag"] != id_tag) || (payload["sigtype"] != "command"))
 		return
 
-	if("power" in signal.data)
-		on = text2num(signal.data["power"])
+	if("power" in payload)
+		on = text2num(payload["power"])
 
-	if("power_toggle" in signal.data)
+	if("power_toggle" in payload)
 		on = !on
 
 	if("set_volume_rate" in signal.data)
-		var/number = text2num(signal.data["set_volume_rate"])
+		var/number = text2num(payload["set_volume_rate"])
 		var/datum/gas_mixture/air_contents = airs[1]
 		volume_rate = clamp(number, 0, air_contents.volume)
 

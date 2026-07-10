@@ -3,12 +3,11 @@
 
 /// A wrapper to generate basic, minimally-compliant data packets easily.
 /// Returns a `datum/signal` with prefilled `s_addr` and `d_addr` added to `datagram`
-/obj/machinery/proc/create_signal(destination_id, list/datagram)
-	if(!datagram || !destination_id)
+/obj/machinery/proc/create_signal(destination_id, list/payload, net_class = src.net_class)
+	if(!payload || !destination_id)
 		return //Unfortunately /dev/null isn't network-scale.
-	var/list/sig_data = datagram.Copy()
-	sig_data[LEGACY_PACKET_SOURCE_ADDRESS] = src.net_id
-	sig_data[LEGACY_PACKET_DESTINATION_ADDRESS] = destination_id
+
+	var/list/sig_data = packetv2(net_id, destination_id, net_class = net_class, payload = payload)
 	return new /datum/signal(src, sig_data, TRANSMISSION_WIRE)
 
 
@@ -19,8 +18,10 @@
 /obj/machinery/proc/post_signal(datum/signal/sending_signal, preserve_s_addr = FALSE)
 	if(isnull(netjack) || isnull(sending_signal)) //nullcheck for sanic speed
 		return //You need a pipe and something to send down it, though.
+
 	if(!preserve_s_addr)
-		sending_signal.data[LEGACY_PACKET_SOURCE_ADDRESS] = src.net_id
+		sending_signal.data[PKT_HEAD_SOURCE_ADDRESS] = src.net_id
+
 	sending_signal.transmission_method = TRANSMISSION_WIRE
 	sending_signal.author = WEAKREF(src) // Override the sending signal author.
 	src.netjack.post_signal(sending_signal)
@@ -30,17 +31,24 @@
 	. = ..() //Should the subtype *probably* stop caring about this packet?
 	if(isnull(signal))
 		return
+
+	if(!is_operational)
+		return RECEIVE_SIGNAL_FINISHED
+
 	var/sigdat = signal.data //cache for sanic speed this joke is getting old.
-	if(sigdat[LEGACY_PACKET_DESTINATION_ADDRESS] != src.net_id)//This packet doesn't belong to us directly
-		if(sigdat[LEGACY_PACKET_DESTINATION_ADDRESS] == NET_ADDRESS_PING)// But it could be a ping, if so, reply
-			var/tmp_filter = sigdat["filter"]
+	if(sigdat[PKT_HEAD_DEST_ADDRESS] != src.net_id)//This packet doesn't belong to us directly
+		if(sigdat[PKT_HEAD_DEST_ADDRESS] == NET_ADDRESS_PING)// But it could be a ping, if so, reply
+			var/tmp_filter = sigdat[PKT_PAYLOAD]["filter"]
 			if(!isnull(tmp_filter) && tmp_filter != net_class)
 				return RECEIVE_SIGNAL_FINISHED
+
 			//Blame kapu for how stupid this looks :3
-			var/payload = list(LEGACY_PACKET_COMMAND=NET_COMMAND_PING_REPLY,LEGACY_PACKET_NETCLASS=src.net_class)
+			var/payload = list(PKT_ARG_CMD = NET_COMMAND_PING_REPLY)
 			if(ping_addition)
 				payload += ping_addition
-			post_signal(create_signal(sigdat[LEGACY_PACKET_SOURCE_ADDRESS],payload))
+
+			post_signal(create_signal(sigdat[PKT_HEAD_SOURCE_ADDRESS], payload = payload, net_class = src.net_class))
+
 		return RECEIVE_SIGNAL_FINISHED//regardless, return 1 so that machines don't process packets not intended for them.
 	return RECEIVE_SIGNAL_CONTINUE // We are the designated recipient of this packet, we need to handle it.
 

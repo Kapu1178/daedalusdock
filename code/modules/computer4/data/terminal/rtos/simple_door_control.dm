@@ -74,12 +74,13 @@
 /datum/c4_file/terminal_program/operating_system/rtos/simple_door_control/proc/update_netstate(datum/signal/packet)
 	//make sure it's updating it's status.
 	// I should probably modify the protocol but it's 5am. suck me.
-	if((packet.data["tag"] != id_tag) && (packet.data["timestamp"]))
+	var/list/payload = packet.data[PKT_PAYLOAD]
+	if((payload["tag"] != id_tag) && (payload["timestamp"]))
 		return
 
 	// We're gonna blindly trust this, We'll validate it someday. Maybe.
-	doorbolt_state = packet.data["lock_status"]
-	dooropen_state = packet.data["door_status"]
+	doorbolt_state = payload["lock_status"]
+	dooropen_state = payload["door_status"]
 
 	redraw_status()
 

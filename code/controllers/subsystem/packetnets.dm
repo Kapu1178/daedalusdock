@@ -323,10 +323,10 @@ SUBSYSTEM_DEF(packets)
 
 /datum/controller/subsystem/packets/proc/ImmediateSubspaceVocalSend(datum/signal/subspace/vocal/packet)
 	// Perform final composition steps on the message.
-	var/message = copytext_char(packet.data["message"], 1, MAX_BROADCAST_LEN)
+	var/message = copytext_char(packet.data[PKT_PAYLOAD]["message"], 1, MAX_BROADCAST_LEN)
 	if(!message)
 		return
-	var/compression = packet.data["compression"]
+	var/compression = packet.data[PKT_PAYLOAD]["compression"]
 	if(compression > 0)
 		message = Gibberish(message, compression >= 30)
 
@@ -382,8 +382,8 @@ SUBSYSTEM_DEF(packets)
 
 	// Render the message and have everybody hear it.
 	// Always call this on the virtualspeaker to avoid issues.
-	var/spans = data["spans"]
-	var/list/message_mods = data["mods"]
+	var/spans = data[PKT_PAYLOAD]["spans"]
+	var/list/message_mods = data[PKT_PAYLOAD]["mods"]
 	var/rendered = virt.compose_message(virt, language, message, frequency, spans)
 
 	for(var/obj/item/radio/radio as anything in receive)

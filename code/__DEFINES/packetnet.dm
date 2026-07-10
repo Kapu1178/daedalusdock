@@ -114,7 +114,7 @@
 
 /// Packet contains volatile data where storing it may cause GC issues.
 /// This means references to atoms, non-trivial datums like virtualspeakers, etc.
-#define MAGIC_DATA_MUST_DISCARD (1<<0)
+#define MAGIC_DATA_TRANSIENT (1<<0)
 
 /// Packet contains data that players should never be able to see *DIRECTLY*.
 /// Re-Interpretation is allowed, This is specifically for arbitrary packet capture applications where raw fields are accessible.

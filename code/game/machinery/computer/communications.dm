@@ -751,13 +751,13 @@
 	if(!frequency)
 		return
 
-	var/datum/signal/status_signal = new(src, list("command" = command))
+	var/datum/signal/status_signal = new(src, packetv2(payload = list(PKT_ARG_CMD = command)))
 	switch(command)
 		if("message")
-			status_signal.data["msg1"] = data1
-			status_signal.data["msg2"] = data2
+			status_signal.data[PKT_PAYLOAD]["msg1"] = data1
+			status_signal.data[PKT_PAYLOAD]["msg2"] = data2
 		if("alert")
-			status_signal.data["picture_state"] = data1
+			status_signal.data[PKT_PAYLOAD]["picture_state"] = data1
 
 	frequency.post_signal(status_signal)
 

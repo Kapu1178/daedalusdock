@@ -250,10 +250,11 @@
 		return TRUE
 
 /obj/machinery/atmospherics/components/unary/vent_scrubber/receive_signal(datum/signal/signal)
-	if(!is_operational || !signal.data["tag"] || (signal.data["tag"] != id_tag) || (signal.data["sigtype"]!="command"))
+	var/list/payload = signal.data[PKT_PAYLOAD]
+	if(!is_operational || !payload["tag"] || (payload["tag"] != id_tag) || (payload["sigtype"]!="command"))
 		return
 
-	if("status" in signal.data)
+	if("status" in payload)
 		broadcast_status()
 		return //do not update_appearance
 
@@ -263,32 +264,32 @@
 	var/old_scrubbing = scrubbing
 	var/old_filter_length = length(filter_types)
 
-	var/atom/signal_sender = signal.data["user"]
+	var/atom/signal_sender = payload["user"]
 
-	if("power" in signal.data)
-		on = text2num(signal.data["power"])
-	if("power_toggle" in signal.data)
+	if("power" in payload)
+		on = text2num(payload["power"])
+	if("power_toggle" in payload)
 		on = !on
 
-	if("quicksucc" in signal.data)
-		quicksucc = text2num(signal.data["quicksucc"])
-	if("toggle_quicksucc" in signal.data)
+	if("quicksucc" in payload)
+		quicksucc = text2num(payload["quicksucc"])
+	if("toggle_quicksucc" in payload)
 		quicksucc = !quicksucc
 
-	if("scrubbing" in signal.data)
-		scrubbing = text2num(signal.data["scrubbing"])
-	if("toggle_scrubbing" in signal.data)
+	if("scrubbing" in payload)
+		scrubbing = text2num(payload["scrubbing"])
+	if("toggle_scrubbing" in payload)
 		scrubbing = !scrubbing
 
 	if(scrubbing != old_scrubbing)
 		investigate_log(" was toggled to [scrubbing ? "scrubbing" : "siphon"] mode by [key_name(signal_sender)]",INVESTIGATE_ATMOS)
 
-	if("toggle_filter" in signal.data)
-		toggle_filters(signal.data["toggle_filter"])
+	if("toggle_filter" in payload)
+		toggle_filters(payload["toggle_filter"])
 
-	if("set_filters" in signal.data)
+	if("set_filters" in payload)
 		filter_types = list()
-		add_filters(signal.data["set_filters"])
+		add_filters(payload["set_filters"])
 
 	broadcast_status()
 	update_appearance()

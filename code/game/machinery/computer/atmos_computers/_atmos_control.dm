@@ -49,9 +49,10 @@ GLOBAL_LIST_EMPTY(atmos_air_controllers)
 	if(!signal)
 		return
 
+	var/list/payload = signal.data[PKT_PAYLOAD]
 	/// The tag of the signal data should be the id_tag var of the atmos object. Format is chamber_role.
 	/// Where chamber is the chamber name and role is one of "sensor", "in", and "out".
-	var/list/tag_data = splittext(signal.data["tag"], "_")
+	var/list/tag_data = splittext(payload["tag"], "_")
 
 	if(length(tag_data) < 2)
 		return
@@ -70,10 +71,10 @@ GLOBAL_LIST_EMPTY(atmos_air_controllers)
 		else
 			return
 
-	if(signal.data["sigtype"] == "status")
+	if(payload["sigtype"] == "status")
 		info_list[tag_data[1]] = signal.data
 
-	if(signal.data["sigtype"] == "destroyed")
+	if(payload["sigtype"] == "destroyed")
 		info_list[tag_data[1]] = null
 
 /obj/machinery/computer/atmos_control/proc/set_frequency(new_frequency)

@@ -182,41 +182,42 @@
 	..()
 
 /obj/machinery/atmospherics/components/binary/dp_vent_pump/receive_signal(datum/signal/signal)
-	if(!signal.data["tag"] || (signal.data["tag"] != id) || (signal.data["sigtype"]!="command"))
+	var/list/payload = signal.data[PKT_PAYLOAD]
+	if(!is_operational || !payload["tag"] || (payload["tag"] != id) || (payload["sigtype"]!="command"))
 		return
 
-	if(("status" in signal.data)) //Send stauts and early return, I'm cargoculting the timer here.
+	if(("status" in payload)) //Send stauts and early return, I'm cargoculting the timer here.
 		broadcast_status()
 		return
 
-	if("power" in signal.data)
-		on = text2num(signal.data["power"])
+	if("power" in payload)
+		on = text2num(payload["power"])
 
-	if("power_toggle" in signal.data)
+	if("power_toggle" in payload)
 		on = !on
 
-	if("set_direction" in signal.data)
-		pump_direction = text2num(signal.data["set_direction"])
+	if("set_direction" in payload)
+		pump_direction = text2num(payload["set_direction"])
 
-	if("checks" in signal.data)
-		pressure_checks = text2num(signal.data["checks"])
+	if("checks" in payload)
+		pressure_checks = text2num(payload["checks"])
 
-	if("purge" in signal.data)
+	if("purge" in payload)
 		pressure_checks &= ~1
 		pump_direction = 0
 
-	if("stabilize" in signal.data)
+	if("stabilize" in payload)
 		pressure_checks |= 1
 		pump_direction = 1
 
-	if("set_input_pressure" in signal.data)
-		input_pressure_min = clamp(text2num(signal.data["set_input_pressure"]),0,MAX_PUMP_PRESSURE)
+	if("set_input_pressure" in payload)
+		input_pressure_min = clamp(text2num(payload["set_input_pressure"]),0,MAX_PUMP_PRESSURE)
 
-	if("set_output_pressure" in signal.data)
-		output_pressure_max = clamp(text2num(signal.data["set_output_pressure"]),0,MAX_PUMP_PRESSURE)
+	if("set_output_pressure" in payload)
+		output_pressure_max = clamp(text2num(payload["set_output_pressure"]),0,MAX_PUMP_PRESSURE)
 
-	if("set_external_pressure" in signal.data)
-		external_pressure_bound = clamp(text2num(signal.data["set_external_pressure"]),0,MAX_PUMP_PRESSURE)
+	if("set_external_pressure" in payload)
+		external_pressure_bound = clamp(text2num(payload["set_external_pressure"]),0,MAX_PUMP_PRESSURE)
 
 	addtimer(CALLBACK(src, PROC_REF(broadcast_status)), 2)
 	update_appearance()

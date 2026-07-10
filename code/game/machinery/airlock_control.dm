@@ -13,10 +13,11 @@
 	if(!signal)
 		return
 
-	if(id_tag != signal.data["tag"] || !signal.data["command"])
+	var/list/payload = signal.data[PKT_PAYLOAD]
+	if(id_tag != payload["tag"] || !payload[PKT_ARG_CMD])
 		return
 
-	switch(signal.data["command"])
+	switch(payload[PKT_ARG_CMD])
 		if("open")
 			open(TRUE)
 

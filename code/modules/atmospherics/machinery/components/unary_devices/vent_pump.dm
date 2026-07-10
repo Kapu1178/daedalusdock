@@ -221,68 +221,69 @@
 	..()
 
 /obj/machinery/atmospherics/components/unary/vent_pump/receive_signal(datum/signal/signal)
-	if(!is_operational || !signal.data["tag"] || (signal.data["tag"] != id_tag) || (signal.data["sigtype"]!="command"))
+	var/list/payload = signal.data[PKT_PAYLOAD]
+	if(!is_operational || !payload["tag"] || (payload["tag"] != id_tag) || (payload["sigtype"]!="command"))
 		return
 
 
 	// Check if we're reporting status, Early return if we are.
-	if("status" in signal.data)
+	if("status" in payload)
 		broadcast_status()
 		return // do not update_appearance if we don't actually do anything.
 
 	COOLDOWN_RESET(src, hibernating)
 
-	var/atom/signal_sender = signal.data["user"]
+	var/atom/signal_sender = payload["user"]
 
-	if("purge" in signal.data)
+	if("purge" in payload)
 		pressure_checks &= ~EXT_BOUND
 		pump_direction = SIPHONING
 
-	if("stabilize" in signal.data)
+	if("stabilize" in payload)
 		pressure_checks |= EXT_BOUND
 		pump_direction = RELEASING
 
-	if("power" in signal.data)
-		on = text2num(signal.data["power"])
+	if("power" in payload)
+		on = text2num(payload["power"])
 
-	if("power_toggle" in signal.data)
+	if("power_toggle" in payload)
 		on = !on
 
-	if("checks" in signal.data)
+	if("checks" in payload)
 		var/old_checks = pressure_checks
-		pressure_checks = text2num(signal.data["checks"])
+		pressure_checks = text2num(payload["checks"])
 		if(pressure_checks != old_checks)
 			investigate_log(" pressure checks were set to [pressure_checks] by [key_name(signal_sender)]",INVESTIGATE_ATMOS)
 
-	if("checks_toggle" in signal.data)
+	if("checks_toggle" in payload)
 		pressure_checks = (pressure_checks?0:NO_BOUND)
 
-	if("direction" in signal.data)
-		pump_direction = text2num(signal.data["direction"])
+	if("direction" in payload)
+		pump_direction = text2num(payload["direction"])
 
-	if("set_internal_pressure" in signal.data)
+	if("set_internal_pressure" in payload)
 		var/old_pressure = internal_pressure_bound
-		internal_pressure_bound = clamp(text2num(signal.data["set_internal_pressure"]),0,ONE_ATMOSPHERE*50)
+		internal_pressure_bound = clamp(text2num(payload["set_internal_pressure"]),0,ONE_ATMOSPHERE*50)
 		if(old_pressure != internal_pressure_bound)
 			investigate_log(" internal pressure was set to [internal_pressure_bound] by [key_name(signal_sender)]",INVESTIGATE_ATMOS)
 
-	if("set_external_pressure" in signal.data)
+	if("set_external_pressure" in payload)
 		var/old_pressure = external_pressure_bound
-		external_pressure_bound = clamp(text2num(signal.data["set_external_pressure"]),0,ONE_ATMOSPHERE*50)
+		external_pressure_bound = clamp(text2num(payload["set_external_pressure"]),0,ONE_ATMOSPHERE*50)
 		if(old_pressure != external_pressure_bound)
 			investigate_log(" external pressure was set to [external_pressure_bound] by [key_name(signal_sender)]",INVESTIGATE_ATMOS)
 
-	if("reset_external_pressure" in signal.data)
+	if("reset_external_pressure" in payload)
 		external_pressure_bound = ONE_ATMOSPHERE
 
-	if("reset_internal_pressure" in signal.data)
+	if("reset_internal_pressure" in payload)
 		internal_pressure_bound = 0
 
-	if("adjust_internal_pressure" in signal.data)
-		internal_pressure_bound = clamp(internal_pressure_bound + text2num(signal.data["adjust_internal_pressure"]),0,ONE_ATMOSPHERE*50)
+	if("adjust_internal_pressure" in payload)
+		internal_pressure_bound = clamp(internal_pressure_bound + text2num(payload["adjust_internal_pressure"]),0,ONE_ATMOSPHERE*50)
 
-	if("adjust_external_pressure" in signal.data)
-		external_pressure_bound = clamp(external_pressure_bound + text2num(signal.data["adjust_external_pressure"]),0,ONE_ATMOSPHERE*50)
+	if("adjust_external_pressure" in payload)
+		external_pressure_bound = clamp(external_pressure_bound + text2num(payload["adjust_external_pressure"]),0,ONE_ATMOSPHERE*50)
 
 		// log_admin("DEBUG \[[world.timeofday]\]: vent_pump/receive_signal: unknown command \"[signal.data["command"]]\"\n[signal.debug_print()]")
 	broadcast_status()

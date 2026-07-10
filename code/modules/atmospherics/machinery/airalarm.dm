@@ -507,12 +507,8 @@ TYPEINFO_DEF(/obj/machinery/airalarm)
 	if(!radio_connection)
 		return FALSE
 
-	var/datum/signal/signal = new(src, command)
-	signal.data["tag"] = target
-	signal.data["sigtype"] = "command"
-	signal.data["user"] = user
+	var/datum/signal/signal = new(src, packetv2(payload = list("tag" = "target", "sigtype" = "command", "user" = user)))
 	radio_connection.post_signal(signal, RADIO_FROM_AIRALARM)
-
 	return TRUE
 
 /obj/machinery/airalarm/proc/get_mode_name(mode_value)
@@ -799,16 +795,16 @@ TYPEINFO_DEF(/obj/machinery/airalarm)
 	if(!frequency)
 		return
 
-	var/datum/signal/alert_signal = new(src, list(
+	var/datum/signal/alert_signal = new(src, packetv2(payload = list(
 		"zone" = get_area_name(src, TRUE),
 		"type" = "Atmospheric"
-	))
+	)))
 	if(alert_level==2)
-		alert_signal.data["alert"] = "severe"
+		alert_signal.data[PKT_PAYLOAD]["alert"] = "severe"
 	else if (alert_level==1)
-		alert_signal.data["alert"] = "minor"
+		alert_signal.data[PKT_PAYLOAD]["alert"] = "minor"
 	else if (alert_level==0)
-		alert_signal.data["alert"] = "clear"
+		alert_signal.data[PKT_PAYLOAD]["alert"] = "clear"
 
 	frequency.post_signal(alert_signal, range = -1)
 
