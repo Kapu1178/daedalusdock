@@ -153,8 +153,7 @@ TYPEINFO_DEF(/obj/item/assembly/signaler)
 		logging_data = "[time] <B>:</B> [usr.key] used [src] @ location ([T.x],[T.y],[T.z]) <B>:</B> [format_frequency(frequency)]/[code]"
 		GLOB.lastsignalers.Add(logging_data)
 
-	var/datum/signal/signal = new(src, packetv2(payload = list("code" = code)), logging_data = logging_data)
-	signal.data[PKT_HEAD_SOURCE_ADDRESS] = net_id
+	var/datum/signal/signal = new(src, packetv2(net_id, payload = list("code" = code)), logging_data = logging_data)
 	radio_connection.post_signal(signal)
 
 /obj/item/assembly/signaler/receive_signal(datum/signal/signal)

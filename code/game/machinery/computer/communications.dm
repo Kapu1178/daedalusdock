@@ -17,6 +17,8 @@
 	circuit = /obj/item/circuitboard/computer/communications
 	light_color = LIGHT_COLOR_BLUE
 
+	network_flags = NETWORK_FLAG_GEN_ID
+
 	/// If the battlecruiser has been called
 	var/static/battlecruiser_called = FALSE
 
@@ -751,7 +753,7 @@
 	if(!frequency)
 		return
 
-	var/datum/signal/status_signal = new(src, packetv2(payload = list(PKT_ARG_CMD = command)))
+	var/datum/signal/status_signal = create_signal(payload = list(PKT_ARG_CMD = command), transmission_method = TRANSMISSION_RADIO)
 	switch(command)
 		if("message")
 			status_signal.data[PKT_PAYLOAD]["msg1"] = data1

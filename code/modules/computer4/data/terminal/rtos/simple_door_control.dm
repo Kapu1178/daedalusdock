@@ -101,18 +101,18 @@
 		if("*") //Toggle Lock
 			signal = new(
 				src,
-				list(
+				packetv2(payload = list(
 					"tag" = id_tag,
 					LEGACY_PACKET_COMMAND = (doorbolt_state == "locked") ? "unlock" : "lock"
-				)
+				))
 			)
 		if("#") //Toggle Open
 			signal = new(
 				src,
-				list(
+				packetv2(payload = list(
 					"tag" = id_tag,
 					LEGACY_PACKET_COMMAND = (dooropen_state == "closed") ? "open" : "close"
-				)
+				))
 			)
 		else //Just probe the airlock to update state.
 			probe_airlock_status()

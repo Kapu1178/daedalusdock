@@ -23,7 +23,6 @@
 
 /obj/machinery/meter/monitored/proc/broadcast_destruction(frequency)
 	var/datum/signal/signal = create_signal(
-		null,
 		payload = list(
 			"sigtype" = "destroyed",
 			"tag" = id_tag,
