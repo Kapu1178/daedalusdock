@@ -3,11 +3,11 @@
 
 /// A wrapper to generate basic, minimally-compliant data packets easily.
 /// Returns a `datum/signal` with prefilled `s_addr` and `d_addr` added to `datagram`
-/obj/machinery/proc/create_signal(destination_id, list/payload, net_class = src.net_class, transmission_method = TRANSMISSION_WIRE)
-	if(!payload || !destination_id)
-		return //Unfortunately /dev/null isn't network-scale.
+/obj/machinery/proc/create_signal(destination_id, list/payload, transmission_method = TRANSMISSION_WIRE) as /datum/signal
+	if(!payload)
+		return
 
-	var/list/sig_data = packetv2(net_id, destination_id, net_class = net_class, payload = payload)
+	var/list/sig_data = packetv2(net_id, destination_id, payload = payload)
 	return new /datum/signal(src, sig_data, transmission_method)
 
 
@@ -47,7 +47,7 @@
 			if(ping_addition)
 				payload += ping_addition
 
-			post_signal(create_signal(sigdat[PKT_HEAD_SOURCE_ADDRESS], payload = payload, net_class = src.net_class))
+			post_signal(create_signal(sigdat[PKT_HEAD_SOURCE_ADDRESS], payload = payload))
 
 		return RECEIVE_SIGNAL_FINISHED//regardless, return 1 so that machines don't process packets not intended for them.
 	return RECEIVE_SIGNAL_CONTINUE // We are the designated recipient of this packet, we need to handle it.

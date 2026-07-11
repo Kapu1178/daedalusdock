@@ -6,6 +6,8 @@
 	icon_state = "gsensor1"
 	resistance_flags = FIRE_PROOF
 
+	network_flags = NETWORK_FLAG_GEN_ID
+
 	var/on = TRUE
 
 	var/frequency = FREQ_ATMOS_STORAGE
@@ -17,11 +19,10 @@
 /obj/machinery/air_sensor/Initialize(mapload)
 	id_tag = chamber_id + "_sensor"
 	SSairmachines.start_processing_machine(src)
-	radio_connection = SSpackets.add_object(src, frequency, RADIO_ATMOSIA)
+	radio_connection = SSpackets.return_frequency(frequency)
 	return ..()
 
 /obj/machinery/air_sensor/Destroy()
-	SSpackets.remove_object(src, frequency)
 	broadcast_destruction(frequency)
 	SSairmachines.stop_processing_machine(src)
 	return ..()

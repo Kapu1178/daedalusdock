@@ -580,7 +580,6 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/machinery/status_display/ai, 32)
 			status_signal.data[PKT_PAYLOAD]["picture_state"] = picture_map[picture.value]
 
 	INVOKE_ASYNC(connected_display, TYPE_PROC_REF(/datum, receive_signal), status_signal)
-	//connected_display.receive_signal(status_signal)
 
 #undef CHARS_PER_LINE
 #undef FONT_SIZE

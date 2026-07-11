@@ -17,6 +17,8 @@ Passive gate is similar to the regular pump except:
 	construction_type = /obj/item/pipe/directional
 	pipe_state = "passivegate"
 	use_power = NO_POWER_USE
+	network_flags = NETWORK_FLAG_GEN_ID
+
 	///Set the target pressure the component should arrive to
 	var/target_pressure = ONE_ATMOSPHERE
 	///Variable for radio frequency
@@ -86,13 +88,13 @@ Passive gate is similar to the regular pump except:
 	if(!radio_connection)
 		return
 
-	var/datum/signal/signal = new(src, packetv2(payload = list(
+	var/datum/signal/signal = create_signal(payload = list(
 		"tag" = id,
 		"device" = "AGP",
 		"power" = on,
 		"target_output" = target_pressure,
 		"sigtype" = "status"
-	)))
+	), transmission_method = TRANSMISSION_RADIO)
 	radio_connection.post_signal(signal, filter = RADIO_ATMOSIA)
 
 /obj/machinery/atmospherics/components/binary/passive_gate/relaymove(mob/living/user, direction)

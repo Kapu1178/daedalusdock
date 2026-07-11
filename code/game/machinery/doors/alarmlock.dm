@@ -7,6 +7,8 @@
 	assemblytype = /obj/structure/door_assembly/door_assembly_public
 	glass = TRUE
 
+	network_flags = NETWORK_FLAG_GEN_ID
+
 	var/datum/radio_frequency/air_connection
 	var/air_frequency = FREQ_ATMOS_ALARMS
 	autoclose = FALSE
@@ -28,7 +30,7 @@
 
 /obj/machinery/door/airlock/alarmlock/receive_signal(datum/signal/signal)
 	..()
-	if(machine_stat & (NOPOWER|BROKEN))
+	if(!is_operational)
 		return
 
 	var/list/payload = signal.data[PKT_PAYLOAD]

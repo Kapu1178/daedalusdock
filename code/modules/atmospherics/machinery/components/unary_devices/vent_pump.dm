@@ -21,6 +21,7 @@
 	shift_underlay_only = FALSE
 	pipe_state = "uvent"
 	vent_movement = VENTCRAWL_ALLOWED | VENTCRAWL_CAN_SEE | VENTCRAWL_ENTRANCE_ALLOWED
+	network_flags = NETWORK_FLAG_GEN_ID
 
 	power_rating = 30000
 
@@ -48,11 +49,10 @@
 	var/can_hibernate = TRUE
 
 /obj/machinery/atmospherics/components/unary/vent_pump/Initialize()
-	if(!id_tag)
-		id_tag = SSpackets.generate_net_id(src)
-
 	SET_TRACKING(__TYPE__)
 	. = ..()
+	if(!id_tag)
+		id_tag = net_id
 
 /obj/machinery/atmospherics/components/unary/vent_pump/Destroy()
 	UNSET_TRACKING(__TYPE__)
@@ -179,7 +179,7 @@
 	if(!radio_connection)
 		return
 
-	var/datum/signal/signal = new(src, packetv2(payload = list(
+	var/datum/signal/signal = create_signal(payload = list(
 		"tag" = id_tag,
 		"frequency" = frequency,
 		"device" = "VP",
@@ -190,7 +190,7 @@
 		"internal" = internal_pressure_bound,
 		"external" = external_pressure_bound,
 		"sigtype" = "status"
-	)))
+	), transmission_method = TRANSMISSION_RADIO)
 
 	var/area/vent_area = get_area(src)
 	if(!GLOB.air_vent_names[id_tag])

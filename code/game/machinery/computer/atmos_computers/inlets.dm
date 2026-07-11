@@ -1,6 +1,9 @@
 /obj/machinery/atmospherics/components/unary/outlet_injector/monitored
 	on = TRUE
 	volume_rate = ATMOS_DEFAULT_VOLUME_PUMP
+
+	network_flags = NETWORK_FLAG_GEN_ID
+
 	/// The unique string that represents which atmos chamber to associate with.
 	var/chamber_id
 	var/frequency = FREQ_ATMOS_STORAGE
@@ -8,7 +11,7 @@
 
 /obj/machinery/atmospherics/components/unary/outlet_injector/monitored/Initialize(mapload)
 	id_tag = chamber_id + "_in"
-	radio_connection = SSpackets.add_object(src, frequency, RADIO_ATMOSIA)
+	radio_connection = SSpackets.return_frequency(frequency)
 	return ..()
 
 /obj/machinery/atmospherics/components/unary/outlet_injector/monitored/atmos_init()
@@ -32,22 +35,22 @@
 	if(!radio_connection)
 		return
 
-	var/datum/signal/signal = new(src, packetv2(payload = list(
+	var/datum/signal/signal = create_signal(payload = list(
 		"tag" = id_tag,
 		"sigtype" = "status",
 		"device" = "AO",
 		"power" = on,
 		"volume_rate" = volume_rate,
 		"timestamp" = world.time,
-	)))
+	), transmission_method = TRANSMISSION_RADIO)
 	radio_connection.post_signal(signal)
 
 /obj/machinery/atmospherics/components/unary/outlet_injector/monitored/proc/broadcast_destruction(frequency)
-	var/datum/signal/signal = new(null, packetv2(payload = list(
+	var/datum/signal/signal = create_signal(payload = list(
 		"sigtype" = "destroyed",
 		"tag" = id_tag,
 		"timestamp" = world.time,
-	)))
+	), transmission_method = TRANSMISSION_RADIO)
 	var/datum/radio_frequency/connection = SSpackets.return_frequency(frequency)
 	connection.post_signal(signal, filter = RADIO_ATMOSIA)
 

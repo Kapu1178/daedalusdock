@@ -18,6 +18,7 @@
 	pipe_state = "scrubber"
 	vent_movement = VENTCRAWL_ALLOWED | VENTCRAWL_CAN_SEE | VENTCRAWL_ENTRANCE_ALLOWED
 	processing_flags = NONE
+	network_flags = NETWORK_FLAG_GEN_ID
 
 	power_rating = 30000
 
@@ -43,9 +44,9 @@
 	var/can_hibernate = TRUE
 
 /obj/machinery/atmospherics/components/unary/vent_scrubber/Initialize()
-	if(!id_tag)
-		id_tag = SSpackets.generate_net_id(src)
 	. = ..()
+	if(!id_tag)
+		id_tag = net_id
 	SET_TRACKING(__TYPE__)
 	for(var/to_filter in filter_types)
 		if(istext(to_filter))
@@ -155,7 +156,7 @@
 	for(var/gas_id in ASSORTED_GASES)
 		f_types += list(list("gas_id" = gas_id, "gas_name" = gas_id, "enabled" = (gas_id in filter_types)))
 
-	var/datum/signal/signal = new(src, packetv2(payload = list(
+	var/datum/signal/signal = create_signal(payload = list(
 		"tag" = id_tag,
 		"frequency" = frequency,
 		"device" = "VS",
@@ -165,7 +166,7 @@
 		"quicksucc" = quicksucc,
 		"filter_types" = f_types,
 		"sigtype" = "status"
-	)))
+	), transmission_method = TRANSMISSION_RADIO)
 
 	var/area/scrub_area = get_area(src)
 	if(!GLOB.air_scrub_names[id_tag])

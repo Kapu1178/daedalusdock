@@ -17,6 +17,8 @@
 	use_power = IDLE_POWER_USE
 	power_rating = 45000
 
+	network_flags = NETWORK_FLAG_GEN_ID
+
 	hide = TRUE
 	initial_volume = ATMOS_DEFAULT_VOLUME_PUMP
 	///Variable for radio frequency
@@ -40,10 +42,9 @@
 	var/radio_filter_out
 
 /obj/machinery/atmospherics/components/binary/dp_vent_pump/Initialize(mapload)
-	if(!id_tag)
-		id_tag = SSpackets.generate_net_id(src)
 	. = ..()
-
+	if(!id_tag)
+		id_tag = net_id
 /obj/machinery/atmospherics/components/binary/dp_vent_pump/Destroy()
 	var/area/vent_area = get_area(src)
 	if(vent_area)
@@ -153,7 +154,7 @@
 	if(!radio_connection)
 		return
 
-	var/datum/signal/signal = new(src, packetv2(payload = list(
+	var/datum/signal/signal = create_signal(payload = list(
 		"tag" = id,
 		"device" = "ADVP",
 		"power" = on,
@@ -163,7 +164,7 @@
 		"output" = output_pressure_max,
 		"external" = external_pressure_bound,
 		"sigtype" = "status"
-	)))
+	), transmission_method = TRANSMISSION_RADIO)
 
 	var/area/vent_area = get_area(src)
 	if(!GLOB.air_vent_names[id_tag])

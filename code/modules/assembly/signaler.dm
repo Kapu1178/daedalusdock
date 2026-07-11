@@ -13,6 +13,8 @@ TYPEINFO_DEF(/obj/item/assembly/signaler)
 	drop_sound = 'sound/items/handling/component_drop.ogg'
 	pickup_sound = 'sound/items/handling/component_pickup.ogg'
 
+	var/net_id
+
 	var/code = DEFAULT_SIGNALER_CODE
 	var/frequency = FREQ_SIGNALER
 	var/datum/radio_frequency/radio_connection
@@ -24,6 +26,16 @@ TYPEINFO_DEF(/obj/item/assembly/signaler)
 
 	/// String containing the last piece of logging data relating to when this signaller has received a signal.
 	var/last_receive_signal_log
+
+/obj/item/assembly/signaler/Initialize(mapload)
+	. = ..()
+	net_id = SSpackets.generate_net_id(src)
+	set_frequency(frequency)
+
+/obj/item/assembly/signaler/Destroy()
+	SSpackets.remove_object(src,frequency)
+	suicider = null
+	. = ..()
 
 /obj/item/assembly/signaler/suicide_act(mob/living/carbon/user)
 	user.visible_message(span_suicide("[user] eats \the [src]! If it is signaled, [user.p_they()] will die!"))
@@ -47,15 +59,6 @@ TYPEINFO_DEF(/obj/item/assembly/signaler)
 	user.suicide_log()
 	playsound(user, 'sound/machines/triple_beep.ogg', ASSEMBLY_BEEP_VOLUME, TRUE)
 	qdel(src)
-
-/obj/item/assembly/signaler/Initialize(mapload)
-	. = ..()
-	set_frequency(frequency)
-
-/obj/item/assembly/signaler/Destroy()
-	SSpackets.remove_object(src,frequency)
-	suicider = null
-	. = ..()
 
 /obj/item/assembly/signaler/activate()
 	if(!..())//cooldown processing
@@ -151,6 +154,7 @@ TYPEINFO_DEF(/obj/item/assembly/signaler)
 		GLOB.lastsignalers.Add(logging_data)
 
 	var/datum/signal/signal = new(src, packetv2(payload = list("code" = code)), logging_data = logging_data)
+	signal.data[PKT_HEAD_SOURCE_ADDRESS] = net_id
 	radio_connection.post_signal(signal)
 
 /obj/item/assembly/signaler/receive_signal(datum/signal/signal)
@@ -178,7 +182,6 @@ TYPEINFO_DEF(/obj/item/assembly/signaler)
 	SSpackets.remove_object(src, frequency)
 	frequency = new_frequency
 	radio_connection = SSpackets.add_object(src, frequency, RADIO_SIGNALER)
-	return
 
 // Embedded signaller used in grenade construction.
 // It's necessary because the signaler doens't have an off state.

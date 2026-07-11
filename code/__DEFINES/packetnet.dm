@@ -29,6 +29,9 @@
 #define NETCLASS_ADAPTER "WNET_BUTTON"
 #define NETCLASS_AIRLOCK "PNET_AIRLOCK"
 
+// Atmos equipment netclasses
+#define NETCLASS_PIPE_METER "PNET_PIPE_METER"
+
 // Packet fields
 // not honestly thrilled with having these be defines but kapu wants it that way
 // I believe every coder is empowered with a right to footgun by our lord Dennis Ritchie
@@ -52,12 +55,6 @@
 	#define PKT_PROTOCOL_VEIP "very_easily_interpreted_protocol"
 
 #define PKT_PAYLOAD "payload"
-
-// Legacy fields. Do not use.
-#define LEGACY_PACKET_SOURCE_ADDRESS PKT_HEAD_SOURCE_ADDRESS
-#define LEGACY_PACKET_DESTINATION_ADDRESS PKT_HEAD_DEST_ADDRESS
-#define LEGACY_PACKET_NETCLASS PKT_HEAD_NETCLASS
-#define LEGACY_PACKET_COMMAND PKT_ARG_CMD
 
 //* PAYLOAD FIELDS*//
 /// Command (type) of a packet
@@ -126,3 +123,6 @@
 #define MAGIC_DATA_INVIOLABLE ALL
 
 #define PACKET_STRING_FILE "packetnet.json"
+
+/// Helper for boilerplate, checks if a packet was bound for the given atom.
+#define PACKET_IS_FOR_US(packet, us) (packet.data[PKT_HEAD_DEST_ADDRESS] == us.network_id)

@@ -19,6 +19,7 @@
 	construction_type = /obj/item/pipe/directional
 	pipe_state = "volumepump"
 	vent_movement = NONE
+	network_flags = NETWORK_FLAG_GEN_ID
 
 	power_rating = 15000
 
@@ -110,13 +111,13 @@
 	if(!radio_connection)
 		return
 
-	var/datum/signal/signal = new(src, packetv2(payload = list(
+	var/datum/signal/signal = create_signal(payload = list(
 		"tag" = id,
 		"device" = "APV",
 		"power" = on,
 		"transfer_rate" = transfer_rate,
 		"sigtype" = "status"
-	)))
+	), transmission_method = TRANSMISSION_RADIO)
 	radio_connection.post_signal(signal)
 
 /obj/machinery/atmospherics/components/binary/volume_pump/ui_interact(mob/user, datum/tgui/ui)

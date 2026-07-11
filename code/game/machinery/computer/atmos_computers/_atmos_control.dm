@@ -11,6 +11,8 @@ GLOBAL_LIST_EMPTY(atmos_air_controllers)
 	circuit = /obj/item/circuitboard/computer/atmos_control
 	light_color = LIGHT_COLOR_CYAN
 
+	network_flags = NETWORK_FLAG_GEN_ID
+
 	var/frequency = FREQ_ATMOS_STORAGE
 	var/datum/radio_frequency/radio_connection
 
@@ -116,11 +118,11 @@ GLOBAL_LIST_EMPTY(atmos_air_controllers)
 	// Ask things around us to update.
 	// Due to how signal datums work this is unoptimized but as long as our freq isnt terribly populated we should be fine.
 	// Also, we dont need to prompt sensors and meters since they already broadcast every process_atmos().
-	var/datum/signal/update_request = new(src, packetv2(payload = list("sigtype" = "command", "status" = TRUE ,"tag" = "[new_id]_in")))
+	var/datum/signal/update_request = create_signal(payload = list("sigtype" = "command", "status" = TRUE ,"tag" = "[new_id]_in"), transmission_method = TRANSMISSION_RADIO)
 	update_request.logging_data = list("user_keyname" = key_name(usr))
 	radio_connection.post_signal(update_request, filter = RADIO_ATMOSIA)
 
-	update_request = new(src, packetv2(payload = list("sigtype" = "command", "status" = TRUE ,"tag" = "[new_id]_out")))
+	update_request = create_signal(payload = list("sigtype" = "command", "status" = TRUE ,"tag" = "[new_id]_out"), transmission_method = TRANSMISSION_RADIO)
 	update_request.logging_data = list("user_keyname" = key_name(usr))
 	radio_connection.post_signal(update_request, filter = RADIO_ATMOSIA)
 

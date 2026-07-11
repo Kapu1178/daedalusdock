@@ -4,6 +4,7 @@
 	icon = 'icons/obj/machines/dominator.dmi'
 	icon_state = "dominator"
 	anchored = FALSE
+
 	var/datum/radio_frequency/radio_connection
 	var/current_frequency = 0
 	var/list/current_data
@@ -86,7 +87,7 @@
 			say("NO DATA TO SEND!")
 			return
 
-		var/datum/signal/packsig = new(src, packetv2(payload = current_data.Copy()), TRANSMISSION_RADIO)
+		var/datum/signal/packsig = create_signal(payload = current_data.Copy(), transmission_method = TRANSMISSION_RADIO)
 		radio_connection.post_signal(packsig, range=send_range)
 		return
 

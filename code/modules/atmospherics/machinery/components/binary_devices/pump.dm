@@ -19,6 +19,7 @@
 	construction_type = /obj/item/pipe/directional
 	pipe_state = "pump"
 	vent_movement = NONE
+	network_flags = NETWORK_FLAG_GEN_ID
 
 	power_rating = 7500
 
@@ -98,13 +99,13 @@
 	if(!radio_connection)
 		return
 
-	var/datum/signal/signal = new(src, packetv2(payload = list(
+	var/datum/signal/signal = create_signal(payload = list(
 		"tag" = id,
 		"device" = "AGP",
 		"power" = on,
 		"target_output" = target_pressure,
 		"sigtype" = "status"
-	)))
+	), transmission_method = TRANSMISSION_RADIO)
 	radio_connection.post_signal(signal, filter = RADIO_ATMOSIA)
 
 /obj/machinery/atmospherics/components/binary/pump/ui_interact(mob/user, datum/tgui/ui)

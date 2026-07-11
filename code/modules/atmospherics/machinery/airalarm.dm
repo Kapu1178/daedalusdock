@@ -92,6 +92,8 @@ TYPEINFO_DEF(/obj/machinery/airalarm)
 	resistance_flags = FIRE_PROOF
 	zmm_flags = ZMM_MANGLE_PLANES
 
+	network_flags = NETWORK_FLAG_GEN_ID
+
 	var/danger_level = 0
 	var/mode = AALARM_MODE_SCRUBBING
 
@@ -507,7 +509,7 @@ TYPEINFO_DEF(/obj/machinery/airalarm)
 	if(!radio_connection)
 		return FALSE
 
-	var/datum/signal/signal = new(src, packetv2(payload = list("tag" = "target", "sigtype" = "command")))
+	var/datum/signal/signal = create_signal(payload = list("tag" = "target", "sigtype" = "command"), transmission_method = TRANSMISSION_RADIO)
 	signal.logging_data = list("user_keyname" = key_name(usr))
 	radio_connection.post_signal(signal, RADIO_FROM_AIRALARM)
 	return TRUE
@@ -796,10 +798,11 @@ TYPEINFO_DEF(/obj/machinery/airalarm)
 	if(!frequency)
 		return
 
-	var/datum/signal/alert_signal = new(src, packetv2(payload = list(
+	var/datum/signal/alert_signal = create_signal(payload = list(
 		"zone" = get_area_name(src, TRUE),
 		"type" = "Atmospheric"
-	)))
+	), transmission_method = TRANSMISSION_RADIO)
+
 	if(alert_level==2)
 		alert_signal.data[PKT_PAYLOAD]["alert"] = "severe"
 	else if (alert_level==1)

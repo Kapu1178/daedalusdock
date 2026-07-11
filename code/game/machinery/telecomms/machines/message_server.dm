@@ -159,7 +159,7 @@ TYPEINFO_DEF(/obj/machinery/blackbox_recorder)
 	if(calibrating) // If we're calibrating, just return, the fancy part of us isn't ready yet.
 		return
 	var/list/sig_data = signal.data //cachemere sweater
-	switch(signal.data[LEGACY_PACKET_COMMAND])
+	switch(signal.data[PKT_PAYLOAD][PKT_ARG_CMD])
 		if(NETCMD_PDAMESSAGE)
 			var/datum/data_pda_message/log_unit = new(sig_data[PKT_HEAD_DEST_ADDRESS], sig_data[PKT_HEAD_SOURCE_ADDRESS], sig_data[PKT_PAYLOAD]["message"])
 			pda_msgs += log_unit
