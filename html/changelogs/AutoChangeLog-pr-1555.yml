@@ -1,0 +1,5 @@
+author: francinum
+delete-after: true
+changes:
+  - refactor: Virtual speakers no longer hold a hard ref to their original speaker,
+      or their radio.
