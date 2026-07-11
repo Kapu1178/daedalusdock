@@ -13,8 +13,6 @@
 
 /datum/c4_file/terminal_program/probe/execute(datum/c4_file/terminal_program/operating_system/thinkdos/system, cmdline)
 	. = ..()
-	if(!.)
-		return
 
 	//If we have a cmdline, skip the printline.
 
