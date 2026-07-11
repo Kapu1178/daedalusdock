@@ -30,7 +30,7 @@
 		log_entries.Cut(1, 2)
 
 	var/datum/comm_log_entry/log = new
-	log.parameters["mobtype"] = signal.virt.source.type
+	log.parameters["mobtype"] = signal.virt.speaker_weakref?.resolve()?.type || "NULL"
 	log.parameters["name"] = payload["name"]
 	log.parameters["job"] = payload["job"]
 	log.parameters["message"] = payload["message"]
