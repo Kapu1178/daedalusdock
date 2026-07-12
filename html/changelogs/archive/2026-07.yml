@@ -10,3 +10,9 @@
   Rug-Dealer:
   - rscadd: Due to a bad batch of igniters, welding tools can now fail to start. Chances
       improve with higher Fine Motor skill.
+2026-07-12:
+  Francinum, Kapu1178:
+  - refactor: Standardized the entire packet network.
+  francinum:
+  - refactor: Virtual speakers no longer hold a hard ref to their original speaker,
+      or their radio.
