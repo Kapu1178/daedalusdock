@@ -58,6 +58,9 @@
 	var/datum/looping_sound/telephone/ring/outgoing/outring_loop
 	COOLDOWN_DECLARE(scan_cooldown)
 
+	/// A payload added to ping responses.
+	var/list/ping_reply_payload
+
 /obj/machinery/telephone/Initialize(mapload)
 	//These need to be above the supercall for color reasons
 	handset = new(src)
@@ -75,7 +78,7 @@
 	. = ..()
 	if(!friendly_name)
 		friendly_name = format_text(astype(get_area(src), /area).name)
-	recalculate_name()
+	update_appearance(UPDATE_NAME)
 
 /obj/machinery/telephone/examine(mob/user)
 	. = ..()
@@ -92,10 +95,14 @@
 	if(user.disco_made_easy("phone_ring", 16, success_text = "The phone begins to ring."))
 		user.playsound_local(src, 'goon/sounds/phone/ring_incoming.ogg', 20, FALSE)
 
-///Recalculate our name.
-/obj/machinery/telephone/proc/recalculate_name()
-	ping_addition = list("user_id"=friendly_name) //Preload this so we can staple this to the ping packet.
+/obj/machinery/telephone/create_ping_reply(datum/signal/ping_signal)
+	. = ..()
+	astype(., /datum/signal)?.data[PKT_PAYLOAD] += ping_reply_payload.Copy()
+
+/obj/machinery/telephone/update_name(updates)
+	ping_reply_payload = list("user_id"=friendly_name)
 	name = "phone - [friendly_name][placard_name ? " - [placard_name]" : null]"
+	return ..()
 
 /obj/machinery/telephone/Destroy()
 	if(!QDELETED(handset))
@@ -195,7 +202,7 @@
 			if(!new_friendly_name)
 				return ITEM_INTERACT_SUCCESS
 			friendly_name = new_friendly_name
-			recalculate_name()
+			update_appearance(UPDATE_NAME)
 
 		if("Set Placard")
 			var/new_placard_name = input(user, "New Placard?", "Re-writing [placard_name]", placard_name) as null|text

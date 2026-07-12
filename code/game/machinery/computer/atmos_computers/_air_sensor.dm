@@ -7,6 +7,7 @@
 	resistance_flags = FIRE_PROOF
 
 	network_flags = NETWORK_FLAG_GEN_ID
+	net_class = NETCLASS_GAS_SENSOR
 
 	var/on = TRUE
 

@@ -19,7 +19,9 @@
 	construction_type = /obj/item/pipe/directional
 	pipe_state = "pump"
 	vent_movement = NONE
+
 	network_flags = NETWORK_FLAG_GEN_ID
+	net_class = NETCLASS_PRESSURE_PUMP
 
 	power_rating = 7500
 

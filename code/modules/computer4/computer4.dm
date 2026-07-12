@@ -20,6 +20,7 @@ TYPEINFO_DEF(/obj/machinery/computer4)
 	zmm_flags = ZMM_MANGLE_PLANES
 
 	network_flags = NETWORK_FLAG_USE_DATATERMINAL // Does not get a net ID
+	net_class = NETCLASS_COMPUTER
 
 	light_inner_range = 0.1
 	light_outer_range = 2

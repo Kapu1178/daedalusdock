@@ -10,7 +10,9 @@
 	construction_type = /obj/item/pipe/directional
 	pipe_state = "pvalve"
 	use_power = NO_POWER_USE
+
 	network_flags = NETWORK_FLAG_GEN_ID
+	net_class = NETCLASS_PRESSURE_VALVE
 
 	///Amount of pressure needed before the valve for it to open
 	var/target_pressure = ONE_ATMOSPHERE

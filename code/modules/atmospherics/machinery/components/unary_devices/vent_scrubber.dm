@@ -18,7 +18,9 @@
 	pipe_state = "scrubber"
 	vent_movement = VENTCRAWL_ALLOWED | VENTCRAWL_CAN_SEE | VENTCRAWL_ENTRANCE_ALLOWED
 	processing_flags = NONE
+
 	network_flags = NETWORK_FLAG_GEN_ID
+	net_class = NETCLASS_VENT_SCRUBBER
 
 	power_rating = 30000
 

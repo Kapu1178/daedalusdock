@@ -21,7 +21,9 @@
 	shift_underlay_only = FALSE
 	pipe_state = "uvent"
 	vent_movement = VENTCRAWL_ALLOWED | VENTCRAWL_CAN_SEE | VENTCRAWL_ENTRANCE_ALLOWED
+
 	network_flags = NETWORK_FLAG_GEN_ID
+	net_class = NETCLASS_VENT_PUMP
 
 	power_rating = 30000
 

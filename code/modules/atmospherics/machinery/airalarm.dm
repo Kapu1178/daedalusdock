@@ -93,6 +93,7 @@ TYPEINFO_DEF(/obj/machinery/airalarm)
 	zmm_flags = ZMM_MANGLE_PLANES
 
 	network_flags = NETWORK_FLAG_GEN_ID
+	net_class = NETCLASS_AIR_ALARM
 
 	var/danger_level = 0
 	var/mode = AALARM_MODE_SCRUBBING

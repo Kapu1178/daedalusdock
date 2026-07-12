@@ -35,20 +35,10 @@
 	if(!is_operational)
 		return RECEIVE_SIGNAL_FINISHED
 
-	var/sigdat = signal.data //cache for sanic speed this joke is getting old.
-	if(sigdat[PKT_HEAD_DEST_ADDRESS] != src.net_id)//This packet doesn't belong to us directly
+	var/list/sigdat = signal.data //cache for sanic speed this joke is getting old.
+	if(sigdat[PKT_HEAD_DEST_ADDRESS] != net_id)//This packet doesn't belong to us directly
 		if(sigdat[PKT_HEAD_DEST_ADDRESS] == NET_ADDRESS_PING)// But it could be a ping, if so, reply
-			var/tmp_filter = sigdat[PKT_PAYLOAD]["filter"]
-			if(!isnull(tmp_filter) && tmp_filter != net_class)
-				return RECEIVE_SIGNAL_FINISHED
-
-			//Blame kapu for how stupid this looks :3
-			var/payload = list(PKT_ARG_CMD = NET_COMMAND_PING_REPLY)
-			if(ping_addition)
-				payload += ping_addition
-
-			post_signal(create_signal(sigdat[PKT_HEAD_SOURCE_ADDRESS], payload = payload))
-
+			handle_ping_signal(signal)
 		return RECEIVE_SIGNAL_FINISHED//regardless, return 1 so that machines don't process packets not intended for them.
 	return RECEIVE_SIGNAL_CONTINUE // We are the designated recipient of this packet, we need to handle it.
 
@@ -57,6 +47,26 @@
 /obj/machinery/proc/receive_wireline_signal(datum/signal/signal, obj/machinery/power/packet_source)
 	//By default this will simply fall through to receive_signal, discarding the extra info.
 	return receive_signal(signal)
+
+/// Upon receiving a ping signal, handle it. By default this responds to the ping.
+/obj/machinery/proc/handle_ping_signal(datum/signal/signal)
+	var/tmp_filter = signal.data[PKT_PAYLOAD]["filter"]
+	if(!isnull(tmp_filter) && tmp_filter != net_class)
+		return FALSE
+
+	var/datum/signal/reply = create_ping_reply(signal)
+	if(reply)
+		post_ping_reply_signal(reply)
+		return TRUE
+	return FALSE
+
+/// Create a response packet to an incoming ping.
+/obj/machinery/proc/create_ping_reply(datum/signal/ping_signal) as /datum/signal
+	return create_signal(ping_signal.data[PKT_HEAD_SOURCE_ADDRESS], payload = list(PKT_ARG_CMD = NET_COMMAND_PING_REPLY))
+
+/// Post a response to a ping.
+/obj/machinery/proc/post_ping_reply_signal(datum/signal/reply)
+	return post_signal(reply)
 
 //Handle the network jack
 

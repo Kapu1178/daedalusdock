@@ -2,7 +2,9 @@
 	on = TRUE
 	volume_rate = ATMOS_DEFAULT_VOLUME_PUMP
 
+
 	network_flags = NETWORK_FLAG_GEN_ID
+	net_class = NETCLASS_OUTLET_INJECTOR
 
 	/// The unique string that represents which atmos chamber to associate with.
 	var/chamber_id

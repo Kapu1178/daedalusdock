@@ -25,6 +25,8 @@
 	var/datum/computer/file/embedded_program/program
 
 	network_flags = NETWORK_FLAG_GEN_ID
+	net_class = NETCLASS_EMBEDDED_CONTROLLER
+
 	name = "embedded controller"
 	density = FALSE
 

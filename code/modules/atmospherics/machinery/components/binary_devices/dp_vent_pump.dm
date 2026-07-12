@@ -18,6 +18,7 @@
 	power_rating = 45000
 
 	network_flags = NETWORK_FLAG_GEN_ID
+	net_class = NETCLASS_DP_VENT_PUMP
 
 	hide = TRUE
 	initial_volume = ATMOS_DEFAULT_VOLUME_PUMP
