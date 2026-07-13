@@ -73,5 +73,6 @@
 		signal.data[PKT_PAYLOAD]["picture_state"] = "radiation"
 	else
 		signal.data[PKT_PAYLOAD][PKT_ARG_CMD] = "shuttle"
+		#warn shuttle command consumer
 
 	frequency.post_signal(signal)

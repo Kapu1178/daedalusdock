@@ -56,8 +56,10 @@
 	SHOULD_CALL_PARENT(FALSE) //We *ARE* the signal poster.
 	if(!powernet || !signal)
 		return //What do you expect me to transmit on, the fucking air?
+
 	if(signal.author.resolve() != connected_machine)
 		CRASH("Data terminal was told to pass a signal from something other than it's master machine?")
+
 	signal.transmission_method = TRANSMISSION_WIRE
 	//Fuck you, we're the author now bitch.
 	signal.author = WEAKREF(src)

@@ -345,6 +345,7 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/machinery/status_display/evac, 32)
 			current_mode = SD_BLANK
 			update_appearance()
 		if("shuttle")
+			#warn shuttle command consumer
 			current_mode = SD_EMERGENCY
 			set_messages("", "")
 		if("message")

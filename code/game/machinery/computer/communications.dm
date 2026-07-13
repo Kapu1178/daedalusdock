@@ -172,7 +172,7 @@
 			var/reason = trim(params["reason"], MAX_MESSAGE_LEN)
 			if (length(reason) < CALL_SHUTTLE_REASON_LENGTH)
 				return
-			SSshuttle.requestEvac(usr, reason)
+			SSshuttle.mobRequestEvac(usr, reason)
 			post_status("shuttle")
 
 		if ("changeSecurityLevel")

@@ -1,6 +1,8 @@
 /datum/shell_command
 	/// Command names.
 	var/list/aliases
+	/// The access required to execute this command, if any.
+	var/list/req_access
 
 	/// How to use this command, usually printed by a "help" command.
 	var/help_text = "N/A"
@@ -9,6 +11,10 @@
 /datum/shell_command/proc/try_exec(command_name, datum/c4_file/terminal_program/operating_system/thinkdos/system, datum/c4_file/terminal_program/program, list/arguments, list/options)
 	if(!(lowertext(command_name) in aliases))
 		return FALSE
+
+	if(req_access && !length(system.current_user.access & req_access))
+		system.print_error("[ANSI_WRAP_BOLD("Error:")] Access denied.")
+		return TRUE
 
 	exec(system, program, arguments, options)
 	return TRUE

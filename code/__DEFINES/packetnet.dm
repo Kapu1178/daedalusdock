@@ -76,6 +76,7 @@
 //* PAYLOAD FIELDS*//
 /// Command (type) of a packet
 #define PKT_ARG_CMD "command"
+#define PKT_ARG_AUTH "auth"
 
 // Pagers
 /// Packet arg for pager types
@@ -91,6 +92,10 @@
 
 // PDA Text Message
 #define NETCMD_PDAMESSAGE "pda_message"
+
+// COMMASTER Commands
+#define NET_COMMAND_CALL_SHUTTLE "call_shuttle"
+	#define PKT_ARG_CALL_REASON "call_reason"
 
 // EC Slave Update Request
 #define NETCMD_UPDATE_REQUEST "update_rq"
