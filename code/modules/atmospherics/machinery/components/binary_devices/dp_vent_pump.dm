@@ -161,11 +161,11 @@
 	radio_connection.post_signal(signal, filter = radio_filter_out)
 
 /obj/machinery/atmospherics/components/binary/dp_vent_pump/atmos_init()
-	default_connection_frequency_inbound_filter = frequency==FREQ_ATMOS_CONTROL?(RADIO_FROM_AIRALARM):null
-	radio_filter_out = frequency==FREQ_ATMOS_CONTROL?(RADIO_TO_AIRALARM):null
+	default_connection_frequency_inbound_filter = connection_frequency ==FREQ_ATMOS_CONTROL?(RADIO_FROM_AIRALARM):null
+	radio_filter_out = connection_frequency ==FREQ_ATMOS_CONTROL?(RADIO_TO_AIRALARM):null
 	// Refreshes the filter on the inbound connection.
-	if(frequency)
-		set_connection_frequency(frequency, filter = default_connection_frequency_inbound_filter)
+	if(connection_frequency)
+		set_connection_frequency(connection_frequency, filter = default_connection_frequency_inbound_filter)
 
 	broadcast_status()
 	..()
@@ -242,11 +242,11 @@
 
 /obj/machinery/atmospherics/components/binary/dp_vent_pump/high_volume/incinerator_ordmix
 	id = INCINERATOR_ORDMIX_DP_VENTPUMP
-	frequency = FREQ_AIRLOCK_CONTROL
+	connection_frequency = FREQ_AIRLOCK_CONTROL
 
 /obj/machinery/atmospherics/components/binary/dp_vent_pump/high_volume/incinerator_atmos
 	id = INCINERATOR_ATMOS_DP_VENTPUMP
-	frequency = FREQ_AIRLOCK_CONTROL
+	connection_frequency = FREQ_AIRLOCK_CONTROL
 
 /obj/machinery/atmospherics/components/binary/dp_vent_pump/high_volume/layer2
 	piping_layer = 2

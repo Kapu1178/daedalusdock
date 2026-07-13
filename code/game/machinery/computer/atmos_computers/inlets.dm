@@ -13,20 +13,15 @@
 
 /obj/machinery/atmospherics/components/unary/outlet_injector/monitored/Initialize(mapload)
 	id_tag = chamber_id + "_in"
-	radio_connection = SSpackets.return_frequency(frequency)
 	return ..()
 
 /obj/machinery/atmospherics/components/unary/outlet_injector/monitored/atmos_init()
 	. = ..()
 	broadcast_status()
 
-/obj/machinery/atmospherics/components/unary/outlet_injector/monitored/Destroy()
-	SSpackets.remove_object(src, frequency)
-	return ..()
-
 /obj/machinery/atmospherics/components/unary/outlet_injector/monitored/on_deconstruction()
 	. = ..()
-	broadcast_destruction(frequency)
+	broadcast_destruction()
 
 /obj/machinery/atmospherics/components/unary/outlet_injector/monitored/ui_act(action, params)
 	. = ..()
@@ -53,8 +48,8 @@
 		"tag" = id_tag,
 		"timestamp" = world.time,
 	), transmission_method = TRANSMISSION_RADIO)
-	var/datum/radio_frequency/connection = SSpackets.return_frequency(frequency)
-	connection.post_signal(signal, filter = RADIO_ATMOSIA)
+
+	radio_connection.post_signal(signal, filter = RADIO_ATMOSIA)
 
 /obj/machinery/atmospherics/components/unary/outlet_injector/monitored/receive_signal(datum/signal/signal)
 	var/list/payload = signal.data[PKT_PAYLOAD]

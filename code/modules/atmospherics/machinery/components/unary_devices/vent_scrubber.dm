@@ -148,7 +148,7 @@
 
 	var/datum/signal/signal = create_signal(payload = list(
 		"tag" = id_tag,
-		"frequency" = frequency,
+		"frequency" = connection_frequency,
 		"device" = "VS",
 		"timestamp" = world.time,
 		"power" = on,
@@ -178,12 +178,12 @@
 	name = "\proper [scrub_area.name] [name] [id_tag]"
 
 /obj/machinery/atmospherics/components/unary/vent_scrubber/atmos_init()
-	default_connection_frequency_inbound_filter = frequency == frequency ? RADIO_FROM_AIRALARM : null
-	radio_filter_out = frequency == frequency ? RADIO_TO_AIRALARM : null
+	default_connection_frequency_inbound_filter = connection_frequency ? RADIO_FROM_AIRALARM : null
+	radio_filter_out = connection_frequency ? RADIO_TO_AIRALARM : null
 
 	// Refreshes the inbound radio filter
-	if(frequency)
-		set_connection_frequency(frequency, filter = default_connection_frequency_inbound_filter)
+	if(connection_frequency)
+		set_connection_frequency(connection_frequency, filter = default_connection_frequency_inbound_filter)
 	broadcast_status()
 	. = ..()
 

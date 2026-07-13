@@ -9,7 +9,6 @@
 
 /obj/machinery/meter/monitored/Initialize()
 	id_tag = chamber_id + "_sensor"
-	radio_connection = SSpackets.return_frequency(frequency)
 	return ..()
 
 /obj/machinery/meter/monitored/Destroy()
@@ -18,9 +17,9 @@
 
 /obj/machinery/meter/monitored/on_deconstruction()
 	. = ..()
-	broadcast_destruction(src.frequency)
+	broadcast_destruction()
 
-/obj/machinery/meter/monitored/proc/broadcast_destruction(frequency)
+/obj/machinery/meter/monitored/proc/broadcast_destruction()
 	var/datum/signal/signal = create_signal(
 		payload = list(
 			"sigtype" = "destroyed",
@@ -29,8 +28,8 @@
 		),
 		transmission_method = TRANSMISSION_RADIO
 	)
-	var/datum/radio_frequency/connection = SSpackets.return_frequency(frequency)
-	connection.post_signal(signal, filter = RADIO_ATMOSIA)
+
+	radio_connection.post_signal(signal, filter = RADIO_ATMOSIA)
 
 /obj/machinery/meter/monitored/process_atmos()
 	. = ..()

@@ -289,8 +289,9 @@ TYPEINFO_DEF(/obj/machinery/airalarm)
 		for(var/id_tag in my_area.air_vent_info)
 			var/long_name = GLOB.air_vent_names[id_tag]
 			var/list/info = my_area.air_vent_info[id_tag]
-			if(!info || info["frequency"] != frequency)
+			if(!info || info["frequency"] != connection_frequency)
 				continue
+
 			data["vents"] += list(list(
 					"id_tag" = id_tag,
 					"long_name" = sanitize(long_name),
@@ -308,7 +309,7 @@ TYPEINFO_DEF(/obj/machinery/airalarm)
 		for(var/id_tag in my_area.air_scrub_info)
 			var/long_name = GLOB.air_scrub_names[id_tag]
 			var/list/info = my_area.air_scrub_info[id_tag]
-			if(!info || info["frequency"] != frequency)
+			if(!info || info["frequency"] != connection_frequency)
 				continue
 			data["scrubbers"] += list(list(
 					"id_tag" = id_tag,

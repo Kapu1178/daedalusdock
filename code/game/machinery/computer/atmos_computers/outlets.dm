@@ -12,9 +12,9 @@
 
 /obj/machinery/atmospherics/components/unary/vent_pump/siphon/monitored/on_deconstruction()
 	. = ..()
-	broadcast_destruction(src.frequency)
+	broadcast_destruction()
 
-/obj/machinery/atmospherics/components/unary/vent_pump/siphon/monitored/proc/broadcast_destruction(frequency)
+/obj/machinery/atmospherics/components/unary/vent_pump/siphon/monitored/proc/broadcast_destruction()
 	var/datum/signal/signal = create_signal(payload = list(
 		"sigtype" = "destroyed",
 		"tag" = id_tag,
@@ -116,7 +116,7 @@
 	chamber_id = ATMOS_GAS_MONITOR_ORDNANCE_LAB
 
 /obj/machinery/atmospherics/components/unary/vent_pump/high_volume/siphon/monitored
-	frequency = FREQ_ATMOS_STORAGE
+	connection_frequency = FREQ_ATMOS_STORAGE
 	on = TRUE
 	icon_state = "vent_map_siphon_on-3"
 	var/chamber_id
@@ -126,16 +126,11 @@
 	id_tag = chamber_id + "_out"
 	return ..()
 
-/obj/machinery/atmospherics/components/unary/vent_pump/high_volume/siphon/monitored/Destroy()
-	broadcast_destruction(src.frequency)
-	SSpackets.remove_object(src, frequency)
-	return ..()
-
 /obj/machinery/atmospherics/components/unary/vent_pump/high_volume/siphon/monitored/on_deconstruction()
 	. = ..()
-	broadcast_destruction(src.frequency)
+	broadcast_destruction()
 
-/obj/machinery/atmospherics/components/unary/vent_pump/high_volume/siphon/monitored/proc/broadcast_destruction(frequency)
+/obj/machinery/atmospherics/components/unary/vent_pump/high_volume/siphon/monitored/proc/broadcast_destruction()
 	var/datum/signal/signal = create_signal(payload = list(
 		"sigtype" = "destroyed",
 		"tag" = id_tag,

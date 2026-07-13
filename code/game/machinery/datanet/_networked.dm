@@ -8,7 +8,7 @@
 
 	connection_frequency = new_frequency
 
-	if(frequency)
+	if(connection_frequency)
 		if(join_connection)
 			radio_connection = SSpackets.add_object(src, connection_frequency, filter)
 		else

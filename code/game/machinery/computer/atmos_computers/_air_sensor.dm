@@ -22,18 +22,18 @@
 	return ..()
 
 /obj/machinery/air_sensor/Destroy()
-	broadcast_destruction(frequency)
+	broadcast_destruction()
 	SSairmachines.stop_processing_machine(src)
 	return ..()
 
-/obj/machinery/air_sensor/proc/broadcast_destruction(frequency)
+/obj/machinery/air_sensor/proc/broadcast_destruction()
 	var/datum/signal/signal = create_signal(payload = list(
 		"sigtype" = "destroyed",
 		"tag" = id_tag,
 		"timestamp" = world.time,
 	), transmission_method = TRANSMISSION_RADIO)
-	var/datum/radio_frequency/connection = SSpackets.return_frequency(frequency)
-	connection.post_signal(signal, filter = RADIO_ATMOSIA)
+
+	radio_connection.post_signal(signal, filter = RADIO_ATMOSIA)
 
 /obj/machinery/air_sensor/update_icon_state()
 	icon_state = "gsensor[on]"

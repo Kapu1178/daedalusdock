@@ -177,7 +177,6 @@
 	/// The default filter applied in set_connection_frequency on init.
 	var/default_connection_frequency_inbound_filter
 
-	var/frequency
 	///Used by SSairmachines for optimizing scrubbers and vent pumps.
 	COOLDOWN_DECLARE(hibernating)
 

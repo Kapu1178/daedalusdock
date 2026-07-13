@@ -59,9 +59,6 @@
 	if(vent_area)
 		vent_area.air_vent_info -= id_tag
 		GLOB.air_vent_names -= id_tag
-
-	SSpackets.remove_object(src,frequency)
-	radio_connection = null
 	return ..()
 
 /obj/machinery/atmospherics/components/unary/vent_pump/update_icon_nopipes()
@@ -173,7 +170,7 @@
 
 	var/datum/signal/signal = create_signal(payload = list(
 		"tag" = id_tag,
-		"frequency" = frequency,
+		"frequency" = connection_frequency,
 		"device" = "VP",
 		"timestamp" = world.time,
 		"power" = on,
@@ -205,12 +202,12 @@
 
 /obj/machinery/atmospherics/components/unary/vent_pump/atmos_init()
 	//some vents work his own spesial way
-	default_connection_frequency_inbound_filter = frequency== FREQ_ATMOS_CONTROL ? (RADIO_FROM_AIRALARM):null
-	radio_filter_out = frequency == FREQ_ATMOS_CONTROL ? (RADIO_TO_AIRALARM) : null
+	default_connection_frequency_inbound_filter = connection_frequency == FREQ_ATMOS_CONTROL ? (RADIO_FROM_AIRALARM):null
+	radio_filter_out = connection_frequency == FREQ_ATMOS_CONTROL ? (RADIO_TO_AIRALARM) : null
 
 	// Refreshes the inbound radio filter
-	if(frequency)
-		set_connection_frequency(frequency, filter = default_connection_frequency_inbound_filter)
+	if(connection_frequency)
+		set_connection_frequency(connection_frequency, filter = default_connection_frequency_inbound_filter)
 
 	broadcast_status()
 	..()
