@@ -178,8 +178,8 @@
 	name = "\proper [scrub_area.name] [name] [id_tag]"
 
 /obj/machinery/atmospherics/components/unary/vent_scrubber/atmos_init()
-	default_connection_frequency_inbound_filter = connection_frequency ? RADIO_FROM_AIRALARM : null
-	radio_filter_out = connection_frequency ? RADIO_TO_AIRALARM : null
+	default_connection_frequency_inbound_filter = connection_frequency == FREQ_ATMOS_CONTROL ? RADIO_FROM_AIRALARM : null
+	radio_filter_out = connection_frequency == FREQ_ATMOS_CONTROL ? RADIO_TO_AIRALARM : null
 
 	// Refreshes the inbound radio filter
 	if(connection_frequency)
