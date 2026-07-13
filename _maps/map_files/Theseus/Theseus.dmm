@@ -4769,7 +4769,7 @@
 /obj/effect/mapping_helpers/airlock/locked,
 /obj/machinery/door/airlock/virology{
 	name = "Virology Exterior Airlock";
-	frequency = 1449;
+	connection_frequency = 1449;
 	id_tag = "virology_airlock_exterior";
 	autoclose = 0
 	},
@@ -14355,7 +14355,7 @@
 /obj/effect/mapping_helpers/airlock/locked,
 /obj/machinery/door/airlock/virology{
 	name = "Virology Interior Airlock";
-	frequency = 1449;
+	connection_frequency = 1449;
 	id_tag = "virology_airlock_interior";
 	autoclose = 0
 	},

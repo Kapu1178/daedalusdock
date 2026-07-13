@@ -16286,7 +16286,7 @@
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
 /obj/machinery/door/airlock/virology{
 	name = "Virology Interior Airlock";
-	frequency = 1449;
+	connection_frequency = 1449;
 	id_tag = "virology_airlock_interior";
 	autoclose = 0
 	},
@@ -21654,7 +21654,7 @@
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
 /obj/machinery/door/airlock/virology{
 	name = "Virology Exterior Airlock";
-	frequency = 1449;
+	connection_frequency = 1449;
 	id_tag = "virology_airlock_exterior";
 	autoclose = 0
 	},
