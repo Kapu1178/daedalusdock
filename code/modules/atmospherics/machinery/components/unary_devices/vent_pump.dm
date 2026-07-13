@@ -27,6 +27,9 @@
 
 	power_rating = 30000
 
+	connection_frequency = FREQ_ATMOS_CONTROL
+	default_connection_frequency_inbound_filter = RADIO_ATMOSIA
+
 	///Direction of pumping the gas (RELEASING or SIPHONING)
 	var/pump_direction = RELEASING
 	///Should we check internal pressure, external pressure, both or none? (EXT_BOUND, INT_BOUND, NO_BOUND)
@@ -39,14 +42,8 @@
 	// INT_BOUND: Do not pass internal_pressure_bound
 	// NO_BOUND: Do not pass either
 
-	///Frequency id for connecting to the NTNet
-	var/frequency = FREQ_ATMOS_CONTROL
-	///Reference to the radio datum
-	var/datum/radio_frequency/radio_connection
-	///Radio connection to the air alarm
-	var/radio_filter_out
 	///Radio connection from the air alarm
-	var/radio_filter_in
+	var/radio_filter_out
 
 	var/can_hibernate = TRUE
 
@@ -169,13 +166,6 @@
 			pressure_delta = min(pressure_delta, internal_pressure_bound - air_contents.returnPressure()) //increasing the pressure here
 
 	return pressure_delta
-//Radio remote control
-
-/obj/machinery/atmospherics/components/unary/vent_pump/proc/set_frequency(new_frequency)
-	SSpackets.remove_object(src, frequency)
-	frequency = new_frequency
-	if(frequency)
-		radio_connection = SSpackets.add_object(src, frequency, radio_filter_in)
 
 /obj/machinery/atmospherics/components/unary/vent_pump/proc/broadcast_status()
 	if(!radio_connection)
@@ -215,10 +205,13 @@
 
 /obj/machinery/atmospherics/components/unary/vent_pump/atmos_init()
 	//some vents work his own spesial way
-	radio_filter_in = frequency==FREQ_ATMOS_CONTROL?(RADIO_FROM_AIRALARM):null
-	radio_filter_out = frequency==FREQ_ATMOS_CONTROL?(RADIO_TO_AIRALARM):null
+	default_connection_frequency_inbound_filter = frequency== FREQ_ATMOS_CONTROL ? (RADIO_FROM_AIRALARM):null
+	radio_filter_out = frequency == FREQ_ATMOS_CONTROL ? (RADIO_TO_AIRALARM) : null
+
+	// Refreshes the inbound radio filter
 	if(frequency)
-		set_frequency(frequency)
+		set_connection_frequency(frequency, filter = default_connection_frequency_inbound_filter)
+
 	broadcast_status()
 	..()
 

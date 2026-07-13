@@ -1,5 +1,18 @@
 #define VALIDATE_WIRED_SIGNAL if(!src.signal){return};if(signal.transmission_method != TRANSMISSION_WIRE){CRASH("Received signal with invalid transport mode for this media!")}
 
+/// Set the radio_connection frequency.
+/obj/machinery/proc/set_connection_frequency(new_frequency, filter)
+	var/join_connection = network_flags & NETWORK_FLAG_USE_DATATERMINAL
+	if(radio_connection && join_connection)
+		SSpackets.remove_object(src, radio_connection.frequency)
+
+	connection_frequency = new_frequency
+
+	if(frequency)
+		if(join_connection)
+			radio_connection = SSpackets.add_object(src, connection_frequency, filter)
+		else
+			radio_connection = SSpackets.return_frequency(connection_frequency)
 
 /// A wrapper to generate basic, minimally-compliant data packets easily.
 /// Returns a `datum/signal` with prefilled `s_addr` and `d_addr` added to `datagram`
@@ -15,16 +28,20 @@
 /// If you're sending a forged source address (You should have a good reason for this...) set `preserve_s_addr = TRUE
 ///
 /// NONE OF THE ABOVE IS TRUE IF YOU ARE `machinery/power`, AS THEY DEAL DIRECTLY WITH SSPACKETS INSTEAD OF ABSTRACTED TERMINALS
-/obj/machinery/proc/post_signal(datum/signal/sending_signal, preserve_s_addr = FALSE)
-	if(isnull(netjack) || isnull(sending_signal)) //nullcheck for sanic speed
+/obj/machinery/proc/post_signal(datum/signal/sending_signal, preserve_s_addr = FALSE, filter)
+	if(isnull(sending_signal))
 		return //You need a pipe and something to send down it, though.
 
 	if(!preserve_s_addr)
 		sending_signal.data[PKT_HEAD_SOURCE_ADDRESS] = src.net_id
 
-	sending_signal.transmission_method = TRANSMISSION_WIRE
 	sending_signal.author = WEAKREF(src) // Override the sending signal author.
-	src.netjack.post_signal(sending_signal)
+	switch(sending_signal.transmission_method)
+		if(TRANSMISSION_RADIO)
+			radio_connection?.post_signal(sending_signal, filter)
+
+		if(TRANSMISSION_WIRE)
+			netjack?.post_signal(sending_signal)
 
 /obj/machinery/receive_signal(datum/signal/signal)
 	SHOULD_CALL_PARENT(TRUE)

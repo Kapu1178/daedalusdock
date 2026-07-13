@@ -162,6 +162,8 @@
 
 	//Datanet related vars.
 
+	/// Primary radio connection
+	var/datum/radio_frequency/radio_connection
 	/// Linked Network Terminal
 	var/obj/machinery/power/data_terminal/netjack
 	/// Network ID, see network_flags for autopopulation info.
@@ -170,7 +172,12 @@
 	var/master_id
 	/// A short string shown to players fingerprinting the device type as part of `command:ping`
 	var/net_class = "PNET_CALL_A_PRIEST"
+	/// The radio_channel frequency this machine is connected to (automatically connects on init).
+	VAR_PROTECTED/connection_frequency
+	/// The default filter applied in set_connection_frequency on init.
+	var/default_connection_frequency_inbound_filter
 
+	var/frequency
 	///Used by SSairmachines for optimizing scrubbers and vent pumps.
 	COOLDOWN_DECLARE(hibernating)
 
@@ -190,6 +197,9 @@
 	if(occupant_typecache)
 		occupant_typecache = typecacheof(occupant_typecache)
 
+
+	if(connection_frequency)
+		set_connection_frequency(connection_frequency, filter = default_connection_frequency_inbound_filter)
 
 	/*
 	 * This is needed to prevent indestructible machinery still blowing up.
@@ -225,6 +235,9 @@
 	unlink_from_jack(ignore_check = TRUE)
 	QDEL_NULL(internal_disk)
 	QDEL_NULL(inserted_disk)
+
+	if(radio_connection && (network_flags & NETWORK_FLAG_JOIN_FREQUENCY))
+		set_connection_frequency(null)
 	return ..()
 
 /**

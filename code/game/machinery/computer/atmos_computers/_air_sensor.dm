@@ -11,8 +11,7 @@
 
 	var/on = TRUE
 
-	var/frequency = FREQ_ATMOS_STORAGE
-	var/datum/radio_frequency/radio_connection
+	connection_frequency = FREQ_ATMOS_STORAGE
 
 	/// The unique string that represents which atmos chamber to associate with.
 	var/chamber_id
@@ -20,7 +19,6 @@
 /obj/machinery/air_sensor/Initialize(mapload)
 	id_tag = chamber_id + "_sensor"
 	SSairmachines.start_processing_machine(src)
-	radio_connection = SSpackets.return_frequency(frequency)
 	return ..()
 
 /obj/machinery/air_sensor/Destroy()

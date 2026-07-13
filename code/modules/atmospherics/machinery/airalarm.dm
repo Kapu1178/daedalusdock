@@ -95,6 +95,9 @@ TYPEINFO_DEF(/obj/machinery/airalarm)
 	network_flags = NETWORK_FLAG_GEN_ID
 	net_class = NETCLASS_AIR_ALARM
 
+	connection_frequency = FREQ_ATMOS_CONTROL
+	default_connection_frequency_inbound_filter = RADIO_TO_AIRALARM
+
 	var/danger_level = 0
 	var/mode = AALARM_MODE_SCRUBBING
 
@@ -120,9 +123,8 @@ TYPEINFO_DEF(/obj/machinery/airalarm)
 	///The current thermostat target temp
 	var/thermostat_target = T20C
 
-	var/frequency = FREQ_ATMOS_CONTROL
 	var/alarm_frequency = FREQ_ATMOS_ALARMS
-	var/datum/radio_frequency/radio_connection
+
 	///Represents a signel source of atmos alarms, complains to all the listeners if one of our thresholds is violated
 	var/datum/alarm_handler/alarm_manager
 
@@ -173,7 +175,6 @@ TYPEINFO_DEF(/obj/machinery/airalarm)
 	RegisterSignal(src, COMSIG_FIRE_ALERT, PROC_REF(handle_alert))
 	update_appearance()
 
-	set_frequency(frequency)
 	AddComponent(/datum/component/usb_port, list(
 		/obj/item/circuit_component/air_alarm,
 	))
@@ -188,7 +189,6 @@ TYPEINFO_DEF(/obj/machinery/airalarm)
 /obj/machinery/airalarm/Destroy()
 	UNSET_TRACKING(__TYPE__)
 	set_area(null)
-	SSpackets.remove_object(src, frequency)
 	SSairmachines.stop_processing_machine(src)
 	QDEL_NULL(wires)
 	QDEL_NULL(alarm_manager)
@@ -500,11 +500,6 @@ TYPEINFO_DEF(/obj/machinery/airalarm)
 		return TRUE
 	else
 		return FALSE
-
-/obj/machinery/airalarm/proc/set_frequency(new_frequency)
-	SSpackets.remove_object(src, frequency)
-	frequency = new_frequency
-	radio_connection = SSpackets.add_object(src, frequency, RADIO_TO_AIRALARM)
 
 /obj/machinery/airalarm/proc/send_signal(target, list/command, atom/user)//sends signal 'command' to 'target'. Returns 0 if no radio connection, 1 otherwise
 	if(!radio_connection)

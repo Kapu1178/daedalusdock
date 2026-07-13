@@ -284,7 +284,10 @@ TYPEINFO_DEF(/obj/item/wallframe/status_display)
 /// Evac display which shows shuttle timer or message set by Command.
 /obj/machinery/status_display/evac
 	current_mode = SD_EMERGENCY
-	var/frequency = FREQ_STATUS_DISPLAYS
+
+	network_flags = NETWORK_FLAG_GEN_ID | NETWORK_FLAG_JOIN_FREQUENCY
+	connection_frequency = FREQ_STATUS_DISPLAYS
+
 	var/friendc = FALSE      // track if Friend Computer mode
 	var/last_picture  // For when Friend Computer mode is undone
 
@@ -297,16 +300,10 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/machinery/status_display/evac, 32)
 
 /obj/machinery/status_display/evac/Initialize(mapload)
 	. = ..()
-	// register for radio system
-	SSpackets.add_object(src, frequency)
 	// Circuit USB
 	AddComponent(/datum/component/usb_port, list(
 		/obj/item/circuit_component/status_display,
 	))
-
-/obj/machinery/status_display/evac/Destroy()
-	SSpackets.remove_object(src,frequency)
-	return ..()
 
 /obj/machinery/status_display/evac/process()
 	if(machine_stat & NOPOWER)

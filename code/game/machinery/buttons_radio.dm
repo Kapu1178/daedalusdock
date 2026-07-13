@@ -4,8 +4,9 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/machinery/button/radio, 24)
 	name = "networked button"
 	net_class = NETCLASS_BUTTON
 	network_flags = NETWORK_FLAG_GEN_ID
+
 	/// Frequency to broadcast on.
-	var/frequency = FREQ_SIGNALER
+	connection_frequency = FREQ_SIGNALER
 
 /obj/machinery/button/radio/try_activate_button(mob/living/user)
 	. = ..()

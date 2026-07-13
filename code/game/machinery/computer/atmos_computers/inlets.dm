@@ -6,10 +6,10 @@
 	network_flags = NETWORK_FLAG_GEN_ID
 	net_class = NETCLASS_OUTLET_INJECTOR
 
+	connection_frequency = FREQ_ATMOS_STORAGE
+
 	/// The unique string that represents which atmos chamber to associate with.
 	var/chamber_id
-	var/frequency = FREQ_ATMOS_STORAGE
-	var/datum/radio_frequency/radio_connection
 
 /obj/machinery/atmospherics/components/unary/outlet_injector/monitored/Initialize(mapload)
 	id_tag = chamber_id + "_in"

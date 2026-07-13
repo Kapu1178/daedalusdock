@@ -11,15 +11,11 @@
 
 	var/datum/radio_frequency/air_connection
 	var/air_frequency = FREQ_ATMOS_ALARMS
-	autoclose = FALSE
 
-/obj/machinery/door/airlock/alarmlock/Initialize(mapload)
-	. = ..()
-	air_connection = new
+	autoclose = FALSE
 
 /obj/machinery/door/airlock/alarmlock/Destroy()
 	SSpackets.remove_object(src,air_frequency)
-	air_connection = null
 	return ..()
 
 /obj/machinery/door/airlock/alarmlock/Initialize(mapload)

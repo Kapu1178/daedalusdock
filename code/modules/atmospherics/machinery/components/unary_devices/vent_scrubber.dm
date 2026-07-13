@@ -19,8 +19,9 @@
 	vent_movement = VENTCRAWL_ALLOWED | VENTCRAWL_CAN_SEE | VENTCRAWL_ENTRANCE_ALLOWED
 	processing_flags = NONE
 
-	network_flags = NETWORK_FLAG_GEN_ID
+	network_flags = NETWORK_FLAG_GEN_ID | NETWORK_FLAG_JOIN_FREQUENCY
 	net_class = NETCLASS_VENT_SCRUBBER
+	connection_frequency = FREQ_ATMOS_CONTROL
 
 	power_rating = 30000
 
@@ -33,14 +34,8 @@
 	///A fast-siphon toggle, siphons at 3x speed for 3x the power cost.
 	var/quicksucc = FALSE
 
-	///Frequency id for connecting to the NTNet
-	var/frequency = FREQ_ATMOS_CONTROL
-	///Reference to the radio datum
-	var/datum/radio_frequency/radio_connection
 	///Radio connection to the air alarm
 	var/radio_filter_out
-	///Radio connection from the air alarm
-	var/radio_filter_in
 
 	///Whether or not this machine can fall asleep. Use a multitool to change.
 	var/can_hibernate = TRUE
@@ -66,8 +61,6 @@
 		scrub_area.air_scrub_info -= id_tag
 		GLOB.air_scrub_names -= id_tag
 
-	SSpackets.remove_object(src,frequency)
-	radio_connection = null
 	SSairmachines.stop_processing_machine(src)
 	return ..()
 
@@ -145,11 +138,6 @@
 	else //scrubbing == SIPHONING
 		icon_state = "scrub_purge"
 
-/obj/machinery/atmospherics/components/unary/vent_scrubber/proc/set_frequency(new_frequency)
-	SSpackets.remove_object(src, frequency)
-	frequency = new_frequency
-	radio_connection = SSpackets.add_object(src, frequency, radio_filter_in)
-
 /obj/machinery/atmospherics/components/unary/vent_scrubber/proc/broadcast_status()
 	if(!radio_connection)
 		return FALSE
@@ -190,10 +178,12 @@
 	name = "\proper [scrub_area.name] [name] [id_tag]"
 
 /obj/machinery/atmospherics/components/unary/vent_scrubber/atmos_init()
-	radio_filter_in = frequency == initial(frequency) ? RADIO_FROM_AIRALARM : null
-	radio_filter_out = frequency == initial(frequency) ? RADIO_TO_AIRALARM : null
+	default_connection_frequency_inbound_filter = frequency == frequency ? RADIO_FROM_AIRALARM : null
+	radio_filter_out = frequency == frequency ? RADIO_TO_AIRALARM : null
+
+	// Refreshes the inbound radio filter
 	if(frequency)
-		set_frequency(frequency)
+		set_connection_frequency(frequency, filter = default_connection_frequency_inbound_filter)
 	broadcast_status()
 	. = ..()
 

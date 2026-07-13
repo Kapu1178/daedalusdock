@@ -102,6 +102,7 @@
 #define TRANSMISSION_SUPERSPACE 3  // reaches independent (CentCom) radios only
 
 // Filter types, used as an optimization to avoid unnecessary proc calls.
+// So, air alarms don't actually define receive_signal, and this is actually used by a subtype of airlock.
 #define RADIO_TO_AIRALARM "to_airalarm"
 #define RADIO_FROM_AIRALARM "from_airalarm"
 #define RADIO_SIGNALER "signaler"

@@ -2,11 +2,10 @@
 	net_class = NETCLASS_PIPE_METER
 	network_flags = NETWORK_FLAG_GEN_ID
 
+	connection_frequency = FREQ_ATMOS_STORAGE
+
 	/// The unique string that represents which atmos chamber to associate with.
 	var/chamber_id
-
-	var/frequency = FREQ_ATMOS_STORAGE
-	var/datum/radio_frequency/radio_connection
 
 /obj/machinery/meter/monitored/Initialize()
 	id_tag = chamber_id + "_sensor"
