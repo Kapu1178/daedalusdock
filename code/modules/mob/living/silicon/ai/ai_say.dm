@@ -11,10 +11,12 @@
 	return ""
 
 /mob/living/silicon/ai/compose_job(atom/movable/speaker, message_langs, raw_message, radio_freq)
-	var/atom/movable/virtualspeaker/virt = astype(speaker)
-	var/atom/movable/M = virt ? virt.speaker_weakref.resolve() : speaker
 	//Also includes the </a> for AI hrefs, for convenience.
-	return "[radio_freq ? " (" + speaker.GetJob() + ")" : ""]" + "[speaker ? "</a>" : ""]"
+	var/atom/movable/real_speaker = speaker
+	if(istype(real_speaker, /atom/movable/virtualspeaker))
+		real_speaker = astype(real_speaker, /atom/movable/virtualspeaker).speaker_weakref.resolve()
+
+	return "[radio_freq ? " (" + speaker.GetJob() + ")" : ""]" + "[real_speaker ? "</a>" : ""]"
 
 /mob/living/silicon/ai/IsVocal()
 	return !CONFIG_GET(flag/silent_ai)
