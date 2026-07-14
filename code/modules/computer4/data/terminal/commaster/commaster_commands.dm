@@ -46,3 +46,29 @@
 
 /datum/shell_command/commaster/connect/exec(datum/c4_file/terminal_program/operating_system/thinkdos/system, datum/c4_file/terminal_program/program, list/arguments, list/options)
 	astype(program, /datum/c4_file/terminal_program/commaster).find_comms_dish(system)
+
+/datum/shell_command/commaster/recall
+	aliases = list("r", "recall",)
+
+/datum/shell_command/commaster/recall/exec(datum/c4_file/terminal_program/operating_system/thinkdos/system, datum/c4_file/terminal_program/program, list/arguments, list/options)
+	var/datum/c4_file/terminal_program/commaster/commaster = program
+	var/obj/machinery/power/data_terminal/netjack = commaster.get_netjack()
+
+	if(!netjack)
+		system.println("[ANSI_WRAP_BOLD("Error:")] Console is not connected to the wirenet.")
+		return
+
+	var/auth = system.current_user.get_auth()
+	var/list/packet_data = packetv2(
+		null,
+		commaster.comms_dish_net_id,
+		payload = list(
+			PKT_ARG_CMD = NET_COMMAND_RECALL_SHUTTLE,
+			PKT_ARG_AUTH = auth,
+		)
+	)
+	var/datum/signal/packet = new(null, packet_data, transmission_method = TRANSMISSION_WIRE)
+	packet.logging_ckey = usr?.ckey
+
+	system.get_computer().post_signal(packet)
+	system.println("Sent!")

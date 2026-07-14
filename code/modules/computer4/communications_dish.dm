@@ -19,6 +19,11 @@
 			call_shuttle(signal)
 			return
 
+		if(NET_COMMAND_RECALL_SHUTTLE)
+			var/mob/probable_mob = get_mob_by_ckey(signal.logging_ckey)
+			SSshuttle.cancelEvac(probable_mob)
+			return
+
 /obj/machinery/communications_dish/proc/call_shuttle(datum/signal/signal)
 	var/mob/probable_user = get_mob_by_ckey(signal.logging_ckey)
 	var/potential_error = SSshuttle.packetRequestEvac(probable_user, signal.data[PKT_PAYLOAD][PKT_ARG_CALL_REASON])

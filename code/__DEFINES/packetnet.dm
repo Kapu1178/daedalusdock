@@ -100,6 +100,10 @@
 #define NET_COMMAND_CALL_SHUTTLE "call_shuttle"
 	/// Shuttle call reason
 	#define PKT_ARG_CALL_REASON "call_reason"
+
+/// Recall the shuttle
+#define NET_COMMAND_RECALL_SHUTTLE "recall_shuttle"
+
 // Update status displays
 #define NET_COMMAND_UPDATE "update"
 // Change the status of the display based on args
