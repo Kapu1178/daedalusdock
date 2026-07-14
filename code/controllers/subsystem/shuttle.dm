@@ -392,7 +392,7 @@ SUBSYSTEM_DEF(shuttle)
 		if(admin_prevent_recall)
 			admin_append += " (NO RECALL)"
 
-	message_admins("[logging_user ? key_name_admin(logging_user) : "[calling_thing] *GAME*"] has called the shuttle[admin_caller && " (ADMIN VERB)"]. (<A HREF='?_src_=holder;[HrefToken()];trigger_centcom_recall=1'>TRIGGER CENTCOM RECALL</A>)")
+	message_admins("[logging_user ? ADMIN_LOOKUPFLW(logging_user) : "[calling_thing] *GAME*"] has called the shuttle[admin_caller && " (ADMIN VERB)"]. (<A HREF='?_src_=holder;[HrefToken()];trigger_centcom_recall=1'>TRIGGER CENTCOM RECALL</A>)")
 	return TRUE
 
 /datum/controller/subsystem/shuttle/proc/centcom_recall(old_timer, admiral_message)
