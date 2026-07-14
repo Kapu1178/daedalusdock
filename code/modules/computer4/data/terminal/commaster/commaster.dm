@@ -3,6 +3,11 @@
 
 	req_access = list(ACCESS_CAPTAIN)
 
+	/// Network ID of the comms dish we're linked to
+	var/comms_dish_net_id
+	/// Timer ID used on start up.
+	var/check_dish_timer_id
+
 	var/static/list/main_commands
 
 /datum/c4_file/terminal_program/commaster/New()
@@ -13,18 +18,26 @@
 		for(var/path as anything in subtypesof(/datum/shell_command/commaster))
 			main_commands += new path
 
+/datum/c4_file/terminal_program/commaster/on_close(datum/c4_file/terminal_program/operating_system/thinkdos/system)
+	. = ..()
+	comms_dish_net_id = null
+	deltimer(check_dish_timer_id)
+
 /datum/c4_file/terminal_program/commaster/execute(datum/c4_file/terminal_program/operating_system/thinkdos/system, datum/parsed_cmdline/cmdline)
 	. = ..()
 
 	var/title_text = list(
-		"						 __  ______   _____________________  ","\n",
-		"  _________  ____ ___  /  |/  /   | / ___/_  __/ ____/ __ \ ","\n",
-		" / ___/ __ \\/ __ `__ \\/ /|_/ / /| | \\__ \ / / / __/ / /_/ / ","\n",
+		"                        __  ______   _____________________  ","\n",
+		"  _________  ____ ___  /  |/  /   | / ___/_  __/ ____/ __ \\ ","\n",
+		" / ___/ __ \\/ __ `__ \\/ /|_/ / /| | \\__ \\ / / / __/ / /_/ / ","\n",
 		"/ /__/ /_/ / / / / / / /  / / ___ |___/ // / / /___/ _, _/  ","\n",
 		"\\___/\\____/_/ /_/ /_/_/  /_/_/  |_/____//_/ /_____/_/ |_|   ","\n",
 	).Join("")
 
 	system.println(title_text)
+
+
+	find_comms_dish(system)
 
 /datum/c4_file/terminal_program/commaster/std_in(text)
 	. = ..()
@@ -38,6 +51,41 @@
 			return TRUE
 
 	system.println("'[parsed_cmdline.raw]' is not recognized as a command.")
+
+/datum/c4_file/terminal_program/commaster/receive_wireline_signal(datum/signal/packet, obj/machinery/power/packet_source)
+	if(packet.data[PKT_PAYLOAD]["commaster_failure"])
+		get_os().println(packet.data[PKT_PAYLOAD]["commaster_failure"])
+		return RECEIVE_SIGNAL_FINISHED
+
+	if(packet.data[PKT_PAYLOAD][PKT_ARG_CMD] == NET_COMMAND_PING_REPLY && packet.data[PKT_HEAD_NETCLASS] == NETCLASS_COMMS_DISH)
+		comms_dish_net_id = packet.data[PKT_HEAD_DEST_ADDRESS]
+		get_os().println("Initialized communications array successfully.")
+		return RECEIVE_SIGNAL_FINISHED
+
+/datum/c4_file/terminal_program/commaster/proc/find_comms_dish(datum/c4_file/terminal_program/operating_system/thinkdos/system)
+	if(check_dish_timer_id)
+		return
+
+	if(!get_netjack())
+		system.print_error("[ANSI_WRAP_BOLD("Error:")] Console is not connected to the wirenet.")
+		return
+
+	var/obj/machinery/computer4/computer = get_computer()
+	system.println("Searching for communications array...")
+
+	var/datum/signal/ping = computer.create_signal(NET_ADDRESS_PING)
+	computer.post_signal(ping)
+
+	check_dish_timer_id = addtimer(CALLBACK(src, PROC_REF(check_dish_exists)), 1 SECOND, TIMER_STOPPABLE|TIMER_DELETE_ME)
+
+/// Called by callback on start up to see if we found a comms dish.
+/datum/c4_file/terminal_program/commaster/proc/check_dish_exists()
+	if(comms_dish_net_id)
+		get_os().println("Successfully initialized communications array.")
+	else
+		astype(get_os(), /datum/c4_file/terminal_program/operating_system/thinkdos).print_error("[ANSI_WRAP_BOLD("Error:")] Unable to locate communications array.")
+
+	check_dish_timer_id = null
 
 // /datum/c4_file/terminal_program/commaster/proc/post_status(command, msg1, msg2)
 // 	var/datum/signal/status_signal = new(null, packetv2(payload = list(PKT_ARG_CMD = command)))

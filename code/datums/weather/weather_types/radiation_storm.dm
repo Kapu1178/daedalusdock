@@ -67,12 +67,15 @@
 	if(!frequency)
 		return
 
-	var/datum/signal/signal = new(null)
+	var/list/payload = list()
 	if (active)
-		signal.data[PKT_PAYLOAD][PKT_ARG_CMD] = "alert"
-		signal.data[PKT_PAYLOAD]["picture_state"] = "radiation"
+		payload[PKT_ARG_CMD] =  NET_COMMAND_STATDISPLAY_SET
+		payload[PKT_ARG_STATDISPLAY_MODE] = "alert"
+		payload[PKT_ARG_STATDISPLAY_PICTURE] = "radiation"
 	else
-		signal.data[PKT_PAYLOAD][PKT_ARG_CMD] = "shuttle"
-		#warn shuttle command consumer
+		payload[PKT_ARG_CMD] =  NET_COMMAND_STATDISPLAY_SET
+		payload[PKT_ARG_STATDISPLAY_MODE] = "shuttle"
 
+	#warn comms dish
+	var/datum/signal/signal = new(null, packetv2(payload = payload))
 	frequency.post_signal(signal)

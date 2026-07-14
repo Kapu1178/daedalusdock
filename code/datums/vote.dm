@@ -168,10 +168,6 @@
 		return
 
 	SSshuttle.autoEnd()
-	var/obj/machinery/computer/communications/C = locate() in INSTANCES_OF(/obj/machinery/computer/communications)
-	if(C)
-		C.post_status("shuttle")
-		#warn shuttle command consumer
 
 #undef CONTINUE_PLAYING
 #undef INITIATE_TRANSFER

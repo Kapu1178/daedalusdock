@@ -18,6 +18,9 @@
 /// When set_frequency is called, run add_object() to add the machine as a listener.
 #define NETWORK_FLAG_JOIN_FREQUENCY (1<<3)
 
+/// Has behavior for data not sent to its net_id.
+#define NETWORK_FLAG_NEED_NOT_DEST (1<<4)
+
 /// Standard set of network flags, for use by most network-connected equipment.
 #define NETWORK_FLAGS_STANDARD_CONNECTION (NETWORK_FLAG_GEN_ID | NETWORK_FLAG_USE_DATATERMINAL)
 
@@ -93,9 +96,16 @@
 // PDA Text Message
 #define NETCMD_PDAMESSAGE "pda_message"
 
-// COMMASTER Commands
+// COMMASTER / Shuttle Display
 #define NET_COMMAND_CALL_SHUTTLE "call_shuttle"
+	/// Shuttle call reason
 	#define PKT_ARG_CALL_REASON "call_reason"
+// Update status displays
+#define NET_COMMAND_UPDATE "update"
+// Change the status of the display based on args
+#define NET_COMMAND_STATDISPLAY_SET "set_display"
+	#define PKT_ARG_STATDISPLAY_MODE "mode"
+	#define PKT_ARG_STATDISPLAY_PICTURE "picture"
 
 // EC Slave Update Request
 #define NETCMD_UPDATE_REQUEST "update_rq"

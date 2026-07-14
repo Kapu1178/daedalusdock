@@ -33,5 +33,13 @@
 		)
 	)
 	var/datum/signal/packet = new(null, packet_data, transmission_method = TRANSMISSION_WIRE)
+	packet.logging_ckey = usr?.ckey
+
 	system.get_computer().post_signal(packet)
 	system.println("Sent!")
+
+/datum/shell_command/commaster/connect
+	aliases = list("connect", "c",)
+
+/datum/shell_command/commaster/connect/exec(datum/c4_file/terminal_program/operating_system/thinkdos/system, datum/c4_file/terminal_program/program, list/arguments, list/options)
+	astype(program, /datum/c4_file/terminal_program/commaster).find_comms_dish(system)

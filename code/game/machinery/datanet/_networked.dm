@@ -17,10 +17,7 @@
 /// A wrapper to generate basic, minimally-compliant data packets easily.
 /// Returns a `datum/signal` with prefilled `s_addr` and `d_addr` added to `datagram`
 /obj/machinery/proc/create_signal(destination_id, list/payload, transmission_method = TRANSMISSION_WIRE) as /datum/signal
-	if(!payload)
-		return
-
-	var/list/sig_data = packetv2(net_id, destination_id, payload = payload)
+	var/list/sig_data = packetv2(net_id, destination_id, payload = payload, net_class = net_class)
 	return new /datum/signal(src, sig_data, transmission_method)
 
 
@@ -56,7 +53,10 @@
 	if(sigdat[PKT_HEAD_DEST_ADDRESS] != net_id)//This packet doesn't belong to us directly
 		if(sigdat[PKT_HEAD_DEST_ADDRESS] == NET_ADDRESS_PING)// But it could be a ping, if so, reply
 			handle_ping_signal(signal)
-		return RECEIVE_SIGNAL_FINISHED//regardless, return 1 so that machines don't process packets not intended for them.
+			return RECEIVE_SIGNAL_FINISHED
+
+		return (network_flags & NETWORK_FLAG_NEED_NOT_DEST) ? RECEIVE_SIGNAL_CONTINUE : RECEIVE_SIGNAL_FINISHED
+
 	return RECEIVE_SIGNAL_CONTINUE // We are the designated recipient of this packet, we need to handle it.
 
 /// Wrapper for wireline packets received from data terminals/netjacks, Includes the origin jack as an arg.

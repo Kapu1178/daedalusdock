@@ -10,3 +10,5 @@
 
 	emergency_no_recall = TRUE
 	endvote_passed = TRUE
+
+	#warn update status panels with dish

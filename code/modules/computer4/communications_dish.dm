@@ -1,5 +1,9 @@
 /obj/machinery/communications_dish
 	name = "communications dish"
+	icon = 'goon/icons/obj/comms_dish.dmi'
+	icon_state = "commdish"
+
+	use_power = NO_POWER_USE
 
 	network_flags = NETWORK_FLAGS_STANDARD_CONNECTION
 	net_class = NETCLASS_COMMS_DISH
@@ -15,7 +19,10 @@
 			call_shuttle(signal)
 			return
 
-	//	SSshuttle.mobRequestEvac(usr, reason)
-
 /obj/machinery/communications_dish/proc/call_shuttle(datum/signal/signal)
-	var/reason = trim(html_encode(signal.data[PKT_PAYLOAD][PKT_ARG_CALL_REASON]))
+	var/mob/probable_user = get_mob_by_ckey(signal.logging_ckey)
+	var/potential_error = SSshuttle.packetRequestEvac(signal.data[PKT_PAYLOAD][PKT_ARG_CALL_REASON], probable_user)
+
+	if(potential_error != TRUE)
+		var/datum/signal/packet = new(src, packetv2(net_id, signal.data[PKT_HEAD_SOURCE_ADDRESS], payload = list("commaster_failure" = potential_error)))
+		post_signal(packet)

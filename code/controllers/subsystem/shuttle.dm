@@ -363,7 +363,7 @@ SUBSYSTEM_DEF(shuttle)
 
 	var/datum/radio_frequency/frequency = SSpackets.return_frequency(FREQ_STATUS_DISPLAYS)
 	#warn needs dish
-	var/datum/signal/status_signal = new(null, packetv2(payload = list("command" = "update"))) // Start processing shuttle-mode displays to display the timer
+	var/datum/signal/status_signal = new(null, packetv2(payload = list(PKT_ARG_CMD = NET_COMMAND_UPDATE))) // Start processing shuttle-mode displays to display the timer
 	frequency.post_signal(status_signal)
 
 	var/mob/logging_user = admin_caller || astype(calling_thing, /mob)
