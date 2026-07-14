@@ -21,7 +21,7 @@
 
 /obj/machinery/communications_dish/proc/call_shuttle(datum/signal/signal)
 	var/mob/probable_user = get_mob_by_ckey(signal.logging_ckey)
-	var/potential_error = SSshuttle.packetRequestEvac(signal.data[PKT_PAYLOAD][PKT_ARG_CALL_REASON], probable_user)
+	var/potential_error = SSshuttle.packetRequestEvac(probable_user, signal.data[PKT_PAYLOAD][PKT_ARG_CALL_REASON])
 
 	if(potential_error != TRUE)
 		var/datum/signal/packet = new(src, packetv2(net_id, signal.data[PKT_HEAD_SOURCE_ADDRESS], payload = list("commaster_failure" = potential_error)))

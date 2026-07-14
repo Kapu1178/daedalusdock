@@ -216,14 +216,15 @@
 	return INITIALIZE_HINT_LATELOAD
 
 /obj/machinery/LateInitialize()
+	if(network_flags & NETWORK_FLAG_USE_DATATERMINAL)
+		link_to_jack()
+
 	power_change()
 	if(use_power == NO_POWER_USE)
 		return
 
 	update_current_power_usage()
 	setup_area_power_relationship()
-	if(network_flags & NETWORK_FLAG_USE_DATATERMINAL)
-		link_to_jack()
 
 /obj/machinery/Destroy()
 	end_processing()

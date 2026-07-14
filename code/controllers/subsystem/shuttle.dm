@@ -317,9 +317,9 @@ SUBSYSTEM_DEF(shuttle)
 		to_chat(user, span_alert(can_evac_or_fail_reason))
 		return FALSE
 
-	return doRequestEvac("\nNature of emergency:\n\n[call_reason]", user)
+	return doRequestEvac("\nNature of emergency:\n[call_reason]", user)
 
-/datum/controller/subsystem/shuttle/proc/packetRequestEvac(call_reason, user)
+/datum/controller/subsystem/shuttle/proc/packetRequestEvac(mob/user, call_reason)
 	call_reason = trim(html_encode(call_reason))
 
 	var/can_evac_or_fail_reason = SSshuttle.canEvac()

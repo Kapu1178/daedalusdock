@@ -58,8 +58,7 @@
 		return RECEIVE_SIGNAL_FINISHED
 
 	if(packet.data[PKT_PAYLOAD][PKT_ARG_CMD] == NET_COMMAND_PING_REPLY && packet.data[PKT_HEAD_NETCLASS] == NETCLASS_COMMS_DISH)
-		comms_dish_net_id = packet.data[PKT_HEAD_DEST_ADDRESS]
-		get_os().println("Initialized communications array successfully.")
+		comms_dish_net_id = packet.data[PKT_HEAD_SOURCE_ADDRESS]
 		return RECEIVE_SIGNAL_FINISHED
 
 /datum/c4_file/terminal_program/commaster/proc/find_comms_dish(datum/c4_file/terminal_program/operating_system/thinkdos/system)
@@ -69,6 +68,8 @@
 	if(!get_netjack())
 		system.print_error("[ANSI_WRAP_BOLD("Error:")] Console is not connected to the wirenet.")
 		return
+
+	comms_dish_net_id = null
 
 	var/obj/machinery/computer4/computer = get_computer()
 	system.println("Searching for communications array...")

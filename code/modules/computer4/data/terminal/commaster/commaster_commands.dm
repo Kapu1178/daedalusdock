@@ -27,9 +27,12 @@
 
 	var/auth = system.current_user.get_auth()
 	var/list/packet_data = packetv2(
+		null,
+		commaster.comms_dish_net_id,
 		payload = list(
 			PKT_ARG_CMD = NET_COMMAND_CALL_SHUTTLE,
 			PKT_ARG_AUTH = auth,
+			PKT_ARG_CALL_REASON = reason,
 		)
 	)
 	var/datum/signal/packet = new(null, packet_data, transmission_method = TRANSMISSION_WIRE)
