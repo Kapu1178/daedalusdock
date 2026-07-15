@@ -166,49 +166,49 @@
 			message.answered = answer_index
 			message.answer_callback.InvokeAsync()
 
-		if ("callShuttle")
-			if (!authenticated(usr) || syndicate)
-				return
-			var/reason = trim(params["reason"], MAX_MESSAGE_LEN)
-			if (length(reason) < CALL_SHUTTLE_REASON_LENGTH)
-				return
-			SSshuttle.mobRequestEvac(usr, reason)
-			post_status("shuttle")
+		// if ("callShuttle")
+		// 	if (!authenticated(usr) || syndicate)
+		// 		return
+		// 	var/reason = trim(params["reason"], MAX_MESSAGE_LEN)
+		// 	if (length(reason) < CALL_SHUTTLE_REASON_LENGTH)
+		// 		return
+		// 	SSshuttle.mobRequestEvac(usr, reason)
+		// 	post_status("shuttle")
 
-		if ("changeSecurityLevel")
-			if (!authenticated_as_silicon_or_captain(usr))
-				return
+		// if ("changeSecurityLevel")
+		// 	if (!authenticated_as_silicon_or_captain(usr))
+		// 		return
 
-			// Check if they have
-			if (!(issilicon(usr) || usr.has_unlimited_silicon_privilege))
-				var/obj/item/held_item = usr.get_active_held_item()
-				var/obj/item/card/id/id_card = held_item?.GetID()
-				if (!istype(id_card))
-					to_chat(usr, span_warning("You need to swipe your ID!"))
-					playsound(src, 'sound/machines/terminal_prompt_deny.ogg', 50, FALSE)
-					return
-				if (!(ACCESS_CAPTAIN in id_card.access))
-					to_chat(usr, span_warning("You are not authorized to do this!"))
-					playsound(src, 'sound/machines/terminal_prompt_deny.ogg', 50, FALSE)
-					return
+		// 	// Check if they have
+		// 	if (!(issilicon(usr) || usr.has_unlimited_silicon_privilege))
+		// 		var/obj/item/held_item = usr.get_active_held_item()
+		// 		var/obj/item/card/id/id_card = held_item?.GetID()
+		// 		if (!istype(id_card))
+		// 			to_chat(usr, span_warning("You need to swipe your ID!"))
+		// 			playsound(src, 'sound/machines/terminal_prompt_deny.ogg', 50, FALSE)
+		// 			return
+		// 		if (!(ACCESS_CAPTAIN in id_card.access))
+		// 			to_chat(usr, span_warning("You are not authorized to do this!"))
+		// 			playsound(src, 'sound/machines/terminal_prompt_deny.ogg', 50, FALSE)
+		// 			return
 
-			var/new_sec_level = seclevel2num(params["newSecurityLevel"])
-			if (new_sec_level != SEC_LEVEL_GREEN && new_sec_level != SEC_LEVEL_BLUE)
-				return
-			if (SSsecurity_level.current_level == new_sec_level)
-				return
+		// 	var/new_sec_level = seclevel2num(params["newSecurityLevel"])
+		// 	if (new_sec_level != SEC_LEVEL_GREEN && new_sec_level != SEC_LEVEL_BLUE)
+		// 		return
+		// 	if (SSsecurity_level.current_level == new_sec_level)
+		// 		return
 
-			set_security_level(new_sec_level)
+		// 	set_security_level(new_sec_level)
 
-			to_chat(usr, span_notice("Authorization confirmed. Modifying security level."))
-			playsound(src, 'sound/machines/terminal_prompt_confirm.ogg', 50, FALSE)
+		// 	to_chat(usr, span_notice("Authorization confirmed. Modifying security level."))
+		// 	playsound(src, 'sound/machines/terminal_prompt_confirm.ogg', 50, FALSE)
 
-			// Only notify people if an actual change happened
-			log_game("[key_name(usr)] has changed the security level to [params["newSecurityLevel"]] with [src] at [AREACOORD(usr)].")
-			message_admins("[ADMIN_LOOKUPFLW(usr)] has changed the security level to [params["newSecurityLevel"]] with [src] at [AREACOORD(usr)].")
-			deadchat_broadcast(" has changed the security level to [params["newSecurityLevel"]] with [src] at [span_name("[get_area_name(usr, TRUE)]")].", span_name("[usr.real_name]"), usr, message_type=DEADCHAT_ANNOUNCEMENT)
+		// 	// Only notify people if an actual change happened
+		// 	log_game("[key_name(usr)] has changed the security level to [params["newSecurityLevel"]] with [src] at [AREACOORD(usr)].")
+		// 	message_admins("[ADMIN_LOOKUPFLW(usr)] has changed the security level to [params["newSecurityLevel"]] with [src] at [AREACOORD(usr)].")
+		// 	deadchat_broadcast(" has changed the security level to [params["newSecurityLevel"]] with [src] at [span_name("[get_area_name(usr, TRUE)]")].", span_name("[usr.real_name]"), usr, message_type=DEADCHAT_ANNOUNCEMENT)
 
-			alert_level_tick += 1
+		// 	alert_level_tick += 1
 		if ("deleteMessage")
 			if (!authenticated(usr))
 				return
@@ -753,7 +753,14 @@
 	if(!frequency)
 		return
 
-	var/datum/signal/status_signal = create_signal(payload = list(PKT_ARG_CMD = command), transmission_method = TRANSMISSION_RADIO)
+	var/datum/signal/status_signal = create_signal(
+		payload = list(
+			PKT_ARG_CMD = NET_COMMAND_STATDISPLAY_SET,
+			PKT_ARG_STATDISPLAY_MODE = command
+		),
+		transmission_method = TRANSMISSION_RADIO
+	)
+
 	switch(command)
 		if("message")
 			status_signal.data[PKT_PAYLOAD]["msg1"] = data1

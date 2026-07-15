@@ -8,6 +8,8 @@
 	/// Timer ID used on start up.
 	var/check_dish_timer_id
 
+	// Status message
+
 	var/static/list/main_commands
 
 /datum/c4_file/terminal_program/commaster/New()
