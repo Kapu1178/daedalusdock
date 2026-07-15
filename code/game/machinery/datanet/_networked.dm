@@ -2,7 +2,7 @@
 
 /// Set the radio_connection frequency.
 /obj/machinery/proc/set_connection_frequency(new_frequency, filter)
-	var/join_connection = network_flags & NETWORK_FLAG_USE_DATATERMINAL
+	var/join_connection = network_flags & NETWORK_FLAG_JOIN_FREQUENCY
 	if(radio_connection && join_connection)
 		SSpackets.remove_object(src, radio_connection.frequency)
 
