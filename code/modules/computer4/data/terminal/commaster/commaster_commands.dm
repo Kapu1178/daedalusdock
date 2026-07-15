@@ -1,19 +1,30 @@
 /datum/shell_command/commaster/quit
 	aliases = list("quit", "q", "exit")
+	help_text = "Terminates the program.\nUsage: 'quit'"
 
 /datum/shell_command/commaster/quit/exec(datum/c4_file/terminal_program/operating_system/thinkdos/system, datum/c4_file/terminal_program/program, list/arguments, list/options)
 	system.println("Quitting...")
 	system.unload_program(program)
 
+/datum/shell_command/commaster/help
+	aliases = list("help")
+	help_text = "Lists all available commands. Use help \[command\] to view information about a specific command."
+
+/datum/shell_command/commaster/help/exec(datum/c4_file/terminal_program/operating_system/thinkdos/system, datum/c4_file/terminal_program/program, list/arguments, list/options)
+	var/list/output = generate_help(system, program, arguments, astype(program, /datum/c4_file/terminal_program/commaster).main_commands)
+	if(output)
+		system.println(jointext(output, "\n"))
+
 /datum/shell_command/commaster/call_shuttle
 	aliases = list("call")
+	help_text = "Sends an emergency aid request to a nearby colony. Requires a connection to a communications array via wireline.\nUsage: 'call'"
 
 /datum/shell_command/commaster/call_shuttle/exec(datum/c4_file/terminal_program/operating_system/thinkdos/system, datum/c4_file/terminal_program/program, list/arguments, list/options)
 	var/datum/c4_file/terminal_program/commaster/commaster = program
 	var/obj/machinery/power/data_terminal/netjack = commaster.get_netjack()
 
 	if(!netjack)
-		system.println("[ANSI_WRAP_BOLD("Error:")] Console is not connected to the wirenet.")
+		system.print_error("[ANSI_WRAP_BOLD("Error:")] Console is not connected to the wirenet.")
 		return
 
 	if(!length(arguments))
@@ -43,12 +54,14 @@
 
 /datum/shell_command/commaster/connect
 	aliases = list("connect", "c",)
+	help_text = "Attempts to establish a connection to a communications array.\nUsage: 'connect'"
 
 /datum/shell_command/commaster/connect/exec(datum/c4_file/terminal_program/operating_system/thinkdos/system, datum/c4_file/terminal_program/program, list/arguments, list/options)
 	astype(program, /datum/c4_file/terminal_program/commaster).find_comms_dish(system)
 
 /datum/shell_command/commaster/recall
-	aliases = list("r", "recall",)
+	aliases = list("recall", "r")
+	help_text = "Cancels an emergency aid request. Requires a connection to a communications array via wireline.\nUsage: 'recall'"
 
 /datum/shell_command/commaster/recall/exec(datum/c4_file/terminal_program/operating_system/thinkdos/system, datum/c4_file/terminal_program/program, list/arguments, list/options)
 	var/datum/c4_file/terminal_program/commaster/commaster = program
@@ -75,15 +88,16 @@
 
 /datum/shell_command/commaster/change_sec_level
 	aliases = list("security_level", "sl")
+	help_text = "Changes the colony security level.\nUsage: 'security_level \[green|blue\]'"
 
 /datum/shell_command/commaster/change_sec_level/exec(datum/c4_file/terminal_program/operating_system/thinkdos/system, datum/c4_file/terminal_program/program, list/arguments, list/options)
 	if(!length(arguments))
-		system.print_error("[ANSI_WRAP_BOLD("Error:")] No security level argument provided. Run 'help security_level' for usage.")
+		system.print_error("[ANSI_WRAP_BOLD("Error:")] No security level argument provided.")
 		return
 
 	var/new_level = lowertext(arguments[1])
 	if(!(new_level in list("green", "blue")))
-		system.print_error("[ANSI_WRAP_BOLD("Error:")] Invalid security level provided. Valid security levels: 'green', 'blue'.")
+		system.print_error("[ANSI_WRAP_BOLD("Error:")] Invalid security level provided.")
 		return
 
 	if (SSsecurity_level.current_level == seclevel2num(new_level))
@@ -97,6 +111,24 @@
 
 /datum/shell_command/commaster/set_status_display
 	aliases = list("status")
+	help_text = "Changes the displayed content of evacuation shuttle displays.\nUsage: 'status \[command\] \[arguments?\]'"
+
+	var/static/list/approved_pictures = list("blank", "biohazard", "default", "lockdown", "redalert")
+
+/datum/shell_command/commaster/set_status_display/New()
+	. = ..()
+	var/list/help_list = list(
+		"Changes the displayed content of evacuation shuttle displays.",
+		"Usage: 'status \[command\] \[arguments?\]'\n",
+    )
+
+	help_text += "Sub-commands:"
+	help_list += "[pad_text("message", 20, " ", TRUE)]Set a text message on displays. Usage: 'status message \"\[line one\]\" \"\[line two\]\"'"
+	help_list += "[pad_text("picture", 20, " ", TRUE)]Set a picture on displays. Usage: 'status picture \[[jointext(approved_pictures, "|")]\]'"
+	help_list += "[pad_text("shuttle", 20, " ", TRUE)]Set displays to show the arrival time of the emergency shuttle. Usage: 'status shuttle'"
+	help_text = jointext(help_list, "\n")
+
+	help_text = jointext(help_list, "\n")
 
 /datum/shell_command/commaster/set_status_display/exec(datum/c4_file/terminal_program/operating_system/thinkdos/system, datum/c4_file/terminal_program/program, list/arguments, list/options)
 	var/datum/c4_file/terminal_program/commaster/commaster = program
@@ -106,12 +138,12 @@
 		system.print_error("[ANSI_WRAP_BOLD("Error:")] No wireless adapter installed.")
 		return
 
-	if(!(length(arguments) || length(options)))
-		system.print_error("[ANSI_WRAP_BOLD("Error:")] No argument(s) provided. Run 'help status' for usage.")
+	if(!(length(arguments)))
+		system.print_error("[ANSI_WRAP_BOLD("Error:")] No argument(s) provided.")
 		return
 
-	if(length(arguments))
-		if(arguments[1] == "message")
+	switch(arguments[1])
+		if("message")
 			var/line_one
 			var/line_two
 
@@ -131,7 +163,7 @@
 				return
 
 			// ok here goes
-			var/list/messages = splittext(jointext(arguments.Copy(2), " "), "\"")
+			var/list/messages = splittext(jointext(arguments, " ", 2), "\"")
 			if(length(messages) == 1)
 				// set status displays to no message (no quote-wrapped argument)
 				adapter.post_signal(packet)
@@ -140,12 +172,12 @@
 			// Lop off everything other than up to 2 quote-enclosed arguments.
 			messages = messages.Copy(2, min(length(messages), 5))
 
-			// If there were two messages in the command, there will be an entry representing any characters between the two enclosed arguments.
-			// Remove it.
-			if(length(messages) == 3)
-				messages -= messages[2]
-
 			if(length(messages))
+				// If there were two messages in the command, there will be an entry representing any characters between the two enclosed arguments.
+				// Remove it.
+				if(length(messages) == 3)
+					messages -= messages[2]
+
 				line_one = reject_bad_text(messages[1] || "", MAX_STATUS_LINE_LENGTH)
 				if(length(messages) == 2)
 					line_two = reject_bad_text(messages[2] || "", MAX_STATUS_LINE_LENGTH)
@@ -154,24 +186,48 @@
 			packet.data[PKT_PAYLOAD]["msg2"] = line_two
 
 			adapter.post_signal(packet, frequency = FREQ_STATUS_DISPLAYS)
+			return
 
-		// if ("setStatusMessage")
-		// 	if (!authenticated(usr))
-		// 		return
-		// 	var/line_one = reject_bad_text(params["lineOne"] || "", MAX_STATUS_LINE_LENGTH)
-		// 	var/line_two = reject_bad_text(params["lineTwo"] || "", MAX_STATUS_LINE_LENGTH)
-		// 	post_status("alert", "blank")
-		// 	post_status("message", line_one, line_two)
-		// 	last_status_display = list(line_one, line_two)
-		// 	playsound(src, SFX_TERMINAL_TYPE, 50, FALSE)
-		// if ("setStatusPicture")
-		// 	if (!authenticated(usr))
-		// 		return
-		// 	var/picture = params["picture"]
-		// 	if (!(picture in approved_status_pictures))
-		// 		return
-		// 	if(picture in state_status_pictures)
-		// 		post_status(picture)
-		// 	else
-		// 		post_status("alert", picture)
-		// 	playsound(src, SFX_TERMINAL_TYPE, 50, FALSE)
+		if("picture")
+			var/picture = jointext(arguments, " ", 2)
+			if(!(picture in approved_pictures))
+				system.print_error("[ANSI_WRAP_BOLD("Error:")] Invalid picture. Valid pictures: [english_list(approved_pictures)].")
+				return
+
+			var/datum/signal/packet = new(
+				null,
+				packetv2(
+					null,
+					payload = list(
+						PKT_ARG_CMD = NET_COMMAND_STATDISPLAY_SET,
+						PKT_ARG_STATDISPLAY_MODE = "alert",
+					)
+				)
+			)
+
+			if(picture == "blank")
+				packet.data[PKT_PAYLOAD][PKT_ARG_STATDISPLAY_MODE] = "blank"
+			else
+				packet.data[PKT_PAYLOAD][PKT_ARG_STATDISPLAY_PICTURE] = picture
+
+			adapter.post_signal(packet, frequency = FREQ_STATUS_DISPLAYS)
+			return
+
+		if("shuttle")
+			var/datum/signal/packet = new(
+				null,
+				packetv2(
+					null,
+					payload = list(
+						PKT_ARG_CMD = NET_COMMAND_STATDISPLAY_SET,
+						PKT_ARG_STATDISPLAY_MODE = "shuttle",
+					)
+				)
+			)
+
+			adapter.post_signal(packet, frequency = FREQ_STATUS_DISPLAYS)
+			return
+
+		else
+			system.print_error("[ANSI_WRAP_BOLD("Error:")] Unrecognized argument(s) \"[jointext(arguments.Copy(2), " ")]\".")
+			return
