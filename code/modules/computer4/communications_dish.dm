@@ -42,3 +42,15 @@
 	if(potential_error != TRUE)
 		var/datum/signal/packet = new(src, packetv2(net_id, signal.data[PKT_HEAD_SOURCE_ADDRESS], payload = list("commaster_failure" = potential_error)))
 		post_signal(packet)
+
+/// Relay a packet through all communications dishes
+/proc/comms_dish_relay_packet(datum/signal/packet)
+	var/datum/radio_frequency/frequency = SSpackets.return_frequency(FREQ_STATUS_DISPLAYS)
+	for(var/obj/machinery/communications_dish/dish in INSTANCES_OF(/obj/machinery/communications_dish))
+		if(dish.is_operational)
+			var/datum/signal/packet_copy = packet.Copy()
+			packet.author = WEAKREF(dish)
+			packet.data[PKT_HEAD_SOURCE_ADDRESS] = dish.net_id
+			packet.data[PKT_HEAD_NETCLASS] = dish.net_class
+			frequency.post_signal(packet)
+

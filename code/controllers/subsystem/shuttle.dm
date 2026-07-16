@@ -361,10 +361,8 @@ SUBSYSTEM_DEF(shuttle)
 		var/area/signal_origin = get_area(calling_thing)
 		emergency.request(null, signal_origin, html_decode(call_reason), set_coefficient = set_coefficient, silent = silent)
 
-	var/datum/radio_frequency/frequency = SSpackets.return_frequency(FREQ_STATUS_DISPLAYS)
-	#warn needs dish
 	var/datum/signal/status_signal = new(null, packetv2(payload = list(PKT_ARG_CMD = NET_COMMAND_UPDATE))) // Start processing shuttle-mode displays to display the timer
-	frequency.post_signal(status_signal)
+	comms_dish_relay_packet(status_signal)
 
 	var/mob/logging_user = admin_caller || astype(calling_thing, /mob)
 

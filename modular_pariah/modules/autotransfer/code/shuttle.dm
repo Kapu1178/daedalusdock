@@ -11,4 +11,5 @@
 	emergency_no_recall = TRUE
 	endvote_passed = TRUE
 
-	#warn update status panels with dish
+	var/datum/signal/packet = new(null, packetv2(payload = list(PKT_ARG_CMD = NET_COMMAND_UPDATE)))
+	comms_dish_relay_packet(packet)
