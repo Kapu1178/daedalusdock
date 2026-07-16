@@ -472,7 +472,7 @@ SUBSYSTEM_DEF(shuttle)
 		if(EMERGENCY_IDLE_OR_RECALLED)
 			doRequestEvac(set_coefficient = 2.5)
 			log_shuttle("There is no means of calling the emergency shuttle anymore. Shuttle automatically called.")
-			message_admins("All the communications consoles were destroyed and all AIs are inactive. Shuttle called.")
+			message_admins("All the communications dishes were destroyed and all AIs are inactive. Shuttle called.")
 
 /datum/controller/subsystem/shuttle/proc/registerHostileEnvironment(datum/bad, announce = TRUE)
 	hostile_environments[bad] = TRUE
