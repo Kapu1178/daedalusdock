@@ -231,3 +231,39 @@
 		else
 			system.print_error("[ANSI_WRAP_BOLD("Error:")] Unrecognized argument(s) \"[jointext(arguments.Copy(2), " ")]\".")
 			return
+
+/datum/shell_command/commaster/change_emergency_access
+	aliases = list("emergency_access", "ea")
+	help_text = "Changes the colony security level.\nUsage: 'emergency_access \[enable|disable\]'"
+
+/datum/shell_command/commaster/change_emergency_access/exec(datum/c4_file/terminal_program/operating_system/thinkdos/system, datum/c4_file/terminal_program/program, list/arguments, list/options)
+	if(!length(arguments))
+		system.print_error("[ANSI_WRAP_BOLD("Error:")] Expected 1 argument.")
+		return
+
+	if(!(arguments[1] in list("enable", "disable")))
+		system.print_error("[ANSI_WRAP_BOLD("Error:")] Invalid argument value.")
+		return
+
+	var/static/cooldown = 0
+	if(world.time <= cooldown)
+		system.print_error("[ANSI_WRAP_BOLD("Error:")] You must wait [DisplayTimeText(cooldown - world.time)] before changing emergency access again.")
+		return
+
+	if(arguments[1] == "enable" && !GLOB.emergency_access)
+		cooldown = world.time + 30 SECONDS
+		make_maint_all_access()
+		log_game("[key_name(usr)] enabled emergency maintenance access.")
+		message_admins("[ADMIN_LOOKUPFLW(usr)] enabled emergency maintenance access.")
+		deadchat_broadcast(" enabled emergency maintenance access at [span_name("[get_area_name(usr, TRUE)]")].", span_name("[usr.real_name]"), usr, message_type = DEADCHAT_ANNOUNCEMENT)
+
+	else if(arguments[1] == "disable" && GLOB.emergency_access)
+		cooldown = world.time + 30 SECONDS
+		revoke_maint_all_access()
+		log_game("[key_name(usr)] disabled emergency maintenance access.")
+		message_admins("[ADMIN_LOOKUPFLW(usr)] disabled emergency maintenance access.")
+		deadchat_broadcast(" disabled emergency maintenance access at [span_name("[get_area_name(usr, TRUE)]")].", span_name("[usr.real_name]"), usr, message_type = DEADCHAT_ANNOUNCEMENT)
+
+	else
+		system.print_error("[ANSI_WRAP_BOLD("Error:")] Emergency access state already set.")
+		return

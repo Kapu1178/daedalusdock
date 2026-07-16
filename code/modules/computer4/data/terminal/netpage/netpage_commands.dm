@@ -12,6 +12,7 @@
 
 /datum/shell_command/netpage/help/exec(datum/c4_file/terminal_program/operating_system/thinkdos/system, datum/c4_file/terminal_program/program, list/arguments, list/options)
 	var/datum/c4_file/terminal_program/netpage/netpage = program
+	noop(netpage)
 	var/list/all_commands = netpage.commands
 	var/list/output = generate_help(system, program, arguments, all_commands)
 	if(output)

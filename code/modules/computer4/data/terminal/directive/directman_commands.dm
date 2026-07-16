@@ -12,6 +12,7 @@
 
 /datum/shell_command/directman/main/help/exec(datum/c4_file/terminal_program/operating_system/thinkdos/system, datum/c4_file/terminal_program/program, list/arguments, list/options)
 	var/datum/c4_file/terminal_program/directman/directman = program
+	noop(directman)
 	var/list/all_commands = directman.main_commands + directman.home_command
 	var/list/output = generate_help(system, program, arguments, all_commands)
 	if(output)
