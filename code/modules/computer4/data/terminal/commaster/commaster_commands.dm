@@ -120,7 +120,7 @@
 	var/list/help_list = list(
 		"Changes the displayed content of evacuation shuttle displays.",
 		"Usage: 'status \[command\] \[arguments?\]'\n",
-    )
+	)
 
 	help_text += "Sub-commands:"
 	help_list += "[pad_text("message", 20, " ", TRUE)]Set a text message on displays. Usage: 'status message \"\[line one\]\" \"\[line two\]\"'"
