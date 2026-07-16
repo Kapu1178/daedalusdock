@@ -8,6 +8,17 @@
 	network_flags = NETWORK_FLAGS_STANDARD_CONNECTION
 	net_class = NETCLASS_COMMS_DISH
 
+/obj/machinery/communications_dish/Initialize(mapload)
+	. = ..()
+	SET_TRACKING(TRACKING_KEY_SHUTTLE_CALLER)
+	SET_TRACKING(__TYPE__)
+
+/obj/machinery/communications_dish/Destroy()
+	UNSET_TRACKING(TRACKING_KEY_SHUTTLE_CALLER)
+	UNSET_TRACKING(__TYPE__)
+	SSshuttle.autoEvac()
+	return ..()
+
 /obj/machinery/communications_dish/receive_signal(datum/signal/signal)
 	. = ..()
 	if(. == RECEIVE_SIGNAL_FINISHED)

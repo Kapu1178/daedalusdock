@@ -459,10 +459,9 @@ SUBSYSTEM_DEF(shuttle)
 				continue
 			if(AI.stat || !AI.client)
 				continue
-		else if(istype(thing, /obj/machinery/computer/communications))
-			var/obj/machinery/computer/communications/C = thing
-			if(C.machine_stat & BROKEN)
-				continue
+
+		if(istype(thing, /obj/machinery/communications_dish) && !(astype(thing, /obj/machinery/communications_dish).machine_stat & BROKEN))
+			continue
 
 		var/turf/T = get_turf(thing)
 		if(T && is_station_level(T.z))
