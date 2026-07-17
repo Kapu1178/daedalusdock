@@ -1,5 +1,5 @@
 /datum/c4_file/terminal_program/commaster
-	name = "comMaster"
+	name = "comMASTER"
 
 	req_access = list(ACCESS_CAPTAIN)
 
@@ -7,6 +7,9 @@
 	var/comms_dish_net_id
 	/// Timer ID used on start up.
 	var/check_dish_timer_id
+
+	// Awaiting console call response timer ID
+	var/awaiting_call_response_timer_id
 
 	// Status message
 
@@ -24,6 +27,10 @@
 	. = ..()
 	comms_dish_net_id = null
 	deltimer(check_dish_timer_id)
+	check_dish_timer_id = null
+
+	deltimer(awaiting_call_response_timer_id)
+	awaiting_call_response_timer_id = null
 
 /datum/c4_file/terminal_program/commaster/execute(datum/c4_file/terminal_program/operating_system/thinkdos/system, datum/parsed_cmdline/cmdline)
 	. = ..()
@@ -55,13 +62,20 @@
 	system.println("'[parsed_cmdline.raw]' is not recognized as a command.")
 
 /datum/c4_file/terminal_program/commaster/receive_wireline_signal(datum/signal/packet, obj/machinery/power/packet_source)
-	if(packet.data[PKT_PAYLOAD]["commaster_failure"])
-		get_os().println(packet.data[PKT_PAYLOAD]["commaster_failure"])
-		return RECEIVE_SIGNAL_FINISHED
-
 	if(packet.data[PKT_PAYLOAD][PKT_ARG_CMD] == NET_COMMAND_PING_REPLY && packet.data[PKT_HEAD_NETCLASS] == NETCLASS_COMMS_DISH)
 		comms_dish_net_id = packet.data[PKT_HEAD_SOURCE_ADDRESS]
 		return RECEIVE_SIGNAL_FINISHED
+
+	if(awaiting_call_response_timer_id)
+		deltimer(awaiting_call_response_timer_id)
+		awaiting_call_response_timer_id = null
+		if(packet.data[PKT_PAYLOAD]["commaster_failure"])
+			get_os().println(packet.data[PKT_PAYLOAD]["commaster_failure"])
+			return RECEIVE_SIGNAL_FINISHED
+
+		else if(packet.data[PKT_PAYLOAD]["shuttle_called"])
+			get_os().println("Emergency request received, a shuttle has been dispatched.")
+			return RECEIVE_SIGNAL_FINISHED
 
 /datum/c4_file/terminal_program/commaster/proc/find_comms_dish(datum/c4_file/terminal_program/operating_system/thinkdos/system)
 	if(check_dish_timer_id)
@@ -90,20 +104,17 @@
 
 	check_dish_timer_id = null
 
-// /datum/c4_file/terminal_program/commaster/proc/post_status(command, msg1, msg2)
-// 	var/datum/signal/status_signal = new(null, packetv2(payload = list(PKT_ARG_CMD = command)))
-// 	switch(command)
-// 		if("message")
-// 			status_signal.data[PKT_PAYLOAD]["msg1"] = data1
-// 			status_signal.data[PKT_PAYLOAD]["msg2"] = data2
-// 		if("alert")
-// 			status_signal.data[PKT_PAYLOAD]["picture_state"] = data1
-
-// 	get_adapter().post_signal(status_signal)
-
 /// Getter for a network adapter.
 /datum/c4_file/terminal_program/commaster/proc/get_adapter() as /obj/item/peripheral/network_card
 	return get_computer().get_peripheral(PERIPHERAL_TYPE_WIRELESS_CARD)
 
 /datum/c4_file/terminal_program/commaster/proc/get_netjack() as /obj/machinery/power/data_terminal
 	return get_computer().netjack
+
+/// Called via timer when attempting to call the shuttle.
+/datum/c4_file/terminal_program/commaster/proc/call_timed_out()
+	if(isnull(awaiting_call_response_timer_id))
+		return
+
+	awaiting_call_response_timer_id = null
+	get_os().println("Shuttle call request timed out.")

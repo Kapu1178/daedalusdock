@@ -39,9 +39,14 @@
 	var/mob/probable_user = get_mob_by_ckey(signal.logging_ckey)
 	var/potential_error = SSshuttle.packetRequestEvac(probable_user, signal.data[PKT_PAYLOAD][PKT_ARG_CALL_REASON])
 
+	var/list/payload = list()
 	if(potential_error != TRUE)
-		var/datum/signal/packet = new(src, packetv2(net_id, signal.data[PKT_HEAD_SOURCE_ADDRESS], payload = list("commaster_failure" = potential_error)))
-		post_signal(packet)
+		payload["commaster_failure"] = potential_error
+	else
+		payload["shuttle_called"] = 1
+
+	var/datum/signal/packet = create_signal(signal.data[PKT_HEAD_SOURCE_ADDRESS], payload = payload)
+	post_signal(packet)
 
 /// Relay a packet through all communications dishes
 /proc/comms_dish_relay_packet(datum/signal/packet)

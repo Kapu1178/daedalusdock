@@ -50,7 +50,8 @@
 	packet.logging_ckey = usr?.ckey
 
 	system.get_computer().post_signal(packet)
-	system.println("Sent!")
+	system.println("Awaiting response...")
+	commaster.awaiting_call_response_timer_id = addtimer(CALLBACK(commaster, TYPE_PROC_REF(/datum/c4_file/terminal_program/commaster, call_timed_out)), 5 SECONDS, TIMER_STOPPABLE|TIMER_DELETE_ME|TIMER_UNIQUE)
 
 /datum/shell_command/commaster/connect
 	aliases = list("connect", "c",)
