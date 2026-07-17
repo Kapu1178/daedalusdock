@@ -183,8 +183,6 @@
 /obj/machinery/door/airlock/Initialize(mapload)
 	. = ..()
 	wires = set_wires()
-	if(frequency)
-		set_frequency(frequency)
 
 	if(security_level > AIRLOCK_SECURITY_IRON)
 		atom_integrity = normal_integrity * AIRLOCK_INTEGRITY_MULTIPLIER

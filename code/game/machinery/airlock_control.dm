@@ -3,21 +3,13 @@
 // This code allows for airlocks to be controlled externally by setting an id_tag and comm frequency (disables ID access)
 /obj/machinery/door/airlock
 	net_class = NETCLASS_AIRLOCK
-	network_flags = NETWORK_FLAG_GEN_ID
+	network_flags = NETWORK_FLAG_GEN_ID | NETWORK_FLAG_JOIN_FREQUENCY
+
+	connection_frequency = FREQ_AIRLOCK_CONTROL
+	default_connection_frequency_inbound_filter = RADIO_AIRLOCK
 
 	/// The current state of the airlock, used to construct the airlock overlays
 	var/airlock_state
-	var/frequency = FREQ_AIRLOCK_CONTROL
-	var/datum/radio_frequency/radio_connection
-
-/obj/machinery/door/airlock/Initialize(mapload)
-	. = ..()
-	set_frequency(frequency)
-
-/obj/machinery/door/airlock/Destroy()
-	if(frequency)
-		SSpackets.remove_object(src,frequency)
-	return ..()
 
 /obj/machinery/door/airlock/receive_signal(datum/signal/signal)
 	SHOULD_CALL_PARENT(FALSE) //TODO: RECONCILE TAGS AND NETIDS
@@ -94,13 +86,6 @@
 	if(!surpress_send)
 		send_status()
 
-
-/obj/machinery/door/airlock/proc/set_frequency(new_frequency)
-	SSpackets.remove_object(src, frequency)
-	if(new_frequency)
-		frequency = new_frequency
-		radio_connection = SSpackets.add_object(src, frequency, RADIO_AIRLOCK)
-
 /obj/machinery/airlock_sensor
 	icon = 'icons/obj/airlock_machines.dmi'
 	icon_state = "airlock_sensor_off"
@@ -111,9 +96,7 @@
 	power_channel = AREA_USAGE_ENVIRON
 
 	var/master_tag
-	var/frequency = FREQ_AIRLOCK_CONTROL
-
-	var/datum/radio_frequency/radio_connection
+	connection_frequency = FREQ_AIRLOCK_CONTROL
 
 	var/on = TRUE
 	var/alert = FALSE
@@ -164,15 +147,3 @@
 		radio_connection.post_signal(signal, range = AIRLOCK_CONTROL_RANGE, filter = RADIO_AIRLOCK)
 
 	update_appearance()
-
-/obj/machinery/airlock_sensor/proc/set_frequency(new_frequency)
-	frequency = new_frequency
-	radio_connection = SSpackets.return_frequency(frequency)
-
-/obj/machinery/airlock_sensor/Initialize(mapload)
-	. = ..()
-	set_frequency(frequency)
-
-/obj/machinery/airlock_sensor/Destroy()
-	SSpackets.remove_object(src,frequency)
-	return ..()
