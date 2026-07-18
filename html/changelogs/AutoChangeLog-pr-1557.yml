@@ -1,7 +1,0 @@
-author: Kapu1178
-delete-after: true
-changes:
-  - rscadd: Almost every packet should now have a proper netclass.
-  - rscadd: The Bridge voidcomputer now has the comMASTER program, taking many of
-      the old Communications Console responsibilities.
-  - tweak: Renamed the old Communications Console to the Announcements Console.
