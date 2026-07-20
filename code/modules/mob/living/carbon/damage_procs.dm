@@ -140,6 +140,7 @@
 		pick_organs -= brain
 		pick_organs += brain
 
+	var/initial_amount = amount
 	for(var/obj/item/organ/O as anything in pick_organs)
 		if(heal)
 			if(amount >= 0)
