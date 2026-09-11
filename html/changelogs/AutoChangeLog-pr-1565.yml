@@ -1,0 +1,6 @@
+author: Kapu1178
+delete-after: true
+changes:
+  - qol: Slapcrafting is now commutative, click order does not matter.
+  - rscadd: Added sling backpacks, crafted with Cloth and Rope.
+  - rscadd: Rope, crafted with two pieces of Cloth.
