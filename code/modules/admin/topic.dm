@@ -561,7 +561,7 @@
 
 		var/mob/M = locate(href_list["sendbacktolobby"])
 
-		if(!isobserver(M))
+		if(!isdead(M))
 			to_chat(usr, span_notice("You can only send ghost players back to the Lobby."), confidential = TRUE)
 			return
 
