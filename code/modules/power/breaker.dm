@@ -139,18 +139,31 @@ TYPEINFO_DEF(/obj/machinery/power/breaker)
 		return
 
 	if(!panel_open)
-		if(!COOLDOWN_FINISHED(src, toggle_cd))
-			to_chat(user, span_warning("[src] is cooling down."))
-			return TRUE
-
-		COOLDOWN_START(src, toggle_cd, 5 SECONDS)
-		playsound(src, 'goon/sounds/button.ogg', 50)
-
-		active = !active
-		visible_message(span_notice("[user] [active ? "enables" : "disables"] [src]."))
-		regenerate_networks()
-		update_appearance()
+		try_toggle(user)
 		return TRUE
+
+/obj/machinery/power/breaker/attack_ai(mob/user)
+	. = ..()
+	try_toggle(user, FALSE)
+
+/// Toggle the breaker.
+/obj/machinery/power/breaker/proc/try_toggle(mob/user, visible_message = TRUE)
+	if(!COOLDOWN_FINISHED(src, toggle_cd))
+		to_chat(user, span_warning("[src] is cooling down."))
+		return FALSE
+
+	COOLDOWN_START(src, toggle_cd, 10 SECONDS)
+	playsound(src, 'goon/sounds/button.ogg', 50)
+
+	if(user && visible_message)
+		visible_message(span_notice("[user] [active ? "enables" : "disables"] [src]."))
+
+	active = !active
+	regenerate_networks()
+	update_appearance()
+
+	log_game("Breaker at [AREACOORD(src)] toggled [active ? "on" : "off"][user && "by [key_name(user)]"].")
+	return TRUE
 
 /obj/machinery/power/breaker/item_interaction(mob/living/user, obj/item/tool, list/modifiers)
 	//opening using screwdriver
