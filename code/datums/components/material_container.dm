@@ -431,6 +431,10 @@
 		mat = GET_MATERIAL_REF(mat)
 	return materials[mat]
 
+/// Formats the storage usage.
+/datum/component/material_container/proc/format_amount()
+	return "[total_amount] / [max_amount == INFINITY ? "Unlimited" : max_amount]"
+
 /// List format is list(material_name = list(amount = ..., ref = ..., etc.))
 /datum/component/material_container/ui_data(mob/user)
 	var/list/data = list()

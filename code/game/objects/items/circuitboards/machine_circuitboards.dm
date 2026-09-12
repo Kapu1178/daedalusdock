@@ -1069,12 +1069,6 @@
 	)
 	needs_anchored = FALSE
 
-/obj/item/circuitboard/machine/ore_silo
-	name = "Ore Silo (Machine Board)"
-	greyscale_colors = CIRCUIT_COLOR_SUPPLY
-	build_path = /obj/machinery/ore_silo
-	req_components = list()
-
 /obj/item/circuitboard/machine/fabricator/department/cargo
 	name = "Departmental Fabricator - Cargo (Machine Board)"
 	greyscale_colors = CIRCUIT_COLOR_SUPPLY
